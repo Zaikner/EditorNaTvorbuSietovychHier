@@ -1,4 +1,4 @@
-import {mainMenu,elementDeleter,clear,socket,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
+import {mainMenu,elementDeleter,clear,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
 import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile} from './TileEditor.js'

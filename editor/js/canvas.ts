@@ -9,9 +9,9 @@ import { Background } from "./Background";
 import { editTrack } from "./PathEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
-const socket = io('http://localhost:8001')
+//const socket = io('http://localhost:8001')
 
-socket.emit("greetings","Hello!")
+//socket.emit("greetings","Hello!")
 
 var doc = document;
 const canvas = document.createElement('canvas');
@@ -157,7 +157,7 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
 }
 
 
-export{mainMenu,doc,elementDeleter,clear,socket,canvas,ctx,calibreEventCoords,editor,reload};
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload};
 
 
   // ///
