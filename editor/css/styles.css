@@ -1,0 +1,54 @@
+body {
+  background-color: #292b2c;
+  overflow: auto;
+  }
+.container
+{
+    margin: 0;
+}
+* {
+    margin: 0;
+    padding: 0;
+  }
+button{
+  border: none;
+  color: black;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+canvas{
+  width: 100%;
+  background-color:wheat;
+}
+/* 
+#optionPlace{
+  overflow: scroll;
+} */
+
+#numOfPlayersPlace,#gameNamePlace,#gameTypePlace,#tileEditingPlace{
+  /* background-color:pink; */
+  padding: 0% 10%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+#canvasPlace{
+  background-color:#292b2c;
+}
+#numOfPlayers,#sizeOfTileSlider,#sizeOfOutlineSlider{
+  background-color:white;
+  width: 80%;
+}
+#numShower,#tileSizeShower,#tileOutlineSizeShower,#hasOutlineShower,#hasBackgroundImageShower{
+  padding: 0% 3%;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
