@@ -4,7 +4,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 
-
+const Path = require('./editor/js/Path');
 import {Socket} from './services/socket/Socket.js';
 
 const app = express();
@@ -15,7 +15,7 @@ const socketConnection = Socket.get();
 socketConnection.setServerSocket(server);
 //socketConnection.setClientSocket('http://localhost:8001');
 const io = socketConnection.getServerSocket()
-const Path = require('./editor/js/Path');
+
 
 
 app.use(express.static(__dirname));
