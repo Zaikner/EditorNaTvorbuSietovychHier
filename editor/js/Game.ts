@@ -8,7 +8,10 @@ class Game{
     //players:Array<Player>
     private numOfPlayers:number = 0;
     private tiles:Array<Tile> = [];
+    private playerTokens:Array<string> = []
     private background:Background = new Background()
+    private nextTileNumber = 1
+    
     
 
     constructor(){}
@@ -57,6 +60,25 @@ class Game{
     setBackground(newBackground:Background){
         this.background = newBackground
     }
+    getNextTileNumber(){
+        return this.nextTileNumber
+    }
+    setNextTileNumber(nextTileNumber:number){
+        this.nextTileNumber = nextTileNumber
+    }
+    increaseTileNumber(){
+        this.nextTileNumber++;
+    }
+    decreaseTileNumber(){
+        this.nextTileNumber--;
+    }
+    setPlayerTokens(newTokens:Array<string>){
+        this.playerTokens = newTokens
+    }
+    getPlayerTokens(){
+        return this.playerTokens
+    }
+    
 }
 
 export{Game}

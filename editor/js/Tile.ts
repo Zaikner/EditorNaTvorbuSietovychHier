@@ -16,8 +16,12 @@ class Tile{
     private isChoosen:boolean = false;
     private backgroundFile?:HTMLImageElement = undefined;
     private patternFile?:HTMLImageElement = undefined;
+    private tileNumber:number;
+    private isEnding:boolean = false;
+    private isStarting:boolean = false;
+    private belongTo:string = '';
 
-    constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string){
+    constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -27,6 +31,7 @@ class Tile{
         this.y2 = y2;
         this.color = color;
         this.radius = radius;
+        this.tileNumber = tileNumber;
     }
 
 
@@ -155,6 +160,10 @@ class Tile{
                         ctx.stroke()
                     }
             }
+            ctx.font = "30px Arial";
+            ctx.fillStyle = 'white'
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
     }
 
     isPointedAt(x:number,y:number){

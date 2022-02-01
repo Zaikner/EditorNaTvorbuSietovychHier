@@ -31,6 +31,15 @@ function editTrack() {
     document.getElementById("buttonPlace").appendChild(endButton);
     document.getElementById("end").addEventListener('click', endDrawingPath);
     (0, TileEditor_js_1.spawnElements)();
+    var undoOneTileButton = document.createElement('button');
+    undoOneTileButton.id = 'undoButton';
+    undoOneTileButton.textContent = 'Undo last Tile/s added!';
+    undoOneTileButton.classList.add("btn");
+    undoOneTileButton.classList.add("btn-dark");
+    document.getElementById("buttonPlace").appendChild(undoOneTileButton);
+    document.getElementById('undoButton').addEventListener('click', function () {
+        (0, TileEditor_js_1.undoTileInsert)();
+    });
 }
 exports.editTrack = editTrack;
 function saveEditingTrack() {
@@ -100,14 +109,16 @@ function draw(event) {
     //socket.emit('skuska');
 }
 function spawnTiles() {
+    var spawnedTiles = [];
     canvas_js_1.editor.getGame().getPath().getPath().forEach(function (point) {
         canSpawn(point.getX(), point.getY());
         if (can == true) {
-            (0, TileEditor_js_1.spawnTile)({ x: point.getX(), y: point.getY() });
+            spawnedTiles.push((0, TileEditor_js_1.spawnTile)({ x: point.getX(), y: point.getY() }));
             console.log(canvas_js_1.editor.getGame().getTiles().length);
         }
     });
     endDrawingPath();
+    canvas_js_1.editor.addToUndoLog(spawnedTiles);
 }
 function canSpawn(x, y) {
     can = true;

@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.isMoving = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
+exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.isMoving = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var isMoving = false;
@@ -175,6 +175,51 @@ function spawnElements() {
         }
     };
     canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(tileImage);
+    var startMenu = canvas_js_1.doc.createElement('select');
+    startMenu.id = 'startMenu';
+    startMenu.classList.add("btn");
+    startMenu.classList.add("btn-dark");
+    types = ['No one', 'Everyone'];
+    for (var i = 0; i < types.length; i++) {
+        var option = canvas_js_1.doc.createElement("option");
+        option.value = types[i];
+        option.text = types[i];
+        startMenu.appendChild(option);
+    }
+    text = canvas_js_1.doc.createElement('p');
+    text.textContent = 'For who is this starting tile? (choose players)';
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(startMenu);
+    var finishMenu = canvas_js_1.doc.createElement('select');
+    finishMenu.id = 'finishMenu';
+    finishMenu.classList.add("btn");
+    finishMenu.classList.add("btn-dark");
+    types = ['No one', 'Everyone'];
+    for (var i = 0; i < types.length; i++) {
+        var option = canvas_js_1.doc.createElement("option");
+        option.value = types[i];
+        option.text = types[i];
+        finishMenu.appendChild(option);
+    }
+    text = canvas_js_1.doc.createElement('p');
+    text.textContent = 'For who is this finishing tile? (choose players)';
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(finishMenu);
+    var standMenu = canvas_js_1.doc.createElement('select');
+    standMenu.id = 'standMenu';
+    standMenu.classList.add("btn");
+    standMenu.classList.add("btn-dark");
+    types = ['No one', 'Everyone'];
+    for (var i = 0; i < types.length; i++) {
+        var option = canvas_js_1.doc.createElement("option");
+        option.value = types[i];
+        option.text = types[i];
+        standMenu.appendChild(option);
+    }
+    text = canvas_js_1.doc.createElement('p');
+    text.textContent = 'Who can stand atop of this tile? (choose players)';
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
+    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(standMenu);
 }
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
@@ -230,6 +275,15 @@ function startInsertingByOne(doc) {
         doc.getElementById("canvasPlace").style.cursor = 'default';
     });
     spawnElements();
+    var undoOneTileButton = doc.createElement('button');
+    undoOneTileButton.id = 'undoButton';
+    undoOneTileButton.textContent = 'Undo last Tile!';
+    undoOneTileButton.classList.add("btn");
+    undoOneTileButton.classList.add("btn-dark");
+    doc.getElementById("buttonPlace").appendChild(undoOneTileButton);
+    doc.getElementById('undoButton').addEventListener('click', function () {
+        undoTileInsert();
+    });
 }
 function saveInsertingTiles() {
     removeAllButtons();
@@ -314,9 +368,15 @@ function removeAllListenersAdded() {
     (0, PathEditor_js_1.endDrawingPath)();
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
+function undoTileInsert() {
+    canvas_js_1.editor.removeLastFromUndoLog();
+    (0, canvas_js_1.reload)();
+}
+exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
-    spawnTile(coords);
+    var addedTile = spawnTile(coords);
+    canvas_js_1.editor.addToUndoLog([addedTile]);
 };
 var spawnTile = function (coords) {
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
@@ -339,13 +399,15 @@ var spawnTile = function (coords) {
     // let tileImage:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileImage')!
     // image.src =URL.createObjectURL(tileImage!.files![0]!)
     // newTile.backgroundFile = image
+    var addedTile = null;
     if (outlineChecker.checked) {
-        canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
+        addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
     }
     else {
-        canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
+        addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
     }
     (0, canvas_js_1.reload)();
+    return addedTile;
 };
 exports.spawnTile = spawnTile;
 var update = function () {

@@ -220,6 +220,57 @@ function spawnElements(){
     }
   }
   doc.getElementById("tileEditingPlace")!.appendChild(tileImage);
+
+  let startMenu:HTMLSelectElement = doc.createElement('select')
+    startMenu.id = 'startMenu';
+    startMenu.classList.add("btn")
+    startMenu.classList.add("btn-dark")
+    types = ['No one','Everyone'];
+    for (let i = 0; i < types.length; i++) {
+      let option = doc.createElement("option");
+      option.value = types[i];
+      option.text = types[i];
+      startMenu.appendChild(option);
+  }
+  text = doc.createElement('p')
+  text.textContent = 'For who is this starting tile? (choose players)'
+
+  doc.getElementById("tileEditingPlace")!.appendChild(text);
+  doc.getElementById("tileEditingPlace")!.appendChild(startMenu);
+
+  let finishMenu:HTMLSelectElement = doc.createElement('select')
+  finishMenu.id = 'finishMenu';
+  finishMenu.classList.add("btn")
+  finishMenu.classList.add("btn-dark")
+  types = ['No one','Everyone'];
+  for (let i = 0; i < types.length; i++) {
+    let option = doc.createElement("option");
+    option.value = types[i];
+    option.text = types[i];
+    finishMenu.appendChild(option);
+}
+text = doc.createElement('p')
+text.textContent = 'For who is this finishing tile? (choose players)'
+
+doc.getElementById("tileEditingPlace")!.appendChild(text);
+doc.getElementById("tileEditingPlace")!.appendChild(finishMenu);
+
+let standMenu:HTMLSelectElement = doc.createElement('select')
+standMenu.id = 'standMenu';
+standMenu.classList.add("btn")
+standMenu.classList.add("btn-dark")
+types = ['No one','Everyone'];
+for (let i = 0; i < types.length; i++) {
+  let option = doc.createElement("option");
+  option.value = types[i];
+  option.text = types[i];
+  standMenu.appendChild(option);
+}
+text = doc.createElement('p')
+text.textContent = 'Who can stand atop of this tile? (choose players)'
+
+doc.getElementById("tileEditingPlace")!.appendChild(text);
+doc.getElementById("tileEditingPlace")!.appendChild(standMenu);
 }
 
 function insertTilesMenu():void{
@@ -266,6 +317,7 @@ function insertTilesMenu():void{
       startInsertingByOne(doc)
     
     }); 
+
   }
   function startInsertingByOne(doc:HTMLDocument){
     doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
@@ -291,7 +343,17 @@ function insertTilesMenu():void{
     }); 
    
     spawnElements()
+    let undoOneTileButton:HTMLButtonElement = doc.createElement('button');
+    undoOneTileButton.id ='undoButton';
+    undoOneTileButton.textContent = 'Undo last Tile!';
+    undoOneTileButton.classList.add("btn")
+    undoOneTileButton.classList.add("btn-dark")
     
+    doc.getElementById("buttonPlace")!.appendChild(undoOneTileButton);
+    doc.getElementById('undoButton')!.addEventListener('click', function(){
+      undoTileInsert()
+  
+    }); 
   
   }
 
@@ -390,11 +452,17 @@ function insertTilesMenu():void{
     canvas.removeEventListener('click',moveEventHandler)
     canvas.removeEventListener('click',deleteHandler)
     endDrawingPath()
-
   }
+
+  function undoTileInsert(){
+      editor.removeLastFromUndoLog()
+      reload()
+  }
+
   let  insert = function(event:MouseEvent){
     let coords = calibreEventCoords(event)
-    spawnTile(coords)
+    var addedTile = spawnTile(coords)
+    editor.addToUndoLog([addedTile])
   }
 
   let spawnTile = function(coords:{x:number,y:number}){
@@ -420,13 +488,15 @@ function insertTilesMenu():void{
         // let tileImage:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileImage')!
         // image.src =URL.createObjectURL(tileImage!.files![0]!)
         // newTile.backgroundFile = image
+    var addedTile = null;
     if (outlineChecker!.checked){
-      editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage,pattImage)
+      addedTile = editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage,pattImage)
     }
     else{
-      editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),0,'',shapeMenu!.value,insertImage,pattImage)
+      addedTile = editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),0,'',shapeMenu!.value,insertImage,pattImage)
     }
-    reload()    
+    reload()
+    return addedTile    
   }
   let update = function(){
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
@@ -490,5 +560,5 @@ function insertTilesMenu():void{
   
 
 
-  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,isMoving,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile}
+  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,isMoving,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert}
   

@@ -2,7 +2,7 @@
 exports.__esModule = true;
 exports.Tile = void 0;
 var Tile = /** @class */ (function () {
-    function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color) {
+    function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
         this.isOccupied = false;
         this.color = "";
         this.stroke = 0;
@@ -11,6 +11,9 @@ var Tile = /** @class */ (function () {
         this.isChoosen = false;
         this.backgroundFile = undefined;
         this.patternFile = undefined;
+        this.isEnding = false;
+        this.isStarting = false;
+        this.belongTo = '';
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -20,6 +23,7 @@ var Tile = /** @class */ (function () {
         this.y2 = y2;
         this.color = color;
         this.radius = radius;
+        this.tileNumber = tileNumber;
     }
     Tile.prototype.drawTile = function (canvas, ctx) {
         // kresli//
@@ -134,6 +138,10 @@ var Tile = /** @class */ (function () {
                 ctx.stroke();
             }
         }
+        ctx.font = "30px Arial";
+        ctx.fillStyle = 'white';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {

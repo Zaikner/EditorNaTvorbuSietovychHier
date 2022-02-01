@@ -6,6 +6,7 @@ import {editTiles,isMoving} from './TileEditor.js'
 class GameEditor{
     private game= new Game();
     private choosenTile?:Tile = undefined;
+    private undoLog:Array<Array<Tile>> = []
     constructor(){
         this.initNewGame()
     }
@@ -15,8 +16,8 @@ class GameEditor{
         console.log(this.getGame())
     }
 
-    initTile(coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement){
-        let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color)
+    initTile(coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
+        let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
         if (stroke!=0){
             newTile.setStroke(stroke)
             newTile.setStrokeColor(strokeColor)
@@ -39,6 +40,9 @@ class GameEditor{
        
         this.game.addTile(newTile)
         newTile.drawTile(canvas,ctx);
+        this.game.increaseTileNumber()
+        console.log('cislo dalsieho je :'+ this.game.getNextTileNumber())
+        return newTile
   }
     findTile(event:MouseEvent){
         
@@ -108,6 +112,16 @@ class GameEditor{
         let tiles = this.game.getTiles()
         tiles.forEach((tile) => {tile.setIsChoosen(false)})
         this.choosenTile = undefined
+    }
+    addToUndoLog(addition:Array<Tile>){
+        this.undoLog.push(addition)
+    }
+    removeLastFromUndoLog(){
+        let removed = this.undoLog.pop()
+        removed?.forEach((tile:Tile) =>{
+            this.game.removeTile(tile)
+            this.game.decreaseTileNumber()
+        })
     }
     
 

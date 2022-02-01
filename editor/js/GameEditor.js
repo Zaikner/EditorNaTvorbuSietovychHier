@@ -9,6 +9,7 @@ var GameEditor = /** @class */ (function () {
     function GameEditor() {
         this.game = new Game_js_1.Game();
         this.choosenTile = undefined;
+        this.undoLog = [];
         this.initNewGame();
     }
     GameEditor.prototype.initNewGame = function () {
@@ -16,7 +17,7 @@ var GameEditor = /** @class */ (function () {
         console.log(this.getGame());
     };
     GameEditor.prototype.initTile = function (coords, color, size, stroke, strokeColor, shape, background, pattern) {
-        var newTile = new Tile_js_1.Tile('', coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color);
+        var newTile = new Tile_js_1.Tile('', coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.game.getNextTileNumber());
         if (stroke != 0) {
             newTile.setStroke(stroke);
             newTile.setStrokeColor(strokeColor);
@@ -34,6 +35,9 @@ var GameEditor = /** @class */ (function () {
         newTile.setShape(shape);
         this.game.addTile(newTile);
         newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx);
+        this.game.increaseTileNumber();
+        console.log('cislo dalsieho je :' + this.game.getNextTileNumber());
+        return newTile;
     };
     GameEditor.prototype.findTile = function (event) {
         var coords = (0, canvas_js_1.calibreEventCoords)(event);
@@ -101,6 +105,17 @@ var GameEditor = /** @class */ (function () {
         var tiles = this.game.getTiles();
         tiles.forEach(function (tile) { tile.setIsChoosen(false); });
         this.choosenTile = undefined;
+    };
+    GameEditor.prototype.addToUndoLog = function (addition) {
+        this.undoLog.push(addition);
+    };
+    GameEditor.prototype.removeLastFromUndoLog = function () {
+        var _this = this;
+        var removed = this.undoLog.pop();
+        removed === null || removed === void 0 ? void 0 : removed.forEach(function (tile) {
+            _this.game.removeTile(tile);
+            _this.game.decreaseTileNumber();
+        });
     };
     GameEditor.prototype.getGame = function () {
         return this.game;

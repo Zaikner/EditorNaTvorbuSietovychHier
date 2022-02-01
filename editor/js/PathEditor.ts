@@ -1,7 +1,7 @@
 import {mainMenu,elementDeleter,clear,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
-import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile} from './TileEditor.js'
+import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert} from './TileEditor.js'
 import { Path } from './Path.js';
 
 var can = false
@@ -43,6 +43,18 @@ function editTrack(){
     document.getElementById("end")!.addEventListener('click',endDrawingPath);
     
     spawnElements()
+    
+    let undoOneTileButton:HTMLButtonElement = document.createElement('button');
+    undoOneTileButton.id ='undoButton';
+    undoOneTileButton.textContent = 'Undo last Tile/s added!';
+    undoOneTileButton.classList.add("btn")
+    undoOneTileButton.classList.add("btn-dark")
+    
+    document.getElementById("buttonPlace")!.appendChild(undoOneTileButton);
+    document.getElementById('undoButton')!.addEventListener('click', function(){
+      undoTileInsert()
+  
+    }); 
   }
 
   
@@ -122,13 +134,15 @@ function saveEditingTrack(){
     //socket.emit('skuska');
   }
   function spawnTiles(){
+    let spawnedTiles:Array<Tile> = []
     editor.getGame().getPath().getPath().forEach((point:Point) => {
       canSpawn(point.getX(),point.getY())
       if (can == true){
-        spawnTile({x:point.getX(),y:point.getY()})
+        spawnedTiles.push(spawnTile({x:point.getX(),y:point.getY()}))
         console.log(editor.getGame().getTiles().length)
       }})
     endDrawingPath()
+    editor.addToUndoLog(spawnedTiles)
     }
 
 

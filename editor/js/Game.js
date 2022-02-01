@@ -11,7 +11,9 @@ var Game = /** @class */ (function () {
         //players:Array<Player>
         this.numOfPlayers = 0;
         this.tiles = [];
+        this.playerTokens = [];
         this.background = new Background_js_1.Background();
+        this.nextTileNumber = 1;
     }
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
@@ -55,6 +57,24 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.setBackground = function (newBackground) {
         this.background = newBackground;
+    };
+    Game.prototype.getNextTileNumber = function () {
+        return this.nextTileNumber;
+    };
+    Game.prototype.setNextTileNumber = function (nextTileNumber) {
+        this.nextTileNumber = nextTileNumber;
+    };
+    Game.prototype.increaseTileNumber = function () {
+        this.nextTileNumber++;
+    };
+    Game.prototype.decreaseTileNumber = function () {
+        this.nextTileNumber--;
+    };
+    Game.prototype.setPlayerTokens = function (newTokens) {
+        this.playerTokens = newTokens;
+    };
+    Game.prototype.getPlayerTokens = function () {
+        return this.playerTokens;
     };
     return Game;
 }());
