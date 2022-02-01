@@ -1,6 +1,6 @@
 body {
   background-color: #292b2c;
-  overflow: auto;
+  overflow: hidden;
   }
 .container
 {
@@ -28,8 +28,10 @@ canvas{
 }
 
 #optionPlace{
+  height: 100vh;
   overflow-y: scroll;
 } 
+
 
 #numOfPlayersPlace,#gameNamePlace,#gameTypePlace,#tileEditingPlace{
   /* background-color:pink; */

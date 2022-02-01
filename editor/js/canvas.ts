@@ -90,7 +90,7 @@ window.addEventListener('resize', resize);
 function resize() {
    //endDrawingPath()
    ctx.canvas.width = window.innerWidth / 3 * 2-30;
-   ctx.canvas.height = window.innerHeight - 70;
+   ctx.canvas.height = window.innerHeight;
    reload();
    //if (started) startDrawingPath();
 // }
