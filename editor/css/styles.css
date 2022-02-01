@@ -26,10 +26,10 @@ canvas{
   width: 100%;
   background-color:wheat;
 }
-/* 
+
 #optionPlace{
-  overflow: scroll;
-} */
+  overflow-y: scroll;
+} 
 
 #numOfPlayersPlace,#gameNamePlace,#gameTypePlace,#tileEditingPlace{
   /* background-color:pink; */
