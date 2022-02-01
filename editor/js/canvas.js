@@ -115,7 +115,7 @@ function elementDeleter(parent) {
 }
 exports.elementDeleter = elementDeleter;
 function calibreEventCoords(event) {
-    return { x: event.clientX - 18, y: event.clientY - 54 };
+    return { x: event.offsetX, y: event.offsetY };
 }
 exports.calibreEventCoords = calibreEventCoords;
 // ///

@@ -153,7 +153,7 @@ function elementDeleter(parent:string){
   }
 }
 function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
-  return {x:event.clientX-18,y:event.clientY-54}
+  return {x:event.offsetX,y:event.offsetY}
 }
 
 
