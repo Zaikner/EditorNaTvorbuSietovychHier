@@ -1,12 +1,10 @@
 "use strict";
 exports.__esModule = true;
-exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.isMoving = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
+exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
-var isMoving = false;
-exports.isMoving = isMoving;
-var image = undefined;
-var pattern = undefined;
+var Elements_js_1 = require("./Elements.js");
+var Warning_js_1 = require("./Warning.js");
 var moveEventHandler = function (event) {
     canvas_js_1.editor.findTile(event);
     (0, canvas_js_1.reload)();
@@ -16,274 +14,78 @@ var deleteHandler = function (event) {
     (0, canvas_js_1.reload)();
 };
 function spawnElements() {
-    var colorPicker = canvas_js_1.doc.createElement('input');
-    colorPicker.type = 'color';
-    colorPicker.id = 'colorPicker';
-    var text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose color of tile:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(colorPicker);
-    var sizeOfTileSlider = canvas_js_1.doc.createElement('input');
-    sizeOfTileSlider.type = 'range';
-    sizeOfTileSlider.id = 'sizeOfTileSlider';
-    sizeOfTileSlider.value = '30';
-    sizeOfTileSlider.min = '20';
-    sizeOfTileSlider.max = '50';
-    sizeOfTileSlider.step = '1';
-    var tileSizeShower = canvas_js_1.doc.createElement('paragraph');
-    tileSizeShower.id = 'tileSizeShower';
-    tileSizeShower.textContent = '30';
-    sizeOfTileSlider.oninput = function () {
-        canvas_js_1.doc.getElementById("tileSizeShower").textContent = sizeOfTileSlider.value;
-    };
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Tile size:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(sizeOfTileSlider);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(tileSizeShower);
-    var outlineChecker = canvas_js_1.doc.createElement('input');
-    outlineChecker.type = 'checkbox';
-    outlineChecker.id = 'outlineChecker';
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Tile have outline? (checkbox)';
-    var hasOutlineShower = canvas_js_1.doc.createElement('paragraph');
-    hasOutlineShower.id = 'hasOutlineShower';
-    hasOutlineShower.textContent = 'no';
-    outlineChecker.oninput = function () {
-        if (outlineChecker.checked) {
-            canvas_js_1.doc.getElementById("hasOutlineShower").textContent = 'yes';
+    //$('#exampleModal').modal('toggle')
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of tile:');
+    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile size:');
+    (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', '20', '50', '1', '30');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have outline? (checkbox)');
+    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'outlineChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of outline:');
+    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Outline size:');
+    (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', '1', '10', '1', '3');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose shape:');
+    (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ["btn", "btn-dark"], ['circle', 'square']);
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have pattern from images? (checkbox)');
+    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'patternChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', 'Choose a Pattern!', function () {
+        if (canvas_js_1.doc.getElementById('tilePattern').files.length > 0) {
+            canvas_js_1.editor.setPattern(new Image());
+            canvas_js_1.editor.getPattern().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tilePattern').files[0]);
         }
         else {
-            canvas_js_1.doc.getElementById("hasOutlineShower").textContent = 'no';
+            canvas_js_1.editor.setPattern(undefined);
         }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(outlineChecker);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(hasOutlineShower);
-    var outlineColorPicker = canvas_js_1.doc.createElement('input');
-    outlineColorPicker.type = 'color';
-    outlineColorPicker.id = 'outlineColorPicker';
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose color of outline:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(outlineColorPicker);
-    var sizeOfOutlineSlider = canvas_js_1.doc.createElement('input');
-    sizeOfOutlineSlider.type = 'range';
-    sizeOfOutlineSlider.id = 'sizeOfOutlineSlider';
-    sizeOfOutlineSlider.value = '3';
-    sizeOfOutlineSlider.min = '1';
-    sizeOfOutlineSlider.max = '10';
-    sizeOfOutlineSlider.step = '1';
-    var tileOutlineSizeShower = canvas_js_1.doc.createElement('paragraph');
-    tileOutlineSizeShower.id = 'tileOutlineSizeShower';
-    tileOutlineSizeShower.textContent = '3';
-    sizeOfOutlineSlider.oninput = function () {
-        canvas_js_1.doc.getElementById("tileOutlineSizeShower").textContent = sizeOfOutlineSlider.value;
-    };
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Outline size:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(sizeOfOutlineSlider);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(tileOutlineSizeShower);
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose Shape:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    var shapeMenu = canvas_js_1.doc.createElement('select');
-    shapeMenu.id = 'shapeMenu';
-    shapeMenu.classList.add("btn");
-    shapeMenu.classList.add("btn-dark");
-    var types = ['circle', 'square'];
-    for (var i = 0; i < types.length; i++) {
-        var option = canvas_js_1.doc.createElement("option");
-        option.value = types[i];
-        option.text = types[i];
-        shapeMenu.appendChild(option);
-    }
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(shapeMenu);
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose pattern image:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    var patternChecker = canvas_js_1.doc.createElement('input');
-    patternChecker.type = 'checkbox';
-    patternChecker.id = 'patternChecker';
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Tile have pattern from images? (checkbox)';
-    var hasPatternImageShower = canvas_js_1.doc.createElement('paragraph');
-    hasPatternImageShower.id = 'hasPatternImageShower';
-    hasPatternImageShower.textContent = 'no';
-    patternChecker.oninput = function () {
-        if (patternChecker.checked) {
-            canvas_js_1.doc.getElementById("hasPatternImageShower").textContent = 'yes';
+    });
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose background image:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have background image? (checkbox)');
+    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'backgroundChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', 'Choose an Image!', function () {
+        if (canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
+            canvas_js_1.editor.setImage(new Image());
+            canvas_js_1.editor.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
         }
         else {
-            canvas_js_1.doc.getElementById("hasPatternImageShower").textContent = 'no';
+            canvas_js_1.editor.setImage(undefined);
         }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(patternChecker);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(hasPatternImageShower);
-    var patternImage = canvas_js_1.doc.createElement('input');
-    patternImage.id = 'tileImage';
-    patternImage.type = 'file';
-    patternImage.accept = ".jpg, .jpeg, .png";
-    patternImage.textContent = 'Choose an Image!';
-    patternImage.oninput = function () {
-        if (patternImage.files.length > 0) {
-            pattern = new Image();
-            pattern.src = URL.createObjectURL(patternImage.files[0]);
-        }
-        else {
-            pattern = undefined;
-        }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(patternImage);
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose background image:';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    var backgroundChecker = canvas_js_1.doc.createElement('input');
-    backgroundChecker.type = 'checkbox';
-    backgroundChecker.id = 'backgroundChecker';
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Tile have background image? (checkbox)';
-    var hasBackgroundImageShower = canvas_js_1.doc.createElement('paragraph');
-    hasBackgroundImageShower.id = 'hasBackgroundImageShower';
-    hasBackgroundImageShower.textContent = 'no';
-    backgroundChecker.oninput = function () {
-        if (backgroundChecker.checked) {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'yes';
-        }
-        else {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'no';
-        }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(backgroundChecker);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(hasBackgroundImageShower);
-    var tileImage = canvas_js_1.doc.createElement('input');
-    tileImage.id = 'tileImage';
-    tileImage.type = 'file';
-    tileImage.accept = ".jpg, .jpeg, .png";
-    tileImage.textContent = 'Choose an Image!';
-    tileImage.oninput = function () {
-        if (tileImage.files.length > 0) {
-            image = new Image();
-            image.src = URL.createObjectURL(tileImage.files[0]);
-        }
-        else {
-            image = undefined;
-        }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(tileImage);
-    var startMenu = canvas_js_1.doc.createElement('select');
-    startMenu.id = 'startMenu';
-    startMenu.classList.add("btn");
-    startMenu.classList.add("btn-dark");
-    types = ['No one', 'Everyone'];
-    for (var i = 0; i < types.length; i++) {
-        var option = canvas_js_1.doc.createElement("option");
-        option.value = types[i];
-        option.text = types[i];
-        startMenu.appendChild(option);
-    }
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'For who is this starting tile? (choose players)';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(startMenu);
-    var finishMenu = canvas_js_1.doc.createElement('select');
-    finishMenu.id = 'finishMenu';
-    finishMenu.classList.add("btn");
-    finishMenu.classList.add("btn-dark");
-    types = ['No one', 'Everyone'];
-    for (var i = 0; i < types.length; i++) {
-        var option = canvas_js_1.doc.createElement("option");
-        option.value = types[i];
-        option.text = types[i];
-        finishMenu.appendChild(option);
-    }
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'For who is this finishing tile? (choose players)';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(finishMenu);
-    var standMenu = canvas_js_1.doc.createElement('select');
-    standMenu.id = 'standMenu';
-    standMenu.classList.add("btn");
-    standMenu.classList.add("btn-dark");
-    types = ['No one', 'Everyone'];
-    for (var i = 0; i < types.length; i++) {
-        var option = canvas_js_1.doc.createElement("option");
-        option.value = types[i];
-        option.text = types[i];
-        standMenu.appendChild(option);
-    }
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Who can stand atop of this tile? (choose players)';
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(standMenu);
+    });
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For whom is this starting tile? (choose players)');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'start');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For whom is this finishing tile? (choose players)');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'end');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which player can visit this tile? (choose players)');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'enabled');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Toogle tile numbering ingame? (checkbox)');
+    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'toogleNumberingChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of numbering:');
+    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose tile number! (Insert a number into textfield)');
+    (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which number follows ?! (Insert a number into textfield)');
+    (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileFollowingSetter');
 }
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
+    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'default';
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
     (0, canvas_js_1.reload)();
     removeAllButtons();
-    var i = 0;
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
-    var saveButton = canvas_js_1.doc.createElement('button');
-    //let addToStartButton:HTMLButtonElement = doc.createElement('button');
-    //let addDistributedButton:HTMLButtonElement = doc.createElement('button');
-    saveButton.id = 'Save';
-    saveButton.textContent = 'Save!';
-    saveButton.classList.add("btn");
-    saveButton.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(saveButton);
-    canvas_js_1.doc.getElementById("Save").addEventListener('click', function () { saveInsertingTiles(); });
-    var drawPathButton = canvas_js_1.doc.createElement('button');
-    drawPathButton.id = 'drawPath';
-    drawPathButton.textContent = 'Draw Path!!';
-    drawPathButton.classList.add("btn");
-    drawPathButton.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(drawPathButton);
-    canvas_js_1.doc.getElementById('drawPath').addEventListener('click', function () {
-        (0, PathEditor_js_1.editTrack)();
-    });
-    var insertOneTileButton = canvas_js_1.doc.createElement('button');
-    insertOneTileButton.id = 'startInsertingButton';
-    insertOneTileButton.textContent = 'Insert by one!';
-    insertOneTileButton.classList.add("btn");
-    insertOneTileButton.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(insertOneTileButton);
-    canvas_js_1.doc.getElementById('startInsertingButton').addEventListener('click', function () {
-        startInsertingByOne(canvas_js_1.doc);
-    });
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'drawPath', ["btn", "btn-dark"], 'Draw Path!!', PathEditor_js_1.editTrack);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'startInsertingButton', ["btn", "btn-dark"], 'Insert by one!', startInsertingByOne);
 }
 exports.insertTilesMenu = insertTilesMenu;
-function startInsertingByOne(doc) {
-    doc.getElementById("canvasPlace").style.cursor = 'grabbing';
+function startInsertingByOne() {
+    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('mousedown', insert);
-    var endInsertingButton = doc.createElement('button');
-    endInsertingButton.id = 'endInsertingButton';
-    endInsertingButton.textContent = 'Stop inserting!';
-    endInsertingButton.classList.add("btn");
-    endInsertingButton.classList.add("btn-dark");
-    doc.getElementById("buttonPlace").appendChild(endInsertingButton);
-    doc.getElementById('endInsertingButton').addEventListener('click', function () {
-        insertTilesMenu();
-        canvas_js_1.canvas.removeEventListener('mousedown', insert);
-        doc.getElementById("canvasPlace").style.cursor = 'default';
-    });
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
     spawnElements();
-    var undoOneTileButton = doc.createElement('button');
-    undoOneTileButton.id = 'undoButton';
-    undoOneTileButton.textContent = 'Undo last Tile!';
-    undoOneTileButton.classList.add("btn");
-    undoOneTileButton.classList.add("btn-dark");
-    doc.getElementById("buttonPlace").appendChild(undoOneTileButton);
-    doc.getElementById('undoButton').addEventListener('click', function () {
-        undoTileInsert();
-    });
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
 }
 function saveInsertingTiles() {
     removeAllButtons();
@@ -296,25 +98,11 @@ function editTiles() {
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     removeAllButtons();
-    exports.isMoving = isMoving = false;
-    var saveButton = canvas_js_1.doc.createElement('button');
-    saveButton.id = 'Save';
-    saveButton.textContent = 'Save!';
-    saveButton.classList.add("btn");
-    saveButton.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(saveButton);
-    canvas_js_1.doc.getElementById("Save").addEventListener('click', function () { saveEditingTiles(); });
-    var updateButton = canvas_js_1.doc.createElement('button');
-    updateButton.id = 'Update';
-    updateButton.textContent = 'Edit button!';
-    updateButton.classList.add("btn");
-    updateButton.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(updateButton);
-    canvas_js_1.doc.getElementById("Update").addEventListener('click', update);
+    canvas_js_1.editor.setIsMoving(false);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveEditingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
     spawnElements();
     setValues();
-    //canvas.addEventListener('mousemove',moveTile)
-    //canvas.addEventListener('mousedown',moveTile)
 }
 exports.editTiles = editTiles;
 function saveEditingTiles() {
@@ -330,7 +118,7 @@ function moveTiles() {
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     canvas_js_1.editor.makeAllTilesNotChoosen();
     (0, canvas_js_1.reload)();
-    exports.isMoving = isMoving = true;
+    canvas_js_1.editor.setIsMoving(true);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     canvas_js_1.canvas.addEventListener('mousemove', moveTile);
@@ -341,13 +129,7 @@ function deleteTiles() {
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     removeAllListenersAdded();
     removeAllButtons();
-    var endButton = document.createElement('button');
-    endButton.id = 'End';
-    endButton.textContent = 'End deleting!';
-    endButton.classList.add("btn");
-    endButton.classList.add("btn-dark");
-    document.getElementById('buttonPlace').appendChild(endButton);
-    endButton.addEventListener('click', saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'End', ["btn", "btn-dark"], 'End deleting!', saveInsertingTiles);
     canvas_js_1.canvas.addEventListener('click', deleteHandler);
 }
 exports.deleteTiles = deleteTiles;
@@ -375,8 +157,17 @@ function undoTileInsert() {
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
-    var addedTile = spawnTile(coords);
-    canvas_js_1.editor.addToUndoLog([addedTile]);
+    var canSpawn = true;
+    if (document.getElementById('tileFollowingSetter').value.length > 0) {
+        if (!canvas_js_1.editor.tileWithNumberExists(parseInt(document.getElementById('tileFollowingSetter').value))) {
+            canSpawn = false;
+            Warning_js_1.Warning.show("Following tile with that number doesn't exist");
+        }
+    }
+    if (canSpawn) {
+        var addedTile = spawnTile(coords);
+        canvas_js_1.editor.addToUndoLog([addedTile]);
+    }
 };
 var spawnTile = function (coords) {
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
@@ -387,18 +178,14 @@ var spawnTile = function (coords) {
     var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
     var backgroundChecker = canvas_js_1.doc.getElementById('backgroundChecker');
     var patternChecker = canvas_js_1.doc.getElementById('patternChecker');
-    var insertImage = image;
-    var pattImage = pattern;
+    var insertImage = canvas_js_1.editor.getImage();
+    var pattImage = canvas_js_1.editor.getPattern();
     if (!backgroundChecker.checked) {
         insertImage = undefined;
     }
     if (!patternChecker.checked) {
         pattImage = undefined;
     }
-    // var image = new Image()
-    // let tileImage:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileImage')!
-    // image.src =URL.createObjectURL(tileImage!.files![0]!)
-    // newTile.backgroundFile = image
     var addedTile = null;
     if (outlineChecker.checked) {
         addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
@@ -406,7 +193,24 @@ var spawnTile = function (coords) {
     else {
         addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
     }
+    addedTile.setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
+    addedTile.setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
+    addedTile.setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
+    addedTile.setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
+    addedTile.setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
+    if (document.getElementById('tileNumberSetter').value.length > 0) {
+        addedTile.setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
+        var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
+            .filter(function (t) { return t.getTileNumber() === parseInt(document.getElementById('tileNumberSetter').value); });
+        if (tileWithSameNumber.length > 0) {
+            tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
+        }
+    }
+    if (document.getElementById('tileFollowingSetter').value.length > 0) {
+        addedTile.setFollowingTileNumber(parseInt(document.getElementById('tileFollowingSetter').value));
+    }
     (0, canvas_js_1.reload)();
+    console.log(addedTile);
     return addedTile;
 };
 exports.spawnTile = spawnTile;
@@ -418,42 +222,84 @@ var update = function () {
     var outlineChecker = canvas_js_1.doc.getElementById('outlineChecker');
     var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
     var backgroundChecker = canvas_js_1.doc.getElementById('backgroundChecker');
-    var insertImage = image;
+    var patternChecker = canvas_js_1.doc.getElementById('patternChecker');
+    var insertImage = canvas_js_1.editor.getImage();
+    var pattImage = canvas_js_1.editor.getPattern();
     if (!backgroundChecker.checked) {
         insertImage = undefined;
     }
+    if (!patternChecker.checked) {
+        pattImage = undefined;
+    }
     canvas_js_1.editor.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), outlineChecker.checked, parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
+    canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
+    canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
+    canvas_js_1.editor.getChoosenTile().setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
+    canvas_js_1.editor.getChoosenTile().setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
+    canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
+    canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
+    if (document.getElementById('tileNumberSetter').value.length > 0) {
+        canvas_js_1.editor.getChoosenTile().setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
+        var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
+            .filter(function (t) { return t.getTileNumber() === parseInt(document.getElementById('tileNumberSetter').value); });
+        if (tileWithSameNumber.length > 0) {
+            tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
+        }
+    }
     (0, canvas_js_1.reload)();
 };
 var setValues = function () {
-    var _a;
+    var _a, _b, _c;
     if (canvas_js_1.editor.getChoosenTile() != undefined) {
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
+        var numberingColor = canvas_js_1.doc.getElementById('numberingColorPicker');
         var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
         var outlineColorPicker = canvas_js_1.doc.getElementById('outlineColorPicker');
         var outlineChecker = canvas_js_1.doc.getElementById('outlineChecker');
         var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
         var backgroundChecker = canvas_js_1.doc.getElementById('backgroundChecker');
+        var patternChecker = canvas_js_1.doc.getElementById('patternChecker');
+        var toogleNumberingChecker = canvas_js_1.doc.getElementById('toogleNumberingChecker');
+        var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
+        var tileFollowingSetter = canvas_js_1.doc.getElementById('tileFollowingSetter');
         var choosenTile = canvas_js_1.editor.getChoosenTile();
         colorPicker.value = choosenTile.getColor();
+        numberingColor.value = choosenTile.getNumberingColor();
         sizeOfTileSlider.value = choosenTile.getRadius().toString();
         sizeOfOutlineSlider.value = choosenTile.getStroke().toString();
         outlineColorPicker.value = choosenTile.getStrokeColor();
         outlineChecker.checked = choosenTile.getStroke() > 0;
+        tileNumberSetter.value = choosenTile.getTileNumber().toString();
+        tileFollowingSetter.value = choosenTile.getFollowingTileNumber().toString();
         if (outlineChecker.checked) {
-            canvas_js_1.doc.getElementById("hasOutlineShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
         }
         else {
-            canvas_js_1.doc.getElementById("hasOutlineShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'no';
         }
         shapeMenu.value = choosenTile.getShape();
-        backgroundChecker.checked = ((_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getBackgroundFile()) != undefined;
+        backgroundChecker.checked = (((_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getBackgroundFile()) != undefined);
         if (backgroundChecker.checked) {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'yes';
         }
         else {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'no';
+        }
+        patternChecker.checked = (((_b = canvas_js_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getPatternFile()) != undefined);
+        //console.log(doc.getElementById("patternCheckerShower")!)
+        if (patternChecker.checked) {
+            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'yes';
+        }
+        else {
+            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'no';
+        }
+        toogleNumberingChecker.checked = (_c = canvas_js_1.editor.getChoosenTile()) === null || _c === void 0 ? void 0 : _c.getToggleNumber();
+        if (toogleNumberingChecker.checked) {
+            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'yes';
+        }
+        else {
+            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'no';
         }
     }
 };

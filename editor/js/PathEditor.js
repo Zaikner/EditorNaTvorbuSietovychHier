@@ -4,42 +4,16 @@ exports.endDrawingPath = exports.saveEditingTrack = exports.editTrack = void 0;
 var canvas_js_1 = require("./canvas.js");
 var Point_js_1 = require("./Point.js");
 var TileEditor_js_1 = require("./TileEditor.js");
+var Elements_js_1 = require("./Elements.js");
 var can = false;
 function editTrack() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
-    //startDrawingPath()
-    var startButton = document.createElement('button');
-    startButton.id = 'start';
-    startButton.textContent = 'Start Inserting!';
-    startButton.classList.add("btn");
-    startButton.classList.add("btn-dark");
-    document.getElementById("buttonPlace").appendChild(startButton);
-    document.getElementById("start").addEventListener('click', startDrawingPath);
-    var spawnButton = document.createElement('button');
-    spawnButton.id = 'spawn';
-    spawnButton.textContent = 'Spawn Tiles!';
-    spawnButton.classList.add("btn");
-    spawnButton.classList.add("btn-dark");
-    document.getElementById("buttonPlace").appendChild(spawnButton);
-    document.getElementById("spawn").addEventListener('click', spawnTiles);
-    var endButton = document.createElement('button');
-    endButton.id = 'end';
-    endButton.textContent = 'End Inserting!';
-    endButton.classList.add("btn");
-    endButton.classList.add("btn-dark");
-    document.getElementById("buttonPlace").appendChild(endButton);
-    document.getElementById("end").addEventListener('click', endDrawingPath);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'start', ["btn", "btn-dark"], 'Start Inserting!', startDrawingPath);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'spawn', ["btn", "btn-dark"], 'Spawn Tiles!', spawnTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'end', ["btn", "btn-dark"], 'End Inserting!', endDrawingPath);
     (0, TileEditor_js_1.spawnElements)();
-    var undoOneTileButton = document.createElement('button');
-    undoOneTileButton.id = 'undoButton';
-    undoOneTileButton.textContent = 'Undo last Tile/s added!';
-    undoOneTileButton.classList.add("btn");
-    undoOneTileButton.classList.add("btn-dark");
-    document.getElementById("buttonPlace").appendChild(undoOneTileButton);
-    document.getElementById('undoButton').addEventListener('click', function () {
-        (0, TileEditor_js_1.undoTileInsert)();
-    });
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile/s added!', TileEditor_js_1.undoTileInsert);
 }
 exports.editTrack = editTrack;
 function saveEditingTrack() {

@@ -6,9 +6,9 @@ class Game{
     private author:String = "";
     private path:Path = new Path();
     //players:Array<Player>
-    private numOfPlayers:number = 0;
+    private numOfPlayers:number = 2;
     private tiles:Array<Tile> = [];
-    private playerTokens:Array<string> = []
+    private playerTokens:Array<string> = ['Player 1','Player 2']
     private background:Background = new Background()
     private nextTileNumber = 1
     
@@ -66,12 +66,8 @@ class Game{
     setNextTileNumber(nextTileNumber:number){
         this.nextTileNumber = nextTileNumber
     }
-    increaseTileNumber(){
-        this.nextTileNumber++;
-    }
-    decreaseTileNumber(){
-        this.nextTileNumber--;
-    }
+   
+   
     setPlayerTokens(newTokens:Array<string>){
         this.playerTokens = newTokens
     }

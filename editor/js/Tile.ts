@@ -18,8 +18,14 @@ class Tile{
     private patternFile?:HTMLImageElement = undefined;
     private tileNumber:number;
     private isEnding:boolean = false;
+    private isEndingFor:Array<String>=[]
     private isStarting:boolean = false;
+    private isStartingFor:Array<String>=[]
     private belongTo:string = '';
+    private canOccupy:Array<String> = []
+    private toggleNumber:boolean = true;
+    private numberingColor:string = 'white'
+    private numberOfFollowingTile:number;
 
     constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
@@ -32,6 +38,7 @@ class Tile{
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
+        this.numberOfFollowingTile = tileNumber+1;
     }
 
 
@@ -160,10 +167,12 @@ class Tile{
                         ctx.stroke()
                     }
             }
-            ctx.font = "30px Arial";
-            ctx.fillStyle = 'white'
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
+            if (this.toggleNumber){
+                ctx.font = "bold 30px Arial";
+                ctx.fillStyle =  this.numberingColor
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
+            }
     }
 
     isPointedAt(x:number,y:number){
@@ -284,8 +293,68 @@ class Tile{
     public setPatternFile(newFile:HTMLImageElement){
          this.patternFile = newFile
     }
-
-
+    
+    public setIsEnding(is : boolean) {
+        this.isEnding = is;
+    }
+    public getIsEnding(){
+        return this.isEnding
+    }
+    public setIsStarting(is : boolean) {
+        this.isStarting = is;
+    }
+    public getIsStarting(){
+        return this.isStarting
+    }
+    public setBelongTo(newOwner : string) {
+        this.belongTo = newOwner;
+    }
+    public getBelongTo(){
+        return this.belongTo
+    }
+    public setIsEndingFor(newPlayers:Array<string>){
+        this.isEndingFor = newPlayers
+    }
+    public getIsStartingFor(){
+        return this.isStartingFor
+    }
+    public setIsStartingFor(newPlayers:Array<string>){
+        this.isStartingFor = newPlayers
+    }
+    public getIsEndingFor(){
+        return this.isEndingFor
+    }
+    public setCanOccupy(newPlayers:Array<string>){
+        this.canOccupy = newPlayers
+    }
+    public getCanOccupy(){
+        return this.canOccupy
+    }
+    public setToogleNumber(is : boolean) {
+        this.toggleNumber = is;
+    }
+    public getToggleNumber(){
+        return this.toggleNumber}
+    public setNumberingColor(color : string) {
+        this.numberingColor = color;
+    }
+    public getNumberingColor() {
+        return this.numberingColor;
+    }
+    public getTileNumber(){
+        return this.tileNumber
+    }
+    public setTileNumber(newNumber:number){
+        this.tileNumber = newNumber
+    }
+    public getFollowingTileNumber(){
+        return this.numberOfFollowingTile
+    }
+    public setFollowingTileNumber(newNumber:number){
+        this.numberOfFollowingTile = newNumber
+    }
+    
+    
 }
 
 export{Tile};

@@ -5,15 +5,9 @@ var Path = /** @class */ (function () {
     function Path() {
         this.path = [];
         this.type = '';
-        this.tilesNumber = 0;
-        this.length = 0;
-        this.toggle = true;
     }
     Path.prototype.add = function (newPoint) {
         this.path.push(newPoint);
-    };
-    Path.prototype.makeLastPointEnding = function () {
-        this.path[this.path.length - 1].setEnd(true);
     };
     Path.prototype.setType = function (type) {
         this.type = type;

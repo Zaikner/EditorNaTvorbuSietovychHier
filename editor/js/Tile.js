@@ -12,8 +12,13 @@ var Tile = /** @class */ (function () {
         this.backgroundFile = undefined;
         this.patternFile = undefined;
         this.isEnding = false;
+        this.isEndingFor = [];
         this.isStarting = false;
+        this.isStartingFor = [];
         this.belongTo = '';
+        this.canOccupy = [];
+        this.toggleNumber = true;
+        this.numberingColor = 'white';
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -24,6 +29,7 @@ var Tile = /** @class */ (function () {
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
+        this.numberOfFollowingTile = tileNumber + 1;
     }
     Tile.prototype.drawTile = function (canvas, ctx) {
         // kresli//
@@ -138,10 +144,12 @@ var Tile = /** @class */ (function () {
                 ctx.stroke();
             }
         }
-        ctx.font = "30px Arial";
-        ctx.fillStyle = 'white';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+        if (this.toggleNumber) {
+            ctx.font = "bold 30px Arial";
+            ctx.fillStyle = this.numberingColor;
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+        }
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {
@@ -251,6 +259,66 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.setPatternFile = function (newFile) {
         this.patternFile = newFile;
+    };
+    Tile.prototype.setIsEnding = function (is) {
+        this.isEnding = is;
+    };
+    Tile.prototype.getIsEnding = function () {
+        return this.isEnding;
+    };
+    Tile.prototype.setIsStarting = function (is) {
+        this.isStarting = is;
+    };
+    Tile.prototype.getIsStarting = function () {
+        return this.isStarting;
+    };
+    Tile.prototype.setBelongTo = function (newOwner) {
+        this.belongTo = newOwner;
+    };
+    Tile.prototype.getBelongTo = function () {
+        return this.belongTo;
+    };
+    Tile.prototype.setIsEndingFor = function (newPlayers) {
+        this.isEndingFor = newPlayers;
+    };
+    Tile.prototype.getIsStartingFor = function () {
+        return this.isStartingFor;
+    };
+    Tile.prototype.setIsStartingFor = function (newPlayers) {
+        this.isStartingFor = newPlayers;
+    };
+    Tile.prototype.getIsEndingFor = function () {
+        return this.isEndingFor;
+    };
+    Tile.prototype.setCanOccupy = function (newPlayers) {
+        this.canOccupy = newPlayers;
+    };
+    Tile.prototype.getCanOccupy = function () {
+        return this.canOccupy;
+    };
+    Tile.prototype.setToogleNumber = function (is) {
+        this.toggleNumber = is;
+    };
+    Tile.prototype.getToggleNumber = function () {
+        return this.toggleNumber;
+    };
+    Tile.prototype.setNumberingColor = function (color) {
+        this.numberingColor = color;
+    };
+    Tile.prototype.getNumberingColor = function () {
+        return this.numberingColor;
+    };
+    Tile.prototype.getTileNumber = function () {
+        return this.tileNumber;
+    };
+    Tile.prototype.setTileNumber = function (newNumber) {
+        this.tileNumber = newNumber;
+    };
+    Tile.prototype.getFollowingTileNumber = function () {
+        return this.numberOfFollowingTile;
+    };
+    Tile.prototype.setFollowingTileNumber = function (newNumber) {
+        this.numberOfFollowingTile = newNumber;
     };
     return Tile;
 }());

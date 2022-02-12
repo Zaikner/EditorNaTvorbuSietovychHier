@@ -10,6 +10,12 @@ var GameEditor = /** @class */ (function () {
         this.game = new Game_js_1.Game();
         this.choosenTile = undefined;
         this.undoLog = [];
+        this.isMoving = false;
+        this.image = undefined;
+        this.pattern = undefined;
+        this.startForPlayers = [];
+        this.endForPlayers = [];
+        this.enabledForPlayers = [];
         this.initNewGame();
     }
     GameEditor.prototype.initNewGame = function () {
@@ -17,6 +23,7 @@ var GameEditor = /** @class */ (function () {
         console.log(this.getGame());
     };
     GameEditor.prototype.initTile = function (coords, color, size, stroke, strokeColor, shape, background, pattern) {
+        var tileNumber = this.nextTileNumber();
         var newTile = new Tile_js_1.Tile('', coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.game.getNextTileNumber());
         if (stroke != 0) {
             newTile.setStroke(stroke);
@@ -28,14 +35,12 @@ var GameEditor = /** @class */ (function () {
         if (pattern != undefined) {
             newTile.setPatternFile(pattern);
         }
-        // var image = new Image()
-        // let tileImage:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileImage')!
-        // image.src =URL.createObjectURL(tileImage!.files![0]!)
-        // newTile.backgroundFile = image
         newTile.setShape(shape);
         this.game.addTile(newTile);
         newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx);
-        this.game.increaseTileNumber();
+        //this.game.increaseTileNumber()
+        newTile.setTileNumber(tileNumber);
+        newTile.setFollowingTileNumber(tileNumber + 1);
         console.log('cislo dalsieho je :' + this.game.getNextTileNumber());
         return newTile;
     };
@@ -54,7 +59,7 @@ var GameEditor = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
-                    if (!TileEditor_js_1.isMoving)
+                    if (!this.isMoving)
                         (0, TileEditor_js_1.editTiles)();
                 }
                 break;
@@ -114,8 +119,31 @@ var GameEditor = /** @class */ (function () {
         var removed = this.undoLog.pop();
         removed === null || removed === void 0 ? void 0 : removed.forEach(function (tile) {
             _this.game.removeTile(tile);
-            _this.game.decreaseTileNumber();
         });
+    };
+    GameEditor.prototype.nextTileNumber = function () {
+        var i = 1;
+        var cont = true;
+        while (cont) {
+            cont = false;
+            this.game.getTiles().forEach(function (tile) {
+                if (tile.getTileNumber() == i) {
+                    i++;
+                    cont = true;
+                }
+            });
+        }
+        return i;
+    };
+    GameEditor.prototype.tileWithNumberExists = function (num) {
+        var res = false;
+        this.game.getTiles().forEach(function (tile) {
+            if (tile.getTileNumber() === num) {
+                res = true;
+            }
+            console.log('rovna sa ' + tile.getTileNumber() + ' : ' + (tile.getTileNumber() === num));
+        });
+        return res;
     };
     GameEditor.prototype.getGame = function () {
         return this.game;
@@ -125,6 +153,42 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.getChoosenTile = function () {
         return this.choosenTile;
+    };
+    GameEditor.prototype.getIsMoving = function () {
+        return this.isMoving;
+    };
+    GameEditor.prototype.setIsMoving = function (is) {
+        this.isMoving = is;
+    };
+    GameEditor.prototype.getImage = function () {
+        return this.image;
+    };
+    GameEditor.prototype.setImage = function (newImage) {
+        this.image = newImage;
+    };
+    GameEditor.prototype.getPattern = function () {
+        return this.pattern;
+    };
+    GameEditor.prototype.setPattern = function (newPattern) {
+        this.pattern = newPattern;
+    };
+    GameEditor.prototype.setStartForPlayers = function (newStartForPlayers) {
+        this.startForPlayers = newStartForPlayers;
+    };
+    GameEditor.prototype.getStartForPlayers = function () {
+        return this.startForPlayers;
+    };
+    GameEditor.prototype.setEndForPlayers = function (newEndForPlayers) {
+        this.endForPlayers = newEndForPlayers;
+    };
+    GameEditor.prototype.getEndForPlayers = function () {
+        return this.endForPlayers;
+    };
+    GameEditor.prototype.setEnabledForPlayers = function (newEnabledForPlayers) {
+        this.enabledForPlayers = newEnabledForPlayers;
+    };
+    GameEditor.prototype.getEnabledForPlayers = function () {
+        return this.enabledForPlayers;
     };
     return GameEditor;
 }());

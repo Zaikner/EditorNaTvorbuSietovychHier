@@ -1,12 +1,19 @@
-import {mainMenu,elementDeleter,canvas,ctx, calibreEventCoords,doc} from './canvas.js'
+import {mainMenu,elementDeleter,canvas,ctx, calibreEventCoords,doc, editor} from './canvas.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 import {Path} from './Path.js'
-import {editTiles,isMoving} from './TileEditor.js'
+import {editTiles} from './TileEditor.js'
+
 class GameEditor{
     private game= new Game();
     private choosenTile?:Tile = undefined;
     private undoLog:Array<Array<Tile>> = []
+    private isMoving = false
+    private image:HTMLImageElement = undefined!;
+    private pattern:HTMLImageElement = undefined!;
+    private startForPlayers:Array<string> = []
+    private endForPlayers:Array<string> = []
+    private enabledForPlayers:Array<string> = []
     constructor(){
         this.initNewGame()
     }
@@ -17,6 +24,7 @@ class GameEditor{
     }
 
     initTile(coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
+        let tileNumber = this.nextTileNumber()
         let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
         if (stroke!=0){
             newTile.setStroke(stroke)
@@ -29,18 +37,14 @@ class GameEditor{
         if (pattern!=undefined){
             newTile.setPatternFile(pattern)
         }
-        // var image = new Image()
-        // let tileImage:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileImage')!
-        // image.src =URL.createObjectURL(tileImage!.files![0]!)
-        // newTile.backgroundFile = image
-
-
+   
         newTile.setShape(shape)
         
-       
         this.game.addTile(newTile)
         newTile.drawTile(canvas,ctx);
-        this.game.increaseTileNumber()
+        //this.game.increaseTileNumber()
+        newTile.setTileNumber(tileNumber)
+        newTile.setFollowingTileNumber(tileNumber+1)
         console.log('cislo dalsieho je :'+ this.game.getNextTileNumber())
         return newTile
   }
@@ -62,7 +66,7 @@ class GameEditor{
                     }              
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
-                    if (!isMoving)editTiles()
+                    if (!this.isMoving)editTiles()
                 }
                 break
             }
@@ -79,6 +83,7 @@ class GameEditor{
                 break
             }
         }
+      
     }
     updateChoosenTile(color:string,size:number,hasStroke:boolean,stroke:number,strokeColor:string,shape:string,image?:HTMLImageElement){
         this.choosenTile?.setColor(color)
@@ -120,10 +125,32 @@ class GameEditor{
         let removed = this.undoLog.pop()
         removed?.forEach((tile:Tile) =>{
             this.game.removeTile(tile)
-            this.game.decreaseTileNumber()
         })
     }
-    
+    nextTileNumber(){
+        let i = 1;
+        let cont = true
+        while (cont){
+            cont = false
+            this.game.getTiles().forEach((tile:Tile)=>{
+                if (tile.getTileNumber() == i){
+                    i++
+                    cont = true
+                }
+            })
+        }
+        return i
+    }
+    tileWithNumberExists(num:number){
+        let res = false
+        this.game.getTiles().forEach((tile:Tile)=>{
+            if (tile.getTileNumber() === num){
+                res = true
+            }
+            console.log('rovna sa '+tile.getTileNumber()+' : '+ (tile.getTileNumber() === num))
+        })
+        return res
+    }
 
   getGame(){
     return this.game
@@ -134,7 +161,46 @@ class GameEditor{
     getChoosenTile(){
         return this.choosenTile
     }
+    public getIsMoving() : boolean {
+        return this.isMoving
+    }
+    public setIsMoving(is:boolean) {
+        this.isMoving = is
+    }
+    public getImage() : HTMLImageElement {
+        return this.image
+    }
+    public setImage(newImage: HTMLImageElement) {
+        this.image = newImage
+    }
+    public getPattern() : HTMLImageElement {
+        return this.pattern
+    }
+    public setPattern(newPattern: HTMLImageElement) {
+        this.pattern = newPattern
+    }
+    public setStartForPlayers(newStartForPlayers:Array<string>){
+        this.startForPlayers = newStartForPlayers
+    }
+    public getStartForPlayers():Array<string>{
+        return this.startForPlayers
+    }
+    public setEndForPlayers(newEndForPlayers:Array<string>){
+        this.endForPlayers = newEndForPlayers
+    }
+    public getEndForPlayers():Array<string>{
+        return this.endForPlayers
+    }
+    public setEnabledForPlayers(newEnabledForPlayers:Array<string>){
+        this.enabledForPlayers = newEnabledForPlayers
+    }
+    public getEnabledForPlayers():Array<string>{
+        return this.enabledForPlayers
+    }
+    
 }
+
+
 
 
 export{GameEditor}

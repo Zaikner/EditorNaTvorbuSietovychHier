@@ -9,9 +9,9 @@ var Game = /** @class */ (function () {
         this.author = "";
         this.path = new Path_js_1.Path();
         //players:Array<Player>
-        this.numOfPlayers = 0;
+        this.numOfPlayers = 2;
         this.tiles = [];
-        this.playerTokens = [];
+        this.playerTokens = ['Player 1', 'Player 2'];
         this.background = new Background_js_1.Background();
         this.nextTileNumber = 1;
     }
@@ -63,12 +63,6 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.setNextTileNumber = function (nextTileNumber) {
         this.nextTileNumber = nextTileNumber;
-    };
-    Game.prototype.increaseTileNumber = function () {
-        this.nextTileNumber++;
-    };
-    Game.prototype.decreaseTileNumber = function () {
-        this.nextTileNumber--;
     };
     Game.prototype.setPlayerTokens = function (newTokens) {
         this.playerTokens = newTokens;

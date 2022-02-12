@@ -50,7 +50,13 @@ document.getElementById("numOfPlayersPlace")!.appendChild(text);
 document.getElementById("numOfPlayersPlace")!.appendChild(numShower);
 
 numOfPlayersSlider.oninput =function(){
-  document.getElementById("numShower")!.textContent = numOfPlayersSlider.value;
+  document.getElementById("numShower")!.textContent =numOfPlayersSlider.value ;
+  editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value))
+  let playerTokens = []
+  for (let i = 1; i <= parseInt(numOfPlayersSlider.value); i++){
+    playerTokens.push('Player '+i)
+  }
+  editor.getGame().setPlayerTokens(playerTokens)
 }
 document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
 
@@ -60,7 +66,10 @@ gameName.id = 'gameName'
 text = document.createElement('p')
 text.textContent = 'Názov hry:'
 document.getElementById("gameNamePlace")!.appendChild(text);
-
+gameName.oninput =function(){
+  editor.getGame().setName(gameName.value)
+  
+}
 document.getElementById("gameNamePlace")!.appendChild(gameName);
 
 let gameType:HTMLSelectElement = document.createElement('select');
@@ -158,21 +167,3 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
 
 
 export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload};
-
-
-  // ///
-  // let u = {x:(to.getX() - from.getX())/10,y:(to.getY() - from.getY())/10}
-  // let newPoint= new Point(from.getX(),from.getY(),false)
-  // let t = 0.1
-  // console.log('zaciatok'+'x: '+newPoint.getX()+' y: '+newPoint.getY())
-  // //console.log('dufany koniec'+'x: '+to.getX()+' y: '+to.getY())
-  // while (Math.sqrt( Math.pow((newPoint.getX()-to.getX()), 2) + Math.pow((newPoint.getY()-to.getY()), 2) ) > 1){
-  //   newPoint.setX(from.getX()+t*u.x) 
-  //   newPoint.setY(from.getY()+t*u.y)
-  //   if (newPoint.getX()%1 == 0){
-  //     console.log(Math.sqrt( Math.pow((newPoint.getX()-to.getX()), 2) + Math.pow((newPoint.getY()-to.getY()), 2) ))
-  //     console.log('novy'+'x: '+newPoint.getX()+' y: '+newPoint.getY())
-  //   }
-  //   t+=0.1
-  // }
-  // console.log('koniec'+'x: '+newPoint.getX()+' y: '+newPoint.getY())

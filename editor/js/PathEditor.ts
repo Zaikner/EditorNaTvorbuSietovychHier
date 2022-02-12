@@ -1,60 +1,18 @@
-import {mainMenu,elementDeleter,clear,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
+import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
 import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert} from './TileEditor.js'
-import { Path } from './Path.js';
+import { spawnButton } from './Elements.js';
 
 var can = false
 function editTrack(){
   removeAllButtons()
   removeAllListenersAdded()
-    //startDrawingPath()
-    let startButton:HTMLButtonElement = document.createElement('button');
-    startButton.id = 'start'
-    startButton.textContent = 'Start Inserting!'
-    startButton.classList.add("btn")
-    startButton.classList.add("btn-dark")
-
-
-    document.getElementById("buttonPlace")!.appendChild(startButton);
-    document.getElementById("start")!.addEventListener('click',startDrawingPath);
-
-
-    let spawnButton:HTMLButtonElement = document.createElement('button');
-    spawnButton.id = 'spawn'
-    spawnButton.textContent = 'Spawn Tiles!'
-    spawnButton.classList.add("btn")
-    spawnButton.classList.add("btn-dark")
-
-
-    document.getElementById("buttonPlace")!.appendChild(spawnButton);
-    document.getElementById("spawn")!.addEventListener('click',spawnTiles);
-
-
-
-    let endButton:HTMLButtonElement = document.createElement('button');
-    endButton.id = 'end'
-    endButton.textContent = 'End Inserting!'
-    endButton.classList.add("btn")
-    endButton.classList.add("btn-dark")
-
-
-    document.getElementById("buttonPlace")!.appendChild(endButton);
-    document.getElementById("end")!.addEventListener('click',endDrawingPath);
-    
+    spawnButton(doc,"buttonPlace",'start',["btn","btn-dark"],'Start Inserting!',startDrawingPath) 
+    spawnButton(doc,"buttonPlace",'spawn',["btn","btn-dark"],'Spawn Tiles!',spawnTiles)
+    spawnButton(doc,"buttonPlace",'end',["btn","btn-dark"],'End Inserting!',endDrawingPath)   
     spawnElements()
-    
-    let undoOneTileButton:HTMLButtonElement = document.createElement('button');
-    undoOneTileButton.id ='undoButton';
-    undoOneTileButton.textContent = 'Undo last Tile/s added!';
-    undoOneTileButton.classList.add("btn")
-    undoOneTileButton.classList.add("btn-dark")
-    
-    document.getElementById("buttonPlace")!.appendChild(undoOneTileButton);
-    document.getElementById('undoButton')!.addEventListener('click', function(){
-      undoTileInsert()
-  
-    }); 
+    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile/s added!',undoTileInsert) 
   }
 
   
