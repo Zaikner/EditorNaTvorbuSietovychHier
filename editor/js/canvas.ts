@@ -1,18 +1,18 @@
-//const TileEditor = require('./TileEditor.js')
-//const PathEditor = require('./PathEditor.js')
+
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-//import {Socket} from "./../../services/socket/Socket.js" --nemaz ale spojazdni
 import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js";
 import { editBackground } from "./BackgroundEditor";
-import { Background } from "./Background";
-import { editTrack } from "./PathEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
-//const socket = io('http://localhost:8001')
+require("dotenv").config('.env');
 
-//socket.emit("greetings","Hello!")
 
+const socket = io('http://sietove-hry.herokuapp.com/');
+socket.emit('chat message', 'hi');
+socket.on('chat message', function(msg) {
+console.log('pekne sa mi odzdravil')
+});
 var doc = document;
 const canvas = document.createElement('canvas');
 const editor = new GameEditor()

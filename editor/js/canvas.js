@@ -1,12 +1,16 @@
 "use strict";
 exports.__esModule = true;
 exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
-//import {Socket} from "./../../services/socket/Socket.js" --nemaz ale spojazdni
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
-//const socket = io('http://localhost:8001')
-//socket.emit("greetings","Hello!")
+var socket_io_client_1 = require("socket.io-client");
+require("dotenv").config('.env');
+var socket = (0, socket_io_client_1.io)('http://sietove-hry.herokuapp.com/');
+socket.emit('chat message', 'hi');
+socket.on('chat message', function (msg) {
+    console.log('pekne sa mi odzdravil');
+});
 var doc = document;
 exports.doc = doc;
 var canvas = document.createElement('canvas');
