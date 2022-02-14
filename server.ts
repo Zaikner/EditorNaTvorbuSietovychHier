@@ -4,17 +4,17 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const a = require('./services/db/DbConnect.js')
-
-import {Socket} from './services/socket/Socket.js';
+import { Server as ioServer } from "socket.io";
+//import {Socket} from './services/socket/Socket.js';
 
 const app = express();
 const server:Server = http.createServer(app);
-//const io = socketio(server);
+const io = new ioServer(server);
 
 
-const socketConnection = Socket.get();
-socketConnection.setServerSocket(server);
-const io = socketConnection.getServerSocket()
+//const socketConnection = Socket.get();
+// socketConnection.setServerSocket(server);
+// const io = socketConnection.getServerSocket()
 const Path = require('./editor/js/Path');
 
 
