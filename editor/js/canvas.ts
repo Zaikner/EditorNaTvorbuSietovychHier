@@ -165,5 +165,4 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
   return {x:event.offsetX,y:event.offsetY}
 }
 
-
 export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload};
