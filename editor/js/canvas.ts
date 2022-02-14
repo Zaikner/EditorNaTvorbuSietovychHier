@@ -5,10 +5,8 @@ import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
-require("dotenv").config('.env');
 
-
-const socket = io('http://sietove-hry.herokuapp.com');
+const socket = io('http://sietove-hry.herokuapp.com/');
 socket.emit('chat message', 'hi');
 socket.on('chat message', function(msg) {
 console.log('pekne sa mi odzdravil')
