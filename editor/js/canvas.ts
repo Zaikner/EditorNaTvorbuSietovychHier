@@ -9,7 +9,7 @@ import { io } from "socket.io-client";
 const socket = io('http://sietove-hry.herokuapp.com/');
 socket.emit('chat message', 'hi');
 socket.on('chat message', function(msg) {
-console.log('pekne sa mi odzdravil')
+console.log(msg)
 });
 var doc = document;
 const canvas = document.createElement('canvas');

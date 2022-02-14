@@ -28,14 +28,15 @@ app.use('/gameSpace',gameSpace);
 const PORT = process.env.PORT || 8001;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+var i = 0
 io.on('connection', (socket:any) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
     socket.on('chat message', (msg:string) => {
-        io.emit('chat message', msg);
+        i++;
+        io.emit('chat message', i);
       });
   });
 
