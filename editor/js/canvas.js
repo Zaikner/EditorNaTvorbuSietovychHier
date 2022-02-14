@@ -6,7 +6,7 @@ var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
 var socket_io_client_1 = require("socket.io-client");
 require("dotenv").config('.env');
-var socket = (0, socket_io_client_1.io)('http://sietove-hry.herokuapp.com/');
+var socket = (0, socket_io_client_1.io)('http://sietove-hry.herokuapp.com');
 socket.emit('chat message', 'hi');
 socket.on('chat message', function (msg) {
     console.log('pekne sa mi odzdravil');
