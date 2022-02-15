@@ -1,7 +1,7 @@
-import {mainMenu,elementDeleter,canvas,ctx, calibreEventCoords,doc, editor} from './canvas.js'
+import {canvas,ctx, calibreEventCoords} from './canvas.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
-import {Path} from './Path.js'
+
 import {editTiles} from './TileEditor.js'
 
 class GameEditor{
@@ -151,7 +151,18 @@ class GameEditor{
         })
         return res
     }
-
+    getDataUrlFromImage(img:HTMLImageElement) {
+        // Create canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        // Set width and height
+        canvas.width = img.width;
+        canvas.height = img.height;
+        // Draw the image
+        ctx!.drawImage(img, 0, 0);
+        return canvas.toDataURL('image/jpeg');
+     }
+   
   getGame(){
     return this.game
 }

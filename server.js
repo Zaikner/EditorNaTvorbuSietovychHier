@@ -22,14 +22,15 @@ app.use('/editor', editor);
 app.use('/gameSpace', gameSpace);
 var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
-var i = 0;
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
-    socket.on('chat message', function (msg) {
-        i++;
-        io.emit('chat message', i);
+    socket.on('saveGame', function (data) {
+        console.log('odchytil');
+        console.log(data);
+        console.log('odchytil');
+        io.emit('chat message');
     });
 });

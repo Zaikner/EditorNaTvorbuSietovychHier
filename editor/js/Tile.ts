@@ -192,8 +192,34 @@ class Tile{
 
         return false;
     }
-
-
+    JSONfyTile(){
+        return {type:this.type,
+                centerX:this.centerX,
+                centerY:this.centerY,
+                x1:this.x1,
+                x2:this.x2,
+                y1:this.y1,
+                y2:this.y2,
+                radius:this.radius,
+                isOccupied:this.isOccupied,
+                color:this.color,
+                stroke:this.stroke,
+                strokeColor:this.strokeColor,
+                shape:this.shape,
+                backgroundFile:this.backgroundFile,
+                patternFile:this.patternFile,
+                tileNumber:this.tileNumber,
+                isEnding:this.isEnding,
+                isEndingFor:this.isEndingFor,   
+                isStarting:this.isStarting,
+                isStartingFor:this.isStartingFor,
+                belongTo:this.belongTo,
+                canOccupy:this.canOccupy,
+                toggleNumber:this.toggleNumber,
+                numberingColor:this.numberingColor,
+                numberOfFollowingTile:this.numberOfFollowingTile}
+            
+    }
 
     public setStroke(newStroke:number){
         this.stroke = newStroke

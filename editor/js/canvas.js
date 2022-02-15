@@ -1,13 +1,14 @@
 "use strict";
 exports.__esModule = true;
-exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
 var socket_io_client_1 = require("socket.io-client");
-var socket = (0, socket_io_client_1.io)('http://sietove-hry.herokuapp.com/');
-socket.emit('chat message', 'hi');
-socket.on('chat message', function (msg) {
+var editorSocket = (0, socket_io_client_1.io)('http://localhost:8001/'); //http://sietove-hry.herokuapp.com/
+exports.editorSocket = editorSocket;
+//socket.emit('chat message', 'hi');
+editorSocket.on('chat message', function (msg) {
     console.log(msg);
 });
 var doc = document;

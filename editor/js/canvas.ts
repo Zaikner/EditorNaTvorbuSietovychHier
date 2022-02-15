@@ -6,9 +6,9 @@ import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
 
-const socket = io('http://sietove-hry.herokuapp.com/');
-socket.emit('chat message', 'hi');
-socket.on('chat message', function(msg) {
+const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
+//socket.emit('chat message', 'hi');
+editorSocket.on('chat message', function(msg) {
 console.log(msg)
 });
 var doc = document;
@@ -163,4 +163,4 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
   return {x:event.offsetX,y:event.offsetY}
 }
 
-export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload};
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket};

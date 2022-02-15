@@ -1,6 +1,8 @@
 import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
+import { editorSocket,editor } from './canvas.js';
+
 class Game{
     private name:String = "";
     private author:String = "";
@@ -12,11 +14,27 @@ class Game{
     private background:Background = new Background()
     private nextTileNumber = 1
     
-    
 
     constructor(){}
 
-
+    saveGame(){
+    
+        
+        let savedTiles:any = []
+        this.tiles.forEach((tile:Tile)=>{
+            savedTiles.push(tile.JSONfyTile())
+        })
+        editorSocket.emit('saveGame',{name:this.name,
+                                      author:this.author,
+                                      background:{
+                                                backgroundImage:this.background.getBackgroundImage() === undefined?'none':editor.getDataUrlFromImage(this.background.getBackgroundImage()),
+                                                color:this.background.getColor()
+                                      },
+                                      tiles:savedTiles,
+                                      numOfPlayers:this.numOfPlayers,
+                                      playerTokens:this.playerTokens
+                                    })
+    }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
     }

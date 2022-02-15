@@ -16,7 +16,7 @@ let deleteHandler = function(event:MouseEvent){
 
 function spawnElements(){
     //$('#exampleModal').modal('toggle')
-    
+    editor.getGame().saveGame()
     spawnParagraph(doc,"tileEditingPlace",'','Choose color of tile:')
     spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
 
@@ -43,8 +43,8 @@ function spawnElements(){
   
     if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
       editor.setPattern(new Image())
-        editor.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)
-    }
+        editor.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
+      }
     else{
       editor.setPattern(undefined!)
     }
@@ -60,7 +60,8 @@ function spawnElements(){
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
         editor.setImage(new Image())
           editor.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
-      }
+
+        }
       else{
         editor.setImage(undefined!)
       }
