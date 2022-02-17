@@ -1,5 +1,5 @@
 import { DbConnect } from "../DbConnect";
-class Background{
+class Background_db{
     private id:number= 0;
     private color:string = '';
     private image:string = '';
@@ -34,7 +34,7 @@ class Background{
     public insert(){
         let client = DbConnect.get()
             const query = {
-                name: 'insert-account',
+                name: 'insert-background',
                 text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3);',
                 values: [this.image,this.color,this.gameName],
               }
@@ -42,5 +42,13 @@ class Background{
               .query(query)
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
-
+    
+    public static load(data:any){
+            let ret = new Background_db()
+            ret.setId(data.id)
+            ret.setGameName(data.gameName)
+            ret.setColor(data.color)
+            ret.setImage(data.image)
+            return ret
+            }
 }

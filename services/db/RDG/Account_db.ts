@@ -1,5 +1,5 @@
 import { DbConnect } from "../DbConnect";
-export class Account{
+export class Account_db{
     private id:number = 0;
     private name:string = ''
     private password:string = ''
@@ -42,4 +42,13 @@ export class Account{
               .query(query)
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
+
+    public static load(data:any){
+        let newAcc = new Account_db()
+        newAcc.setId(data.id)
+        newAcc.setName(data.name)
+        newAcc.setPassword(data.password)
+        newAcc.setAvatar(data.avatar)
+        return newAcc
+    }
 }

@@ -1,39 +1,39 @@
 "use strict";
 exports.__esModule = true;
-exports.Game = void 0;
+exports.Game_db = void 0;
 var DbConnect_1 = require("../DbConnect");
-var Game = /** @class */ (function () {
-    function Game() {
+var Game_db = /** @class */ (function () {
+    function Game_db() {
         this.id = 0;
         this.name = '';
         this.author = '';
         this.numOfPlayers = 0;
     }
-    Game.prototype.getId = function () {
+    Game_db.prototype.getId = function () {
         return this.id;
     };
-    Game.prototype.setId = function (newId) {
+    Game_db.prototype.setId = function (newId) {
         this.id = newId;
     };
-    Game.prototype.getNumOfPlayers = function () {
+    Game_db.prototype.getNumOfPlayers = function () {
         return this.id;
     };
-    Game.prototype.setNumOfPlayers = function (newNum) {
+    Game_db.prototype.setNumOfPlayers = function (newNum) {
         this.numOfPlayers = newNum;
     };
-    Game.prototype.getName = function () {
+    Game_db.prototype.getName = function () {
         return this.name;
     };
-    Game.prototype.setName = function (newName) {
+    Game_db.prototype.setName = function (newName) {
         this.name = newName;
     };
-    Game.prototype.getAuthor = function () {
+    Game_db.prototype.getAuthor = function () {
         return this.name;
     };
-    Game.prototype.setAuthor = function (newAuthor) {
+    Game_db.prototype.setAuthor = function (newAuthor) {
         this.author = newAuthor;
     };
-    Game.prototype.insert = function () {
+    Game_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-game',
@@ -44,6 +44,14 @@ var Game = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
-    return Game;
+    Game_db.load = function (data) {
+        var ret = new Game_db();
+        ret.setId(data.id);
+        ret.setName(data.name);
+        ret.setAuthor(data.author);
+        ret.setNumOfPlayers(data.numOfPlayers);
+        return ret;
+    };
+    return Game_db;
 }());
-exports.Game = Game;
+exports.Game_db = Game_db;

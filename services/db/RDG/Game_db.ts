@@ -1,7 +1,7 @@
 
 import { DbConnect } from "../DbConnect";
 
-export class Game{
+export class Game_db{
     private id:number = 0;
     private name:string = '';
     private author:string = '';
@@ -50,5 +50,15 @@ export class Game{
               .query(query)
               .then((res:any) => console.log(res.rows[0]))
               .catch((e:Error) => console.error(e.stack))}
+
+
+    public static load(data:any){
+                let ret = new Game_db()
+                ret.setId(data.id)
+                ret.setName(data.name)
+                ret.setAuthor(data.author)
+                ret.setNumOfPlayers(data.numOfPlayers)
+                return ret
+                }
     
 }

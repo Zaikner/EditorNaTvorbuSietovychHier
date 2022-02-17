@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const AccountManager = require('../backEnd/AccountManager.js')
+const AccountManager = require('../backEnd/Accounts/AccountManager.js')
 
 let router = express.Router()
 
@@ -18,9 +18,14 @@ router.route("/login")
 })
 .post(async(request,res) =>
 {   
+    let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
-    if (registred){
+    
+    if (registred && !isLoged){
         res.redirect('/')
+    }
+    else if (isLoged){
+        res.render('login',{root:'./editor/views',text:'This account is already logged in!'})
     }
     else{
         res.render('login',{root:'./editor/views',text:'Wrong credentials!'})

@@ -1,4 +1,5 @@
 import { DbConnect } from "../DbConnect";
+import { Account_db } from "./Account_db";
 export class AccountFinder{
     private static INSTANCE:AccountFinder = new AccountFinder()
     public static getIntance():AccountFinder{return this.INSTANCE}
@@ -15,7 +16,14 @@ export class AccountFinder{
                 values: [name],
               }
             var results = await  client.query(query)
-            return results.rows
+            var ret:Array<Account_db> = []
+          
+            await results.rows.forEach((row:any) => {
+                console.log('precital')
+                ret.push(Account_db.load(row))
+            });
+           
+            return ret
     
         }
         catch(err){
@@ -31,8 +39,11 @@ export class AccountFinder{
                 values: [name,password],
               }
             var results = await  client.query(query)
-            return results.rows
-    
+            var ret:Array<Account_db> = []
+            results.rows.forEach((row:any) => {
+                ret.push(Account_db.load(row))
+            });
+            return ret
         }
         catch(err){
           console.log("Connection failed")

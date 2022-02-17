@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
-exports.Tile = void 0;
+exports.Tile_db = void 0;
 var DbConnect_1 = require("../DbConnect");
-var Tile = /** @class */ (function () {
-    function Tile() {
+var Tile_db = /** @class */ (function () {
+    function Tile_db() {
         this.id = 0;
         this.type = '';
         this.centerX = 0;
@@ -33,175 +33,175 @@ var Tile = /** @class */ (function () {
         this.numberOfFollowingTile = 0;
         this.gameName = '';
     }
-    Tile.prototype.setStroke = function (newStroke) {
+    Tile_db.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
     };
-    Tile.prototype.getStroke = function () {
+    Tile_db.prototype.getStroke = function () {
         return this.stroke;
     };
-    Tile.prototype.setStrokeColor = function (newStrokeColor) {
+    Tile_db.prototype.setStrokeColor = function (newStrokeColor) {
         this.strokeColor = newStrokeColor;
     };
-    Tile.prototype.getStrokeColor = function () {
+    Tile_db.prototype.getStrokeColor = function () {
         return this.strokeColor;
     };
-    Tile.prototype.setShape = function (newShape) {
+    Tile_db.prototype.setShape = function (newShape) {
         this.shape = newShape;
     };
-    Tile.prototype.getShape = function () {
+    Tile_db.prototype.getShape = function () {
         return this.shape;
     };
-    Tile.prototype.setIsChoosen = function (isChosen) {
+    Tile_db.prototype.setIsChoosen = function (isChosen) {
         this.isChoosen = isChosen;
     };
-    Tile.prototype.getIsChoosen = function () {
+    Tile_db.prototype.getIsChoosen = function () {
         return this.isChoosen;
     };
-    Tile.prototype.setType = function (newType) {
+    Tile_db.prototype.setType = function (newType) {
         this.type = newType;
     };
-    Tile.prototype.getType = function () {
+    Tile_db.prototype.getType = function () {
         return this.type;
     };
-    Tile.prototype.setX1 = function (newX1) {
+    Tile_db.prototype.setX1 = function (newX1) {
         this.x1 = newX1;
     };
-    Tile.prototype.getX1 = function () {
+    Tile_db.prototype.getX1 = function () {
         return this.x1;
     };
-    Tile.prototype.setX2 = function (newX2) {
+    Tile_db.prototype.setX2 = function (newX2) {
         this.x2 = newX2;
     };
-    Tile.prototype.getX2 = function () {
+    Tile_db.prototype.getX2 = function () {
         return this.x2;
     };
-    Tile.prototype.setY1 = function (newY1) {
+    Tile_db.prototype.setY1 = function (newY1) {
         this.y1 = newY1;
     };
-    Tile.prototype.getY1 = function () {
+    Tile_db.prototype.getY1 = function () {
         return this.y1;
     };
-    Tile.prototype.setY2 = function (newY2) {
+    Tile_db.prototype.setY2 = function (newY2) {
         this.y2 = newY2;
     };
-    Tile.prototype.getY2 = function () {
+    Tile_db.prototype.getY2 = function () {
         return this.y2;
     };
-    Tile.prototype.setCenterX = function (newCenterX) {
+    Tile_db.prototype.setCenterX = function (newCenterX) {
         this.centerX = newCenterX;
     };
-    Tile.prototype.getCenterX = function () {
+    Tile_db.prototype.getCenterX = function () {
         return this.centerX;
     };
-    Tile.prototype.setCenterY = function (newCenterY) {
+    Tile_db.prototype.setCenterY = function (newCenterY) {
         this.centerY = newCenterY;
     };
-    Tile.prototype.getCenterY = function () {
+    Tile_db.prototype.getCenterY = function () {
         return this.centerY;
     };
-    Tile.prototype.setRadius = function (newRadius) {
+    Tile_db.prototype.setRadius = function (newRadius) {
         this.radius = newRadius;
     };
-    Tile.prototype.getRadius = function () {
+    Tile_db.prototype.getRadius = function () {
         return this.radius;
     };
-    Tile.prototype.setIsOccupied = function (newIsOccupied) {
+    Tile_db.prototype.setIsOccupied = function (newIsOccupied) {
         this.isOccupied = newIsOccupied;
     };
-    Tile.prototype.getIsOccupied = function () {
+    Tile_db.prototype.getIsOccupied = function () {
         return this.isOccupied;
     };
-    Tile.prototype.setColor = function (newColor) {
+    Tile_db.prototype.setColor = function (newColor) {
         this.color = newColor;
     };
-    Tile.prototype.getColor = function () {
+    Tile_db.prototype.getColor = function () {
         return this.color;
     };
-    Tile.prototype.getBackgroundFile = function () {
+    Tile_db.prototype.getBackgroundFile = function () {
         return this.backgroundFile;
     };
-    Tile.prototype.setBackgroundFile = function (newFile) {
+    Tile_db.prototype.setBackgroundFile = function (newFile) {
         this.backgroundFile = newFile;
     };
-    Tile.prototype.getPatternFile = function () {
+    Tile_db.prototype.getPatternFile = function () {
         return this.patternFile;
     };
-    Tile.prototype.setPatternFile = function (newFile) {
+    Tile_db.prototype.setPatternFile = function (newFile) {
         this.patternFile = newFile;
     };
-    Tile.prototype.setIsEnding = function (is) {
+    Tile_db.prototype.setIsEnding = function (is) {
         this.isEnding = is;
     };
-    Tile.prototype.getIsEnding = function () {
+    Tile_db.prototype.getIsEnding = function () {
         return this.isEnding;
     };
-    Tile.prototype.setIsStarting = function (is) {
+    Tile_db.prototype.setIsStarting = function (is) {
         this.isStarting = is;
     };
-    Tile.prototype.getIsStarting = function () {
+    Tile_db.prototype.getIsStarting = function () {
         return this.isStarting;
     };
-    Tile.prototype.setBelongTo = function (newOwner) {
+    Tile_db.prototype.setBelongTo = function (newOwner) {
         this.belongTo = newOwner;
     };
-    Tile.prototype.getBelongTo = function () {
+    Tile_db.prototype.getBelongTo = function () {
         return this.belongTo;
     };
-    Tile.prototype.setIsEndingFor = function (newPlayers) {
+    Tile_db.prototype.setIsEndingFor = function (newPlayers) {
         this.isEndingFor = newPlayers;
     };
-    Tile.prototype.getIsStartingFor = function () {
+    Tile_db.prototype.getIsStartingFor = function () {
         return this.isStartingFor;
     };
-    Tile.prototype.setIsStartingFor = function (newPlayers) {
+    Tile_db.prototype.setIsStartingFor = function (newPlayers) {
         this.isStartingFor = newPlayers;
     };
-    Tile.prototype.getIsEndingFor = function () {
+    Tile_db.prototype.getIsEndingFor = function () {
         return this.isEndingFor;
     };
-    Tile.prototype.setCanOccupy = function (newPlayers) {
+    Tile_db.prototype.setCanOccupy = function (newPlayers) {
         this.canOccupy = newPlayers;
     };
-    Tile.prototype.getCanOccupy = function () {
+    Tile_db.prototype.getCanOccupy = function () {
         return this.canOccupy;
     };
-    Tile.prototype.setToogleNumber = function (is) {
+    Tile_db.prototype.setToogleNumber = function (is) {
         this.toggleNumber = is;
     };
-    Tile.prototype.getToggleNumber = function () {
+    Tile_db.prototype.getToggleNumber = function () {
         return this.toggleNumber;
     };
-    Tile.prototype.setNumberingColor = function (color) {
+    Tile_db.prototype.setNumberingColor = function (color) {
         this.numberingColor = color;
     };
-    Tile.prototype.getNumberingColor = function () {
+    Tile_db.prototype.getNumberingColor = function () {
         return this.numberingColor;
     };
-    Tile.prototype.getTileNumber = function () {
+    Tile_db.prototype.getTileNumber = function () {
         return this.tileNumber;
     };
-    Tile.prototype.setTileNumber = function (newNumber) {
+    Tile_db.prototype.setTileNumber = function (newNumber) {
         this.tileNumber = newNumber;
     };
-    Tile.prototype.getFollowingTileNumber = function () {
+    Tile_db.prototype.getFollowingTileNumber = function () {
         return this.numberOfFollowingTile;
     };
-    Tile.prototype.setFollowingTileNumber = function (newNumber) {
+    Tile_db.prototype.setFollowingTileNumber = function (newNumber) {
         this.numberOfFollowingTile = newNumber;
     };
-    Tile.prototype.getId = function () {
+    Tile_db.prototype.getId = function () {
         return this.id;
     };
-    Tile.prototype.setId = function (newId) {
+    Tile_db.prototype.setId = function (newId) {
         this.id = newId;
     };
-    Tile.prototype.getGameName = function () {
+    Tile_db.prototype.getGameName = function () {
         return this.gameName;
     };
-    Tile.prototype.setGameName = function (newName) {
+    Tile_db.prototype.setGameName = function (newName) {
         this.gameName = newName;
     };
-    Tile.prototype.insert = function () {
+    Tile_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-tile',
@@ -212,6 +212,38 @@ var Tile = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows); })["catch"](function (e) { return console.error(e.stack); });
     };
-    return Tile;
+    Tile_db.load = function (data) {
+        var ret = new Tile_db();
+        ret.setId(data.id);
+        ret.setType(data.type);
+        ret.setCenterX(data.centerX);
+        ret.setCenterY(data.centerY);
+        ret.setX1(data.x1);
+        ret.setX2(data.x2);
+        ret.setY1(data.y1);
+        ret.setY2(data.y2);
+        ret.setRadius(data.radius);
+        ret.setIsOccupied(data.isOccupied);
+        ret.setColor(data.color);
+        ret.setStroke(data.stroke);
+        ret.setStrokeColor(data.strokeColor);
+        ret.setShape(data.shape);
+        ret.setIsChoosen(data.isChoosen);
+        ret.setBackgroundFile(data.backgroundFile);
+        ret.setPatternFile(data.patternFile);
+        ret.setTileNumber(data.tileNumber);
+        ret.setIsEnding(data.isEnding);
+        ret.setIsEndingFor(data.isEndingFor);
+        ret.setIsStarting(data.isStarting);
+        ret.setIsStarting(data.isStartingFor);
+        ret.setBelongTo(data.belongTo);
+        ret.setCanOccupy(data.canOccupy);
+        ret.setToogleNumber(data.toggleNumber);
+        ret.setNumberingColor(data.numberingColor);
+        ret.setFollowingTileNumber(data.numberOfFollowingTile);
+        ret.setGameName(data.gameName);
+        return ret;
+    };
+    return Tile_db;
 }());
-exports.Tile = Tile;
+exports.Tile_db = Tile_db;

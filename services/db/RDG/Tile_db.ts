@@ -1,5 +1,5 @@
 import { DbConnect } from "../DbConnect";
-export class Tile{
+export class Tile_db{
     private id:number= 0;
     private type:string = '';
     private centerX:number = 0;
@@ -213,4 +213,37 @@ export class Tile{
               .query(query)
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
+
+    public static load(data:any){
+        let ret = new Tile_db()
+        ret.setId(data.id)
+        ret.setType(data.type)
+        ret.setCenterX(data.centerX)
+        ret.setCenterY(data.centerY)
+        ret.setX1(data.x1)
+        ret.setX2(data.x2)
+        ret.setY1(data.y1)
+        ret.setY2(data.y2)
+        ret.setRadius(data.radius)
+        ret.setIsOccupied(data.isOccupied)
+        ret.setColor(data.color)
+        ret.setStroke(data.stroke)
+        ret.setStrokeColor(data.strokeColor)
+        ret.setShape(data.shape)
+        ret.setIsChoosen(data.isChoosen)
+        ret.setBackgroundFile(data.backgroundFile)
+        ret.setPatternFile(data.patternFile)
+        ret.setTileNumber(data.tileNumber)
+        ret.setIsEnding(data.isEnding)
+        ret.setIsEndingFor(data.isEndingFor)
+        ret.setIsStarting(data.isStarting)
+        ret.setIsStarting(data.isStartingFor)
+        ret.setBelongTo(data.belongTo)
+        ret.setCanOccupy(data.canOccupy)
+        ret.setToogleNumber(data.toggleNumber)
+        ret.setNumberingColor(data.numberingColor)
+        ret.setFollowingTileNumber(data.numberOfFollowingTile)
+        ret.setGameName(data.gameName)
+        return ret
+        }
 }

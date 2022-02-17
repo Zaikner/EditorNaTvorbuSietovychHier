@@ -36,13 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var Account_js_1 = require("../services/db/RDG/Account.js");
-var AccountFinder_js_1 = require("../services/db/RDG/AccountFinder.js");
+var Account_db_js_1 = require("../../services/db/RDG/Account_db.js");
+var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
+var Account_js_1 = require("./Account.js");
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env');
 var AccountManager = /** @class */ (function () {
     function AccountManager() {
-        this.loggedAccounts = [];
     }
     AccountManager.isValidRegistration = function (name, password, confirm) {
         return password == confirm && this.isValidName(name);
@@ -58,7 +58,6 @@ var AccountManager = /** @class */ (function () {
                         if (names.length != 0) {
                             return [2 /*return*/, false];
                         }
-                        console.log('nasiel:' + names);
                         return [2 /*return*/, true];
                 }
             });
@@ -79,14 +78,13 @@ var AccountManager = /** @class */ (function () {
                     case 1:
                         names = _a.sent();
                         if (names.length != 0) {
-                            console.log('vela');
                             return [2 /*return*/, false];
                         }
                         else if (password != confirm) {
                             return [2 /*return*/, false];
                         }
                         else {
-                            acc = new Account_js_1.Account();
+                            acc = new Account_db_js_1.Account_db();
                             acc.setName(name);
                             acc.setPassword(this.encode(password));
                             acc.insert();
@@ -106,12 +104,12 @@ var AccountManager = /** @class */ (function () {
                     case 1:
                         accounts = _a.sent();
                         if (accounts.length != 0) {
-                            if (this.decode(accounts[0].password) == password) {
+                            if (this.decode(accounts[0].getPassword()) == password && !this.isLogged(name)) {
+                                this.login(accounts[0]);
                                 return [2 /*return*/, true];
                             }
                         }
                         else {
-                            console.log('prazdne');
                             return [2 /*return*/, false];
                         }
                         return [2 /*return*/];
@@ -119,7 +117,24 @@ var AccountManager = /** @class */ (function () {
             });
         });
     };
-    AccountManager.login = function () { };
+    AccountManager.login = function (acc) {
+        var newAcc = new Account_js_1.Account(acc.getName(), acc.getPassword());
+        newAcc.setAvatar(acc.getAvatar());
+        this.loggedAccounts.push(newAcc);
+    };
+    AccountManager.logout = function (name) {
+    };
+    AccountManager.isLogged = function (name) {
+        var ret = false;
+        this.loggedAccounts.forEach(function (acc) {
+            if (acc.getName() === name) {
+                ret = true;
+            }
+            console.log('Ucet sa rovna:' + acc.getName() === name + ' ');
+        });
+        return ret;
+    };
+    AccountManager.loggedAccounts = [];
     return AccountManager;
 }());
 module.exports = AccountManager;
