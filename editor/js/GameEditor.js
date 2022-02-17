@@ -145,17 +145,6 @@ var GameEditor = /** @class */ (function () {
         });
         return res;
     };
-    GameEditor.prototype.getDataUrlFromImage = function (img) {
-        // Create canvas
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        // Set width and height
-        canvas.width = img.width;
-        canvas.height = img.height;
-        // Draw the image
-        ctx.drawImage(img, 0, 0);
-        return canvas.toDataURL('image/jpeg');
-    };
     GameEditor.prototype.getGame = function () {
         return this.game;
     };

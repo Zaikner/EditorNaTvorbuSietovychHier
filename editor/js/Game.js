@@ -4,6 +4,7 @@ exports.Game = void 0;
 var Path_js_1 = require("./Path.js");
 var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
+var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Game = /** @class */ (function () {
     function Game() {
         this.name = "";
@@ -24,12 +25,11 @@ var Game = /** @class */ (function () {
         canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
             author: this.author,
             background: {
-                backgroundImage: this.background.getBackgroundImage() === undefined ? 'none' : canvas_js_1.editor.getDataUrlFromImage(this.background.getBackgroundImage()),
+                backgroundImage: this.background.getBackgroundImage() === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.background.getBackgroundImage()),
                 color: this.background.getColor()
             },
             tiles: savedTiles,
-            numOfPlayers: this.numOfPlayers,
-            playerTokens: this.playerTokens
+            numOfPlayers: this.numOfPlayers
         });
     };
     Game.prototype.removeTile = function (tile) {

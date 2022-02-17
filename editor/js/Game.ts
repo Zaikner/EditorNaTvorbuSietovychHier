@@ -2,7 +2,7 @@ import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
 import { editorSocket,editor } from './canvas.js';
-
+import {getDataUrlFromImage} from './utilityFunctions.js'
 class Game{
     private name:String = "";
     private author:String = "";
@@ -27,12 +27,11 @@ class Game{
         editorSocket.emit('saveGame',{name:this.name,
                                       author:this.author,
                                       background:{
-                                                backgroundImage:this.background.getBackgroundImage() === undefined?'none':editor.getDataUrlFromImage(this.background.getBackgroundImage()),
+                                                backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
                                                 color:this.background.getColor()
                                       },
                                       tiles:savedTiles,
                                       numOfPlayers:this.numOfPlayers,
-                                      playerTokens:this.playerTokens
                                     })
     }
     removeTile(tile:Tile){

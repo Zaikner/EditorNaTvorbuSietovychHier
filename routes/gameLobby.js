@@ -7,7 +7,7 @@ router
 .route("/")
 .get((request,res) =>
 {   
-    res.sendFile('gameSpace.html',{root:'./editor/views'});
+    res.sendFile('gameLobby.html',{root:'./editor/views'});
 });
 
 

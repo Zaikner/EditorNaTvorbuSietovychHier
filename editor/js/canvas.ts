@@ -5,6 +5,7 @@ import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
+import { spawnButton } from "./Elements";
 
 const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
 //socket.emit('chat message', 'hi');
@@ -78,7 +79,9 @@ text.textContent = 'Typ hry:'
 document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
-
+spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Save game to database!',function(){
+  editor.getGame().saveGame()
+})
 }
 
 

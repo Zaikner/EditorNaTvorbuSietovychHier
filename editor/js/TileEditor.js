@@ -15,7 +15,6 @@ var deleteHandler = function (event) {
 };
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
-    canvas_js_1.editor.getGame().saveGame();
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of tile:');
     (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile size:');

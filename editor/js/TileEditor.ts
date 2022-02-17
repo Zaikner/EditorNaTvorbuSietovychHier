@@ -16,7 +16,7 @@ let deleteHandler = function(event:MouseEvent){
 
 function spawnElements(){
     //$('#exampleModal').modal('toggle')
-    editor.getGame().saveGame()
+   
     spawnParagraph(doc,"tileEditingPlace",'','Choose color of tile:')
     spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
 
