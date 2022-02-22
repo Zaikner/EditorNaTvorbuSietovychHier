@@ -18,7 +18,7 @@ head
         p <strong>If you don't have account yet, please <strong>
           a(href='/editor/register') register!
       #modalFooter.modal-footer
-        form.text-center(action='/editor/login' method='post' style='width: 100%;')
+        form.text-center(action=action method='post' style='width: 100%;')
           input#nameInput.form-control(name='name' type='text' placeholder='Name' minlength='5' required='')
           input#passwordInput.form-control(name='password' type='password' placeholder='Password' minlength='5' required='')
           button.btn.btn-primary(type='submit' name='editor' value='editor') Login

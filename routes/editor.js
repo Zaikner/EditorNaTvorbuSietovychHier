@@ -20,7 +20,7 @@ router
 router.route("/login")
 .get((request,res) =>
 {   
-    res.render('login',{root:'./editor/views',text:""})
+    res.render('login',{root:'./editor/views',text:"",action:'/editor/login'})
 })
 .post(async(request,res) =>
 {   
@@ -37,10 +37,10 @@ router.route("/login")
     }
     else if (isLoged){
         
-        res.render('login',{root:'./editor/views',text:'This account is already logged in!'})
+        res.render('login',{root:'./editor/views',text:'This account is already logged in!',action:'/editor/login'})
     }
     else{
-        res.render('login',{root:'./editor/views',text:'Wrong credentials!'})
+        res.render('login',{root:'./editor/views',text:'Wrong credentials!',action:'/editor/login'})
     }
 
 });
