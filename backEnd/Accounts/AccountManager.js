@@ -105,12 +105,11 @@ var AccountManager = /** @class */ (function () {
                         accounts = _a.sent();
                         if (accounts.length != 0) {
                             if (this.decode(accounts[0].getPassword()) == password && !this.isLogged(name)) {
-                                this.login(accounts[0]);
-                                return [2 /*return*/, true];
+                                return [2 /*return*/, [true, this.login(accounts[0])]];
                             }
                         }
                         else {
-                            return [2 /*return*/, false];
+                            return [2 /*return*/, [false, undefined]];
                         }
                         return [2 /*return*/];
                 }
@@ -120,9 +119,29 @@ var AccountManager = /** @class */ (function () {
     AccountManager.login = function (acc) {
         var newAcc = new Account_js_1.Account(acc.getName(), acc.getPassword());
         newAcc.setAvatar(acc.getAvatar());
+        newAcc.setClientId(this.createNewClientId());
         this.loggedAccounts.push(newAcc);
+        return newAcc;
     };
     AccountManager.logout = function (name) {
+        var lout = undefined;
+        console.log('ucty su');
+        console.log(this.loggedAccounts);
+        this.loggedAccounts.forEach(function (acc) {
+            if (acc.getClientId() == name) {
+                lout = acc;
+                console.log('odlogol' + acc.getName());
+            }
+            else {
+                console.log('nerovnaju sa');
+                console.log(acc.getClientId());
+                console.log(name);
+            }
+        });
+        if (lout != undefined) {
+            this.loggedAccounts = this.loggedAccounts.filter(function (acc) { return acc != lout; });
+            this.clientIds = this.clientIds.filter(function (id) { return id != name; });
+        }
     };
     AccountManager.isLogged = function (name) {
         var ret = false;
@@ -134,7 +153,18 @@ var AccountManager = /** @class */ (function () {
         });
         return ret;
     };
+    AccountManager.createNewClientId = function () {
+        var ret = '';
+        for (var i = 0; i < 12; i++) {
+            ret += String.fromCharCode(Math.floor(Math.random() * 70 + 48));
+        }
+        if (this.clientIds.includes(ret)) {
+            ret = this.createNewClientId();
+        }
+        return ret;
+    };
     AccountManager.loggedAccounts = [];
+    AccountManager.clientIds = [];
     return AccountManager;
 }());
 module.exports = AccountManager;

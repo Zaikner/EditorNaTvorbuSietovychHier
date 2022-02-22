@@ -186,7 +186,7 @@ var spawnTile = function (coords) {
     if (!patternChecker.checked) {
         pattImage = undefined;
     }
-    var addedTile = null;
+    var addedTile;
     if (outlineChecker.checked) {
         addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
     }
@@ -201,7 +201,7 @@ var spawnTile = function (coords) {
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         addedTile.setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
-            .filter(function (t) { return t.getTileNumber() === parseInt(document.getElementById('tileNumberSetter').value); });
+            .filter(function (t) { return t != addedTile && t.getTileNumber() === parseInt(document.getElementById('tileNumberSetter').value); });
         if (tileWithSameNumber.length > 0) {
             tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
         }

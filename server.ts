@@ -5,15 +5,18 @@ const http = require('http');
 const express = require('express');
 const DbConnect = require('./services/db/DbConnect.js')
 import { Server as ioServer } from "socket.io";
-import {Game} from './services/db/RDG/Game_db.js'
+import {Game_db} from './services/db/RDG/Game_db.js'
 import {GameFinder} from './services/db/RDG/GameFinder_db.js'
-import {Tile} from './services/db/RDG/Tile_db.js'
+import {Tile_db} from './services/db/RDG/Tile_db.js'
+var CryptoJS = require("crypto-js");
+var cookieParser = require('cookie-parser')
 //import {Socket} from './services/socket/Socket.js';
 
 const app = express();
 const server:Server = http.createServer(app);
 const io = new ioServer(server);
 const bodyParser = require('body-parser')
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.set('view engine', 'pug')
@@ -30,19 +33,22 @@ app.use(express.static(__dirname));
 const editor = require("./routes/editor.js")
 const main = require("./routes/main.js")
 const gameLobby = require("./routes/gameLobby.js")
+const account = require("./routes/account.js")
+const logout = require("./routes/logout.js")
 
 
 app.use('/',main);
 app.use('/editor',editor);
 app.use('/gameLobby',gameLobby);
+app.use('/account',account);
+app.use('/logout',logout);
 const PORT = process.env.PORT || 8001;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-
 io.on('connection', (socket:any) => {
     console.log('a user connected');
-
+    
     //GameFinder.getIntance().findByName('dsasda')
     socket.on('disconnect', () => {
       console.log('user disconnected');
@@ -52,12 +58,12 @@ io.on('connection', (socket:any) => {
       console.log('odchytil')
         console.log(data)
         console.log('odchytil')
-        let g = new Game()
+        let g = new Game_db()
         g.setAuthor(data.author)
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
         data.tiles.forEach((tile:any) =>{
-          let t = new Tile()
+          let t = new Tile_db()
           t.setType(tile.type)
           t.setCenterX(tile.centerX)
           t.setCenterY(tile.centerY)

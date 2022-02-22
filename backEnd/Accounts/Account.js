@@ -4,6 +4,7 @@ exports.Account = void 0;
 var Account = /** @class */ (function () {
     function Account(name, password) {
         this.avatar = 'default';
+        this.clientId = '';
         this.name = name;
         this.password = password;
     }
@@ -24,6 +25,12 @@ var Account = /** @class */ (function () {
     };
     Account.prototype.setAvatar = function (newAvatar) {
         this.avatar = newAvatar;
+    };
+    Account.prototype.getClientId = function () {
+        return this.clientId;
+    };
+    Account.prototype.setClientId = function (newId) {
+        this.clientId = newId;
     };
     return Account;
 }());

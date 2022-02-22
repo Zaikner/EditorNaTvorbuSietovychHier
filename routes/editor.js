@@ -8,7 +8,13 @@ router
 .route("/")
 .get((request,res) =>
 {   
-    res.sendFile('edit.html',{root:'./editor/views'});
+    if (request.cookies.id == undefined){
+        res.redirect('/editor/login')
+    }
+    else{
+        res.sendFile('edit.html',{root:'./editor/views'});
+    }
+    
 });
 
 router.route("/login")
@@ -21,10 +27,16 @@ router.route("/login")
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
-    if (registred && !isLoged){
-        res.redirect('/')
+    if (registred == undefined){
+        registred = [false]
+    }
+    if (registred[0] && !isLoged){
+        res.cookie('id',registred[1].getClientId())
+        //res.redirect('/editor/setId?id='+registred[1].getClientId())
+        res.redirect('/editor')
     }
     else if (isLoged){
+        
         res.render('login',{root:'./editor/views',text:'This account is already logged in!'})
     }
     else{
@@ -50,8 +62,25 @@ router.route("/register")
         }
         res.render('register',{root:'./editor/views',text:'That name is already used!'})
     }
-    //res.sendFile('register.html',{root:'./editor/views'});
-  //res.render('registerProblem',{root:'./editor/views'})
+
+});
+
+// router
+// .route("/id/:id")
+// .get((request,res) =>
+// {   console.log(request.params)
+    
+//     res.sendFile('edit.html',{root:'./editor/views'});
+//     //res.sendFile('main.html',{root:'./editor/views'});
+// });
+
+router
+.route("/setId")
+.get((request,res) =>
+{   console.log(request.params)
+    console.log(request.query)
+    res.sendFile('setClientId.html',{root:'./editor/views'});
+    //res.sendFile('main.html',{root:'./editor/views'});
 });
 
 

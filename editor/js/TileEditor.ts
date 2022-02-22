@@ -218,7 +218,7 @@ function insertTilesMenu():void{
       pattImage = undefined!
     }
 
-    var addedTile = null;
+    var addedTile:Tile;
     if (outlineChecker!.checked){
       addedTile = editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage,pattImage)
     }
@@ -232,11 +232,13 @@ function insertTilesMenu():void{
     addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
+      
       addedTile.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
-    
+      
       let tileWithSameNumber = editor.getGame().getTiles()
-      .filter((t:Tile) => {return t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
+      .filter((t:Tile) => {return t!= addedTile && t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
       if (tileWithSameNumber.length > 0){
+
         tileWithSameNumber[0].setTileNumber(editor.nextTileNumber())
       }
        
