@@ -48,19 +48,19 @@ router.route("/login")
 router.route("/register")
 .get((request,res) =>
 {   
-    res.render('register',{root:'./editor/views'});
+    res.render('register',{root:'./editor/views',action : '/editor/register'});
 })
 .post(async(request,res) =>
 {   
     let registred = await AccountManager.register(request.body.name,request.body.password,request.body.confirm)
     if (registred){
-        res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!'})
+        res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!',action : '/editor/register'})
     }
     else{
         if (request.body.confirm!= request.body.password){
-            res.render('register',{root:'./editor/views',text:'Confirmation and password are not same!'})
+            res.render('register',{root:'./editor/views',text:'Confirmation and password are not same!',action : '/editor/register'})
         }
-        res.render('register',{root:'./editor/views',text:'That name is already used!'})
+        res.render('register',{root:'./editor/views',text:'That name is already used!',action : '/editor/register'})
     }
 
 });
