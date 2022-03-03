@@ -8,12 +8,21 @@ router
 .route("/")
 .get((request,res) =>
 {   
-    if (request.cookies.id == undefined){
-        res.redirect('/editor/login')
+    let acc = AccountManager.getAccountByClientId(request.cookies.id)
+
+    if (request.cookies.id != undefined && acc != undefined){
+        if (acc.getIsGuest() === true){
+            
+            res.redirect('/editor/login')
+        }
+        else{
+            res.sendFile('edit.html',{root:'./editor/views'});
+        }
+        
+        
     }
     else{
-        res.sendFile('edit.html',{root:'./editor/views'});
-    }
+        res.redirect('/editor/login')}
     
 });
 

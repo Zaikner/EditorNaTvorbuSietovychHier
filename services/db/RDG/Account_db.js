@@ -44,6 +44,17 @@ var Account_db = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Account_db.prototype.update = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'update-account',
+            text: 'UPDATE "bachelorsThesis"."Account" SET name = $1 ,password = $2 ,avatar = $3 WHERE id = $4;',
+            values: [this.name, this.password, this.avatar, this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Account_db.load = function (data) {
         var newAcc = new Account_db();
         newAcc.setId(data.id);

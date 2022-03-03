@@ -1,4 +1,5 @@
 import { DbConnect } from "../DbConnect";
+import { Game_db } from "./Game_db";
 export class GameFinder{
     private static INSTANCE:GameFinder = new GameFinder()
     public static getIntance():GameFinder{return this.INSTANCE}
@@ -6,15 +7,52 @@ export class GameFinder{
     private constructor(){
 
     }
-    public findByName(name:string){
-        let client = DbConnect.get()
-        const query = {
-            name: 'select-game',
-            text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE name=$1;',
-            values: [name],
+    
+
+    public async findByName(name:string){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-game-name',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE name=$1;',
+                    values: [name],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Game_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                    console.log('precital')
+                    ret.push(Game_db.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
           }
-          client
-          .query(query)
-          .then((res:any) => console.log(res.rows[0]))
-          .catch((e:Error) => console.error(e.stack))}    
+          public async findAll(){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-game-all',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game";',
+                    values: [],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Game_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                    console.log('precital')
+                    ret.push(Game_db.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }
 }

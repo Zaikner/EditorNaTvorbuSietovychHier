@@ -8,8 +8,11 @@ import { Server as ioServer } from "socket.io";
 import {Game_db} from './services/db/RDG/Game_db.js'
 import {GameFinder} from './services/db/RDG/GameFinder_db.js'
 import {Tile_db} from './services/db/RDG/Tile_db.js'
+const busboy = require('connect-busboy');
 var CryptoJS = require("crypto-js");
 var cookieParser = require('cookie-parser')
+const fileUpload = require('express-fileupload');
+//const multer  = require('multer')
 //import {Socket} from './services/socket/Socket.js';
 
 const app = express();
@@ -21,20 +24,27 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.set('view engine', 'pug')
 app.set('views', __dirname + '/editor/views');
-
+//app.use(multer)
+// app.use(fileUpload({
+//   createParentPath: true
+// }));
 
 //const socketConnection = Socket.get();
 // socketConnection.setServerSocket(server);
 // const io = socketConnection.getServerSocket()
 const Path = require('./editor/js/Path');
 
-
+app.use(fileUpload());
 app.use(express.static(__dirname));
 const editor = require("./routes/editor.js")
 const main = require("./routes/main.js")
 const gameLobby = require("./routes/gameLobby.js")
 const account = require("./routes/account.js")
 const logout = require("./routes/logout.js")
+const room = require("./routes/room.js")
+const loginOrGuest = require("./routes/loginOrGuest.js")
+const playAsGuest = require("./routes/playAsGuest.js")
+
 
 
 app.use('/',main);
@@ -42,6 +52,9 @@ app.use('/editor',editor);
 app.use('/gameLobby',gameLobby);
 app.use('/account',account);
 app.use('/logout',logout);
+app.use('/room',room);
+app.use('/loginOrGuest',loginOrGuest);
+app.use('/playAsGuest',playAsGuest);
 const PORT = process.env.PORT || 8001;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -52,6 +65,9 @@ io.on('connection', (socket:any) => {
     //GameFinder.getIntance().findByName('dsasda')
     socket.on('disconnect', () => {
       console.log('user disconnected');
+    });
+    socket.on('msg', (msg:string) => {
+      console.log('napojil socket');
     });
     socket.on('saveGame', (data:any) => {
       

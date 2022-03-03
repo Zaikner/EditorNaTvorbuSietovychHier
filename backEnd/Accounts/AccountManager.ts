@@ -7,6 +7,7 @@ require("dotenv").config('.env')
 class AccountManager{
     private static loggedAccounts:Array<Account> = []
     private static clientIds:Array<String> = []
+    private static numberOfGuests:number = 0
     public static isValidRegistration(name:string,password:string,confirm:string){
         return password == confirm && this.isValidName(name)
     }
@@ -80,6 +81,16 @@ class AccountManager{
         }
      
     }
+    public static logGuest(){
+        let newAcc = new Account((this.numberOfGuests+1).toString(),'guestHaveNoPassword')
+        this.numberOfGuests++;
+        newAcc.setIsGuest(true)
+        newAcc.setClientId(this.createNewClientId())
+        this.loggedAccounts.push(newAcc)
+        return newAcc
+        
+
+    }
     
     public static isLogged(name:string){
         let ret = false
@@ -101,6 +112,41 @@ class AccountManager{
             ret = this.createNewClientId()
         }
         return ret
+    }
+    public static getAccountByClientId(clientId:string){
+        let ret = undefined
+        this.loggedAccounts.forEach((acc:Account) =>{
+            if (acc.getClientId()===clientId){
+                ret = acc
+            }
+            console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
+            
+        })
+        return ret
+    }
+    public static async changePassword(name:string, newPassword:string, clientId:string){
+        let accounts = await AccountFinder.getIntance().findByName(name)
+        if (accounts!= undefined){
+            console.log(accounts[0])
+            accounts[0].setPassword(this.encode(newPassword))
+            accounts[0].update();
+            
+        }
+    
+        
+    }
+    public static async changeAvatar(name:string, newAvatar:string){
+        let accounts = await AccountFinder.getIntance().findByName(name)
+        if (accounts!= undefined){
+            
+            accounts[0].setAvatar(newAvatar)
+            //console.log(accounts[0])
+            accounts[0].update();
+            
+        }
+    }
+    public static getLogedAccounts(){
+        return this.loggedAccounts
     }
 
 }

@@ -143,6 +143,14 @@ var AccountManager = /** @class */ (function () {
             this.clientIds = this.clientIds.filter(function (id) { return id != name; });
         }
     };
+    AccountManager.logGuest = function () {
+        var newAcc = new Account_js_1.Account((this.numberOfGuests + 1).toString(), 'guestHaveNoPassword');
+        this.numberOfGuests++;
+        newAcc.setIsGuest(true);
+        newAcc.setClientId(this.createNewClientId());
+        this.loggedAccounts.push(newAcc);
+        return newAcc;
+    };
     AccountManager.isLogged = function (name) {
         var ret = false;
         this.loggedAccounts.forEach(function (acc) {
@@ -163,8 +171,58 @@ var AccountManager = /** @class */ (function () {
         }
         return ret;
     };
+    AccountManager.getAccountByClientId = function (clientId) {
+        var ret = undefined;
+        this.loggedAccounts.forEach(function (acc) {
+            if (acc.getClientId() === clientId) {
+                ret = acc;
+            }
+            console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName());
+        });
+        return ret;
+    };
+    AccountManager.changePassword = function (name, newPassword) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findByName(name)];
+                    case 1:
+                        accounts = _a.sent();
+                        if (accounts != undefined) {
+                            console.log(accounts[0]);
+                            accounts[0].setPassword(this.encode(newPassword));
+                            accounts[0].update();
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountManager.changeAvatar = function (name, newAvatar) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findByName(name)];
+                    case 1:
+                        accounts = _a.sent();
+                        if (accounts != undefined) {
+                            accounts[0].setAvatar(newAvatar);
+                            console.log(accounts[0]);
+                            accounts[0].update();
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountManager.getLogedAccounts = function () {
+        return this.loggedAccounts;
+    };
     AccountManager.loggedAccounts = [];
     AccountManager.clientIds = [];
+    AccountManager.numberOfGuests = 0;
     return AccountManager;
 }());
 module.exports = AccountManager;

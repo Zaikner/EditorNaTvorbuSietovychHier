@@ -3,6 +3,7 @@ export class Account{
     private password:string
     private avatar:string = 'default'
     private clientId:string = ''
+    private isGuest:boolean = false;
 
     constructor(name:string,password:string){
         this.name = name
@@ -32,6 +33,12 @@ export class Account{
     }
     public setClientId(newId:string){
         this.clientId = newId
+    }
+    public getIsGuest() {
+        return this.isGuest
+    }
+    public setIsGuest(is:boolean){
+        this.isGuest = is
     }
 
 }

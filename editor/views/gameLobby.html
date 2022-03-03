@@ -52,12 +52,34 @@ background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
                    
                     <div class="col-5" style=" overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%;">
 
-                        <div style="margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;">
+                        <div style="margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;">
                             <p style="font-size: 20px; font-family: sans-serif;">Choose room</p>
                             <hr>
+                            <form>
+                                <p>Choose room with number:</p>
+                                <input type="number" id="roomIdSelecter">
+                                <button type="submit">Join</button>
+                            </form>
+                            <form>
+                                <p>or create new room</p>
+                                <button type="submit">Create</button>
+                            </form>
+                            
+                            
+                            
                         </div>
-                        <div style="margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;">
-                            <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
+                        <div style="margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 25vh;  border-radius: 25px;">
+                            <!-- <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p> -->
+                            <label for="chat" style="font-size: 20px; font-family: sans-serif; "><strong>Active rooms</strong></label>
+                            
+                            <ul class="list-group" style="overflow-y: scroll; max-height: 20vh">
+                                <li class="list-group-item">Room 1 <a href="">Game 2</a> <button>Join</button></li>
+                                <li class="list-group-item">Room 1  <a href="">Game 2</a> <button>Join</button></li>
+                                <li class="list-group-item">Room 1  <a href="">Game 2</a> <button>Join</button></li>
+                                <li class="list-group-item">Room 1  <a href="">Game 2</a> <button>Join</button></li>
+                                <li class="list-group-item">Room 1  <a href="">Game 2</a> <button>Join</button></li>
+                              </ul>
+                            
                             <hr>
                         </div>
                         <div style="margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;">
@@ -70,17 +92,30 @@ background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
                         <div style="margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;">
                             <p style="font-size: 20px; font-family: sans-serif;"> Created games overview</p>
                             <hr>
+                            <p>Tu niekde bude checkbox alebo dropdown filter</p>
+                            <br>
+                            <br>
+                            <ul class="list-group" style="overflow-y: scroll; max-height: 25vh">
+                                <li class="list-group-item">Game 1  <button>Detail</button></li>
+                                <li class="list-group-item">Game 12   <button>Detail</button></li>
+                                <li class="list-group-item">Game 31   <button>Detail</button></li>
+                                <li class="list-group-item">Game 111   <button>Detail</button></li>
+                                <li class="list-group-item">Game 2   <button>Detail</button></li>
+                              </ul>
+                            
+                            <hr>
                         </div>
                         <div style="margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;">
                     
                             <div class="form-group">
                                 <label for="chat" style="font-size: 20px; font-family: sans-serif;"><strong>Player chat</strong></label>
                                 
-                                <textarea class="form-control" id="chat" rows="6" style="resize: none;" readonly></textarea>
+                                <textarea class="form-control" id="chat" rows="15" style="resize: none; overflow-y: scroll; max-height: 20vh;" readonly></textarea>
                                 <textarea class="form-control" id="answer" rows="1" style="resize: none;" placeholder="Write there"></textarea>
                               </div>
                         </div>
                      </div>
+                     <script src="../socket.io/socket.io.js"></script>
                     
                     <div>
                   

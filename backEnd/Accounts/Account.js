@@ -5,6 +5,7 @@ var Account = /** @class */ (function () {
     function Account(name, password) {
         this.avatar = 'default';
         this.clientId = '';
+        this.isGuest = false;
         this.name = name;
         this.password = password;
     }
@@ -31,6 +32,12 @@ var Account = /** @class */ (function () {
     };
     Account.prototype.setClientId = function (newId) {
         this.clientId = newId;
+    };
+    Account.prototype.getIsGuest = function () {
+        return this.isGuest;
+    };
+    Account.prototype.setIsGuest = function (is) {
+        this.isGuest = is;
     };
     return Account;
 }());

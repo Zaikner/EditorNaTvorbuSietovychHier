@@ -43,6 +43,18 @@ export class Account_db{
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
 
+    public update(){
+                let client = DbConnect.get()
+                    const query = {
+                        name: 'update-account',
+                        text: 'UPDATE "bachelorsThesis"."Account" SET name = $1 ,password = $2 ,avatar = $3 WHERE id = $4;',
+                        values: [this.name,this.password,this.avatar,this.id],
+                      }
+                      client
+                      .query(query)
+                      .then((res:any) => console.log(res.rows))
+                      .catch((e:Error) => console.error(e.stack))}
+
     public static load(data:any){
         let newAcc = new Account_db()
         newAcc.setId(data.id)

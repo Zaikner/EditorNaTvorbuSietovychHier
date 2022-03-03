@@ -1,4 +1,4 @@
-import { Game } from "./Game_db";
+import { Game_db } from "./Game_db";
 import { DbConnect } from "../DbConnect";
 export class TileFinder{
     private static INSTANCE:TileFinder = new TileFinder()

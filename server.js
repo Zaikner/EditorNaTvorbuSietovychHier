@@ -7,8 +7,11 @@ var DbConnect = require('./services/db/DbConnect.js');
 var socket_io_1 = require("socket.io");
 var Game_db_js_1 = require("./services/db/RDG/Game_db.js");
 var Tile_db_js_1 = require("./services/db/RDG/Tile_db.js");
+var busboy = require('connect-busboy');
 var CryptoJS = require("crypto-js");
 var cookieParser = require('cookie-parser');
+var fileUpload = require('express-fileupload');
+//const multer  = require('multer')
 //import {Socket} from './services/socket/Socket.js';
 var app = express();
 var server = http.createServer(app);
@@ -19,21 +22,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/editor/views');
+//app.use(multer)
+// app.use(fileUpload({
+//   createParentPath: true
+// }));
 //const socketConnection = Socket.get();
 // socketConnection.setServerSocket(server);
 // const io = socketConnection.getServerSocket()
 var Path = require('./editor/js/Path');
+app.use(fileUpload());
 app.use(express.static(__dirname));
 var editor = require("./routes/editor.js");
 var main = require("./routes/main.js");
 var gameLobby = require("./routes/gameLobby.js");
 var account = require("./routes/account.js");
 var logout = require("./routes/logout.js");
+var room = require("./routes/room.js");
+var loginOrGuest = require("./routes/loginOrGuest.js");
+var playAsGuest = require("./routes/playAsGuest.js");
 app.use('/', main);
 app.use('/editor', editor);
 app.use('/gameLobby', gameLobby);
 app.use('/account', account);
 app.use('/logout', logout);
+app.use('/room', room);
+app.use('/loginOrGuest', loginOrGuest);
+app.use('/playAsGuest', playAsGuest);
 var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
 io.on('connection', function (socket) {
@@ -41,6 +55,9 @@ io.on('connection', function (socket) {
     //GameFinder.getIntance().findByName('dsasda')
     socket.on('disconnect', function () {
         console.log('user disconnected');
+    });
+    socket.on('msg', function (msg) {
+        console.log('napojil socket');
     });
     socket.on('saveGame', function (data) {
         console.log('odchytil');
