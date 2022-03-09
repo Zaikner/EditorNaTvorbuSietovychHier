@@ -10,7 +10,7 @@ import { spawnButton } from "./Elements";
 
 import { Background } from "./Background";
 
-const editorSocket = io('https://sietove-hry.herokuapp.com/');//http://sietove-hry.herokuapp.com/
+const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
 
 editorSocket.on('connected',(msg)=>{

@@ -8,7 +8,7 @@ var GameEditor_js_1 = require("./GameEditor.js");
 var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
 var Background_1 = require("./Background");
-var editorSocket = (0, socket_io_client_1.io)('https://sietove-hry.herokuapp.com/'); //http://sietove-hry.herokuapp.com/
+var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
 //socket.emit('chat message', 'hi');
 editorSocket.on('connected', function (msg) {
