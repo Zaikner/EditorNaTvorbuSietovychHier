@@ -4,7 +4,6 @@ var path = require('path');
 var http = require('http');
 var express = require('express');
 var DbConnect = require('./services/db/DbConnect.js');
-var socket_io_1 = require("socket.io");
 var busboy = require('connect-busboy');
 var CryptoJS = require("crypto-js");
 var cookieParser = require('cookie-parser');
@@ -14,7 +13,7 @@ var SocketServer = require('./services/socket/SocketServer.js');
 //import {Socket} from './services/socket/Socket.js';
 var app = express();
 var server = http.createServer(app);
-var io = new socket_io_1.Server(server);
+//const io = new ioServer(server);
 var bodyParser = require('body-parser');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,8 +50,8 @@ app.use('/playAsGuest', playAsGuest);
 app.use('/showGame', showGame);
 var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
-SocketServer.setIo(io);
-SocketServer.serverListen();
+// SocketServer.setIo(io)
+// SocketServer.serverListen()
 // io.on('connection', (socket:any) => {
 //     console.log('a user connected');
 //     //GameFinder.getIntance().findByName('dsasda')
@@ -107,4 +106,4 @@ SocketServer.serverListen();
 //         io.emit('chat message');
 //       });
 //   });
-module.exports = io;
+// module.exports = io
