@@ -4,7 +4,7 @@ import {Tile} from './Tile.js'
 import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js";
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
-
+import { io } from "socket.io-client";
 import { spawnButton } from "./Elements";
 
 
@@ -12,7 +12,7 @@ import { Background } from "./Background";
 
 const editorSocket = io('https://sietove-hry.herokuapp.com/');//http://sietove-hry.herokuapp.com/
 //socket.emit('chat message', 'hi');
-import { io } from "socket.io-client";
+
 editorSocket.on('connected',(msg)=>{
   console.log('Editor client connected')
   console.log(msg)

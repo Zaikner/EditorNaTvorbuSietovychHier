@@ -5,12 +5,12 @@ var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
+var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
 var Background_1 = require("./Background");
 var editorSocket = (0, socket_io_client_1.io)('https://sietove-hry.herokuapp.com/'); //http://sietove-hry.herokuapp.com/
 exports.editorSocket = editorSocket;
 //socket.emit('chat message', 'hi');
-var socket_io_client_1 = require("socket.io-client");
 editorSocket.on('connected', function (msg) {
     console.log('Editor client connected');
     console.log(msg);
