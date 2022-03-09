@@ -24,15 +24,15 @@ class Game{
         this.tiles.forEach((tile:Tile)=>{
             savedTiles.push(tile.JSONfyTile())
         })
-        editorSocket.emit('saveGame',{name:this.name,
-                                      author:this.author,
-                                      background:{
-                                                backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
-                                                color:this.background.getColor()
-                                      },
-                                      tiles:savedTiles,
-                                      numOfPlayers:this.numOfPlayers,
-                                    })
+        // editorSocket.emit('saveGame',{name:this.name,
+        //                               author:this.author,
+        //                               background:{
+        //                                         backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
+        //                                         color:this.background.getColor()
+        //                               },
+        //                               tiles:savedTiles,
+        //                               numOfPlayers:this.numOfPlayers,
+        //                             })
     }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});

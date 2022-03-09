@@ -1,79 +1,78 @@
 "use strict";
 exports.__esModule = true;
 exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
-var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
 var Elements_1 = require("./Elements");
-var socket_io_client_1 = require("socket.io-client");
-var Background_1 = require("./Background");
-var editorSocket = (0, socket_io_client_1.io)('http://sietove-hry.herokuapp.com/'); //http://sietove-hry.herokuapp.com/
+var editorSocket = 'undefined';
 exports.editorSocket = editorSocket;
-//socket.emit('chat message', 'hi');
-editorSocket.on('connected', function (msg) {
-    console.log('Editor client connected');
-    console.log(msg);
-    msg.tiles.forEach(function (tile) {
-        var addedTile = new Tile_js_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
-        addedTile.setStroke(tile.stroke);
-        addedTile.setStrokeColor(tile.strokeColor);
-        addedTile.setShape(tile.shape);
-        addedTile.setIsChoosen(tile.isChoosen);
-        var image = new Image();
-        image.src = msg.background.image;
-        image.onload = function () {
-            addedTile.setBackgroundFile(image);
-            reload(editor, ctx);
-        };
-        //addedTile.setBackgroundFile(tile.backgroundFile)
-        //addedTile.setPatternFile(tile.patternFile)
-        addedTile.setIsEnding(tile.isEnding);
-        addedTile.setIsEndingFor(tile.isEndingFor);
-        addedTile.setIsStarting(tile.isStarting);
-        addedTile.setIsStartingFor(tile.isStartingFor);
-        addedTile.setBelongTo(tile.belongTo);
-        addedTile.setCanOccupy(tile.canOccupy);
-        addedTile.setToogleNumber(tile.toggleNumber);
-        addedTile.setNumberingColor(tile.numberingColor);
-        addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
-        editor.getGame().addTile(addedTile);
-    });
-    var background = new Background_1.Background();
-    background.setColor(msg.background.color);
-    var backImage = new Image();
-    backImage.src = msg.background.image;
-    backImage.onload = function () {
-        background.setBackgroundImage(backImage);
-        editor.getGame().setBackground(background);
-        console.log('obrazok ready');
-        reload(editor, ctx);
-    };
-    background.setBackgroundImage(backImage);
-    console.log(background);
-    console.log('sprava je pod');
-    console.log(msg.background);
-    console.log('farba je: ' + msg.background.color);
-    editor.getGame().setBackground(background);
-    //editor.getGame().setBackground(msg.background)
-    editor.getGame().setAuthor(msg.game.author);
-    editor.getGame().setName(msg.game.name);
-    editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
-    //reload(editor,ctx)
-    //edit()
-});
-//editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
-if (window.location.href === 'http://localhost:8001/editor/') {
-    edit();
-}
-else {
-    var params = new URLSearchParams(window.location.search);
-    editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
-}
-editorSocket.on('loaded game', function () {
-    console.log('Editor client connected');
-    //edit()
-});
+// const editorSocket = io('http://sietove-hry.herokuapp.com/');//http://sietove-hry.herokuapp.com/
+// //socket.emit('chat message', 'hi');
+// import { io } from "socket.io-client";
+// editorSocket.on('connected',(msg)=>{
+//   console.log('Editor client connected')
+//   console.log(msg)
+//   msg.tiles.forEach((tile:any) =>{
+//     let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
+//      addedTile.setStroke(tile.stroke)
+//      addedTile.setStrokeColor(tile.strokeColor)
+//      addedTile.setShape(tile.shape)
+//      addedTile.setIsChoosen(tile.isChoosen)
+//      let image = new Image()
+//      image.src = msg.background.image
+//      image.onload = function(){
+//       addedTile.setBackgroundFile(image)
+//       reload(editor,ctx)
+//      }
+//       //addedTile.setBackgroundFile(tile.backgroundFile)
+//       //addedTile.setPatternFile(tile.patternFile)
+//      addedTile.setIsEnding(tile.isEnding)
+//      addedTile.setIsEndingFor(tile.isEndingFor)
+//      addedTile.setIsStarting(tile.isStarting)
+//      addedTile.setIsStartingFor(tile.isStartingFor)
+//      addedTile.setBelongTo(tile.belongTo)
+//      addedTile.setCanOccupy(tile.canOccupy)
+//      addedTile.setToogleNumber(tile.toggleNumber)
+//      addedTile.setNumberingColor(tile.numberingColor)
+//      addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
+//     editor.getGame().addTile(addedTile)
+//   })
+//   let background = new Background()
+//   background.setColor(msg.background.color)
+//   let backImage = new Image()
+//   backImage.src = msg.background.image
+//   backImage.onload = function(){
+//     background.setBackgroundImage(backImage)
+//     editor.getGame().setBackground(background)
+//     console.log('obrazok ready')
+//     reload(editor,ctx)
+//   }
+//   background.setBackgroundImage(backImage)
+//   console.log(background)
+//   console.log('sprava je pod')
+//   console.log(msg.background)
+//   console.log('farba je: '+msg.background.color)
+//   editor.getGame().setBackground(background)
+//   //editor.getGame().setBackground(msg.background)
+//   editor.getGame().setAuthor(msg.game.author)
+//   editor.getGame().setName(msg.game.name)
+//   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
+//   //reload(editor,ctx)
+//   //edit()
+// })
+// //editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
+// if (window.location.href === 'http://localhost:8001/editor/'){
+//   edit()
+// }
+// else{
+//   const params = new URLSearchParams(window.location.search);
+//   editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+// }
+// editorSocket.on('loaded game',()=>{
+//   console.log('Editor client connected')
+//   //edit()
+// })
 function edit() {
     mainMenu();
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
