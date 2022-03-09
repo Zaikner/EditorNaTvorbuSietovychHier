@@ -1,17 +1,87 @@
 "use strict";
 exports.__esModule = true;
-exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
-var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
-var editorSocket = (0, socket_io_client_1.io)('http://localhost:8001/'); //http://sietove-hry.herokuapp.com/
+var socket_io_client_1 = require("socket.io-client");
+var Background_1 = require("./Background");
+var editorSocket = (0, socket_io_client_1.io)(); //http://sietove-hry.herokuapp.com/
 exports.editorSocket = editorSocket;
 //socket.emit('chat message', 'hi');
-editorSocket.on('chat message', function (msg) {
+editorSocket.on('connected', function (msg) {
+    console.log('Editor client connected');
     console.log(msg);
+    msg.tiles.forEach(function (tile) {
+        var addedTile = new Tile_js_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
+        addedTile.setStroke(tile.stroke);
+        addedTile.setStrokeColor(tile.strokeColor);
+        addedTile.setShape(tile.shape);
+        addedTile.setIsChoosen(tile.isChoosen);
+        var image = new Image();
+        image.src = msg.background.image;
+        image.onload = function () {
+            addedTile.setBackgroundFile(image);
+            reload(editor, ctx);
+        };
+        //addedTile.setBackgroundFile(tile.backgroundFile)
+        //addedTile.setPatternFile(tile.patternFile)
+        addedTile.setIsEnding(tile.isEnding);
+        addedTile.setIsEndingFor(tile.isEndingFor);
+        addedTile.setIsStarting(tile.isStarting);
+        addedTile.setIsStartingFor(tile.isStartingFor);
+        addedTile.setBelongTo(tile.belongTo);
+        addedTile.setCanOccupy(tile.canOccupy);
+        addedTile.setToogleNumber(tile.toggleNumber);
+        addedTile.setNumberingColor(tile.numberingColor);
+        addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
+        editor.getGame().addTile(addedTile);
+    });
+    var background = new Background_1.Background();
+    background.setColor(msg.background.color);
+    var backImage = new Image();
+    backImage.src = msg.background.image;
+    backImage.onload = function () {
+        background.setBackgroundImage(backImage);
+        editor.getGame().setBackground(background);
+        console.log('obrazok ready');
+        reload(editor, ctx);
+    };
+    background.setBackgroundImage(backImage);
+    console.log(background);
+    console.log('sprava je pod');
+    console.log(msg.background);
+    console.log('farba je: ' + msg.background.color);
+    editor.getGame().setBackground(background);
+    //editor.getGame().setBackground(msg.background)
+    editor.getGame().setAuthor(msg.game.author);
+    editor.getGame().setName(msg.game.name);
+    editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
+    //reload(editor,ctx)
+    //edit()
 });
+//editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
+if (window.location.href === 'http://localhost:8001/editor/') {
+    edit();
+}
+else {
+    var params = new URLSearchParams(window.location.search);
+    editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+}
+editorSocket.on('loaded game', function () {
+    console.log('Editor client connected');
+    //edit()
+});
+function edit() {
+    mainMenu();
+    document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
+    document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
+    document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
+    document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
+    document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
+}
 var doc = document;
 exports.doc = doc;
 var canvas = document.createElement('canvas');
@@ -20,12 +90,6 @@ var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
-document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
-document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
-document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
-document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
-document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
-mainMenu();
 function mainMenu() {
     started = false;
     var numOfPlayersSlider = document.createElement('input');
@@ -69,25 +133,28 @@ function mainMenu() {
     document.getElementById("gameTypePlace").appendChild(gameType);
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], 'Save game to database!', function () {
         editor.getGame().saveGame();
+        window.location.replace('/');
     });
 }
 exports.mainMenu = mainMenu;
 var length = 0;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
-resize();
-window.addEventListener('resize', resize);
+resize(editor, ctx);
+window.addEventListener('resize', function () { resize(editor, ctx); });
 // // resize canvas
-function resize() {
+function resize(editor, context) {
     //endDrawingPath()
-    ctx.canvas.width = window.innerWidth / 3 * 2 - 30;
-    ctx.canvas.height = window.innerHeight;
-    reload();
+    context.canvas.width = window.innerWidth / 3 * 2 - 30;
+    context.canvas.height = window.innerHeight;
+    reload(editor, context);
     //if (started) startDrawingPath();
     // }
 }
-function reload() {
+exports.resize = resize;
+function reload(editor, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    console.log(editor.getGame().getBackground());
     if (editor.getGame().getBackground() != undefined) {
         editor.getGame().getBackground().draw();
     }
@@ -135,3 +202,12 @@ function calibreEventCoords(event) {
     return { x: event.offsetX, y: event.offsetY };
 }
 exports.calibreEventCoords = calibreEventCoords;
+function getCookie(name) {
+    var cookie = new Map();
+    document.cookie.split(';').forEach(function (el) {
+        var _a = el.split('='), k = _a[0], v = _a[1];
+        var key = k.trim();
+        cookie.set(key, v);
+    });
+    return cookie.get(name);
+}

@@ -1,5 +1,6 @@
 import { Game_db } from "./Game_db";
 import { DbConnect } from "../DbConnect";
+import { Tile_db } from "./Tile_db";
 export class TileFinder{
     private static INSTANCE:TileFinder = new TileFinder()
     public static getIntance():TileFinder{return this.INSTANCE}
@@ -7,15 +8,29 @@ export class TileFinder{
     private constructor(){
 
     }
-    public findTileByGameName(name:string){
-        let client = DbConnect.get()
-        const query = {
-            name: 'select-gameTiles',
-            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
-            values: [name],
-          }
-          client
-          .query(query)
-          .then((res:any) => console.log(res.rows[0]))
-          .catch((e:Error) => console.error(e.stack))}    
+  
+    
+    public async findByName(name:string){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-gameTiles',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
+                    values: [name],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Tile_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                    console.log('precital')
+                    ret.push(Tile_db.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }    
 }

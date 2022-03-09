@@ -1,6 +1,4 @@
-import e = require('express')
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload} from './canvas.js'
-import { GameEditor } from './GameEditor.js'
+import {doc,ctx, editor,reload} from './canvas.js'
 import {removeAllButtons,removeAllListenersAdded} from './TileEditor.js'
 
 var background:HTMLImageElement = undefined!
@@ -67,7 +65,7 @@ function editBackground(){
         editor.getGame().getBackground().delete()
       }
       editor.getGame().getBackground().setColor(colorPicker.value)
-      reload()
+      reload(editor,ctx)
   });
 
   let buttonDelete:HTMLButtonElement = doc.createElement('button')
@@ -79,7 +77,7 @@ function editBackground(){
   doc.getElementById("buttonPlace")!.appendChild(buttonDelete);
   doc.getElementById("deleteBackground")!.addEventListener('click',function(){
       editor.getGame().getBackground().delete()
-      reload()
+      reload(editor,ctx)
   });
 
   let colorPicker:HTMLInputElement = doc.createElement('input')

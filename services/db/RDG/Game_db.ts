@@ -19,7 +19,7 @@ export class Game_db{
         this.id  = newId
     }
     public getNumOfPlayers() : number {
-        return this.id
+        return this.numOfPlayers
     }
     public setNumOfPlayers(newNum:number){
         this.numOfPlayers  = newNum

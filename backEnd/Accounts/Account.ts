@@ -4,6 +4,7 @@ export class Account{
     private avatar:string = 'default'
     private clientId:string = ''
     private isGuest:boolean = false;
+    private socketId:string = ''
 
     constructor(name:string,password:string){
         this.name = name
@@ -39,6 +40,12 @@ export class Account{
     }
     public setIsGuest(is:boolean){
         this.isGuest = is
+    }
+    public getSocketId() : string {
+        return this.socketId
+    }
+    public setSocketId(newId:string){
+        this.socketId = newId
     }
 
 }

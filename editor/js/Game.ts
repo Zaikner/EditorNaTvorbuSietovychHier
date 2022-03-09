@@ -1,7 +1,7 @@
 import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
-import { editorSocket,editor } from './canvas.js';
+import { editorSocket} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Game{
     private name:String = "";

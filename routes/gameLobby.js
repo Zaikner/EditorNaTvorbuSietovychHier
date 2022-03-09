@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 
 const AccountManager = require('../backEnd/Accounts/AccountManager.js');
+const { Account_db } = require('../services/db/RDG/Account_db.js');
 const { GameFinder } = require('../services/db/RDG/GameFinder_db.js');
+const { Game_db } = require('../services/db/RDG/Game_db.js');
 
 let router = express.Router()
 
@@ -11,9 +13,8 @@ router
 .get( async(request,res) =>
 {   
 
-    let a = GameFinder.getIntance().findAll()
-    console.log(await a)
-    res.sendFile('gameLobby.html',{root:'./editor/views'});
+    let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
+    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a});
 });
 
 

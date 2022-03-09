@@ -235,7 +235,7 @@ var Tile_db = /** @class */ (function () {
         ret.setIsEnding(data.isEnding);
         ret.setIsEndingFor(data.isEndingFor);
         ret.setIsStarting(data.isStarting);
-        ret.setIsStarting(data.isStartingFor);
+        ret.setIsStartingFor(data.isStartingFor);
         ret.setBelongTo(data.belongTo);
         ret.setCanOccupy(data.canOccupy);
         ret.setToogleNumber(data.toggleNumber);

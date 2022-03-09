@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.Background_db = void 0;
 var DbConnect_1 = require("../DbConnect");
 var Background_db = /** @class */ (function () {
     function Background_db() {
@@ -53,3 +54,4 @@ var Background_db = /** @class */ (function () {
     };
     return Background_db;
 }());
+exports.Background_db = Background_db;

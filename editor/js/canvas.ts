@@ -4,14 +4,96 @@ import {Tile} from './Tile.js'
 import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js";
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
-import { io } from "socket.io-client";
+
 import { spawnButton } from "./Elements";
 
-const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
+import { io } from "socket.io-client";
+import { Background } from "./Background";
+const editorSocket = io();//http://sietove-hry.herokuapp.com/
 //socket.emit('chat message', 'hi');
-editorSocket.on('chat message', function(msg) {
-console.log(msg)
-});
+editorSocket.on('connected',(msg)=>{
+  console.log('Editor client connected')
+  console.log(msg)
+  msg.tiles.forEach((tile:any) =>{
+    let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
+  
+    
+     addedTile.setStroke(tile.stroke)
+     addedTile.setStrokeColor(tile.strokeColor)
+     addedTile.setShape(tile.shape)
+     addedTile.setIsChoosen(tile.isChoosen)
+     let image = new Image()
+     image.src = msg.background.image
+     image.onload = function(){
+      addedTile.setBackgroundFile(image)
+      reload(editor,ctx)
+     }
+      //addedTile.setBackgroundFile(tile.backgroundFile)
+      //addedTile.setPatternFile(tile.patternFile)
+  
+     addedTile.setIsEnding(tile.isEnding)
+     addedTile.setIsEndingFor(tile.isEndingFor)
+     addedTile.setIsStarting(tile.isStarting)
+     addedTile.setIsStartingFor(tile.isStartingFor)
+     addedTile.setBelongTo(tile.belongTo)
+     addedTile.setCanOccupy(tile.canOccupy)
+     addedTile.setToogleNumber(tile.toggleNumber)
+     addedTile.setNumberingColor(tile.numberingColor)
+     addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
+   
+    editor.getGame().addTile(addedTile)
+  })
+  let background = new Background()
+  background.setColor(msg.background.color)
+  let backImage = new Image()
+  backImage.src = msg.background.image
+  backImage.onload = function(){
+    background.setBackgroundImage(backImage)
+    
+    editor.getGame().setBackground(background)
+    console.log('obrazok ready')
+    reload(editor,ctx)
+  }
+    
+  background.setBackgroundImage(backImage)
+    
+  console.log(background)
+  console.log('sprava je pod')
+  console.log(msg.background)
+  console.log('farba je: '+msg.background.color)
+  editor.getGame().setBackground(background)
+  //editor.getGame().setBackground(msg.background)
+
+  editor.getGame().setAuthor(msg.game.author)
+  editor.getGame().setName(msg.game.name)
+  editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
+  //reload(editor,ctx)
+  //edit()
+})
+
+
+//editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
+
+if (window.location.href === 'http://localhost:8001/editor/'){
+  edit()
+}
+else{
+  const params = new URLSearchParams(window.location.search);
+  editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+  
+}
+
+editorSocket.on('loaded game',()=>{
+  console.log('Editor client connected')
+  //edit()
+})
+function edit(){
+  mainMenu();
+document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
+document.getElementById('insertTiles')!.addEventListener('click',function(){insertTilesMenu();} );
+document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
+document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
+document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
 var doc = document;
 const canvas = document.createElement('canvas');
 const editor = new GameEditor()
@@ -19,13 +101,8 @@ document.getElementById("canvasPlace")!.appendChild(canvas);
 
 let started:Boolean = false;
 
-document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
-document.getElementById('insertTiles')!.addEventListener('click',function(){insertTilesMenu();} );
-document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
-document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
-document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
-mainMenu();
+
 
 function mainMenu(){ 
  started = false
@@ -81,6 +158,7 @@ document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Save game to database!',function(){
   editor.getGame().saveGame()
+  window.location.replace('/')
 })
 }
 
@@ -89,29 +167,29 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Sav
 
  var length:number =0;
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
-resize();
+resize(editor,ctx);
 
  
-window.addEventListener('resize', resize);
+window.addEventListener('resize', function(){resize(editor,ctx)});
 
 
 
 // // resize canvas
-function resize() {
+function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   ctx.canvas.width = window.innerWidth / 3 * 2-30;
-   ctx.canvas.height = window.innerHeight;
-   reload();
+   context.canvas.width = window.innerWidth / 3 * 2-30;
+   context.canvas.height = window.innerHeight;
+   reload(editor,context);
    //if (started) startDrawingPath();
 // }
 }
 
 
 
-function reload()
+function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
 { 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  console.log(editor.getGame().getBackground())
   if (editor.getGame().getBackground() != undefined){
     editor.getGame().getBackground().draw()
   }
@@ -166,4 +244,13 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
   return {x:event.offsetX,y:event.offsetY}
 }
 
-export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket};
+function getCookie(name:string) {
+  let cookie = new Map();
+  document.cookie.split(';').forEach(function(el) {
+    let [k,v] = el.split('=');
+    let key:string = k.trim()
+    cookie.set(key,v);
+  })
+  return cookie.get(name);
+}
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize};

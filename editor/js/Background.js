@@ -8,6 +8,7 @@ var Background = /** @class */ (function () {
         this.color = 'wheat';
     }
     Background.prototype.draw = function () {
+        console.log('spustil draw');
         if (this.backgroundImage != undefined) {
             canvas_1.ctx.drawImage(this.backgroundImage, 0, 0, canvas_1.canvas.width, canvas_1.canvas.height);
         }
@@ -22,7 +23,9 @@ var Background = /** @class */ (function () {
         this.color = 'wheat';
     };
     Background.prototype.setColor = function (newColor) {
+        console.log('setol ' + this.color);
         this.color = newColor;
+        console.log('setol ' + this.color);
     };
     Background.prototype.getColor = function () {
         return this.color;

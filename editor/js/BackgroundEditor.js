@@ -55,7 +55,7 @@ function editBackground() {
             canvas_js_1.editor.getGame().getBackground()["delete"]();
         }
         canvas_js_1.editor.getGame().getBackground().setColor(colorPicker.value);
-        (0, canvas_js_1.reload)();
+        (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
     var buttonDelete = canvas_js_1.doc.createElement('button');
     buttonDelete.id = 'deleteBackground';
@@ -65,7 +65,7 @@ function editBackground() {
     canvas_js_1.doc.getElementById("buttonPlace").appendChild(buttonDelete);
     canvas_js_1.doc.getElementById("deleteBackground").addEventListener('click', function () {
         canvas_js_1.editor.getGame().getBackground()["delete"]();
-        (0, canvas_js_1.reload)();
+        (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
     var colorPicker = canvas_js_1.doc.createElement('input');
     colorPicker.type = 'color';

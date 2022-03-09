@@ -1,5 +1,5 @@
 import { DbConnect } from "../DbConnect";
-class Background_db{
+export class Background_db{
     private id:number= 0;
     private color:string = '';
     private image:string = '';

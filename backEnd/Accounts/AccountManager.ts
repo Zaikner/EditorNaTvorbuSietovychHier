@@ -106,7 +106,7 @@ class AccountManager{
     public static createNewClientId(){
         let ret = ''
         for (let i = 0; i < 12; i++){
-            ret+=String.fromCharCode(Math.floor(Math.random()*70+48))
+            ret+=String.fromCharCode(Math.floor(Math.random()*20+65))
         }
         if (this.clientIds.includes(ret)){
             ret = this.createNewClientId()

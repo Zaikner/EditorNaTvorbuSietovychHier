@@ -55,4 +55,5 @@ export class GameFinder{
               console.log("Connection failed")
             } 
           }
+  
 }

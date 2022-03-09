@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const SocketServer = require('../services/socket/SocketServer.js')
 const AccountManager = require('../backEnd/Accounts/AccountManager.js')
 
 let router = express.Router()
@@ -16,7 +17,16 @@ router
             res.redirect('/editor/login')
         }
         else{
+            //SocketServer.getIo().emit('connected')
+            console.log('editor redirectuje')
+            let acc = AccountManager.getAccountByClientId(request.cookies.id)
+           
             res.sendFile('edit.html',{root:'./editor/views'});
+          
+            // console.log(SocketServer.getIo().to(acc.getSocketId()))
+            // console.log(SocketServer.getIo().to(acc.getSocketId()).emit('connected'))
+            // SocketServer.getIo().to(acc.getSocketId()).emit('connected')
+            //console.log(io)
         }
         
         

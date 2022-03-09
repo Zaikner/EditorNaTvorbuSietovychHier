@@ -7,11 +7,11 @@ var Elements_js_1 = require("./Elements.js");
 var Warning_js_1 = require("./Warning.js");
 var moveEventHandler = function (event) {
     canvas_js_1.editor.findTile(event);
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 var deleteHandler = function (event) {
     canvas_js_1.editor.deleteTile(event);
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
@@ -70,7 +70,7 @@ function insertTilesMenu() {
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'default';
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
@@ -91,7 +91,7 @@ function saveInsertingTiles() {
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
 function editTiles() {
@@ -109,7 +109,7 @@ function saveEditingTiles() {
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
 function moveTiles() {
@@ -117,7 +117,7 @@ function moveTiles() {
     (0, PathEditor_js_1.endDrawingPath)();
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.editor.setIsMoving(true);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
@@ -152,7 +152,7 @@ function removeAllListenersAdded() {
 exports.removeAllListenersAdded = removeAllListenersAdded;
 function undoTileInsert() {
     canvas_js_1.editor.removeLastFromUndoLog();
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
@@ -209,7 +209,7 @@ var spawnTile = function (coords) {
     if (document.getElementById('tileFollowingSetter').value.length > 0) {
         addedTile.setFollowingTileNumber(parseInt(document.getElementById('tileFollowingSetter').value));
     }
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     console.log(addedTile);
     return addedTile;
 };
@@ -246,7 +246,7 @@ var update = function () {
             tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
         }
     }
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 var setValues = function () {
     var _a, _b, _c;
@@ -305,5 +305,5 @@ var setValues = function () {
 };
 var moveTile = function (event) {
     canvas_js_1.editor.moveTile(event);
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };

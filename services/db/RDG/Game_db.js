@@ -16,7 +16,7 @@ var Game_db = /** @class */ (function () {
         this.id = newId;
     };
     Game_db.prototype.getNumOfPlayers = function () {
-        return this.id;
+        return this.numOfPlayers;
     };
     Game_db.prototype.setNumOfPlayers = function (newNum) {
         this.numOfPlayers = newNum;

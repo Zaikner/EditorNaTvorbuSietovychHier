@@ -28,14 +28,14 @@ function saveEditingTrack() {
 exports.saveEditingTrack = saveEditingTrack;
 function startDrawingPath() {
     canvas_js_1.editor.getGame().getPath().setPath([]);
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.canvas.addEventListener('mousemove', draw);
     canvas_js_1.canvas.addEventListener('mousedown', setPosition);
     canvas_js_1.canvas.addEventListener('mouseenter', setPosition);
 }
 function endDrawingPath() {
     canvas_js_1.editor.getGame().getPath().setPath([]);
-    (0, canvas_js_1.reload)();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.canvas.removeEventListener('mousemove', draw);
     canvas_js_1.canvas.removeEventListener('mousedown', setPosition);
     canvas_js_1.canvas.removeEventListener('mouseenter', setPosition);

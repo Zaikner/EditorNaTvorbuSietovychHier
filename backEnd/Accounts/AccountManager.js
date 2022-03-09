@@ -164,7 +164,7 @@ var AccountManager = /** @class */ (function () {
     AccountManager.createNewClientId = function () {
         var ret = '';
         for (var i = 0; i < 12; i++) {
-            ret += String.fromCharCode(Math.floor(Math.random() * 70 + 48));
+            ret += String.fromCharCode(Math.floor(Math.random() * 20 + 65));
         }
         if (this.clientIds.includes(ret)) {
             ret = this.createNewClientId();
@@ -181,7 +181,7 @@ var AccountManager = /** @class */ (function () {
         });
         return ret;
     };
-    AccountManager.changePassword = function (name, newPassword) {
+    AccountManager.changePassword = function (name, newPassword, clientId) {
         return __awaiter(this, void 0, void 0, function () {
             var accounts;
             return __generator(this, function (_a) {
@@ -209,7 +209,7 @@ var AccountManager = /** @class */ (function () {
                         accounts = _a.sent();
                         if (accounts != undefined) {
                             accounts[0].setAvatar(newAvatar);
-                            console.log(accounts[0]);
+                            //console.log(accounts[0])
                             accounts[0].update();
                         }
                         return [2 /*return*/];

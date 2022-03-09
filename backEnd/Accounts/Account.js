@@ -6,6 +6,7 @@ var Account = /** @class */ (function () {
         this.avatar = 'default';
         this.clientId = '';
         this.isGuest = false;
+        this.socketId = '';
         this.name = name;
         this.password = password;
     }
@@ -38,6 +39,12 @@ var Account = /** @class */ (function () {
     };
     Account.prototype.setIsGuest = function (is) {
         this.isGuest = is;
+    };
+    Account.prototype.getSocketId = function () {
+        return this.socketId;
+    };
+    Account.prototype.setSocketId = function (newId) {
+        this.socketId = newId;
     };
     return Account;
 }());

@@ -1,5 +1,6 @@
 
 import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload} from './canvas.js'
+
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
 import {spawnColorPicker,spawnParagraph,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'
@@ -7,11 +8,11 @@ import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event)   
-reload()
+reload(editor,ctx)
 }
 let deleteHandler = function(event:MouseEvent){
   editor.deleteTile(event)
-  reload()}
+  reload(editor,ctx)}
 
 
 function spawnElements(){
@@ -93,7 +94,7 @@ function insertTilesMenu():void{
   doc.getElementById("canvasPlace")!.style.cursor = 'default'
   removeAllListenersAdded()
   editor.makeAllTilesNotChoosen()
-  reload()
+  reload(editor,ctx)
   removeAllButtons()  
   canvas.addEventListener('click',moveEventHandler)
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
@@ -117,7 +118,7 @@ function insertTilesMenu():void{
     removeAllButtons()
     removeAllListenersAdded()
     editor.makeAllTilesNotChoosen()
-    reload()
+    reload(editor,ctx)
     mainMenu();
   }
 
@@ -136,7 +137,7 @@ function insertTilesMenu():void{
       removeAllButtons()
       removeAllListenersAdded()
       editor.makeAllTilesNotChoosen()
-      reload()
+      reload(editor,ctx)
       mainMenu();
     }
   
@@ -145,7 +146,7 @@ function insertTilesMenu():void{
     endDrawingPath()
     doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     editor.makeAllTilesNotChoosen()
-    reload()
+    reload(editor,ctx)
     editor.setIsMoving(true)
     removeAllButtons()
     canvas.addEventListener('click',moveEventHandler)
@@ -180,7 +181,7 @@ function insertTilesMenu():void{
 
   function undoTileInsert(){
       editor.removeLastFromUndoLog()
-      reload()
+      reload(editor,ctx)
   }
 
   let  insert = function(event:MouseEvent){
@@ -246,7 +247,7 @@ function insertTilesMenu():void{
     if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
       addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
     }
-    reload()
+    reload(editor,ctx)
     console.log(addedTile)
     return addedTile    
   }
@@ -286,7 +287,7 @@ function insertTilesMenu():void{
       }
        
     }
-    reload()
+    reload(editor,ctx)
   }
   let setValues = function(){
     if (editor.getChoosenTile()!=undefined){
@@ -355,7 +356,7 @@ function insertTilesMenu():void{
 
   let moveTile = function(event:MouseEvent){
       editor.moveTile(event)
-      reload()
+      reload(editor,ctx)
   }
   
   export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert}

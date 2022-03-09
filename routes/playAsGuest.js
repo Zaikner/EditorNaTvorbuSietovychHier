@@ -10,7 +10,7 @@ router
 {   
     var logged = AccountManager.logGuest()
     res.cookie('id',logged.getClientId())
-    res.sendFile('gameLobby.html',{root:'./editor/views'});
+    res.redirect('/gamelobby')
 });
 
 

@@ -1,0 +1,96 @@
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css' integrity='sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2' crossorigin='anonymous')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
+style.
+  body {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #292b2c; */
+  overflow: hidden;
+  background-color: #7ed6df;
+  background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
+  }
+title Game Lobby
+nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;')
+  .container-fluid
+  form(action='/' method='get')
+    button.btn.btn-info.py-2(type='submit' style=' width:200px; margin-right: 10px;background-color: #1fd1f9;\
+    background-image: linear-gradient(315deg, #1fd1f9 0%, #b621fe 74%);\
+    ') Main Menu
+  form(action='/account' method='get')
+    button.btn.btn-light.py-2(type='submit' style=' width:200px; margin-right: 10px;background-color: #7f53ac;\
+    background-image: linear-gradient(315deg, #7f53ac 0%, #647dee 74%);') Account
+.d-flex.align-items-center.justify-content-center
+  .container-fluid
+    .row.d-flex.align-items-center.justify-content-center
+      // <div class="col-1"></div>
+      .col-12(style=' overflow: hidden; width: 100vh; height: 100vh;')
+        .row(style='height:100vh; width: 100%;')
+          .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%;')
+            div(style='margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+              p(style='font-size: 20px; font-family: sans-serif;') Choose room
+              hr
+              form
+                p Choose room with number:
+                input#roomIdSelecter(type='number')
+                button(type='submit') Join
+              form
+                p or create new room
+                button(type='submit') Create
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 25vh;  border-radius: 25px;')
+              // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
+              label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                strong Active rooms
+              ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+                li.list-group-item
+                  | Room 1 
+                  a(href='') Game 2
+                  button Join
+                li.list-group-item
+                  | Room 1  
+                  a(href='') Game 2
+                  button Join
+                li.list-group-item
+                  | Room 1  
+                  a(href='') Game 2
+                  button Join
+                li.list-group-item
+                  | Room 1  
+                  a(href='') Game 2
+                  button Join
+                li.list-group-item
+                  | Room 1  
+                  a(href='') Game 2
+                  button Join
+              hr
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;')
+              p(style='font-size: 20px; font-family: sans-serif;') HighScore
+              hr
+          .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
+            div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
+              p(style='font-size: 20px; font-family: sans-serif;')  Created games overview
+              hr
+              p Tu niekde bude checkbox alebo dropdown filter
+              br
+              br
+              ul.list-group(style='overflow-y: scroll; max-height: 25vh')
+                each game in gameNames
+                    form(action='/showGame' method='get' name='name' value = game)
+                      li.list-group-item(name='name' value = game)= game
+                        | 
+                        button(type = 'submit' name='name' value = game).btn.btn-danger Detail         
+              hr
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+              .form-group
+                label(for='chat' style='font-size: 20px; font-family: sans-serif;')
+                  strong Player chat
+                textarea#chat.form-control(rows='15' style='resize: none; overflow-y: scroll; max-height: 20vh;' readonly='')
+                textarea#answer.form-control(rows='1' style='resize: none;' placeholder='Write there')
+          script(src='../socket.io/socket.io.js')
+          div
+          // <div class="col-1"></div>
+        div

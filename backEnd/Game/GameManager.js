@@ -36,49 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.BackgroundFinder = void 0;
-var DbConnect_1 = require("../DbConnect");
-var Background_db_1 = require("./Background_db");
-var BackgroundFinder = /** @class */ (function () {
-    function BackgroundFinder() {
+var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
+var TileFinder_Db_js_1 = require("../../services/db/RDG/TileFinder_Db.js");
+var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
+var GameManager = /** @class */ (function () {
+    function GameManager() {
     }
-    BackgroundFinder.getIntance = function () { return this.INSTANCE; };
-    BackgroundFinder.prototype.findByName = function (name) {
+    GameManager.loadGame = function (name) {
         return __awaiter(this, void 0, void 0, function () {
-            var client, query, results, ret, err_1;
+            var game, tiles, background;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        client = DbConnect_1.DbConnect.get();
-                        _a.label = 1;
+                    case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
                     case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        query = {
-                            name: 'select-background',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Background" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                            values: [name]
-                        };
-                        return [4 /*yield*/, client.query(query)];
+                        game = _a.sent();
+                        return [4 /*yield*/, TileFinder_Db_js_1.TileFinder.getIntance().findByName(name)];
                     case 2:
-                        results = _a.sent();
-                        ret = [];
-                        return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
-                                ret.push(Background_db_1.Background_db.load(row));
-                            })];
+                        tiles = _a.sent();
+                        return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findByName(name)];
                     case 3:
-                        _a.sent();
-                        return [2 /*return*/, ret];
-                    case 4:
-                        err_1 = _a.sent();
-                        console.log("Connection failed");
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        background = _a.sent();
+                        console.log({ game: game[0], tiles: tiles, background: background });
+                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0] }];
                 }
             });
         });
     };
-    BackgroundFinder.INSTANCE = new BackgroundFinder();
-    return BackgroundFinder;
+    return GameManager;
 }());
-exports.BackgroundFinder = BackgroundFinder;
+module.exports = GameManager;

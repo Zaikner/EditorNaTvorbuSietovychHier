@@ -1,4 +1,5 @@
 import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
+
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
 import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert} from './TileEditor.js'
@@ -30,7 +31,7 @@ function saveEditingTrack(){
 
   function startDrawingPath():void{
     editor.getGame().getPath().setPath([]);
-    reload()
+    reload(editor,ctx)
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mousedown', setPosition);
     canvas.addEventListener('mouseenter', setPosition);
@@ -38,7 +39,7 @@ function saveEditingTrack(){
   }
   function endDrawingPath():void{
     editor.getGame().getPath().setPath([]);
-    reload()
+    reload(editor,ctx)
     canvas.removeEventListener('mousemove', draw);
     canvas.removeEventListener('mousedown', setPosition);
     canvas.removeEventListener('mouseenter', setPosition);
