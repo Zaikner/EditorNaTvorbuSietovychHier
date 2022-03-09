@@ -9,7 +9,7 @@ import { spawnButton } from "./Elements";
 
 import { io } from "socket.io-client";
 import { Background } from "./Background";
-const editorSocket = io();//http://sietove-hry.herokuapp.com/
+const editorSocket = io('http://sietove-hry.herokuapp.com/');//http://sietove-hry.herokuapp.com/
 //socket.emit('chat message', 'hi');
 editorSocket.on('connected',(msg)=>{
   console.log('Editor client connected')
