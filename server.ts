@@ -18,7 +18,7 @@ const SocketServer = require('./services/socket/SocketServer.js')
 
 const app = express();
 const server:Server = http.createServer(app);
-//const io = new ioServer(server);
+const io = new ioServer(server);
 const bodyParser = require('body-parser')
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -65,7 +65,7 @@ const PORT = process.env.PORT || 8001;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
-// SocketServer.setIo(io)
+//SocketServer.setIo(io)
 // SocketServer.serverListen()
 // io.on('connection', (socket:any) => {
 //     console.log('a user connected');
