@@ -10,7 +10,7 @@ var CryptoJS = require("crypto-js");
 var cookieParser = require('cookie-parser');
 var fileUpload = require('express-fileupload');
 var SocketServer = require('./services/socket/SocketServer.js');
-//const AccountManager = require('./backEnd/Accounts/AccountManager.js')
+var AccountManager = require('./backEnd/Accounts/AccountManager.js');
 //const GameManager = require('./backEnd/Game/GameManager.js')
 //const multer  = require('multer')
 //import {Socket} from './services/socket/Socket.js';
