@@ -6,7 +6,7 @@ import { Tile_db } from "../db/RDG/Tile_db";
 import { Background_db } from "../db/RDG/Background_db";
 import { GameFinder } from "../db/RDG/GameFinder_db";
 import { BackgroundFinder } from "../db/RDG/BackgroundFinder";
-import { TileFinder } from "../db/RDG/TileFinder_Db";
+import { TileFinder } from "../db/RDG/inytile";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 //const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -25,7 +25,7 @@ class ServerSocket{
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
                     let game = await GameFinder.getIntance().findByName(msg.name)
-                    let tt =TileFinder.getIntance()
+                    let tt =await TileFinder.getIntance().findByName(msg.name)
                     let background = await BackgroundFinder.getIntance().findByName(msg.name)
                 
                    

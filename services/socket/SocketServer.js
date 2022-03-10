@@ -41,7 +41,7 @@ var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
 var GameFinder_db_1 = require("../db/RDG/GameFinder_db");
 var BackgroundFinder_1 = require("../db/RDG/BackgroundFinder");
-var TileFinder_Db_1 = require("../db/RDG/TileFinder_Db");
+var inytile_1 = require("../db/RDG/inytile");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
 //const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -64,12 +64,14 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
                         case 1:
                             game = _a.sent();
-                            tt = TileFinder_Db_1.TileFinder.getIntance();
+                            return [4 /*yield*/, inytile_1.TileFinder.getIntance().findByName(msg.name)];
+                        case 2:
+                            tt = _a.sent();
                             return [4 /*yield*/, BackgroundFinder_1.BackgroundFinder.getIntance().findByName(msg.name)
                                 // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
                                 //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
                             ];
-                        case 2:
+                        case 3:
                             background = _a.sent();
                             // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
                             //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
