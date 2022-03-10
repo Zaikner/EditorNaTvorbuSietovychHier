@@ -25,12 +25,12 @@ class ServerSocket{
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
                     let game = await GameFinder.getIntance().findByName(msg.name)
-                    let tiles = await TileFinder.getIntance().findByName(msg.name)
-                    let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                    //let tiles = await TileFinder.getIntance().findByName(msg.name)
+                    //let background = await BackgroundFinder.getIntance().findByName(msg.name)
                 
                    
                    // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                    this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
+                    //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
                     console.log('zapol som hru'+ msg.name);
             });
             
