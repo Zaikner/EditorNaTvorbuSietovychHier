@@ -37,44 +37,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.TileFinder = void 0;
-var DbConnect_1 = require("../DbConnect");
-var Tile_db_1 = require("./Tile_db");
 var TileFinder = /** @class */ (function () {
     function TileFinder() {
     }
     TileFinder.getIntance = function () { return this.INSTANCE; };
     TileFinder.prototype.findByName = function (name) {
         return __awaiter(this, void 0, void 0, function () {
-            var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        client = DbConnect_1.DbConnect.get();
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        query = {
-                            name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                            values: [name]
-                        };
-                        return [4 /*yield*/, client.query(query)];
-                    case 2:
-                        results = _a.sent();
-                        ret = [];
-                        return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
-                                ret.push(Tile_db_1.Tile_db.load(row));
-                            })];
-                    case 3:
-                        _a.sent();
-                        return [2 /*return*/, ret];
-                    case 4:
-                        err_1 = _a.sent();
-                        console.log("Connection failed");
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
+                return [2 /*return*/, 1
+                    //   let client = DbConnect.get()
+                    //   try {
+                    //       const query = {
+                    //           name: 'select-gameTiles',
+                    //           text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
+                    //           values: [name],
+                    //         }
+                    //       var results = await  client.query(query)
+                    //       var ret:Array<Tile_db> = []
+                    //       await results.rows.forEach((row:any) => {
+                    //           console.log('precital')
+                    //           ret.push(Tile_db.load(row))
+                    //       });
+                    //       return ret
+                    //   }
+                    //   catch(err){
+                    //     console.log("Connection failed")
+                    //   } 
+                ];
             });
         });
     };

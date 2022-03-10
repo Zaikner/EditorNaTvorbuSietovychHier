@@ -11,26 +11,27 @@ export class TileFinder{
   
     
     public async findByName(name:string){
-            let client = DbConnect.get()
-            try {
-                const query = {
-                    name: 'select-gameTiles',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                    values: [name],
-                  }
-                var results = await  client.query(query)
-                var ret:Array<Tile_db> = []
+            return 1
+          //   let client = DbConnect.get()
+          //   try {
+          //       const query = {
+          //           name: 'select-gameTiles',
+          //           text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
+          //           values: [name],
+          //         }
+          //       var results = await  client.query(query)
+          //       var ret:Array<Tile_db> = []
               
-                await results.rows.forEach((row:any) => {
-                    console.log('precital')
-                    ret.push(Tile_db.load(row))
-                });
+          //       await results.rows.forEach((row:any) => {
+          //           console.log('precital')
+          //           ret.push(Tile_db.load(row))
+          //       });
                
-                return ret
+          //       return ret
         
-            }
-            catch(err){
-              console.log("Connection failed")
-            } 
-          }    
+          //   }
+          //   catch(err){
+          //     console.log("Connection failed")
+          //   } 
+           }    
 }
