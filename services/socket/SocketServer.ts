@@ -25,7 +25,7 @@ class ServerSocket{
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
                     let game = await GameFinder.getIntance().findByName(msg.name)
-                    let tiles = await TileFinder.getIntance()
+                    let tiles = await TileFinder.getIntance().findByName(msg.name)
                     let background = await BackgroundFinder.getIntance().findByName(msg.name)
                 
                    
