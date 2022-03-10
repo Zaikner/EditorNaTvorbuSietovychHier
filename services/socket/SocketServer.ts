@@ -6,7 +6,7 @@ import { Tile_db } from "../db/RDG/Tile_db";
 import { Background_db } from "../db/RDG/Background_db";
 import { GameFinder } from "../db/RDG/GameFinder_db";
 import { BackgroundFinder } from "../db/RDG/BackgroundFinder";
-import { TileFinder } from "../db/RDG/inytile";
+import { TileFinder } from "../db/RDG/TileFinder";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 //const GameManager = require('../../backEnd/Game/GameManager.js')
