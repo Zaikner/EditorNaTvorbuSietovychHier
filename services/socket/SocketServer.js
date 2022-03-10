@@ -64,14 +64,12 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
                         case 1:
                             game = _a.sent();
-                            return [4 /*yield*/, TileFinder_Db_1.TileFinder.getIntance().findByName(msg.name)];
-                        case 2:
-                            tiles = _a.sent();
+                            tiles = TileFinder_Db_1.TileFinder.getIntance();
                             return [4 /*yield*/, BackgroundFinder_1.BackgroundFinder.getIntance().findByName(msg.name)
                                 // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
                                 //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
                             ];
-                        case 3:
+                        case 2:
                             background = _a.sent();
                             // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
                             //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
