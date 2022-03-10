@@ -64,7 +64,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
                         case 1:
                             game = _a.sent();
-                            return [4 /*yield*/, TileFinder_Db_1.TileFinder.getIntance().findByName(msg.name)];
+                            return [4 /*yield*/, TileFinder_Db_1.TileFinder.getIntance()];
                         case 2:
                             tiles = _a.sent();
                             return [4 /*yield*/, BackgroundFinder_1.BackgroundFinder.getIntance().findByName(msg.name)
