@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
-var TileFinder_Db_js_1 = require("../../services/db/RDG/TileFinder_Db.js");
+var TileFinder_1 = require("../../services/db/RDG/TileFinder");
 var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
 var GameManager = /** @class */ (function () {
     function GameManager() {
@@ -50,13 +50,12 @@ var GameManager = /** @class */ (function () {
                     case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
                     case 1:
                         game = _a.sent();
-                        return [4 /*yield*/, TileFinder_Db_js_1.TileFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByName(name)];
                     case 2:
                         tiles = _a.sent();
                         return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findByName(name)];
                     case 3:
                         background = _a.sent();
-                        console.log({ game: game[0], tiles: tiles, background: background });
                         return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0] }];
                 }
             });

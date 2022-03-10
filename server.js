@@ -53,8 +53,8 @@ app.use('/playAsGuest', playAsGuest);
 app.use('/showGame', showGame);
 var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
-//SocketServer.setIo(io)
-// SocketServer.serverListen()
+SocketServer.setIo(io);
+SocketServer.serverListen();
 // io.on('connection', (socket:any) => {
 //     console.log('a user connected');
 //     //GameFinder.getIntance().findByName('dsasda')

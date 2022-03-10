@@ -39,12 +39,9 @@ exports.__esModule = true;
 var Game_db_1 = require("../db/RDG/Game_db");
 var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
-var GameFinder_db_1 = require("../db/RDG/GameFinder_db");
-var BackgroundFinder_1 = require("../db/RDG/BackgroundFinder");
-var TileFinder_1 = require("../db/RDG/TileFinder");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
-//const GameManager = require('../../backEnd/Game/GameManager.js')
+var GameManager = require('../../backEnd/Game/GameManager.js');
 var ServerSocket = /** @class */ (function () {
     function ServerSocket() {
     }
@@ -55,25 +52,28 @@ var ServerSocket = /** @class */ (function () {
             console.log(socket.id);
             socket.emit('pipi');
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, game, tt, background;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var acc, _a, _b, _c, _d, _e;
+                return __generator(this, function (_f) {
+                    switch (_f.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(msg.id);
-                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
+                            // let game = await GameFinder.getIntance().findByName(msg.name)
+                            // let tt =await TileFinder.getIntance().findByName(msg.name)
+                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                            _b = (_a = console).log;
+                            _c = 'toto returnol:';
+                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 1:
-                            game = _a.sent();
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByName(msg.name)];
+                            // let game = await GameFinder.getIntance().findByName(msg.name)
+                            // let tt =await TileFinder.getIntance().findByName(msg.name)
+                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                            _b.apply(_a, [_c + (_f.sent())]);
+                            _d = this.emitToSpecificSocket;
+                            _e = [socket.id, 'connected'];
+                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 2:
-                            tt = _a.sent();
-                            return [4 /*yield*/, BackgroundFinder_1.BackgroundFinder.getIntance().findByName(msg.name)
-                                // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                            ];
-                        case 3:
-                            background = _a.sent();
-                            // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                            this.emitToSpecificSocket(socket.id, 'connected', { game: game[0], tiles: tt, background: background[0] });
+                            _d.apply(this, _e.concat([_f.sent()]));
                             console.log('zapol som hru' + msg.name);
                             return [2 /*return*/];
                     }

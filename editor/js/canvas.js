@@ -63,7 +63,9 @@ editorSocket.on('connected', function (msg) {
     //edit()
 });
 //editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
-if (window.location.href === 'http://localhost:8001/editor/') {
+console.log(window.location.href.split('/'));
+var zoz = window.location.href.split('/');
+if (zoz[zoz.length - 2] === 'editor') {
     edit();
 }
 else {

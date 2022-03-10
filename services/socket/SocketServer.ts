@@ -9,7 +9,7 @@ import { BackgroundFinder } from "../db/RDG/BackgroundFinder";
 import { TileFinder } from "../db/RDG/TileFinder";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
-//const GameManager = require('../../backEnd/Game/GameManager.js')
+const GameManager = require('../../backEnd/Game/GameManager.js')
 class ServerSocket{
     private static io:ioServer;
     
@@ -21,16 +21,16 @@ class ServerSocket{
             socket.emit('pipi')
             
             socket.on('load game',async (msg:{id:string,name:string}) => {
-    
+                    
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
-                    let game = await GameFinder.getIntance().findByName(msg.name)
-                    let tt =await TileFinder.getIntance().findByName(msg.name)
-                    let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                    // let game = await GameFinder.getIntance().findByName(msg.name)
+                    // let tt =await TileFinder.getIntance().findByName(msg.name)
+                    // let background = await BackgroundFinder.getIntance().findByName(msg.name)
                 
                    
-                   // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                    this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tt,background:background![0]})
+                   console.log('toto returnol:'+await GameManager.loadGame(msg.name))
+                    this.emitToSpecificSocket(socket.id,'connected', await GameManager.loadGame(msg.name))
                     console.log('zapol som hru'+ msg.name);
             });
             
