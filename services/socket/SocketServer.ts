@@ -30,7 +30,7 @@ class ServerSocket{
                 
                    
                    // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                    //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
+                    this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tt,background:background![0]})
                     console.log('zapol som hru'+ msg.name);
             });
             

@@ -69,12 +69,11 @@ var ServerSocket = /** @class */ (function () {
                             tt = _a.sent();
                             return [4 /*yield*/, BackgroundFinder_1.BackgroundFinder.getIntance().findByName(msg.name)
                                 // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                                //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
                             ];
                         case 3:
                             background = _a.sent();
                             // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                            //this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
+                            this.emitToSpecificSocket(socket.id, 'connected', { game: game[0], tiles: tt, background: background[0] });
                             console.log('zapol som hru' + msg.name);
                             return [2 /*return*/];
                     }
