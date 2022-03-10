@@ -15,7 +15,7 @@ class GameManager{
         let game = await GameFinder.getIntance().findByName(name)
         let tiles = await TileFinder.getIntance().findByName(name)
         let background = await BackgroundFinder.getIntance().findByName(name)
-        console.log({game:game![0],tiles:tiles,background:background})
+    
        return {game:game![0],tiles:tiles,background:background![0]}
 
       

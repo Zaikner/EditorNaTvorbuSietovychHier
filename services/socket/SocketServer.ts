@@ -4,6 +4,9 @@ import { Server as ioServer } from "socket.io";
 import { Game_db } from "../db/RDG/Game_db";
 import { Tile_db } from "../db/RDG/Tile_db";
 import { Background_db } from "../db/RDG/Background_db";
+import { GameFinder } from "../db/RDG/GameFinder_db";
+import { TileFinder } from "../db/RDG/TileFinder_Db";
+import { BackgroundFinder } from "../db/RDG/BackgroundFinder";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 //const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -21,9 +24,13 @@ class ServerSocket{
     
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
-                    
+                    let game = await GameFinder.getIntance().findByName(msg.name)
+                    let tiles = await TileFinder.getIntance().findByName(msg.name)
+                    let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                
+                   
                    // console.log('toto returnol:'+await GameManager.loadGame(msg.name))
-                    //this.emitToSpecificSocket(socket.id,'connected',await GameManager.loadGame(msg.name))
+                    this.emitToSpecificSocket(socket.id,'connected', {game:game![0],tiles:tiles,background:background![0]})
                     console.log('zapol som hru'+ msg.name);
             });
             
