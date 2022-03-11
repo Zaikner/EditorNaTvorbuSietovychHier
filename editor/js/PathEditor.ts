@@ -2,7 +2,7 @@ import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reloa
 
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
-import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert} from './TileEditor.js'
+import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles} from './TileEditor.js'
 import { spawnButton } from './Elements.js';
 
 var can = false
@@ -14,6 +14,7 @@ function editTrack(){
     spawnButton(doc,"buttonPlace",'end',["btn","btn-dark"],'End Inserting!',endDrawingPath)   
     spawnElements()
     spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile/s added!',undoTileInsert) 
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
   }
 
   
@@ -122,3 +123,5 @@ function saveEditingTrack(){
 
  
 export {editTrack,saveEditingTrack,endDrawingPath}
+
+

@@ -107,7 +107,7 @@ function insertTilesMenu():void{
     removeAllListenersAdded()
     
     canvas.addEventListener('mousedown', insert);
-   
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
     spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],'Stop inserting!',insertTilesMenu)   
     spawnElements()
 
@@ -359,5 +359,5 @@ function insertTilesMenu():void{
       reload(editor,ctx)
   }
   
-  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert}
+  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
   

@@ -9,7 +9,7 @@ import { spawnButton } from "./Elements";
 
 
 import { Background } from "./Background";
-
+const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
 
@@ -99,7 +99,7 @@ document.getElementById('editTiles')!.addEventListener('click',function(){editTi
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
 var doc = document;
 const canvas = document.createElement('canvas');
-const editor = new GameEditor()
+
 document.getElementById("canvasPlace")!.appendChild(canvas);
 
 let started:Boolean = false;
@@ -114,7 +114,7 @@ function mainMenu(){
 let numOfPlayersSlider:HTMLInputElement = document.createElement('input')
 numOfPlayersSlider.type = 'range'
 numOfPlayersSlider.id = 'numOfPlayers';
-numOfPlayersSlider.value = '2'
+numOfPlayersSlider.value = editor.getGame().getnumOfPlayers().toString()
 numOfPlayersSlider.min = '1';
 numOfPlayersSlider.max = '6';
 numOfPlayersSlider.step = '1';
@@ -122,7 +122,7 @@ numOfPlayersSlider.step = '1';
 
 let numShower = document.createElement('paragraph');
 numShower.id = 'numShower'
-numShower.textContent = '2'
+numShower.textContent = editor.getGame().getnumOfPlayers().toString()
 let text = document.createElement('p')
 text.textContent = 'Počet hráčov:'
 document.getElementById("numOfPlayersPlace")!.appendChild(text);
@@ -141,7 +141,7 @@ document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
 
 let gameName:HTMLInputElement = document.createElement('input')
 gameName.id = 'gameName'
-
+gameName.value = editor.getGame().getName()
 text = document.createElement('p')
 text.textContent = 'Názov hry:'
 document.getElementById("gameNamePlace")!.appendChild(text);

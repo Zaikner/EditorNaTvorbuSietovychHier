@@ -14,6 +14,7 @@ function editTrack() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'end', ["btn", "btn-dark"], 'End Inserting!', endDrawingPath);
     (0, TileEditor_js_1.spawnElements)();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile/s added!', TileEditor_js_1.undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', TileEditor_js_1.saveInsertingTiles);
 }
 exports.editTrack = editTrack;
 function saveEditingTrack() {

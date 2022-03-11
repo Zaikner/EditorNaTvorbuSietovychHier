@@ -34,24 +34,30 @@ export class GameFinder{
           }
           public async findAll(){
             let client = DbConnect.get()
+            console.log(process.env.DATABASE_URL,)
+            console.log('pripojil')
             try {
                 const query = {
                     name: 'select-game-all',
                     text: 'SELECT * FROM "bachelorsThesis"."Game";',
                     values: [],
                   }
+                  console.log('vykonal query')
                 var results = await  client.query(query)
+                console.log('query zbehlo')
                 var ret:Array<Game_db> = []
-              
+                console.log('travelz')
                 await results.rows.forEach((row:any) => {
                     console.log('precital')
                     ret.push(Game_db.load(row))
                 });
-               
+                console.log('presiel traverz')
+                console.log(ret)
                 return ret
         
             }
             catch(err){
+              console.log(err)
               console.log("Connection failed")
             } 
           }

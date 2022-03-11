@@ -12,7 +12,7 @@ router
 .route("/")
 .get( async(request,res) =>
 {   
-
+    console.log(await GameFinder.getIntance().findAll())
     let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
     res.render('gameLobby.pug',{root:'./editor/views',gameNames:a});
 });

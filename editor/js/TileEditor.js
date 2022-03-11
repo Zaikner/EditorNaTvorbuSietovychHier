@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
+exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
@@ -83,6 +83,7 @@ function startInsertingByOne() {
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('mousedown', insert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
     spawnElements();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
@@ -94,6 +95,7 @@ function saveInsertingTiles() {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
+exports.saveInsertingTiles = saveInsertingTiles;
 function editTiles() {
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
