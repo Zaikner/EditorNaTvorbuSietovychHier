@@ -128,6 +128,17 @@ var ServerSocket = /** @class */ (function () {
                 b.insert();
                 _this.io.emit('chat message');
             });
+            socket.on('relog', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var acc;
+                return __generator(this, function (_a) {
+                    console.log('skusil relognut' + msg.id);
+                    acc = AccountManager.getAccountByClientId(msg.id);
+                    AccountManager.login(acc);
+                    socket.emit('set cookie');
+                    console.log('pripojil' + acc);
+                    return [2 /*return*/];
+                });
+            }); });
         });
     };
     ServerSocket.getIo = function () {

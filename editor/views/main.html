@@ -3,6 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bachelor's thesis</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>  </head>
   
@@ -31,22 +33,23 @@ background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
         <button  type="submit"  id ='accountInput' class="btn btn-danger text-center" style="padding: 0 0; width: 700px; height: 70px; margin-top: 50px; font-family:sans-serif; font-size: 30px;">Account</button>
     </form>
 <!-- </div> -->
-    <script>
-        
-    // if (window.localStorage.getItem('id') != undefined){
-    //     document.getElementById('editorForm').action = '/editor'
-    //     document.getElementById('editorInput').value = '/editor/?id='+window.localStorage.getItem('id')
-    // }
-    // if (window.localStorage.getItem('id') != undefined){
-    //     document.getElementById('accountForm').action = '/account'
-    //     document.getElementById('accountInput').value = '/account/?id='+window.localStorage.getItem('id')
-    // }
-    
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
 
-console.log(document.cookie)
+  if (window.localStorage.getItem('id')){
+    socket.emit('relog',{id:window.localStorage.getItem('id')})
 
-    
-    </script>
+  }
+  else{
+      console.log('ziaden uzivatel nie je pripojenz')
+  }
+  socket.on('set cookie',()=>{
+      console.log('nastavil socket')
+    Cookies.set('id',window.localStorage.getItem('id'))
+  })
+  
+</script>
 </body>
 
 

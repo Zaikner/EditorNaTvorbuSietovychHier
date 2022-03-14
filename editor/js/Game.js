@@ -16,6 +16,10 @@ var Game = /** @class */ (function () {
         this.playerTokens = ['Player 1', 'Player 2'];
         this.background = new Background_js_1.Background();
         this.nextTileNumber = 1;
+        this.initSizeX = 0;
+        this.initSizeY = 0;
+        this.scaleX = 2;
+        this.scaleY = 2;
     }
     Game.prototype.saveGame = function () {
         var savedTiles = [];
@@ -86,6 +90,30 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPlayerTokens = function () {
         return this.playerTokens;
+    };
+    Game.prototype.getInitSizeX = function () {
+        return this.initSizeX;
+    };
+    Game.prototype.setInitSizeX = function (newCoord) {
+        return this.initSizeX = newCoord;
+    };
+    Game.prototype.getInitSizeY = function () {
+        return this.initSizeY;
+    };
+    Game.prototype.setInitSizeY = function (newCoord) {
+        return this.initSizeY = newCoord;
+    };
+    Game.prototype.getScaleX = function () {
+        return this.scaleX;
+    };
+    Game.prototype.setScaleX = function (newCoord) {
+        return this.scaleX = newCoord;
+    };
+    Game.prototype.getScaleY = function () {
+        return this.scaleY;
+    };
+    Game.prototype.setScaleY = function (newCoord) {
+        return this.scaleY = newCoord;
     };
     return Game;
 }());

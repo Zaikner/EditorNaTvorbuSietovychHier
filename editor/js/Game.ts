@@ -13,6 +13,10 @@ class Game{
     private playerTokens:Array<string> = ['Player 1','Player 2']
     private background:Background = new Background()
     private nextTileNumber = 1
+    private initSizeX:number = 0
+    private initSizeY:number = 0;
+    private scaleX:number = 2;
+    private scaleY:number = 2;
     
 
     constructor(){}
@@ -90,6 +94,31 @@ class Game{
     }
     getPlayerTokens(){
         return this.playerTokens
+    }
+
+    getInitSizeX(){
+        return this.initSizeX
+    }
+    setInitSizeX(newCoord:number){
+        return this.initSizeX = newCoord
+    }
+    getInitSizeY(){
+        return this.initSizeY
+    }
+    setInitSizeY(newCoord:number){
+        return this.initSizeY = newCoord
+    }
+    getScaleX(){
+        return this.scaleX
+    }
+    setScaleX(newCoord:number){
+        return this.scaleX = newCoord
+    }
+    getScaleY(){
+        return this.scaleY
+    }
+    setScaleY(newCoord:number){
+        return this.scaleY = newCoord
     }
     
 }

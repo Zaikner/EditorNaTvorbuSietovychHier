@@ -1,3 +1,4 @@
+import { editor } from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Tile{
     private type:string;
@@ -48,9 +49,11 @@ class Tile{
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.backgroundFile == undefined && this.patternFile == undefined){
+            
             ctx.strokeStyle =this.color
             ctx.lineWidth = 0
             ctx.fillStyle = this.color
+            ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
             
         
             if (this.shape == 'circle'){
@@ -60,28 +63,30 @@ class Tile{
             else if (this.shape == 'square'){
                 ctx.rect(this.x1,this.y1,this.radius*2,this.radius*2)
             }
+            ctx.resetTransform();
             ctx.fill();
         }
         else if (this.backgroundFile != undefined){
                 // //kresli image
             if (this.shape == 'circle'){
                 ctx.save()
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var clipPath = new Path2D()
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
                 ctx.fillStyle = 'black'
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 //ctx.fill()
-                ctx.stroke()
-            
+             
                 
-         
                 ctx.drawImage(this.backgroundFile!,this.x1,this.y1,2*this.radius,2*this.radius)
+                ctx.resetTransform();
                 ctx.restore()
                 //ctx.restore()
             }
             else{
                 ctx.save()
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var clipPath = new Path2D()
                 clipPath.rect(this.x1,this.y1,this.radius*2,this.radius*2)
                 ctx.clip(clipPath);
@@ -91,12 +96,14 @@ class Tile{
                 ctx.stroke()
                 
                 ctx.drawImage(this.backgroundFile!,this.x1,this.y1,2*this.radius,2*this.radius)
+                ctx.resetTransform();
                 ctx.restore()
             }
         }
         else if (this.patternFile != undefined){
             if (this.shape == 'circle'){
                 ctx.save()
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var clipPath = new Path2D()
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
@@ -109,11 +116,13 @@ class Tile{
                     for (let j = 0;j*20+this.y1 < this.y2;j++){
                     ctx.drawImage(this.patternFile!,this.x1+i*20,this.y1+j*20,20,20)}
                 }
+                ctx.resetTransform();
                 ctx.restore()
                 //ctx.restore()
             }
             else{
                 ctx.save()
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var clipPath = new Path2D()
                 clipPath.rect(this.x1,this.y1,this.radius*2,this.radius*2)
                 ctx.clip(clipPath);
@@ -126,6 +135,7 @@ class Tile{
                     for (let j = 0;j*20+this.y1 < this.y2;j++){
                     ctx.drawImage(this.patternFile!,this.x1+i*20,this.y1+j*20,20,20)}
                 }
+                ctx.resetTransform();
                 ctx.restore()
             }
         
@@ -134,7 +144,7 @@ class Tile{
         
             //outline
              if (this.stroke > 0){
-                
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                  ctx.strokeStyle =this.strokeColor
                  ctx.lineWidth = this.stroke
                  ctx.stroke();
@@ -149,6 +159,7 @@ class Tile{
                 // ctx.setLineDash([1]);
                 // ctx.stroke()
                 // ctx.setLineDash([0]);
+                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+8);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -157,9 +168,12 @@ class Tile{
                 ctx.lineWidth = 15
                 ctx.strokeStyle = grd
                 ctx.stroke()
+                ctx.resetTransform();
                     }
                     else{
+                        ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                         var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
+    
                         grd.addColorStop(0, "red");
                         //grd.addColorStop(0.5, "#990000");
                          grd.addColorStop(0.33, '#990000');
@@ -167,13 +181,20 @@ class Tile{
                         ctx.lineWidth = 15
                         ctx.strokeStyle = grd
                         ctx.stroke()
+                        ctx.resetTransform();
                     }
             }
             if (this.toggleNumber){
+                //ctx.save() 
+                //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 ctx.font = "bold 30px Arial";
                 ctx.fillStyle =  this.numberingColor
                 ctx.textBaseline = 'middle';
                 ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
+                ctx.resetTransform();
+                ctx.restore()
+
+
             }
     }
 

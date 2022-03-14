@@ -22,12 +22,22 @@ editorSocket.on('connected', function (msg) {
         addedTile.setStrokeColor(tile.strokeColor);
         addedTile.setShape(tile.shape);
         addedTile.setIsChoosen(tile.isChoosen);
-        var image = new Image();
-        image.src = msg.background.image;
-        image.onload = function () {
-            addedTile.setBackgroundFile(image);
-            reload(editor, ctx);
-        };
+        if (tile.backgroundFile != 'none') {
+            var image_1 = new Image();
+            image_1.src = tile.backgroundFile;
+            image_1.onload = function () {
+                addedTile.setBackgroundFile(image_1);
+                reload(editor, ctx);
+            };
+        }
+        if (tile.patternFile != 'none') {
+            var image_2 = new Image();
+            image_2.src = tile.patternFile;
+            image_2.onload = function () {
+                addedTile.setPatternFile(image_2);
+                reload(editor, ctx);
+            };
+        }
         //addedTile.setBackgroundFile(tile.backgroundFile)
         //addedTile.setPatternFile(tile.patternFile)
         addedTile.setIsEnding(tile.isEnding);
@@ -40,18 +50,21 @@ editorSocket.on('connected', function (msg) {
         addedTile.setNumberingColor(tile.numberingColor);
         addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
         editor.getGame().addTile(addedTile);
+        reload(editor, ctx);
     });
     var background = new Background_1.Background();
     background.setColor(msg.background.color);
-    var backImage = new Image();
-    backImage.src = msg.background.image;
-    backImage.onload = function () {
-        background.setBackgroundImage(backImage);
-        editor.getGame().setBackground(background);
-        console.log('obrazok ready');
-        reload(editor, ctx);
-    };
-    background.setBackgroundImage(backImage);
+    if (msg.background.image != 'none') {
+        var backImage_1 = new Image();
+        backImage_1.src = msg.background.image;
+        backImage_1.onload = function () {
+            background.setBackgroundImage(backImage_1);
+            editor.getGame().setBackground(background);
+            console.log('obrazok ready');
+            reload(editor, ctx);
+        };
+        background.setBackgroundImage(backImage_1);
+    }
     console.log(background);
     console.log('sprava je pod');
     console.log(msg.background);
@@ -69,6 +82,8 @@ console.log(window.location.href.split('/'));
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
     edit();
+    editor.getGame().setInitSizeX(window.innerWidth);
+    editor.getGame().setInitSizeY(window.innerHeight);
 }
 else {
     var params = new URLSearchParams(window.location.search);
@@ -143,13 +158,26 @@ exports.mainMenu = mainMenu;
 var length = 0;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
+ctx.scale(2, -2);
 resize(editor, ctx);
 window.addEventListener('resize', function () { resize(editor, ctx); });
 // // resize canvas
 function resize(editor, context) {
     //endDrawingPath()
+    if (editor.getGame().getInitSizeX() == 0) {
+        editor.getGame().setInitSizeX(window.innerWidth / 3 * 2 - 30);
+    }
+    if (editor.getGame().getInitSizeY() == 0) {
+        editor.getGame().setInitSizeY(window.innerHeight);
+    }
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
+    editor.getGame().setScaleX((window.innerWidth / 3 * 2 - 30) / editor.getGame().getInitSizeX());
+    console.log(window.innerWidth / 3 * 2 - 30);
+    console.log(editor.getGame().getInitSizeX());
+    editor.getGame().setScaleY(window.innerHeight / editor.getGame().getInitSizeY());
+    console.log('x je: ' + editor.getGame().getScaleX());
+    console.log('y je: ' + editor.getGame().getScaleY());
     reload(editor, context);
     //if (started) startDrawingPath();
     // }

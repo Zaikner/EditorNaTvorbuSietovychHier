@@ -24,12 +24,23 @@ editorSocket.on('connected',(msg)=>{
      addedTile.setStrokeColor(tile.strokeColor)
      addedTile.setShape(tile.shape)
      addedTile.setIsChoosen(tile.isChoosen)
-     let image = new Image()
-     image.src = msg.background.image
-     image.onload = function(){
-      addedTile.setBackgroundFile(image)
-      reload(editor,ctx)
+     if(tile.backgroundFile != 'none'){
+      let image = new Image()
+      image.src = tile.backgroundFile
+      image.onload = function(){
+       addedTile.setBackgroundFile(image)
+       reload(editor,ctx)
+      }
      }
+     if(tile.patternFile != 'none'){
+      let image = new Image()
+      image.src = tile.patternFile
+      image.onload = function(){
+       addedTile.setPatternFile(image)
+       reload(editor,ctx)
+      }
+     }
+   
       //addedTile.setBackgroundFile(tile.backgroundFile)
       //addedTile.setPatternFile(tile.patternFile)
   
@@ -44,20 +55,24 @@ editorSocket.on('connected',(msg)=>{
      addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
    
     editor.getGame().addTile(addedTile)
+    reload(editor,ctx)
   })
   let background = new Background()
   background.setColor(msg.background.color)
-  let backImage = new Image()
-  backImage.src = msg.background.image
-  backImage.onload = function(){
+  if (msg.background.image!='none'){
+    let backImage = new Image()
+    backImage.src = msg.background.image
+    backImage.onload = function(){
+      background.setBackgroundImage(backImage)
+      
+      editor.getGame().setBackground(background)
+      console.log('obrazok ready')
+      reload(editor,ctx)
+    }
+      
     background.setBackgroundImage(backImage)
-    
-    editor.getGame().setBackground(background)
-    console.log('obrazok ready')
-    reload(editor,ctx)
   }
-    
-  background.setBackgroundImage(backImage)
+ 
     
   console.log(background)
   console.log('sprava je pod')
@@ -79,6 +94,9 @@ console.log(window.location.href.split('/'))
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
   edit()
+  editor.getGame().setInitSizeX(window.innerWidth)
+  editor.getGame().setInitSizeY(window.innerHeight)
+  
 }
 else{
   const params = new URLSearchParams(window.location.search);
@@ -99,6 +117,7 @@ document.getElementById('editTiles')!.addEventListener('click',function(){editTi
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
 var doc = document;
 const canvas = document.createElement('canvas');
+
 
 document.getElementById("canvasPlace")!.appendChild(canvas);
 
@@ -170,6 +189,7 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Sav
 
  var length:number =0;
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
+ctx.scale(2, -2);
 resize(editor,ctx);
 
  
@@ -180,8 +200,20 @@ window.addEventListener('resize', function(){resize(editor,ctx)});
 // // resize canvas
 function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
    //endDrawingPath()
+   if(editor.getGame().getInitSizeX() == 0){
+    editor.getGame().setInitSizeX(window.innerWidth/ 3 * 2-30)
+   }
+   if(editor.getGame().getInitSizeY() == 0){
+    editor.getGame().setInitSizeY(window.innerHeight)
+   }
    context.canvas.width = window.innerWidth / 3 * 2-30;
    context.canvas.height = window.innerHeight;
+   editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
+   console.log(window.innerWidth/ 3 * 2-30)
+   console.log(editor.getGame().getInitSizeX())
+   editor.getGame().setScaleY(window.innerHeight/editor.getGame().getInitSizeY())
+   console.log( 'x je: '+editor.getGame().getScaleX())
+   console.log( 'y je: '+editor.getGame().getScaleY())
    reload(editor,context);
    //if (started) startDrawingPath();
 // }

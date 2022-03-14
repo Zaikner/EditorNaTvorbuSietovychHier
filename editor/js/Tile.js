@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Tile = void 0;
+var canvas_js_1 = require("./canvas.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Tile = /** @class */ (function () {
     function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
@@ -40,31 +41,35 @@ var Tile = /** @class */ (function () {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 0;
             ctx.fillStyle = this.color;
+            ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
             if (this.shape == 'circle') {
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
             }
             else if (this.shape == 'square') {
                 ctx.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
             }
+            ctx.resetTransform();
             ctx.fill();
         }
         else if (this.backgroundFile != undefined) {
             // //kresli image
             if (this.shape == 'circle') {
                 ctx.save();
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var clipPath = new Path2D();
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
                 ctx.fillStyle = 'black';
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 //ctx.fill()
-                ctx.stroke();
                 ctx.drawImage(this.backgroundFile, this.x1, this.y1, 2 * this.radius, 2 * this.radius);
+                ctx.resetTransform();
                 ctx.restore();
                 //ctx.restore()
             }
             else {
                 ctx.save();
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var clipPath = new Path2D();
                 clipPath.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
                 ctx.clip(clipPath);
@@ -73,12 +78,14 @@ var Tile = /** @class */ (function () {
                 //ctx.fill()
                 ctx.stroke();
                 ctx.drawImage(this.backgroundFile, this.x1, this.y1, 2 * this.radius, 2 * this.radius);
+                ctx.resetTransform();
                 ctx.restore();
             }
         }
         else if (this.patternFile != undefined) {
             if (this.shape == 'circle') {
                 ctx.save();
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var clipPath = new Path2D();
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
@@ -91,11 +98,13 @@ var Tile = /** @class */ (function () {
                         ctx.drawImage(this.patternFile, this.x1 + i * 20, this.y1 + j * 20, 20, 20);
                     }
                 }
+                ctx.resetTransform();
                 ctx.restore();
                 //ctx.restore()
             }
             else {
                 ctx.save();
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var clipPath = new Path2D();
                 clipPath.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
                 ctx.clip(clipPath);
@@ -108,11 +117,13 @@ var Tile = /** @class */ (function () {
                         ctx.drawImage(this.patternFile, this.x1 + i * 20, this.y1 + j * 20, 20, 20);
                     }
                 }
+                ctx.resetTransform();
                 ctx.restore();
             }
         }
         //outline
         if (this.stroke > 0) {
+            ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;
             ctx.stroke();
@@ -125,6 +136,7 @@ var Tile = /** @class */ (function () {
                 // ctx.setLineDash([1]);
                 // ctx.stroke()
                 // ctx.setLineDash([0]);
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var grd = ctx.createRadialGradient(this.centerX, this.centerY, this.radius, this.centerX, this.centerY, this.radius + 8);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -133,8 +145,10 @@ var Tile = /** @class */ (function () {
                 ctx.lineWidth = 15;
                 ctx.strokeStyle = grd;
                 ctx.stroke();
+                ctx.resetTransform();
             }
             else {
+                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
                 var grd = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -143,13 +157,18 @@ var Tile = /** @class */ (function () {
                 ctx.lineWidth = 15;
                 ctx.strokeStyle = grd;
                 ctx.stroke();
+                ctx.resetTransform();
             }
         }
         if (this.toggleNumber) {
+            //ctx.save() 
+            //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
             ctx.font = "bold 30px Arial";
             ctx.fillStyle = this.numberingColor;
             ctx.textBaseline = 'middle';
             ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+            ctx.resetTransform();
+            ctx.restore();
         }
     };
     Tile.prototype.isPointedAt = function (x, y) {

@@ -14,8 +14,18 @@
     
 let params = new URLSearchParams(window.location.search);
 window.localStorage.setItem('id',params.get("id"))
-Cookies.set('id',params.get("id"))
-window.location.replace('/')
+//Cookies.set('id',params.get("id"))
+if (Cookies.get('mode') == 'editor'){
+    window.location.replace('/editor')
+}
+if (Cookies.get('mode') == 'account'){
+    window.location.replace('/account')
+}
+if (Cookies.get('mode') == 'game'){
+    window.location.replace('/gameLobby')
+}
+
+
 
 </script>
 </html>

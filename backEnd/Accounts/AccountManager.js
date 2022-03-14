@@ -44,6 +44,7 @@ require("dotenv").config('.env');
 var AccountManager = /** @class */ (function () {
     function AccountManager() {
     }
+    // implementuj funkciu, ktora bude kontrolovat, ci sa uzivatel neodlogol, bud nejake cey request, alebo prebehne vsetky uzivatelov
     AccountManager.isValidRegistration = function (name, password, confirm) {
         return password == confirm && this.isValidName(name);
     };
@@ -152,6 +153,8 @@ var AccountManager = /** @class */ (function () {
         return newAcc;
     };
     AccountManager.isLogged = function (name) {
+        // OPRAVIT!!!!!!!!!!!!, ide to, ale odlogovanie nie je poriesene
+        return false;
         var ret = false;
         this.loggedAccounts.forEach(function (acc) {
             if (acc.getName() === name) {

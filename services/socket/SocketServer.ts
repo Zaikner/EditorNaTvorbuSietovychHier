@@ -85,6 +85,16 @@ class ServerSocket{
         b.insert()
         this.io.emit('chat message');
       });
+
+
+      socket.on('relog',async(msg:{id:string})=>{
+        console.log('skusil relognut'+msg.id)
+        //console.log(msg.id)
+        let acc = AccountManager.getAccountByClientId(msg.id)
+        AccountManager.login(acc)
+        socket.emit('set cookie')
+        console.log('pripojil'+acc)
+      })
           });
     }
   

@@ -34,8 +34,8 @@ router.route("/login")
     }
     if (registred[0] && !isLoged){
         res.cookie('id',registred[1].getClientId())
-        //res.redirect('/editor/setId?id='+registred[1].getClientId())
-        res.redirect('/gameLobby')
+        /res.cookie('mode','game')
+        res.redirect('/editor/setId?id='+registred[1].getClientId())
     }
     else if (isLoged){
         

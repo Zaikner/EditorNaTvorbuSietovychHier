@@ -8,6 +8,8 @@ class AccountManager{
     private static loggedAccounts:Array<Account> = []
     private static clientIds:Array<String> = []
     private static numberOfGuests:number = 0
+
+    // implementuj funkciu, ktora bude kontrolovat, ci sa uzivatel neodlogol, bud nejake cey request, alebo prebehne vsetky uzivatelov
     public static isValidRegistration(name:string,password:string,confirm:string){
         return password == confirm && this.isValidName(name)
     }
@@ -93,6 +95,9 @@ class AccountManager{
     }
     
     public static isLogged(name:string){
+
+        // OPRAVIT!!!!!!!!!!!!, ide to, ale odlogovanie nie je poriesene
+        return false
         let ret = false
         this.loggedAccounts.forEach((acc:Account) =>{
             if (acc.getName()===name){

@@ -51,8 +51,9 @@ router.route("/login")
     }
     if (registred[0] && !isLoged){
         res.cookie('id',registred[1].getClientId())
-        //res.redirect('/editor/setId?id='+registred[1].getClientId())
-        res.redirect('/editor')
+        res.cookie('mode','editor')
+        res.redirect('/editor/setId?id='+registred[1].getClientId())
+        //res.redirect('/editor')
     }
     else if (isLoged){
         
