@@ -36,9 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
 var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
+var Room = require('./Room.js');
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
@@ -61,6 +63,25 @@ var GameManager = /** @class */ (function () {
             });
         });
     };
+    GameManager.createRoom = function (name, numOfPlayers) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, room;
+            return __generator(this, function (_a) {
+                id = Math.floor(Math.random() * 9000) + 1000;
+                room = new Room(id, numOfPlayers, name);
+                console.log(room);
+                this.activeRooms.push(room);
+                return [2 /*return*/, room];
+            });
+        });
+    };
+    GameManager.getActiveRooms = function () {
+        return this.activeRooms;
+    };
+    GameManager.setActiveRooms = function (newRooms) {
+        return this.activeRooms = newRooms;
+    };
+    GameManager.activeRooms = [];
     return GameManager;
 }());
 module.exports = GameManager;

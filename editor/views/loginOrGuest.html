@@ -38,6 +38,9 @@
       <script>  $(window).on('load', function() {
         
         $('#loginModal').modal('show');
+        if (localStorage.getItem("id")!= undefined){
+          window.location.replace('/gameLobby')
+        }
     });</script>
 </body>
 </html>

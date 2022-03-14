@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const AccountManager = require('../backEnd/Accounts/AccountManager.js');
+const GameManager = require('../backEnd/Game/GameManager.js');
 const { Account_db } = require('../services/db/RDG/Account_db.js');
 const { GameFinder } = require('../services/db/RDG/GameFinder_db.js');
 const { Game_db } = require('../services/db/RDG/Game_db.js');
@@ -14,7 +15,9 @@ router
 {   
     console.log(await GameFinder.getIntance().findAll())
     let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
-    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a});
+    let rooms = GameManager.getActiveRooms().map(room => [room.getId()+'&'+room.getGameName(),"Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getNumOfPlayers()])
+    console.log(rooms)
+    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms});
 });
 
 

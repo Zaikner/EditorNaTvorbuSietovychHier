@@ -9,6 +9,7 @@ import { spawnButton } from "./Elements";
 
 
 import { Background } from "./Background";
+import { initGameInfo } from "./Gameplay";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -58,7 +59,11 @@ editorSocket.on('connected',(msg)=>{
     reload(editor,ctx)
   })
   let background = new Background()
+  console.log('background je je chyba')
+  console.log(msg.background)
+  console.log(msg)
   background.setColor(msg.background.color)
+  console.log('background nie je chyba')
   if (msg.background.image!='none'){
     let backImage = new Image()
     backImage.src = msg.background.image
@@ -84,6 +89,7 @@ editorSocket.on('connected',(msg)=>{
   editor.getGame().setAuthor(msg.game.author)
   editor.getGame().setName(msg.game.name)
   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
+  initGameInfo(msg.game.name)
   //reload(editor,ctx)
   //edit()
 })
@@ -100,7 +106,21 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else{
   const params = new URLSearchParams(window.location.search);
+  console.log(params.get('name'))
+  console.log('room je :')
+  console.log(params.get('room'))
+  console.log(params.get('room') == null)
   editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+
+  if (params.get('room') == null){
+    //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+  }
+  else{
+    editorSocket.emit('load room-info',{room:params.get('room')})
+    //editorSocket.emit('load room-game',{room:params.get('room')})
+    //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+
+  }
   
 }
 

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.AccountManager = void 0;
 var Account_db_js_1 = require("../../services/db/RDG/Account_db.js");
 var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var Account_js_1 = require("./Account.js");
@@ -228,4 +229,5 @@ var AccountManager = /** @class */ (function () {
     AccountManager.numberOfGuests = 0;
     return AccountManager;
 }());
+exports.AccountManager = AccountManager;
 module.exports = AccountManager;

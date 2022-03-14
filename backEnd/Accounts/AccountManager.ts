@@ -1,10 +1,11 @@
 import {Account_db} from '../../services/db/RDG/Account_db.js'
 import { AccountFinder } from '../../services/db/RDG/AccountFinder.js';
 import{Account} from './Account.js'
+
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env')
 
-class AccountManager{
+export class AccountManager{
     private static loggedAccounts:Array<Account> = []
     private static clientIds:Array<String> = []
     private static numberOfGuests:number = 0
@@ -153,6 +154,7 @@ class AccountManager{
     public static getLogedAccounts(){
         return this.loggedAccounts
     }
+    
 
 }
 module.exports = AccountManager

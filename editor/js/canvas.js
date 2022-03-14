@@ -8,6 +8,7 @@ var GameEditor_js_1 = require("./GameEditor.js");
 var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
 var Background_1 = require("./Background");
+var Gameplay_1 = require("./Gameplay");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -53,7 +54,11 @@ editorSocket.on('connected', function (msg) {
         reload(editor, ctx);
     });
     var background = new Background_1.Background();
+    console.log('background je je chyba');
+    console.log(msg.background);
+    console.log(msg);
     background.setColor(msg.background.color);
+    console.log('background nie je chyba');
     if (msg.background.image != 'none') {
         var backImage_1 = new Image();
         backImage_1.src = msg.background.image;
@@ -74,6 +79,7 @@ editorSocket.on('connected', function (msg) {
     editor.getGame().setAuthor(msg.game.author);
     editor.getGame().setName(msg.game.name);
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
+    (0, Gameplay_1.initGameInfo)(msg.game.name);
     //reload(editor,ctx)
     //edit()
 });
@@ -87,7 +93,19 @@ if (zoz[zoz.length - 2] === 'editor') {
 }
 else {
     var params = new URLSearchParams(window.location.search);
+    console.log(params.get('name'));
+    console.log('room je :');
+    console.log(params.get('room'));
+    console.log(params.get('room') == null);
     editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+    if (params.get('room') == null) {
+        //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+    }
+    else {
+        editorSocket.emit('load room-info', { room: params.get('room') });
+        //editorSocket.emit('load room-game',{room:params.get('room')})
+        //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+    }
 }
 editorSocket.on('loaded game', function () {
     console.log('Editor client connected');
