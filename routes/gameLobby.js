@@ -15,7 +15,7 @@ router
 {   
     console.log(await GameFinder.getIntance().findAll())
     let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
-    let rooms = GameManager.getActiveRooms().map(room => [room.getId()+'&'+room.getGameName(),"Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getNumOfPlayers()])
+    let rooms = GameManager.getActiveRooms().map(room => [room.getId(),"Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getNumOfPlayers()])
     console.log(rooms)
     res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms});
 });

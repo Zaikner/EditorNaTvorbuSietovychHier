@@ -9,9 +9,9 @@ import { spawnButton } from "./Elements";
 
 
 import { Background } from "./Background";
-import { initGameInfo } from "./Gameplay";
+import { initGameInfo,initDice } from "./Gameplay";
 const editor = new GameEditor()
-const editorSocket = io('https://sietove-hry.herokuapp.com/');//'https://sietove-hry.herokuapp.com/'
+const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
 
 editorSocket.on('connected',(msg)=>{
@@ -121,7 +121,7 @@ else{
     //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
   }
-  
+  initDice()
 }
 
 editorSocket.on('loaded game',()=>{

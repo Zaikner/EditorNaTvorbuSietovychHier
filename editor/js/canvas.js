@@ -106,6 +106,7 @@ else {
         //editorSocket.emit('load room-game',{room:params.get('room')})
         //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
     }
+    (0, Gameplay_1.initDice)();
 }
 editorSocket.on('loaded game', function () {
     console.log('Editor client connected');
