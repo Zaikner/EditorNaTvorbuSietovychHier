@@ -5,6 +5,7 @@ var Path_js_1 = require("./Path.js");
 var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
+var Warning_js_1 = require("./Warning.js");
 var Game = /** @class */ (function () {
     function Game() {
         this.name = "";
@@ -22,19 +23,25 @@ var Game = /** @class */ (function () {
         this.scaleY = 2;
     }
     Game.prototype.saveGame = function () {
-        var savedTiles = [];
-        this.tiles.forEach(function (tile) {
-            savedTiles.push(tile.JSONfyTile());
-        });
-        canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
-            author: this.author,
-            background: {
-                backgroundImage: this.background.getBackgroundImage() === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.background.getBackgroundImage()),
-                color: this.background.getColor()
-            },
-            tiles: savedTiles,
-            numOfPlayers: this.numOfPlayers
-        });
+        if (this.name.length == 0) {
+            Warning_js_1.Warning.show("You can't create game without name!");
+        }
+        else {
+            var savedTiles_1 = [];
+            this.tiles.forEach(function (tile) {
+                savedTiles_1.push(tile.JSONfyTile());
+            });
+            canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
+                author: this.author,
+                background: {
+                    backgroundImage: this.background.getBackgroundImage() === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.background.getBackgroundImage()),
+                    color: this.background.getColor()
+                },
+                tiles: savedTiles_1,
+                numOfPlayers: this.numOfPlayers
+            });
+            window.location.replace('/');
+        }
     };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });

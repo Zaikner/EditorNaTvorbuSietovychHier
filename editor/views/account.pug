@@ -34,6 +34,8 @@ head
         h5 Statistics
       #modalFooter.modal-footer
         form.text-center(action='/logout', method='get', style='width: 100%;')
+          button.btn.btn-primary(type='submit') Log out!
+        form.text-center(action='/', method='get', style='width: 100%;')
           button.btn.btn-primary(type='submit') Leave and confirm changes!
 script.
   $(window).on('load', function() {

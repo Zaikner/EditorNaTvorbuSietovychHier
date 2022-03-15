@@ -169,7 +169,7 @@ function mainMenu() {
     document.getElementById("gameTypePlace").appendChild(gameType);
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], 'Save game to database!', function () {
         editor.getGame().saveGame();
-        window.location.replace('/');
+        //window.location.replace('/')
     });
 }
 exports.mainMenu = mainMenu;

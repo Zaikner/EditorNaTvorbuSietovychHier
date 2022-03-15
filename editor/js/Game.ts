@@ -3,6 +3,7 @@ import {Tile} from './Tile.js'
 import {Background} from './Background.js'
 import { editorSocket} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
+import { Warning } from './Warning.js';
 class Game{
     private name:string = "";
     private author:string = "";
@@ -22,21 +23,27 @@ class Game{
     constructor(){}
 
     saveGame(){
-    
+        if (this.name.length == 0){
+            Warning.show("You can't create game without name!")
+        }
+        else{
+            let savedTiles:any = []
+            this.tiles.forEach((tile:Tile)=>{
+                savedTiles.push(tile.JSONfyTile())
+            })
+            editorSocket.emit('saveGame',{name:this.name,
+                                          author:this.author,
+                                          background:{
+                                                    backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
+                                                    color:this.background.getColor()
+                                          },
+                                          tiles:savedTiles,
+                                          numOfPlayers:this.numOfPlayers,
+                                        })
+            window.location.replace('/')
+        }
         
-        let savedTiles:any = []
-        this.tiles.forEach((tile:Tile)=>{
-            savedTiles.push(tile.JSONfyTile())
-        })
-        editorSocket.emit('saveGame',{name:this.name,
-                                      author:this.author,
-                                      background:{
-                                                backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
-                                                color:this.background.getColor()
-                                      },
-                                      tiles:savedTiles,
-                                      numOfPlayers:this.numOfPlayers,
-                                    })
+       
     }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});

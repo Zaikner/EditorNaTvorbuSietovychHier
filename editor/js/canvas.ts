@@ -11,7 +11,7 @@ import { spawnButton } from "./Elements";
 import { Background } from "./Background";
 import { initGameInfo } from "./Gameplay";
 const editor = new GameEditor()
-const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
+const editorSocket = io('https://sietove-hry.herokuapp.com/');//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
 
 editorSocket.on('connected',(msg)=>{
@@ -200,7 +200,7 @@ document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Save game to database!',function(){
   editor.getGame().saveGame()
-  window.location.replace('/')
+  //window.location.replace('/')
 })
 }
 
