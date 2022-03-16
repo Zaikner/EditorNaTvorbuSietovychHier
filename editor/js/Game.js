@@ -19,8 +19,9 @@ var Game = /** @class */ (function () {
         this.nextTileNumber = 1;
         this.initSizeX = 0;
         this.initSizeY = 0;
-        this.scaleX = 2;
-        this.scaleY = 2;
+        this.scaleX = 1;
+        this.scaleY = 1;
+        this.pawns = [];
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -45,6 +46,9 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
+    };
+    Game.prototype.removePawn = function (pawn) {
+        this.pawns = this.pawns.filter(function (p) { return p != pawn; });
     };
     Game.prototype.setPath = function (newPath) {
         this.path = newPath;
@@ -121,6 +125,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.setScaleY = function (newCoord) {
         return this.scaleY = newCoord;
+    };
+    Game.prototype.setPawns = function (newPawns) {
+        this.pawns = newPawns;
+    };
+    Game.prototype.getPawns = function () {
+        return this.pawns;
     };
     return Game;
 }());

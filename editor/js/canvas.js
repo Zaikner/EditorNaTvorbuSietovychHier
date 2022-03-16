@@ -9,6 +9,7 @@ var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
 var Background_1 = require("./Background");
 var Gameplay_1 = require("./Gameplay");
+var PawnEditor_1 = require("./PawnEditor");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -85,11 +86,13 @@ editorSocket.on('connected', function (msg) {
 });
 //editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
 console.log(window.location.href.split('/'));
+var isEditor = false;
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
     edit();
-    editor.getGame().setInitSizeX(window.innerWidth);
-    editor.getGame().setInitSizeY(window.innerHeight);
+    isEditor = true;
+    //editor.getGame().setInitSizeX(window.innerWidth)
+    //editor.getGame().setInitSizeY(window.innerHeight)
 }
 else {
     var params = new URLSearchParams(window.location.search);
@@ -120,6 +123,7 @@ function edit() {
     document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
 }
+document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnMenu)(); });
 var doc = document;
 exports.doc = doc;
 var canvas = document.createElement('canvas');
@@ -183,20 +187,22 @@ window.addEventListener('resize', function () { resize(editor, ctx); });
 // // resize canvas
 function resize(editor, context) {
     //endDrawingPath()
-    if (editor.getGame().getInitSizeX() == 0) {
-        editor.getGame().setInitSizeX(window.innerWidth / 3 * 2 - 30);
-    }
-    if (editor.getGame().getInitSizeY() == 0) {
-        editor.getGame().setInitSizeY(window.innerHeight);
-    }
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
-    editor.getGame().setScaleX((window.innerWidth / 3 * 2 - 30) / editor.getGame().getInitSizeX());
-    console.log(window.innerWidth / 3 * 2 - 30);
-    console.log(editor.getGame().getInitSizeX());
-    editor.getGame().setScaleY(window.innerHeight / editor.getGame().getInitSizeY());
-    console.log('x je: ' + editor.getGame().getScaleX());
-    console.log('y je: ' + editor.getGame().getScaleY());
+    if (!isEditor) {
+        if (editor.getGame().getInitSizeX() == 0) {
+            editor.getGame().setInitSizeX(window.innerWidth / 3 * 2 - 30);
+        }
+        if (editor.getGame().getInitSizeY() == 0) {
+            editor.getGame().setInitSizeY(window.innerHeight);
+        }
+        editor.getGame().setScaleX((window.innerWidth / 3 * 2 - 30) / editor.getGame().getInitSizeX());
+        console.log(window.innerWidth / 3 * 2 - 30);
+        console.log(editor.getGame().getInitSizeX());
+        editor.getGame().setScaleY(window.innerHeight / editor.getGame().getInitSizeY());
+        console.log('x je: ' + editor.getGame().getScaleX());
+        console.log('y je: ' + editor.getGame().getScaleY());
+    }
     reload(editor, context);
     //if (started) startDrawingPath();
     // }
@@ -229,9 +235,16 @@ function reload(editor, ctx) {
         ctx.stroke(); // draw it!
         num++;
     }
+    ctx.closePath();
     var tiles = editor.getGame().getTiles();
     tiles.forEach(function (tile) {
         tile.drawTile(canvas, ctx);
+    });
+    ctx.closePath();
+    ctx.restore();
+    var pawns = editor.getGame().getPawns();
+    pawns.forEach(function (pawn) {
+        pawn.draw(ctx);
     });
 }
 exports.reload = reload;

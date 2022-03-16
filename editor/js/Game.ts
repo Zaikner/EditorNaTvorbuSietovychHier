@@ -4,6 +4,7 @@ import {Background} from './Background.js'
 import { editorSocket} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
+import { Pawn } from './Pawn.js';
 class Game{
     private name:string = "";
     private author:string = "";
@@ -16,8 +17,9 @@ class Game{
     private nextTileNumber = 1
     private initSizeX:number = 0
     private initSizeY:number = 0;
-    private scaleX:number = 2;
-    private scaleY:number = 2;
+    private scaleX:number = 1;
+    private scaleY:number = 1;
+    private pawns:Array<Pawn> = []
     
 
     constructor(){}
@@ -47,6 +49,9 @@ class Game{
     }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
+    }
+    removePawn(pawn:Pawn){
+        this.pawns = this.pawns.filter((p) => {return p != pawn});
     }
     setPath(newPath:Path){
         this.path = newPath;
@@ -126,6 +131,12 @@ class Game{
     }
     setScaleY(newCoord:number){
         return this.scaleY = newCoord
+    }
+    public setPawns(newPawns:Array<Pawn>){
+        this.pawns = newPawns
+    }
+    public getPawns(){
+        return this.pawns
     }
     
 }

@@ -67,11 +67,15 @@ var GameEditor = /** @class */ (function () {
         }
     };
     GameEditor.prototype.deleteTile = function (event) {
+        var _this = this;
         var coords = (0, canvas_js_1.calibreEventCoords)(event);
         var tiles = this.game.getTiles();
         for (var i = tiles.length - 1; i >= 0; i--) {
             if (tiles[i].isPointedAt(coords.x, coords.y)) {
                 this.game.removeTile(tiles[i]);
+                tiles[i].getPawns().forEach(function (pawn) {
+                    _this.game.removePawn(pawn);
+                });
                 break;
             }
         }

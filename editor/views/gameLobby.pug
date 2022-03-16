@@ -11,9 +11,10 @@ style.
   align-items: center;
   justify-content: center;
   /* background-color: #292b2c; */
-  overflow: hidden;
+  overflow: auto;
   background-color: #7ed6df;
   background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
+  bottom-padding:1px;
   }
 title Game Lobby
 nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;')
@@ -29,9 +30,9 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
   .container-fluid
     .row.d-flex.align-items-center.justify-content-center
       // <div class="col-1"></div>
-      .col-12(style=' overflow: auto; width: 100vh; height: 100vh;')
-        .row(style='height:100vh; width: 100%;')
-          .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%;')
+      .col-12(style=' overflow: auto; width: 100vh; height: 100vh;  bottom-padding:1px')
+        .row(style='height:100vh; width: 100%;  bottom-padding:1px')
+          .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%; bottom-padding:1px;')
             div(style='margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 40vh;  border-radius: 25px;')
               p(style='font-size: 20px; font-family: sans-serif;') Choose room
               hr
@@ -42,7 +43,7 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
               form
                 p(style='font-size: 20px;') Create new room
                 button(type='button' id='create') Create
-            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 25vh;  border-radius: 25px;')
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
               // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
               label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
                 strong Active rooms
@@ -55,9 +56,13 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                           button(type = 'submit' name='room' value = room[0]).btn.btn-danger Join
                
               hr
-            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;')
+            div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;')
               p(style='font-size: 20px; font-family: sans-serif;') HighScore
               hr
+            br
+            br
+            br
+            br
           .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
             div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
               p(style='font-size: 20px; font-family: sans-serif;')  Created games overview
@@ -72,12 +77,14 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                         | 
                         button(type = 'submit' name='name' value = game).btn.btn-danger Detail         
               hr
-            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 40vh;  border-radius: 25px;')
               .form-group
                 label(for='chat' style='font-size: 20px; font-family: sans-serif;')
                   strong Player chat
                 textarea#chat.form-control(rows='15' style='resize: none; overflow-y: scroll; max-height: 20vh;' readonly='')
-                textarea#answer.form-control(rows='1' style='resize: none;' placeholder='Write there')
+                
+                textarea#answer.form-control.form.inline(rows='1' style='resize: none; width: 50%' placeholder='Write there' inline="true")
+                button(type = 'submit' id='chatButton').btn.btn-danger.form.inline Send!   
                 br
 #loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
   .modal-dialog

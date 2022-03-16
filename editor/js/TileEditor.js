@@ -158,6 +158,8 @@ function undoTileInsert() {
 }
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
+    console.log('scales' + canvas_js_1.editor.getGame().getScaleX());
+    console.log('scales' + canvas_js_1.editor.getGame().getScaleY());
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
     var canSpawn = true;
     if (document.getElementById('tileFollowingSetter').value.length > 0) {

@@ -1,4 +1,5 @@
 import { editor } from './canvas.js';
+import { Pawn } from './Pawn.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Tile{
     private type:string;
@@ -27,6 +28,7 @@ class Tile{
     private toggleNumber:boolean = true;
     private numberingColor:string = 'white'
     private numberOfFollowingTile:number;
+    private pawns:Array<Pawn> = []
 
     constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
@@ -196,6 +198,7 @@ class Tile{
 
 
             }
+        ctx.closePath()
     }
 
     isPointedAt(x:number,y:number){
@@ -401,6 +404,12 @@ class Tile{
     }
     public setFollowingTileNumber(newNumber:number){
         this.numberOfFollowingTile = newNumber
+    }
+    public setPawns(newPawns:Array<Pawn>){
+        this.pawns = newPawns
+    }
+    public getPawns(){
+        return this.pawns
     }
     
     

@@ -21,6 +21,7 @@ var Tile = /** @class */ (function () {
         this.canOccupy = [];
         this.toggleNumber = true;
         this.numberingColor = 'white';
+        this.pawns = [];
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -170,6 +171,7 @@ var Tile = /** @class */ (function () {
             ctx.resetTransform();
             ctx.restore();
         }
+        ctx.closePath();
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {
@@ -366,6 +368,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.setFollowingTileNumber = function (newNumber) {
         this.numberOfFollowingTile = newNumber;
+    };
+    Tile.prototype.setPawns = function (newPawns) {
+        this.pawns = newPawns;
+    };
+    Tile.prototype.getPawns = function () {
+        return this.pawns;
     };
     return Tile;
 }());

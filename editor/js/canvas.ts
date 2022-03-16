@@ -10,6 +10,8 @@ import { spawnButton } from "./Elements";
 
 import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
+import { pawnMenu } from "./PawnEditor";
+import { Pawn } from "./Pawn";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -97,11 +99,13 @@ editorSocket.on('connected',(msg)=>{
 
 //editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
 console.log(window.location.href.split('/'))
+let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
   edit()
-  editor.getGame().setInitSizeX(window.innerWidth)
-  editor.getGame().setInitSizeY(window.innerHeight)
+  isEditor = true;
+  //editor.getGame().setInitSizeX(window.innerWidth)
+  //editor.getGame().setInitSizeY(window.innerHeight)
   
 }
 else{
@@ -135,6 +139,8 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){inse
 document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
 document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
+
+document.getElementById('insertPawn')!.addEventListener('click',function(){pawnMenu()} );
 var doc = document;
 const canvas = document.createElement('canvas');
 
@@ -220,20 +226,25 @@ window.addEventListener('resize', function(){resize(editor,ctx)});
 // // resize canvas
 function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   if(editor.getGame().getInitSizeX() == 0){
-    editor.getGame().setInitSizeX(window.innerWidth/ 3 * 2-30)
-   }
-   if(editor.getGame().getInitSizeY() == 0){
-    editor.getGame().setInitSizeY(window.innerHeight)
-   }
+  
    context.canvas.width = window.innerWidth / 3 * 2-30;
    context.canvas.height = window.innerHeight;
-   editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
-   console.log(window.innerWidth/ 3 * 2-30)
-   console.log(editor.getGame().getInitSizeX())
-   editor.getGame().setScaleY(window.innerHeight/editor.getGame().getInitSizeY())
-   console.log( 'x je: '+editor.getGame().getScaleX())
-   console.log( 'y je: '+editor.getGame().getScaleY())
+   if(!isEditor){
+    if(editor.getGame().getInitSizeX() == 0){
+      editor.getGame().setInitSizeX(window.innerWidth/ 3 * 2-30)
+     }
+     if(editor.getGame().getInitSizeY() == 0){
+      editor.getGame().setInitSizeY(window.innerHeight)
+     }
+     editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
+     console.log(window.innerWidth/ 3 * 2-30)
+     console.log(editor.getGame().getInitSizeX())
+     editor.getGame().setScaleY(window.innerHeight/editor.getGame().getInitSizeY())
+     console.log( 'x je: '+editor.getGame().getScaleX())
+     console.log( 'y je: '+editor.getGame().getScaleY())
+   }
+   
+  
    reload(editor,context);
    //if (started) startDrawingPath();
 // }
@@ -275,11 +286,18 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
     ctx.stroke(); // draw it!
     num++;
   }
-
+  ctx.closePath()
   let tiles = editor.getGame().getTiles()
   tiles.forEach((tile:Tile) => {
     tile.drawTile(canvas,ctx)
   })
+  ctx.closePath()
+  ctx.restore()
+  let pawns = editor.getGame().getPawns()
+  pawns.forEach((pawn:Pawn) =>{
+      pawn.draw(ctx)
+  })
+ 
   
 }
 

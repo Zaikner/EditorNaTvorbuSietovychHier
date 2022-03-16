@@ -3,6 +3,7 @@ import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 
 import {editTiles} from './TileEditor.js'
+import { Pawn } from './Pawn.js';
 
 class GameEditor{
     private game= new Game();
@@ -72,6 +73,7 @@ class GameEditor{
             }
         }
     }
+  
     deleteTile(event:MouseEvent){
         
         let coords = calibreEventCoords(event)
@@ -80,6 +82,10 @@ class GameEditor{
         for (let i = tiles.length-1; i >= 0;i--){
             if (tiles[i].isPointedAt(coords.x,coords.y)){
                 this.game.removeTile(tiles[i])
+                tiles[i].getPawns().forEach((pawn:Pawn)=>{
+                    this.game.removePawn(pawn)
+                })
+                
                 break
             }
         }

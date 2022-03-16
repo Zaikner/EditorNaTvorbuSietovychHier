@@ -185,6 +185,8 @@ function insertTilesMenu():void{
   }
 
   let  insert = function(event:MouseEvent){
+    console.log('scales'+editor.getGame().getScaleX())
+    console.log('scales'+editor.getGame().getScaleY())
     let coords = calibreEventCoords(event)
     let canSpawn = true
     if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
