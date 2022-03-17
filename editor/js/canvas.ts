@@ -12,6 +12,7 @@ import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
 import { pawnMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
+import { addOption, createQuestion } from "./Questions";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -139,7 +140,9 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){inse
 document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
 document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
-
+//spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
+document.getElementById('addButton')!.addEventListener('click',function(){addOption();})
+document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion();})
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnMenu()} );
 var doc = document;
 const canvas = document.createElement('canvas');
@@ -326,4 +329,9 @@ function getCookie(name:string) {
   })
   return cookie.get(name);
 }
+$('#addButton').on('load', function() {
+  console.log('tototottoott')}
+  //document.getElementById('addButton')!.addEventListener('click',addOption)}
+  )
+
 export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize};

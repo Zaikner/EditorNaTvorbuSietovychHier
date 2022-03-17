@@ -139,6 +139,9 @@ var ServerSocket = /** @class */ (function () {
                     return [2 /*return*/];
                 });
             }); });
+            socket.on('newQuestion', function (data) {
+                console.log(data);
+            });
         });
     };
     ServerSocket.getIo = function () {

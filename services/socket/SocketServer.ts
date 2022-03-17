@@ -95,6 +95,10 @@ class ServerSocket{
         socket.emit('set cookie')
         console.log('pripojil'+acc)
       })
+
+      socket.on('newQuestion',(data:{question:string,options:Array<string>})=>{
+        console.log(data)
+      })
           });
     }
   

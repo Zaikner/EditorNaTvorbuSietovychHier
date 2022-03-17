@@ -10,6 +10,7 @@ var Elements_1 = require("./Elements");
 var Background_1 = require("./Background");
 var Gameplay_1 = require("./Gameplay");
 var PawnEditor_1 = require("./PawnEditor");
+var Questions_1 = require("./Questions");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -123,6 +124,9 @@ function edit() {
     document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
 }
+//spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
+document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
+document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });
 document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnMenu)(); });
 var doc = document;
 exports.doc = doc;
@@ -274,3 +278,8 @@ function getCookie(name) {
     });
     return cookie.get(name);
 }
+$('#addButton').on('load', function () {
+    console.log('tototottoott');
+}
+//document.getElementById('addButton')!.addEventListener('click',addOption)}
+);

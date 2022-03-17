@@ -24,7 +24,7 @@
           <li><button type="button" class="btn btn-secondary dropdown-item" id="editRule" >Edit Rules</button></li>
         </ul>
       </li>
-      <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
+      <!-- <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
         <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Quizz Questions
         </a>
@@ -34,7 +34,9 @@
           <li><button type="button" class="btn btn-secondary dropdown-item" id="editQuestions" >Insert and edit Question</button></li>
         
         </ul>
-      </li>
+        onclick="$('#questionModal').modal('hide')"
+      </li> -->
+      <button type="button" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:500px; margin-right: 10px; white-space: nowrap; text-align: center;"  onclick="$('#questionModal').modal('show')">Question manager</button>
        <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
           <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Pawn Editing options
@@ -116,6 +118,70 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="questionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center;">Question manager</h2></div>
+       
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Ok!</button>
+          <button type="button" class="btn btn-primary" style="text-align: center; "  onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')">Create Question!</button></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Create Question!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <strong><p style="color: white;">Check answer to question!</p></strong>
+        <form class="form-inline" id="questionForm" style=" width: 50vh;">
+          <input type="text"/>>
+          <div id="questionOptions">
+          <div class="form-group"  style="margin-bottom:5px">
+              <label for="question" style="margin-left: 15px; color: white;">Question: </label>
+              <input type="text" id="question" class="form-control"  style="width: 35vh" name="question">
+              
+          </div>
+          <div class="form-group" style="margin-bottom:5px">
+            <input type="checkbox" id="questionCheck" style="width: 20px;" height="20px" class="form-control">
+            <label for="ans1" style="color: white;">Option1:   </label>
+            <input type="text" id="ans1" class="form-control"  style="width: 35vh;" name ='ans1'>
+        </div>
+        <div class="form-group"  style="margin-bottom:5px; width: 50vh;">
+          <input type="checkbox" id="questionCheck" style="width: 20px;" height="20px" class="form-control">
+          <label for="ans2" style="color: white;">Option2:   </label>
+          <input type="text" id="ans2" class="form-control" style="width: 35vh;"  name ='ans2'>
+      </div>
+    </div>
+      <!-- <div class="container" id = 'containerAdd' style="text-align: center;"></div> -->
+      <div class="container" id = 'containerAdd' style="text-align: center;"><button type="button"  id="addButton" class="btn btn-secondary">Add Option!</button></div> -->
+      <div class="container" style="text-align: center;"><button type="button" class="btn btn-secondary" id="questionSubmitButton" onclick="$('#createModal').modal('hide');$('#questionModal').modal('show')">Create!</button></div>
+      </form>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+      
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
         
         </div>
       </div>
@@ -141,7 +207,9 @@ editorSocket.emit('editor',{jo:'co'})
 
 </script> -->
     
-    
-  <script>localStorage.clear()</script>
+  
+  <script>localStorage.clear()
+ 
+  </script>
   </body>
 </html>

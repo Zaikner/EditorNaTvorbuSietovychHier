@@ -50,6 +50,7 @@ const loginOrGuest = require("./routes/loginOrGuest.js")
 const playAsGuest = require("./routes/playAsGuest.js")
 const showGame = require("./routes/showGame.js")
 const createRoom = require("./routes/createRoom.js")
+const createQuestion = require("./routes/createQuestion.js")
 
 
 
@@ -65,6 +66,7 @@ app.use('/loginOrGuest',loginOrGuest);
 app.use('/playAsGuest',playAsGuest);
 app.use('/showGame',showGame);
 app.use('/createRoom',createRoom);
+app.use('/createQuestion',createQuestion);
 const PORT = process.env.PORT || 8001;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
