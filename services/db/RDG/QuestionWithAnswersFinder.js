@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.QuestionWithAnswersFinder = void 0;
 var DbConnect_1 = require("../DbConnect");
-var QuestionsWIthAnswers_1 = require("./QuestionsWIthAnswers");
+var QuestionsWithAnswers_1 = require("./QuestionsWithAnswers");
 var QuestionWithAnswersFinder = /** @class */ (function () {
     function QuestionWithAnswersFinder() {
     }
@@ -64,7 +64,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
                                 console.log('precital');
-                                ret.push(QuestionsWIthAnswers_1.QuestionWithAnswers.load(row));
+                                ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
                             })];
                     case 3:
                         _a.sent();

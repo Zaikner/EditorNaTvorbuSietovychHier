@@ -1,7 +1,8 @@
 import { DbConnect } from "../DbConnect";
 import { Question } from "./Question";
 import { QuestionOption } from "./QuestionOption";
-import { QuestionWithAnswers } from "./QuestionsWIthAnswers";
+import { QuestionWithAnswers } from "./QuestionsWithAnswers";
+
 
 export class QuestionWithAnswersFinder{
     private static INSTANCE:QuestionWithAnswersFinder = new QuestionWithAnswersFinder()
