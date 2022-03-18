@@ -7,6 +7,11 @@ import { Background_db } from "../db/RDG/Background_db";
 import { GameFinder } from "../db/RDG/GameFinder_db";
 import { BackgroundFinder } from "../db/RDG/BackgroundFinder";
 import { TileFinder } from "../db/RDG/TileFinder";
+import { Question } from "../db/RDG/Question";
+import { QuestionOption } from "../db/RDG/QuestionOption";
+import { QuestionFinder } from "../db/RDG/QuestionFinder";
+import { QuestionOptionFinder } from "../db/RDG/QuestionOptionFinder";
+import { QuestionWithAnswersFinder } from "../db/RDG/QuestionWithAnswersFinder";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -96,8 +101,41 @@ class ServerSocket{
         console.log('pripojil'+acc)
       })
 
-      socket.on('newQuestion',(data:{question:string,options:Array<string>})=>{
-        console.log(data)
+      socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean}>,id:string})=>{
+        let quest = new Question()
+        let lastQuest = await QuestionFinder.getIntance().findWithLastId()
+        let id = lastQuest![0].getId()+1
+        quest.setText(data.question)
+        quest.setId(id)
+        //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
+
+        quest.insert()
+
+        data.options.forEach((elem:{txt:string,isAnswer:boolean}) => {
+          let option = new QuestionOption()
+          option.setText(elem.txt)
+          option.setQuestionId(id)
+          option.setIsAnswer(elem.isAnswer)
+          console.log(option)
+          option.insert()
+        })
+
+        console.log(await QuestionWithAnswersFinder.getIntance().findAll())
+      })
+      socket.on('loadQuestions',async()=>{
+        let questions = await QuestionWithAnswersFinder.getIntance().findAll()
+        let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+        questions?.forEach((question) => {
+          data.push({
+            questionId: question.getQuestionId(),
+            optionId: question.getOptionId(),
+            questionText: question.getQuestionText(),
+            optionText: question.getOptionText(),
+            author: question.getAuthor(),
+            isAnswer: question.getIsAnswer()})
+        })
+      
+        socket.emit('loadedQuestions',data)
       })
           });
     }

@@ -36,7 +36,7 @@
         </ul>
         onclick="$('#questionModal').modal('hide')"
       </li> -->
-      <button type="button" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:500px; margin-right: 10px; white-space: nowrap; text-align: center;"  onclick="$('#questionModal').modal('show')">Question manager</button>
+      <button type="button" class="btn btn-secondary py-2" id="questionManager" style=" width:500px; margin-right: 10px; white-space: nowrap; text-align: center;"  onclick="$('#questionModal').modal('show')">Question manager</button>
        <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
           <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Pawn Editing options
@@ -122,17 +122,60 @@
   <div class="modal-dialog modal-xl ">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center;">Question manager</h2></div>
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky;">Question manager</h2></div>
        
         <button type="button" class="close" data-dismiss="modal">
         </button>
       </div>
-      <div class="modal-body" id="modalBody">
+      <div class="modal-body" id="modalBody" style="overflow-y: auto; height:70vh">
+        <div class="container"  id='listContainer'>
+          <div class="list-group" style=" margin-bottom: 5%;">
+            <button type="button" class="list-group-item list-group-item-action active" style="text-align: center;">
+              Question ID 1: Ste teply ?
+            </button>
+            <button type="button" class="list-group-item list-group-item-action">Ano</button>
+            <button type="button" class="list-group-item list-group-item-action">Asi ano</button>
+            <button type="button" class="list-group-item list-group-item-action">Mozno</button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>Urco</button>
+          </div>
+   
+        </div>
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Ok!</button>
+        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')">Ok!</button>
           <button type="button" class="btn btn-primary" style="text-align: center; "  onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')">Create Question!</button></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky;">Answer Question!</h2></div>
+       
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody" style="overflow-y: auto;">
+        <div class="container"  id='listContainer'>
+          <div class="list-group" style=" margin-bottom: 5%;">
+            <button type="button" class="list-group-item list-group-item-action active" style="text-align: center;">
+              Question ID 1: Ste teply ?
+            </button>
+            <button type="button" class="list-group-item list-group-item-action">Ano</button>
+            <button type="button" class="list-group-item list-group-item-action">Asi ano</button>
+            <button type="button" class="list-group-item list-group-item-action">Mozno</button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>Urco</button>
+          </div>
+   
+        </div>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <div class="container" style="text-align: center;"><button type="button" id="answerButton" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Answer!</button></div>
         
       </div>
     </div>
@@ -149,7 +192,7 @@
       <div class="modal-body" id="modalBody">
         <strong><p style="color: white;">Check answer to question!</p></strong>
         <form class="form-inline" id="questionForm" style=" width: 50vh;">
-          <input type="text"/>>
+         
           <div id="questionOptions">
           <div class="form-group"  style="margin-bottom:5px">
               <label for="question" style="margin-left: 15px; color: white;">Question: </label>
@@ -157,14 +200,14 @@
               
           </div>
           <div class="form-group" style="margin-bottom:5px">
-            <input type="checkbox" id="questionCheck" style="width: 20px;" height="20px" class="form-control">
+            <input type="checkbox" id="check1" style="width: 20px;" height="20px" class="form-control" name ='check1'>
             <label for="ans1" style="color: white;">Option1:   </label>
-            <input type="text" id="ans1" class="form-control"  style="width: 35vh;" name ='ans1'>
+            <input type="text" id="ans1" class="form-control"  style="width: 35vh;" name ='ans1' required>
         </div>
         <div class="form-group"  style="margin-bottom:5px; width: 50vh;">
-          <input type="checkbox" id="questionCheck" style="width: 20px;" height="20px" class="form-control">
+          <input type="checkbox" id="check2" style="width: 20px;" height="20px" class="form-control" name ='check2' >
           <label for="ans2" style="color: white;">Option2:   </label>
-          <input type="text" id="ans2" class="form-control" style="width: 35vh;"  name ='ans2'>
+          <input type="text" id="ans2" class="form-control" style="width: 35vh;"  name ='ans2' required>
       </div>
     </div>
       <!-- <div class="container" id = 'containerAdd' style="text-align: center;"></div> -->

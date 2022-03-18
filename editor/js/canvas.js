@@ -116,6 +116,7 @@ editorSocket.on('loaded game', function () {
     console.log('Editor client connected');
     //edit()
 });
+editorSocket.on('loadedQuestions', function (data) { (0, Questions_1.showAllQuestions)(data); });
 function edit() {
     mainMenu();
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
@@ -124,6 +125,7 @@ function edit() {
     document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
 }
+document.getElementById('questionManager').addEventListener('click', function () { editorSocket.emit('loadQuestions'); });
 //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
 document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
 document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });

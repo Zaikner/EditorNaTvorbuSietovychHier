@@ -39,6 +39,10 @@ exports.__esModule = true;
 var Game_db_1 = require("../db/RDG/Game_db");
 var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
+var Question_1 = require("../db/RDG/Question");
+var QuestionOption_1 = require("../db/RDG/QuestionOption");
+var QuestionFinder_1 = require("../db/RDG/QuestionFinder");
+var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
 var GameManager = require('../../backEnd/Game/GameManager.js');
@@ -139,9 +143,59 @@ var ServerSocket = /** @class */ (function () {
                     return [2 /*return*/];
                 });
             }); });
-            socket.on('newQuestion', function (data) {
-                console.log(data);
-            });
+            socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var quest, lastQuest, id, _a, _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            quest = new Question_1.Question();
+                            return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findWithLastId()];
+                        case 1:
+                            lastQuest = _c.sent();
+                            id = lastQuest[0].getId() + 1;
+                            quest.setText(data.question);
+                            quest.setId(id);
+                            //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
+                            quest.insert();
+                            data.options.forEach(function (elem) {
+                                var option = new QuestionOption_1.QuestionOption();
+                                option.setText(elem.txt);
+                                option.setQuestionId(id);
+                                option.setIsAnswer(elem.isAnswer);
+                                console.log(option);
+                                option.insert();
+                            });
+                            _b = (_a = console).log;
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
+                        case 2:
+                            _b.apply(_a, [_c.sent()]);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+            socket.on('loadQuestions', function () { return __awaiter(_this, void 0, void 0, function () {
+                var questions, data;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
+                        case 1:
+                            questions = _a.sent();
+                            data = [];
+                            questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
+                                data.push({
+                                    questionId: question.getQuestionId(),
+                                    optionId: question.getOptionId(),
+                                    questionText: question.getQuestionText(),
+                                    optionText: question.getOptionText(),
+                                    author: question.getAuthor(),
+                                    isAnswer: question.getIsAnswer()
+                                });
+                            });
+                            socket.emit('loadedQuestions', data);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
         });
     };
     ServerSocket.getIo = function () {

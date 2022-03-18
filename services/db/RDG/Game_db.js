@@ -28,7 +28,7 @@ var Game_db = /** @class */ (function () {
         this.name = newName;
     };
     Game_db.prototype.getAuthor = function () {
-        return this.name;
+        return this.author;
     };
     Game_db.prototype.setAuthor = function (newAuthor) {
         this.author = newAuthor;

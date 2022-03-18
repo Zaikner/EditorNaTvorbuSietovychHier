@@ -12,7 +12,7 @@ import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
 import { pawnMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
-import { addOption, createQuestion } from "./Questions";
+import { addOption, createQuestion, showAllQuestions } from "./Questions";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -133,6 +133,7 @@ editorSocket.on('loaded game',()=>{
   console.log('Editor client connected')
   //edit()
 })
+editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)})
 function edit(){
   mainMenu();
 document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
@@ -140,7 +141,9 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){inse
 document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
 document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
+document.getElementById('questionManager')!.addEventListener('click',function(){editorSocket.emit('loadQuestions');} )
 //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
+
 document.getElementById('addButton')!.addEventListener('click',function(){addOption();})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion();})
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnMenu()} );

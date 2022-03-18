@@ -1,12 +1,10 @@
 
 import { DbConnect } from "../DbConnect";
 
-export class Game_db{
+export class Question{
     private id:number = 0;
-    private name:string = '';
+    private text:string = '';
     private author:string = '';
-    private numOfPlayers:number = 0;
-
     constructor(){
 
     }
@@ -18,18 +16,12 @@ export class Game_db{
     public setId(newId:number){
         this.id  = newId
     }
-    public getNumOfPlayers() : number {
-        return this.numOfPlayers
+ 
+    public getText() : string {
+        return this.text
     }
-    public setNumOfPlayers(newNum:number){
-        this.numOfPlayers  = newNum
-    }
-      
-    public getName() : string {
-        return this.name
-    }
-    public setName(newName:string){
-        this.name  = newName
+    public setText(newName:string){
+        this.text  = newName
     }
     public getAuthor() : string {
         return this.author
@@ -42,9 +34,9 @@ export class Game_db{
     public insert(){
         let client = DbConnect.get()
             const query = {
-                name: 'insert-game',
-                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers") VALUES($1,$2,$3);',
-                values: [this.name,this.author,this.numOfPlayers],
+                name: 'insert-question',
+                text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3);',
+                values: [this.id,this.text,this.author],
               }
               client
               .query(query)
@@ -53,11 +45,10 @@ export class Game_db{
 
 
     public static load(data:any){
-                let ret = new Game_db()
+                let ret = new Question()
                 ret.setId(data.id)
-                ret.setName(data.name)
+                ret.setText(data.text)
                 ret.setAuthor(data.author)
-                ret.setNumOfPlayers(data.numOfPlayers)
                 return ret
                 }
     
