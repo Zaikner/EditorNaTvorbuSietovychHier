@@ -1,6 +1,8 @@
-import {doc, editorSocket} from './canvas'
+import {doc, editorSocket, elementDeleter} from './canvas'
+import { removeAllButtons } from './TileEditor';
 
 let num = 2
+let givenOptions = 0
 console.log('zapol aspon subor')
 
 function addOption(){
@@ -78,8 +80,66 @@ function showAllQuestions(data:any){
        
     })
 }
-function askQuestion(id:number){
-    
-}
+function askQuestion(data:any){
+    let questions:Map<number,HTMLDivElement> = new Map()
+    elementDeleter('answerQuestion')
+    let i = 0
+    data.forEach((elem:any) =>{
+        i++;
+        console.log('vykonal')
+        if (questions.get(elem.questionId) === undefined){
+            let list = document.createElement('div')
+            list.classList.add("list-group")
+            list.style.marginBottom = "5%";
+            questions.set(elem.questionId,list)
 
-export {addOption,createQuestion,showAllQuestions}
+            let quest = document.createElement('button')
+            quest.type = 'button';
+            quest.classList.add("list-group-item","list-group-item-action","active")
+            quest.style.textAlign =  'center';
+            quest.textContent = 'Question ID '+ elem.questionId +' : ' +elem.questionText
+
+            list.appendChild(quest)
+
+            document.getElementById('answerQuestion')?.appendChild(list)
+        }
+        let opt = document.createElement('button')
+        opt.id = 'givenOption'+i;
+        opt.type = 'button';
+        opt.classList.add("list-group-item","list-group-item-action",'btn','btn-info')
+        opt.setAttribute('isAnswer',elem.isAnswer)
+        //quest.style.textAlign =  'center';
+        opt.textContent = elem.optionText
+        opt.addEventListener('click',function(){
+            if (opt.classList.contains('active')){
+                opt.classList.remove('active')
+            }
+            else{
+                opt.classList.add('active')
+            }
+        })
+        questions.get(elem.questionId)?.appendChild(opt)})
+    givenOptions = i
+    }
+function evaluateQuestion(){
+    for(let i = 1; i <= givenOptions; i++){
+        let button = document.getElementById('givenOption'+i)
+       
+        if ((button?.getAttribute('isAnswer') === 'true' && button?.classList.contains('active')) || (button?.getAttribute('isAnswer') === 'false' && !button?.classList.contains('active'))){
+        
+            button!.classList.remove('btn-info')
+            button!.classList.add('btn-success')
+            button!.classList.add('active')
+        
+        }
+        else {
+            button!.classList.remove('btn-info')
+            button!.classList.add('btn-danger')
+            button!.classList.add('active')
+        }
+    }
+    setTimeout(function(){
+        $('#answerModal').modal('hide')
+    }, 5000)
+}
+export {addOption,createQuestion,showAllQuestions,askQuestion,evaluateQuestion}

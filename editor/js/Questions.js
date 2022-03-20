@@ -1,8 +1,9 @@
 "use strict";
 exports.__esModule = true;
-exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
+exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
 var canvas_1 = require("./canvas");
 var num = 2;
+var givenOptions = 0;
 console.log('zapol aspon subor');
 function addOption() {
     var _a;
@@ -69,19 +70,65 @@ function showAllQuestions(data) {
         opt.textContent = elem.optionText;
         (_b = questions.get(elem.questionId)) === null || _b === void 0 ? void 0 : _b.appendChild(opt);
     });
-    //console.log(data)
-    //console.log( typeof data)
-    //for (int i)
-    //let questions = da
-    // data.forEach((elem) =>{
-    //     list.appendChild(quest) 
-    //     document.getElementById('listContainer')?.appendChild(list)
-    // })
-    //       <button type="button" class="list-group-item list-group-item-action">Ano</button>
-    //       <button type="button" class="list-group-item list-group-item-action">Asi ano</button>
-    //       <button type="button" class="list-group-item list-group-item-action">Mozno</button>
-    //       <button type="button" class="list-group-item list-group-item-action" disabled>Urco</button>
-    //     </div>
-    //   </div>
 }
 exports.showAllQuestions = showAllQuestions;
+function askQuestion(data) {
+    var questions = new Map();
+    (0, canvas_1.elementDeleter)('answerQuestion');
+    var i = 0;
+    data.forEach(function (elem) {
+        var _a, _b;
+        i++;
+        console.log('vykonal');
+        if (questions.get(elem.questionId) === undefined) {
+            var list = document.createElement('div');
+            list.classList.add("list-group");
+            list.style.marginBottom = "5%";
+            questions.set(elem.questionId, list);
+            var quest = document.createElement('button');
+            quest.type = 'button';
+            quest.classList.add("list-group-item", "list-group-item-action", "active");
+            quest.style.textAlign = 'center';
+            quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
+            list.appendChild(quest);
+            (_a = document.getElementById('answerQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+        }
+        var opt = document.createElement('button');
+        opt.id = 'givenOption' + i;
+        opt.type = 'button';
+        opt.classList.add("list-group-item", "list-group-item-action", 'btn', 'btn-info');
+        opt.setAttribute('isAnswer', elem.isAnswer);
+        //quest.style.textAlign =  'center';
+        opt.textContent = elem.optionText;
+        opt.addEventListener('click', function () {
+            if (opt.classList.contains('active')) {
+                opt.classList.remove('active');
+            }
+            else {
+                opt.classList.add('active');
+            }
+        });
+        (_b = questions.get(elem.questionId)) === null || _b === void 0 ? void 0 : _b.appendChild(opt);
+    });
+    givenOptions = i;
+}
+exports.askQuestion = askQuestion;
+function evaluateQuestion() {
+    for (var i = 1; i <= givenOptions; i++) {
+        var button = document.getElementById('givenOption' + i);
+        if (((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'true' && (button === null || button === void 0 ? void 0 : button.classList.contains('active'))) || ((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'false' && !(button === null || button === void 0 ? void 0 : button.classList.contains('active')))) {
+            button.classList.remove('btn-info');
+            button.classList.add('btn-success');
+            button.classList.add('active');
+        }
+        else {
+            button.classList.remove('btn-info');
+            button.classList.add('btn-danger');
+            button.classList.add('active');
+        }
+    }
+    setTimeout(function () {
+        $('#answerModal').modal('hide');
+    }, 5000);
+}
+exports.evaluateQuestion = evaluateQuestion;

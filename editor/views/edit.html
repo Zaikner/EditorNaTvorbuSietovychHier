@@ -143,7 +143,7 @@
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')">Ok!</button>
+        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" id="setAnswerButton" style="text-align: center;" onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')">Ok!</button>
           <button type="button" class="btn btn-primary" style="text-align: center; "  onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')">Create Question!</button></div>
         
       </div>
@@ -160,15 +160,9 @@
         </button>
       </div>
       <div class="modal-body" id="modalBody" style="overflow-y: auto;">
-        <div class="container"  id='listContainer'>
-          <div class="list-group" style=" margin-bottom: 5%;">
-            <button type="button" class="list-group-item list-group-item-action active" style="text-align: center;">
-              Question ID 1: Ste teply ?
-            </button>
-            <button type="button" class="list-group-item list-group-item-action">Ano</button>
-            <button type="button" class="list-group-item list-group-item-action">Asi ano</button>
-            <button type="button" class="list-group-item list-group-item-action">Mozno</button>
-            <button type="button" class="list-group-item list-group-item-action" disabled>Urco</button>
+        <div class="container"  >
+          <div class="list-group" style=" margin-bottom: 5%;" id='answerQuestion'>
+   
           </div>
    
         </div>

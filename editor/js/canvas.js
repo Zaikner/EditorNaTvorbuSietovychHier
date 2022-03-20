@@ -117,6 +117,7 @@ editorSocket.on('loaded game', function () {
     //edit()
 });
 editorSocket.on('loadedQuestions', function (data) { (0, Questions_1.showAllQuestions)(data); });
+editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQuestion)(data); });
 function edit() {
     mainMenu();
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
@@ -127,6 +128,8 @@ function edit() {
 }
 document.getElementById('questionManager').addEventListener('click', function () { editorSocket.emit('loadQuestions'); });
 //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
+document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
+document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 7 }); });
 document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
 document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });
 document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnMenu)(); });

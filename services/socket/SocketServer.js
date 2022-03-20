@@ -196,6 +196,33 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
+            socket.on('answerQuestion', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var questions, data;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log('odchytil answerQuestion');
+                            console.log(msg.id);
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findById(msg.id)];
+                        case 1:
+                            questions = _a.sent();
+                            data = [];
+                            console.log(questions);
+                            questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
+                                data.push({
+                                    questionId: question.getQuestionId(),
+                                    optionId: question.getOptionId(),
+                                    questionText: question.getQuestionText(),
+                                    optionText: question.getOptionText(),
+                                    author: question.getAuthor(),
+                                    isAnswer: question.getIsAnswer()
+                                });
+                            });
+                            socket.emit('loadedAnswerQuestions', data);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
         });
     };
     ServerSocket.getIo = function () {

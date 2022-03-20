@@ -137,6 +137,26 @@ class ServerSocket{
       
         socket.emit('loadedQuestions',data)
       })
+
+      socket.on('answerQuestion',async(msg:{id:number})=>{
+        console.log('odchytil answerQuestion' )
+        console.log(msg.id)
+        let questions = await QuestionWithAnswersFinder.getIntance().findById(msg.id)
+        let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+        console.log(questions)
+
+        questions?.forEach((question) => {
+          data.push({
+            questionId: question.getQuestionId(),
+            optionId: question.getOptionId(),
+            questionText: question.getQuestionText(),
+            optionText: question.getOptionText(),
+            author: question.getAuthor(),
+            isAnswer: question.getIsAnswer()})
+        })
+      
+        socket.emit('loadedAnswerQuestions',data)
+      })
           });
     }
   
