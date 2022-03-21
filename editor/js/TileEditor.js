@@ -1,10 +1,11 @@
 "use strict";
 exports.__esModule = true;
-exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
+exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
 var Warning_js_1 = require("./Warning.js");
+var PawnEditor_js_1 = require("./PawnEditor.js");
 var moveEventHandler = function (event) {
     canvas_js_1.editor.findTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
@@ -15,24 +16,35 @@ var deleteHandler = function (event) {
 };
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
+    (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of tile:');
-    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
+    var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
+    colorPicker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile size:');
-    (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', '20', '50', '1', '30');
+    var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', '20', '50', '1', '30');
+    sizeOfTileSlider.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have outline? (checkbox)');
-    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'outlineChecker', false, ['no', 'yes']);
+    var outlineChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'outlineChecker', false, ['no', 'yes']);
+    outlineChecker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of outline:');
-    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker');
+    var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker');
+    outlineColorPicker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Outline size:');
-    (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', '1', '10', '1', '3');
+    var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', '1', '10', '1', '3');
+    sizeOfOutlineSlider.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose shape:');
-    (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ["btn", "btn-dark"], ['circle', 'square']);
+    var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ["btn", "btn-dark"], ['circle', 'square']);
+    shapeMenu.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have pattern from images? (checkbox)');
-    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'patternChecker', false, ['no', 'yes']);
+    var patternChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'patternChecker', false, ['no', 'yes']);
+    patternChecker.onchange = showActualState;
     (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', 'Choose a Pattern!', function () {
         if (canvas_js_1.doc.getElementById('tilePattern').files.length > 0) {
             canvas_js_1.editor.setPattern(new Image());
             canvas_js_1.editor.getPattern().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tilePattern').files[0]);
+            canvas_js_1.editor.getPattern().onload = function () {
+                showActualState();
+            };
         }
         else {
             canvas_js_1.editor.setPattern(undefined);
@@ -40,11 +52,15 @@ function spawnElements() {
     });
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose background image:');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have background image? (checkbox)');
-    (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'backgroundChecker', false, ['no', 'yes']);
+    var backgroundChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'backgroundChecker', false, ['no', 'yes']);
+    backgroundChecker.onchange = showActualState;
     (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', 'Choose an Image!', function () {
         if (canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
             canvas_js_1.editor.setImage(new Image());
             canvas_js_1.editor.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
+            canvas_js_1.editor.getImage().onload = function () {
+                showActualState();
+            };
         }
         else {
             canvas_js_1.editor.setImage(undefined);
@@ -59,9 +75,11 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Toogle tile numbering ingame? (checkbox)');
     (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'toogleNumberingChecker', false, ['no', 'yes']);
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of numbering:');
-    (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker');
+    var numberingColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker');
+    numberingColorPicker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose tile number! (Insert a number into textfield)');
-    (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
+    var tileNumberSetter = (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
+    tileNumberSetter.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which number follows ?! (Insert a number into textfield)');
     (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileFollowingSetter');
 }
@@ -87,6 +105,7 @@ function startInsertingByOne() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
     spawnElements();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
+    showActualState();
 }
 function saveInsertingTiles() {
     removeAllButtons();
@@ -104,7 +123,7 @@ function editTiles() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveEditingTiles);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
     spawnElements();
-    setValues();
+    setValues(undefined);
 }
 exports.editTiles = editTiles;
 function saveEditingTiles() {
@@ -149,6 +168,7 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('mousedown', insert);
     canvas_js_1.canvas.removeEventListener('click', moveEventHandler);
     canvas_js_1.canvas.removeEventListener('click', deleteHandler);
+    canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.insertPawn);
     (0, PathEditor_js_1.endDrawingPath)();
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
@@ -192,10 +212,10 @@ var spawnTile = function (coords) {
     }
     var addedTile;
     if (outlineChecker.checked) {
-        addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
+        addedTile = canvas_js_1.editor.initTile(true, coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage, pattImage);
     }
     else {
-        addedTile = canvas_js_1.editor.initTile(coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
+        addedTile = canvas_js_1.editor.initTile(true, coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
     }
     addedTile.setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
     addedTile.setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
@@ -252,9 +272,15 @@ var update = function () {
     }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
-var setValues = function () {
-    var _a, _b, _c;
-    if (canvas_js_1.editor.getChoosenTile() != undefined) {
+var setValues = function (tile) {
+    if (tile == undefined) {
+        tile = canvas_js_1.editor.getChoosenTile();
+        console.log('je undefined');
+    }
+    else {
+        console.log('nie je undefined');
+    }
+    if (tile != undefined) {
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
         var numberingColor = canvas_js_1.doc.getElementById('numberingColorPicker');
@@ -267,30 +293,34 @@ var setValues = function () {
         var toogleNumberingChecker = canvas_js_1.doc.getElementById('toogleNumberingChecker');
         var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
         var tileFollowingSetter = canvas_js_1.doc.getElementById('tileFollowingSetter');
-        var choosenTile = canvas_js_1.editor.getChoosenTile();
-        colorPicker.value = choosenTile.getColor();
-        numberingColor.value = choosenTile.getNumberingColor();
-        sizeOfTileSlider.value = choosenTile.getRadius().toString();
-        sizeOfOutlineSlider.value = choosenTile.getStroke().toString();
-        outlineColorPicker.value = choosenTile.getStrokeColor();
-        outlineChecker.checked = choosenTile.getStroke() > 0;
-        tileNumberSetter.value = choosenTile.getTileNumber().toString();
-        tileFollowingSetter.value = choosenTile.getFollowingTileNumber().toString();
+        //let choosenTile = editor.getChoosenTile()
+        console.log('pred zmenou farby');
+        console.log(tile);
+        colorPicker.value = tile.getColor();
+        console.log('po zmene farby');
+        console.log(tile);
+        numberingColor.value = tile.getNumberingColor();
+        sizeOfTileSlider.value = tile.getRadius().toString();
+        sizeOfOutlineSlider.value = tile.getStroke().toString();
+        outlineColorPicker.value = tile.getStrokeColor();
+        outlineChecker.checked = tile.getStroke() > 0;
+        tileNumberSetter.value = tile.getTileNumber().toString();
+        tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
         if (outlineChecker.checked) {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
         }
         else {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'no';
         }
-        shapeMenu.value = choosenTile.getShape();
-        backgroundChecker.checked = (((_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getBackgroundFile()) != undefined);
+        shapeMenu.value = tile.getShape();
+        backgroundChecker.checked = (tile.getBackgroundFile() != undefined);
         if (backgroundChecker.checked) {
             canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'yes';
         }
         else {
             canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'no';
         }
-        patternChecker.checked = (((_b = canvas_js_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getPatternFile()) != undefined);
+        patternChecker.checked = (tile.getPatternFile() != undefined);
         //console.log(doc.getElementById("patternCheckerShower")!)
         if (patternChecker.checked) {
             canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'yes';
@@ -298,7 +328,7 @@ var setValues = function () {
         else {
             canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'no';
         }
-        toogleNumberingChecker.checked = (_c = canvas_js_1.editor.getChoosenTile()) === null || _c === void 0 ? void 0 : _c.getToggleNumber();
+        toogleNumberingChecker.checked = tile.getToggleNumber();
         if (toogleNumberingChecker.checked) {
             canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'yes';
         }
@@ -306,8 +336,51 @@ var setValues = function () {
             canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'no';
         }
     }
+    return tile;
 };
 var moveTile = function (event) {
     canvas_js_1.editor.moveTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
+function showActualState() {
+    console.log('vykonal aktualizaciu');
+    console.log(canvas_js_1.editor.getGame().getTiles());
+    var cs = document.getElementById('changeCanvas');
+    var cttttx = cs.getContext("2d");
+    (0, canvas_js_1.reload)(canvas_js_1.editor, cttttx);
+    var width = cs.width;
+    var height = cs.height;
+    var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
+    var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
+    var numberingColor = canvas_js_1.doc.getElementById('numberingColorPicker');
+    var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
+    var outlineColorPicker = canvas_js_1.doc.getElementById('outlineColorPicker');
+    var outlineChecker = canvas_js_1.doc.getElementById('outlineChecker');
+    var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
+    var backgroundChecker = canvas_js_1.doc.getElementById('backgroundChecker');
+    var patternChecker = canvas_js_1.doc.getElementById('patternChecker');
+    var toogleNumberingChecker = canvas_js_1.doc.getElementById('toogleNumberingChecker');
+    var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
+    var tileFollowingSetter = canvas_js_1.doc.getElementById('tileFollowingSetter');
+    var stroke = 0;
+    if (outlineChecker.checked) {
+        stroke = parseInt(sizeOfOutlineSlider.value);
+    }
+    var tile = canvas_js_1.editor.initTile(false, { x: width / 2, y: height / 2 }, colorPicker.value, parseInt(sizeOfTileSlider.value), stroke, outlineColorPicker.value, shapeMenu.value, undefined, undefined);
+    tile.setNumberingColor(numberingColor.value);
+    if (tileNumberSetter.value != "") {
+        tile.setTileNumber(parseInt(tileNumberSetter.value));
+    }
+    if (backgroundChecker.checked) {
+        tile.setBackgroundFile(canvas_js_1.editor.getImage());
+    }
+    if (patternChecker.checked) {
+        tile.setPatternFile(canvas_js_1.editor.getPattern());
+    }
+    //tile = setValues(tile)
+    tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
+    console.log('actual state');
+    console.log(tile);
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+}
+exports.showActualState = showActualState;

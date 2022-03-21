@@ -247,7 +247,7 @@ function reload(editor, ctx) {
     ctx.closePath();
     var tiles = editor.getGame().getTiles();
     tiles.forEach(function (tile) {
-        tile.drawTile(canvas, ctx);
+        tile.drawTile(canvas, ctx, false);
     });
     ctx.closePath();
     ctx.restore();

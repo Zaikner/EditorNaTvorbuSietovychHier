@@ -3,9 +3,10 @@ import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload
 
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
-import {spawnColorPicker,spawnParagraph,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'
+import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'
 import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
+import { insertPawn } from './PawnEditor.js'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event)   
 reload(editor,ctx)
@@ -17,34 +18,49 @@ let deleteHandler = function(event:MouseEvent){
 
 function spawnElements(){
     //$('#exampleModal').modal('toggle')
-   
+
+    spawnCanvas(doc,'tileEditingPlace','changeCanvas')
     spawnParagraph(doc,"tileEditingPlace",'','Choose color of tile:')
-    spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
+    let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
+    colorPicker.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'','Tile size:')
-    spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider','20','50','1','30')
+    let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider','20','50','1','30')
+    sizeOfTileSlider.onchange = showActualState
    
     spawnParagraph(doc,"tileEditingPlace",'','Tile have outline? (checkbox)')
-    spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,['no','yes'])
-   
+    let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,['no','yes'])
+    outlineChecker.onchange = showActualState
+
     spawnParagraph(doc,"tileEditingPlace",'','Choose color of outline:')
-    spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker')
+    let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker')
+    outlineColorPicker.onchange = showActualState
+    
 
     spawnParagraph(doc,"tileEditingPlace",'','Outline size:')
-    spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider','1','10','1','3')
+    
+    let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider','1','10','1','3')
+    sizeOfOutlineSlider.onchange = showActualState
     
     spawnParagraph(doc,"tileEditingPlace",'','Choose shape:')
-    spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',["btn","btn-dark"],['circle','square'])
+    let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',["btn","btn-dark"],['circle','square'])
+    shapeMenu.onchange= showActualState
+    
+
     
     spawnParagraph(doc,"tileEditingPlace",'','Tile have pattern from images? (checkbox)')
-    spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,['no','yes'])
-
+    let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,['no','yes'])
+    patternChecker.onchange = showActualState
 
   spawnImageInput(doc,"tileEditingPlace",'tilePattern','Choose a Pattern!',function(){
   
     if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
       editor.setPattern(new Image())
         editor.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
+        editor.getPattern().onload = function (){
+          showActualState()
+        }
+        
       }
     else{
       editor.setPattern(undefined!)
@@ -54,14 +70,18 @@ function spawnElements(){
   spawnParagraph(doc,"tileEditingPlace",'','Choose background image:')
 
     spawnParagraph(doc,"tileEditingPlace",'','Tile have background image? (checkbox)')
-    spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,['no','yes'])
+    let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,['no','yes'])
+    backgroundChecker.onchange = showActualState
   
     spawnImageInput(doc,"tileEditingPlace",'tileImage','Choose an Image!',function(){
   
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
         editor.setImage(new Image())
           editor.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
-
+          editor.getImage().onload = function(){
+            showActualState()
+          }
+          
         }
       else{
         editor.setImage(undefined!)
@@ -81,10 +101,12 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,['no','yes'])
    
     spawnParagraph(doc,"tileEditingPlace",'','Choose color of numbering:')
-    spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
+    let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
+    numberingColorPicker.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'','Choose tile number! (Insert a number into textfield)')
-    spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
+    let tileNumberSetter = spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
+    tileNumberSetter.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'','Which number follows ?! (Insert a number into textfield)')
     spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
@@ -100,6 +122,7 @@ function insertTilesMenu():void{
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
     spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],'Draw Path!!',editTrack)
     spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],'Insert by one!',startInsertingByOne)
+    
 }
   function startInsertingByOne(){
     doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
@@ -112,6 +135,7 @@ function insertTilesMenu():void{
     spawnElements()
 
     spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile!',undoTileInsert)
+    showActualState()
   }
 
   function saveInsertingTiles(){
@@ -130,7 +154,7 @@ function insertTilesMenu():void{
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveEditingTiles)
     spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],'Edit button!',update)   
       spawnElements()
-      setValues()      
+      setValues(undefined!)      
     }
   
     function saveEditingTiles(){
@@ -176,6 +200,7 @@ function insertTilesMenu():void{
     canvas.removeEventListener('mousedown', insert)
     canvas.removeEventListener('click',moveEventHandler)
     canvas.removeEventListener('click',deleteHandler)
+    canvas.removeEventListener('click',insertPawn)
     endDrawingPath()
   }
 
@@ -223,10 +248,10 @@ function insertTilesMenu():void{
 
     var addedTile:Tile;
     if (outlineChecker!.checked){
-      addedTile = editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage,pattImage)
+      addedTile = editor.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage,pattImage)
     }
     else{
-      addedTile = editor.initTile(coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),0,'',shapeMenu!.value,insertImage,pattImage)
+      addedTile = editor.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),0,'',shapeMenu!.value,insertImage,pattImage)
     }
     addedTile.setIsStartingFor(editor.getStartForPlayers())
     addedTile.setIsEndingFor(editor.getEndForPlayers())
@@ -291,8 +316,17 @@ function insertTilesMenu():void{
     }
     reload(editor,ctx)
   }
-  let setValues = function(){
-    if (editor.getChoosenTile()!=undefined){
+  let setValues = function(tile:Tile){
+    if (tile == undefined){
+      tile = editor.getChoosenTile()!
+      console.log('je undefined')
+    }
+    else{
+      console.log('nie je undefined')
+    }
+  
+    if (tile!=undefined){
+     
       let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
@@ -306,16 +340,20 @@ function insertTilesMenu():void{
       
       let tileNumberSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileNumberSetter')!
       let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
-      let choosenTile = editor.getChoosenTile()
-      
-      colorPicker.value = choosenTile!.getColor()
-      numberingColor.value = choosenTile!.getNumberingColor()
-      sizeOfTileSlider.value = choosenTile!.getRadius().toString()
-      sizeOfOutlineSlider.value = choosenTile!.getStroke().toString()
-      outlineColorPicker.value = choosenTile!.getStrokeColor()
-      outlineChecker.checked = choosenTile!.getStroke()>0
-      tileNumberSetter.value = choosenTile!.getTileNumber().toString()
-      tileFollowingSetter.value = choosenTile!.getFollowingTileNumber().toString()
+      //let choosenTile = editor.getChoosenTile()
+      console.log('pred zmenou farby')
+      console.log(tile)
+
+      colorPicker.value = tile!.getColor()
+      console.log('po zmene farby')
+      console.log(tile)
+      numberingColor.value = tile!.getNumberingColor()
+      sizeOfTileSlider.value = tile!.getRadius().toString()
+      sizeOfOutlineSlider.value = tile!.getStroke().toString()
+      outlineColorPicker.value = tile!.getStrokeColor()
+      outlineChecker.checked = tile!.getStroke()>0
+      tileNumberSetter.value = tile!.getTileNumber().toString()
+      tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
       
       if (outlineChecker.checked){
         doc.getElementById("outlineCheckerShower")!.textContent = 'yes'
@@ -324,9 +362,9 @@ function insertTilesMenu():void{
         doc.getElementById("outlineCheckerShower")!.textContent = 'no'
       }
 
-      shapeMenu.value = choosenTile!.getShape()
+      shapeMenu.value = tile!.getShape()
       
-      backgroundChecker.checked = (editor.getChoosenTile()?.getBackgroundFile() != undefined)
+      backgroundChecker.checked = (tile.getBackgroundFile() != undefined)
 
       if (backgroundChecker.checked){
         doc.getElementById("backgroundCheckerShower")!.textContent = 'yes'
@@ -336,7 +374,7 @@ function insertTilesMenu():void{
         doc.getElementById("backgroundCheckerShower")!.textContent = 'no'
       }
 
-      patternChecker.checked = (editor.getChoosenTile()?.getPatternFile() != undefined)
+      patternChecker.checked = (tile.getPatternFile() != undefined)
       //console.log(doc.getElementById("patternCheckerShower")!)
       if (patternChecker.checked){
         doc.getElementById("patternCheckerShower")!.textContent = 'yes'
@@ -345,7 +383,7 @@ function insertTilesMenu():void{
       else{
         doc.getElementById("patternCheckerShower")!.textContent = 'no'
       }
-      toogleNumberingChecker.checked = editor.getChoosenTile()?.getToggleNumber()!
+      toogleNumberingChecker.checked = tile.getToggleNumber()!
       if (toogleNumberingChecker.checked){
         doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'yes'
         
@@ -354,12 +392,67 @@ function insertTilesMenu():void{
         doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'no'
       }
     }
+    return tile
   }
 
   let moveTile = function(event:MouseEvent){
       editor.moveTile(event)
       reload(editor,ctx)
   }
+
+  function showActualState(){
+    console.log('vykonal aktualizaciu')
+
+    console.log(editor.getGame().getTiles())
+    let cs = <HTMLCanvasElement>document.getElementById('changeCanvas')!
+    let cttttx = <CanvasRenderingContext2D> cs.getContext("2d");
+    reload(editor,cttttx)
+    let width = cs.width
+    let height = cs.height
+    let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
+    let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
+    let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
+    let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
+    let outlineColorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('outlineColorPicker')!
+    let outlineChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('outlineChecker')!
+    let shapeMenu:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('shapeMenu')!
+    let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
+    let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
+    let toogleNumberingChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('toogleNumberingChecker')!
+    
+    let tileNumberSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileNumberSetter')!
+    let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
+
+    let stroke = 0
+    if (outlineChecker.checked){
+      stroke = parseInt(sizeOfOutlineSlider!.value)
+    }
+    let tile = editor.initTile(false,{x:width/2,y:height/2},colorPicker!.value,parseInt(sizeOfTileSlider!.value),stroke,outlineColorPicker!.value,shapeMenu!.value,undefined,undefined)
+    tile.setNumberingColor(numberingColor.value)
+    if (tileNumberSetter.value != ""){
+      tile.setTileNumber(parseInt(tileNumberSetter.value))
+    }
+    if (backgroundChecker.checked){
+      tile.setBackgroundFile(editor.getImage())
+    }
+    if (patternChecker.checked){
+      tile.setPatternFile(editor.getPattern())
+    }
+   
+    //tile = setValues(tile)
+   
+   
   
-  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
+
+    tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
+    console.log('actual state')
+    console.log(tile)
+    reload(editor,ctx)
+   
+    
+  }
+  
+  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
+
+
   

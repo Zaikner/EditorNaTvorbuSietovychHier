@@ -1,4 +1,5 @@
 import { editor } from "./canvas";
+import { showActualState } from "./TileEditor";
 
 
 
@@ -16,6 +17,13 @@ function spawnParagraph(doc:HTMLDocument,parent:string,id:string,textCont:string
     text.textContent = textCont
     doc.getElementById(parent)!.appendChild(text);
     return text
+}
+
+function spawnCanvas(doc:HTMLDocument,parent:string,id:string){
+  let canvas = doc.createElement('canvas')
+  canvas.id = id
+  doc.getElementById(parent)!.appendChild(canvas);
+  return canvas
 }
 
 function spawnCheckerWithValueShower(doc:HTMLDocument,parent:string,id:string,isChecked:boolean,options:Array<string>){
@@ -87,6 +95,7 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,classList:Arra
       menu.appendChild(option);
     }
     doc.getElementById(parent)!.appendChild(menu);
+    return menu
 }
 function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,func:Function){
   let image:HTMLInputElement = doc.createElement('input')
@@ -167,6 +176,7 @@ function spawnNumberInput(doc:HTMLDocument,parent:string,id:string){
   numberSetter.id = id;
   numberSetter.type = 'number'
   doc.getElementById(parent)!.appendChild(numberSetter);
+  return numberSetter
 }
 
-export{spawnColorPicker,spawnParagraph,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}
+export{spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}

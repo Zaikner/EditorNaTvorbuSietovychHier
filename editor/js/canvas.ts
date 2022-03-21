@@ -302,7 +302,7 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
   ctx.closePath()
   let tiles = editor.getGame().getTiles()
   tiles.forEach((tile:Tile) => {
-    tile.drawTile(canvas,ctx)
+    tile.drawTile(canvas,ctx,false)
   })
   ctx.closePath()
   ctx.restore()

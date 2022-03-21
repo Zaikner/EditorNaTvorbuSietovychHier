@@ -7,6 +7,7 @@ export class Pawn{
     tile:Tile;
     color:string = '#000000';
     image:HTMLImageElement = undefined!;
+    type:string = ''
    
     constructor(id:number,player:string,tile:Tile){
         this.id = id

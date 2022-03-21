@@ -6,6 +6,7 @@ var Pawn = /** @class */ (function () {
     function Pawn(id, player, tile) {
         this.color = '#000000';
         this.image = undefined;
+        this.type = '';
         this.id = id;
         this.player = player;
         this.tile = tile;

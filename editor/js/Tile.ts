@@ -26,7 +26,7 @@ class Tile{
     private belongTo:string = '';
     private canOccupy:Array<String> = []
     private toggleNumber:boolean = true;
-    private numberingColor:string = 'white'
+    private numberingColor:string = '#000000'
     private numberOfFollowingTile:number;
     private pawns:Array<Pawn> = []
 
@@ -45,9 +45,18 @@ class Tile{
     }
 
 
-    public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D){
-        // kresli//
-      
+    public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
+        // // kresli//
+        // console.log('vykonal')
+        // if (showOnlyChange){
+        //     ctx = <CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d");
+        // }
+        // else{
+        //     console.log(editor.getGame().getTiles())
+        //     console.log('vytlacil cez false')
+        //     console.log(this)
+        // }   
+        
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.backgroundFile == undefined && this.patternFile == undefined){
@@ -67,6 +76,7 @@ class Tile{
             }
             ctx.resetTransform();
             ctx.fill();
+            console.log('nakreslil')
         }
         else if (this.backgroundFile != undefined){
                 // //kresli image

@@ -3,17 +3,21 @@ import { spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } fr
 import { Pawn } from "./Pawn"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
+
+
+
+
 function pawnMenu(){
     removeAllListenersAdded()
     removeAllButtons()
-    spawnParagraph(doc,'tileEditingPlace','','Configure your Pawn, and click on tile to insert it!')
-    spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
-    spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
-    spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
-    spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
-    spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
+    // spawnParagraph(doc,'tileEditingPlace','','Configure your Pawn, and click on tile to insert it!')
+    // spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
+    // spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
+    // spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
+    // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
+    // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
     spawnParagraph(doc,'tileEditingPlace','','To which player it belong?')
-    spawnSelectMenu(doc,'tileEditingPlace','',[],editor.getGame().getPlayerTokens())
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
     canvas.addEventListener('click',insertPawn)
 }
 
@@ -30,15 +34,14 @@ function insertPawn(event:MouseEvent){
         }
     }
     if(tile!=undefined){
-        let newPawn = new Pawn(1,'player1',tile)
-        newPawn.color = colorPicker!.value
+        let player:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('playerSelect')!
+        let newPawn = new Pawn(1,player!.value,tile)
+        //newPawn.color = colorPicker!.value
         editor.getGame().getPawns().push(newPawn)
         removeAllListenersAdded()
         reload(editor,ctx)
+        console.log(newPawn)
     }
-   
-    
-
 }
 
-export{pawnMenu}
+export{pawnMenu,insertPawn}

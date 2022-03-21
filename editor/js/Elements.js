@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnParagraph = exports.spawnColorPicker = void 0;
+exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnParagraph = exports.spawnColorPicker = void 0;
 var canvas_1 = require("./canvas");
 function spawnColorPicker(doc, parent, id) {
     var colorPicker = doc.createElement('input');
@@ -18,6 +18,13 @@ function spawnParagraph(doc, parent, id, textCont) {
     return text;
 }
 exports.spawnParagraph = spawnParagraph;
+function spawnCanvas(doc, parent, id) {
+    var canvas = doc.createElement('canvas');
+    canvas.id = id;
+    doc.getElementById(parent).appendChild(canvas);
+    return canvas;
+}
+exports.spawnCanvas = spawnCanvas;
 function spawnCheckerWithValueShower(doc, parent, id, isChecked, options) {
     var checker = doc.createElement('input');
     checker.type = 'checkbox';
@@ -82,6 +89,7 @@ function spawnSelectMenu(doc, parent, id, classList, options) {
         menu.appendChild(option);
     }
     doc.getElementById(parent).appendChild(menu);
+    return menu;
 }
 exports.spawnSelectMenu = spawnSelectMenu;
 function spawnImageInput(doc, parent, id, txt, func) {
@@ -165,5 +173,6 @@ function spawnNumberInput(doc, parent, id) {
     numberSetter.id = id;
     numberSetter.type = 'number';
     doc.getElementById(parent).appendChild(numberSetter);
+    return numberSetter;
 }
 exports.spawnNumberInput = spawnNumberInput;

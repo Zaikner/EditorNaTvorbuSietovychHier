@@ -22,7 +22,7 @@ var GameEditor = /** @class */ (function () {
         this.game = new Game_js_1.Game();
         console.log(this.getGame());
     };
-    GameEditor.prototype.initTile = function (coords, color, size, stroke, strokeColor, shape, background, pattern) {
+    GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background, pattern) {
         var tileNumber = this.nextTileNumber();
         var newTile = new Tile_js_1.Tile('', coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.game.getNextTileNumber());
         if (stroke != 0) {
@@ -36,8 +36,10 @@ var GameEditor = /** @class */ (function () {
             newTile.setPatternFile(pattern);
         }
         newTile.setShape(shape);
-        this.game.addTile(newTile);
-        newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx);
+        if (add) {
+            this.game.addTile(newTile);
+        }
+        newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx, false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber);
         newTile.setFollowingTileNumber(tileNumber + 1);
@@ -116,6 +118,7 @@ var GameEditor = /** @class */ (function () {
         this.choosenTile = undefined;
     };
     GameEditor.prototype.addToUndoLog = function (addition) {
+        console.log('pridal do undoLogu');
         this.undoLog.push(addition);
     };
     GameEditor.prototype.removeLastFromUndoLog = function () {

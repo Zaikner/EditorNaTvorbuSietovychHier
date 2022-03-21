@@ -24,7 +24,7 @@ class GameEditor{
         console.log(this.getGame())
     }
 
-    initTile(coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
+    initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
         let tileNumber = this.nextTileNumber()
         let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
         if (stroke!=0){
@@ -40,9 +40,11 @@ class GameEditor{
         }
    
         newTile.setShape(shape)
+        if (add){
+            this.game.addTile(newTile)
+        }
         
-        this.game.addTile(newTile)
-        newTile.drawTile(canvas,ctx);
+        newTile.drawTile(canvas,ctx,false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber)
         newTile.setFollowingTileNumber(tileNumber+1)
@@ -125,6 +127,7 @@ class GameEditor{
         this.choosenTile = undefined
     }
     addToUndoLog(addition:Array<Tile>){
+        console.log('pridal do undoLogu')
         this.undoLog.push(addition)
     }
     removeLastFromUndoLog(){
