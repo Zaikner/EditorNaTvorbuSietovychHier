@@ -57,7 +57,7 @@ function showAllQuestions(data) {
             questions.set(elem.questionId, list);
             var quest = document.createElement('button');
             quest.type = 'button';
-            quest.classList.add("list-group-item", "list-group-item-action", "active");
+            quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-info");
             quest.style.textAlign = 'center';
             quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
             list.appendChild(quest);
@@ -87,7 +87,7 @@ function askQuestion(data) {
             questions.set(elem.questionId, list);
             var quest = document.createElement('button');
             quest.type = 'button';
-            quest.classList.add("list-group-item", "list-group-item-action", "active");
+            quest.classList.add("list-group-item", "list-group-item-action", "active", 'btn-info');
             quest.style.textAlign = 'center';
             quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
             list.appendChild(quest);

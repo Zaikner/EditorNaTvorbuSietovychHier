@@ -44,7 +44,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
             <li><button type="button" class="btn btn-secondary dropdown-item" id="insertPawn" >Insert Pawns</button></li>
             <li><button type="button" class="btn btn-secondary dropdown-item" id="editPawn" >Edit Pawns</button></li>
-            <li><button type="button" class="btn btn-secondary dropdown-item" id="movePawn" >Move Pawns</button></li>
+            <!-- <li><button type="button" class="btn btn-secondary dropdown-item" id="movePawn" >Move Pawns</button></li> -->
             <li> <button type="button" class="btn btn-secondary dropdown-item" id="deletePawn">Delete Pawns</button></li>
          
           </ul>
@@ -63,11 +63,7 @@
           </ul>
         </li>
 
-        <form action="/" method="get">
-          <button type="submit" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:200px; margin-right: 10px;">General info</button>
-  
-          <!-- <button  type="submit" name="editor" value="editor">Editor</button> -->
-      </form>
+        <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="generalInfoButton" style=" width:200px; margin-right: 10px;">General info</button>
       
       <form action="/" method="get">
         <button type="submit" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:200px; margin-right: 10px;">Main Menu</button>
@@ -103,9 +99,9 @@
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="background-color: #292b2c">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalHeader">Warning!</h5>
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Warning!</h5>
         <button type="button" class="close" data-dismiss="modal">
         </button>
       </div>
@@ -113,16 +109,16 @@
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <button type="button" class="btn btn-primary" onclick="$('#exampleModal').modal('hide')">Ok!</button>
+        <button type="button" class="btn btn-secondary" onclick="$('#exampleModal').modal('hide')">Ok!</button>
       </div>
     </div>
   </div>
 </div>
 <div class="modal fade" id="questionModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-xl ">
-    <div class="modal-content">
+    <div class="modal-content" style="background-color: #292b2c" >
       <div class="modal-header">
-        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky;">Question manager</h2></div>
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky; color: white;">Question manager</h2></div>
        
         <button type="button" class="close" data-dismiss="modal">
         </button>
@@ -130,7 +126,7 @@
       <div class="modal-body" id="modalBody" style="overflow-y: auto; height:70vh">
         <div class="container"  id='listContainer'>
           <div class="list-group" style=" margin-bottom: 5%;">
-            <button type="button" class="list-group-item list-group-item-action active" style="text-align: center;">
+            <button type="button" class="list-group-item list-group-item-action active btn-info" style="text-align: center;">
               Question ID 1: Ste teply ?
             </button>
             <button type="button" class="list-group-item list-group-item-action">Ano</button>
@@ -143,8 +139,8 @@
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <div class="container" style="text-align: center;"><button type="button" class="btn btn-primary" id="setAnswerButton" style="text-align: center;" onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')">Ok!</button>
-          <button type="button" class="btn btn-primary" style="text-align: center; "  onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')">Create Question!</button></div>
+        <div class="container" style="text-align: center;"><button type="button" class="btn btn-secondary" id="setAnswerButton" style="text-align: center;" onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')">Ok!</button>
+          <button type="button" class="btn btn-secondary" style="text-align: center; "  onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')">Create Question!</button></div>
         
       </div>
     </div>
@@ -152,9 +148,9 @@
 </div>
 <div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="background-color: #292b2c">
       <div class="modal-header">
-        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky;">Answer Question!</h2></div>
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky; color: white;">Answer Question!</h2></div>
        
         <button type="button" class="close" data-dismiss="modal">
         </button>
@@ -169,7 +165,45 @@
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <div class="container" style="text-align: center;"><button type="button" id="answerButton" class="btn btn-primary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Answer!</button></div>
+        <div class="container" style="text-align: center;"><button type="button" id="answerButton" class="btn btn-secondary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Answer!</button></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="pawnModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header" >
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky; color: white;">Choose pawn style for player!</h2></div>
+       
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody" style="overflow-y: auto; height:70vh; text-align: center;">
+        <div class="container" style="text-align: center;" >
+          <div class="list-group" style="text-align: center;"  id='pawnType1'>
+              <canvas style="width: 200px; height: 200px; margin: 0 auto; border: 20px solid; border-radius: 50%; border-color: white; text-align: center;"></canvas>
+              <p style="color: white;" >Type 1</p>
+            </div>
+            <div class="list-group" style="text-align: center;"  id='pawnType1'>
+              <canvas style="width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;"></canvas>
+              <p style="color: white;">Type 2</p>
+            </div>
+            <div class="list-group" style="text-align: center;"  id='pawnType1'>
+              <canvas style="width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;"></canvas>
+              <p style="color: white;"> Type 3</p>
+            </div>
+            <div class="list-group" style="text-align: center;"  id='pawnType1'>
+              <canvas style="width: 200px; height: 200px; margin: 0 auto; border: solid; border-radius: 50%; border-color: black; text-align: center;"></canvas>
+              <p>Type 1</p>
+            </div>
+   
+        </div>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <div class="container" style="text-align: center;"><button type="button" id="answerButton" class="btn btn-secondary" style="text-align: center;" onclick="$('#pawnModal').modal('hide')">Edit!</button></div>
         
       </div>
     </div>

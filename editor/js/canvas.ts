@@ -1,7 +1,7 @@
 
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-import { insertTilesMenu,editTiles,deleteTiles,moveTiles } from "./TileEditor.js";
+import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded } from "./TileEditor.js";
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
@@ -10,9 +10,10 @@ import { spawnButton } from "./Elements";
 
 import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
-import { pawnMenu } from "./PawnEditor";
+import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion} from "./Questions";
+import { removeAllListeners } from "process";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -147,13 +148,18 @@ document.getElementById('editTiles')!.addEventListener('click',function(){editTi
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );}
 document.getElementById('questionManager')!.addEventListener('click',function(){editorSocket.emit('loadQuestions');} )
 //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
-
+document.getElementById('generalInfoButton')!.addEventListener('click',function(){
+  removeAllButtons()
+  removeAllListenersAdded()
+  mainMenu();})
 
 document.getElementById('answerButton')!.addEventListener('click',function(){evaluateQuestion();})
 document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:7})})
 document.getElementById('addButton')!.addEventListener('click',function(){addOption();})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion();})
-document.getElementById('insertPawn')!.addEventListener('click',function(){pawnMenu()} );
+document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
+document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
+document.getElementById('deletePawn')!.addEventListener('click',function(){pawnDeleteMenu()} );
 var doc = document;
 const canvas = document.createElement('canvas');
 

@@ -124,6 +124,7 @@ function editTiles() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
     spawnElements();
     setValues(undefined);
+    showActualState();
 }
 exports.editTiles = editTiles;
 function saveEditingTiles() {

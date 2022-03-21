@@ -154,7 +154,8 @@ function insertTilesMenu():void{
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveEditingTiles)
     spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],'Edit button!',update)   
       spawnElements()
-      setValues(undefined!)      
+      setValues(undefined!)
+    showActualState()      
     }
   
     function saveEditingTiles(){

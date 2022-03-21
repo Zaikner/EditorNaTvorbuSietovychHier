@@ -1,5 +1,5 @@
 import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
-import { spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
+import { spawnButton, spawnCanvas, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
@@ -7,7 +7,7 @@ import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
 
 
-function pawnMenu(){
+function pawnInsertMenu(){
     removeAllListenersAdded()
     removeAllButtons()
     // spawnParagraph(doc,'tileEditingPlace','','Configure your Pawn, and click on tile to insert it!')
@@ -43,5 +43,28 @@ function insertPawn(event:MouseEvent){
         console.log(newPawn)
     }
 }
+function pawnEditMenu(){
+    removeAllListenersAdded()
+    removeAllButtons()
 
-export{pawnMenu,insertPawn}
+    spawnParagraph(doc,'tileEditingPlace','','Select player:')
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    spawnCanvas(doc,'tileEditingPlace','pawnStyle')
+    spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
+    spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
+    spawnParagraph(doc,'tileEditingPlace','','Choose pawn type!')
+    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],'Choose type!',function(){$('#pawnModal').modal('show')})
+
+    spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
+    spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
+    // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
+    
+
+}
+function pawnDeleteMenu(){
+    removeAllListenersAdded()
+    removeAllButtons()
+
+}
+
+export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn}
