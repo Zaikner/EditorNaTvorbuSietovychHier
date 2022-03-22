@@ -18,17 +18,18 @@ export class Pawn{
     }
 
     draw(ctx:CanvasRenderingContext2D){
+        let style = editor.getGame().getPawnStyle().get(this.player)
         ctx.beginPath()
         ctx.save()
         ctx.strokeStyle ="#000"; ctx.lineWidth=1; ctx.setLineDash([]);
-        ctx.fillStyle = this.color
+        ctx.fillStyle = style!.getColor()
         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
         ctx.arc(this.tile.getCenterX(), this.tile.getCenterY(), this.tile.getRadius()/4, 0, 2 * Math.PI);
         ctx.fill()
         ctx.resetTransform();
         ctx.restore()
         ctx.strokeStyle ="#000"; ctx.lineWidth=1; ctx.setLineDash([]);
-        ctx.fillStyle = 'black'
+        ctx.fillStyle = "#000"
         ctx.closePath()
     }
 

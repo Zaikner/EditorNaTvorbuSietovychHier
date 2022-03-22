@@ -5,8 +5,10 @@ export class PawnStyle{
     private image:HTMLImageElement = undefined!;
 
 
-    constructor(){
-
+    constructor(player:string,color:string,type:string){
+        this.player = player
+        this.color = color
+        this.type = type
     }
     public setColor(newColor:string){
         this.color = newColor

@@ -106,7 +106,7 @@ function askQuestion(data:any){
         let opt = document.createElement('button')
         opt.id = 'givenOption'+i;
         opt.type = 'button';
-        opt.classList.add("list-group-item","list-group-item-action",'btn','btn-info')
+        opt.classList.add("list-group-item","list-group-item-action",'btn','btn-light')
         opt.setAttribute('isAnswer',elem.isAnswer)
         //quest.style.textAlign =  'center';
         opt.textContent = elem.optionText

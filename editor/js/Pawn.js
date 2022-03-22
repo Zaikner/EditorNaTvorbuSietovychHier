@@ -12,12 +12,13 @@ var Pawn = /** @class */ (function () {
         this.tile = tile;
     }
     Pawn.prototype.draw = function (ctx) {
+        var style = canvas_1.editor.getGame().getPawnStyle().get(this.player);
         ctx.beginPath();
         ctx.save();
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 1;
         ctx.setLineDash([]);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = style.getColor();
         ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
         ctx.arc(this.tile.getCenterX(), this.tile.getCenterY(), this.tile.getRadius() / 4, 0, 2 * Math.PI);
         ctx.fill();
@@ -26,7 +27,7 @@ var Pawn = /** @class */ (function () {
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 1;
         ctx.setLineDash([]);
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = "#000";
         ctx.closePath();
     };
     Pawn.prototype.move = function (numOfTiles) {

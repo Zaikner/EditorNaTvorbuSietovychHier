@@ -5,6 +5,7 @@ import { editorSocket} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
+import { PawnStyle } from './PawnStyle.js';
 class Game{
     private name:string = "";
     private author:string = "";
@@ -13,6 +14,8 @@ class Game{
     private numOfPlayers:number = 2;
     private tiles:Array<Tile> = [];
     private playerTokens:Array<string> = ['Player 1','Player 2']
+    private pawnStyle:Map<string,PawnStyle>= new Map([['Player 1',new PawnStyle('Player 1','#000000','type1')],['Player 2',new PawnStyle('Player 2','#000000','type1')]])
+                              
     private background:Background = new Background()
     private nextTileNumber = 1
     private initSizeX:number = 0
@@ -132,11 +135,17 @@ class Game{
     setScaleY(newCoord:number){
         return this.scaleY = newCoord
     }
-    public setPawns(newPawns:Array<Pawn>){
+    setPawns(newPawns:Array<Pawn>){
         this.pawns = newPawns
     }
-    public getPawns(){
+    getPawns(){
         return this.pawns
+    }
+    setPawnStyle(newPawns:Map<string,PawnStyle>){
+        this.pawnStyle = newPawns
+    }
+    getPawnStyle(){
+        return this.pawnStyle
     }
     
 }

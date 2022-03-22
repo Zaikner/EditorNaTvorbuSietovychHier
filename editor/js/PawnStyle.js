@@ -2,11 +2,14 @@
 exports.__esModule = true;
 exports.PawnStyle = void 0;
 var PawnStyle = /** @class */ (function () {
-    function PawnStyle() {
+    function PawnStyle(player, color, type) {
         this.player = '';
         this.color = '';
         this.type = '';
         this.image = undefined;
+        this.player = player;
+        this.color = color;
+        this.type = type;
     }
     PawnStyle.prototype.setColor = function (newColor) {
         this.color = newColor;

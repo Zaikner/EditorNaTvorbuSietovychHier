@@ -7,6 +7,7 @@ router
 .route("/")
 .get((request,res) =>
 {   console.log(request.params)
+    
     res.sendFile('gamePlace.html',{root:'./editor/views'});
 });
 

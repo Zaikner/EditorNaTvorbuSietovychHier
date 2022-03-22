@@ -11,6 +11,7 @@ var Background_1 = require("./Background");
 var Gameplay_1 = require("./Gameplay");
 var PawnEditor_1 = require("./PawnEditor");
 var Questions_1 = require("./Questions");
+var PawnStyle_1 = require("./PawnStyle");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -120,26 +121,27 @@ editorSocket.on('loadedQuestions', function (data) { (0, Questions_1.showAllQues
 editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQuestion)(data); });
 function edit() {
     mainMenu();
+    console.log('vykonal edit');
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
     document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
     document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
     document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
+    document.getElementById('questionManager').addEventListener('click', function () { editorSocket.emit('loadQuestions'); });
+    //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
+    document.getElementById('generalInfoButton').addEventListener('click', function () {
+        (0, TileEditor_js_1.removeAllButtons)();
+        (0, TileEditor_js_1.removeAllListenersAdded)();
+        mainMenu();
+    });
+    document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
+    document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 7 }); });
+    document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
+    document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });
+    document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
+    document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
+    document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });
 }
-document.getElementById('questionManager').addEventListener('click', function () { editorSocket.emit('loadQuestions'); });
-//spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
-document.getElementById('generalInfoButton').addEventListener('click', function () {
-    (0, TileEditor_js_1.removeAllButtons)();
-    (0, TileEditor_js_1.removeAllListenersAdded)();
-    mainMenu();
-});
-document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
-document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 7 }); });
-document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
-document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });
-document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
-document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
-document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });
 var doc = document;
 exports.doc = doc;
 var canvas = document.createElement('canvas');
@@ -165,9 +167,24 @@ function mainMenu() {
     numOfPlayersSlider.oninput = function () {
         document.getElementById("numShower").textContent = numOfPlayersSlider.value;
         editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value));
-        var playerTokens = [];
-        for (var i = 1; i <= parseInt(numOfPlayersSlider.value); i++) {
-            playerTokens.push('Player ' + i);
+        var number = parseInt(numOfPlayersSlider.value);
+        var playerTokens = editor.getGame().getPlayerTokens();
+        if (number < playerTokens.length) {
+            for (var i = 0; i < playerTokens.length - number; i++) {
+                playerTokens.pop();
+                editor.getGame().getPawnStyle()["delete"]('Player ' + (playerTokens.length));
+                console.log(editor.getGame().getPawnStyle());
+                console.log('odobral');
+            }
+        }
+        if (number > playerTokens.length) {
+            for (var i = 0; i < number - playerTokens.length; i++) {
+                playerTokens.push('Player ' + (playerTokens.length + 1));
+                console.log('pridal');
+                editor.getGame().getPawnStyle().set('Player ' + (playerTokens.length), new PawnStyle_1.PawnStyle('Player ' + (playerTokens.length), '#000000', 'type1'));
+                console.log(editor.getGame().getPawnStyle());
+                //editor.getGame().getPawnStyle().Player
+            }
         }
         editor.getGame().setPlayerTokens(playerTokens);
     };
@@ -225,6 +242,7 @@ function resize(editor, context) {
 }
 exports.resize = resize;
 function reload(editor, ctx) {
+    console.log(ctx);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     console.log(editor.getGame().getBackground());
     if (editor.getGame().getBackground() != undefined) {

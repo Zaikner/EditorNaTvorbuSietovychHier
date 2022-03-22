@@ -6,6 +6,7 @@ var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Warning_js_1 = require("./Warning.js");
+var PawnStyle_js_1 = require("./PawnStyle.js");
 var Game = /** @class */ (function () {
     function Game() {
         this.name = "";
@@ -15,6 +16,7 @@ var Game = /** @class */ (function () {
         this.numOfPlayers = 2;
         this.tiles = [];
         this.playerTokens = ['Player 1', 'Player 2'];
+        this.pawnStyle = new Map([['Player 1', new PawnStyle_js_1.PawnStyle('Player 1', '#000000', 'type1')], ['Player 2', new PawnStyle_js_1.PawnStyle('Player 2', '#000000', 'type1')]]);
         this.background = new Background_js_1.Background();
         this.nextTileNumber = 1;
         this.initSizeX = 0;
@@ -131,6 +133,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPawns = function () {
         return this.pawns;
+    };
+    Game.prototype.setPawnStyle = function (newPawns) {
+        this.pawnStyle = newPawns;
+    };
+    Game.prototype.getPawnStyle = function () {
+        return this.pawnStyle;
     };
     return Game;
 }());

@@ -26,7 +26,7 @@ class ServerSocket{
             socket.emit('pipi')
             
             socket.on('load game',async (msg:{id:string,name:string}) => {
-                    
+                    console.log('aspon emitol load game')
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
                     // let game = await GameFinder.getIntance().findByName(msg.name)

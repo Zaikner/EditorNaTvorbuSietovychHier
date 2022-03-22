@@ -48,15 +48,35 @@ function pawnEditMenu(){
     removeAllButtons()
 
     spawnParagraph(doc,'tileEditingPlace','','Select player:')
-    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    playerPicker.onchange = function(){
+        drawActualPawnLook(playerPicker.value)
+    }
     spawnCanvas(doc,'tileEditingPlace','pawnStyle')
     spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
-    spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
+    let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
+    colorPicker.onchange = function(){
+        editor.getGame().getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
+        drawActualPawnLook(playerPicker.value)
+    }
     spawnParagraph(doc,'tileEditingPlace','','Choose pawn type!')
-    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],'Choose type!',function(){$('#pawnModal').modal('show')})
+    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],'Choose type!',function(){$('#pawnModal').modal('show')
+     drawStyles(colorPicker.value)})
 
     spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
     spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
+
+    for (let i = 1; i <= 3; i++){
+        let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
+        
+        button.onclick = function(){
+            let player = playerPicker.value
+            editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
+            console.log(editor.getGame().getPawnStyle())
+            drawActualPawnLook(player)
+        }
+        drawActualPawnLook('Player 1')
+    }
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
     
 
@@ -67,4 +87,93 @@ function pawnDeleteMenu(){
 
 }
 
+function drawStyles(color:string){
+    let cs = <HTMLCanvasElement>document.getElementById('canvasPawn1')!
+    cs.width = 100
+    cs.height = 100
+
+    drawPawnType1( <CanvasRenderingContext2D> cs.getContext("2d"),50,20,20,100,100,color)
+    
+    // cs.width = 100
+    // cs.height = 100
+    // let contextik = <CanvasRenderingContext2D> cs.getContext("2d");
+    // contextik.resetTransform()
+    // let width = cs.width
+    // let height = cs.height
+    // contextik.beginPath()
+    // contextik.arc(50,20,20,0, 2 * Math.PI)
+    // contextik.fillStyle = color
+    // contextik.fill()
+    // contextik.beginPath()
+    // contextik.moveTo(50,30)
+    // contextik.lineTo(20,90)
+    // contextik.lineTo(80,90)
+    // contextik.lineTo(50,30)
+    // contextik.fill()
+
+    cs = <HTMLCanvasElement>document.getElementById('canvasPawn2')!
+    cs.width = 100
+    cs.height = 100
+    let contextik = <CanvasRenderingContext2D> cs.getContext("2d");
+    contextik.resetTransform()
+    let width = cs.width
+    let height = cs.height
+    contextik.beginPath()
+    contextik.arc(50,20,20,0, 2 * Math.PI)
+    contextik.fillStyle = color
+    contextik.fill()
+    contextik.beginPath()
+    contextik.moveTo(30,40)
+    contextik.lineTo(70,40)
+    contextik.lineTo(50,90)
+    contextik.lineTo(30,40)
+    contextik.fill()
+
+    cs = <HTMLCanvasElement>document.getElementById('canvasPawn3')!
+    cs.width = 100
+    cs.height = 100
+    contextik = <CanvasRenderingContext2D> cs.getContext("2d");
+    contextik.resetTransform()
+    width = cs.width
+    height = cs.height
+    contextik.beginPath()
+    contextik.arc(50,20,20,0, 2 * Math.PI)
+    contextik.fillStyle = color
+    contextik.fill()
+    contextik.beginPath()
+    contextik.moveTo(10,40)
+    contextik.lineTo(90,40)
+    contextik.lineTo(50,90)
+    contextik.lineTo(10,40)
+    contextik.fill()
+}
+
+function drawPawnType1(contextik:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,width:number,height:number,color:string)
+{
+    
+    contextik.beginPath()
+    contextik.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+    contextik.fillStyle = color
+    contextik.fill()
+    contextik.beginPath()
+    contextik.moveTo(headCenterX,headCenterY+radius/2)
+    contextik.lineTo(headCenterX-radius*1.5,headCenterY+radius*3)
+    contextik.lineTo(headCenterX+radius*1.5,headCenterY+radius*3)
+    contextik.lineTo(headCenterX,headCenterY+radius/2)
+    contextik.fill()
+
+}
+function drawActualPawnLook(player:string){
+    let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
+   
+    let style = editor.getGame().getPawnStyle().get(player)
+    if (style?.getType() === 'type1'){
+        drawPawnType1( <CanvasRenderingContext2D> cs.getContext("2d"),cs.width/2,40,40,100,100,style!.getColor())
+    }
+    else{
+        console.log('nie je dorobene')
+    }
+    
+    
+}
 export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn}
