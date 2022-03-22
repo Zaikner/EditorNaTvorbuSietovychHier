@@ -96,6 +96,9 @@ class ServerSocket{
         console.log('skusil relognut'+msg.id)
         //console.log(msg.id)
         let acc = AccountManager.getAccountByClientId(msg.id)
+        if(acc === undefined){
+          return
+        }
         AccountManager.login(acc)
         socket.emit('set cookie')
         console.log('pripojil'+acc)

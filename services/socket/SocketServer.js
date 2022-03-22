@@ -60,6 +60,7 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_f) {
                     switch (_f.label) {
                         case 0:
+                            console.log('aspon emitol load game');
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(msg.id);
                             // let game = await GameFinder.getIntance().findByName(msg.name)
@@ -137,6 +138,9 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     console.log('skusil relognut' + msg.id);
                     acc = AccountManager.getAccountByClientId(msg.id);
+                    if (acc === undefined) {
+                        return [2 /*return*/];
+                    }
                     AccountManager.login(acc);
                     socket.emit('set cookie');
                     console.log('pripojil' + acc);
