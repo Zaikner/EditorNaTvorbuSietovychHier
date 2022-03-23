@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.Tile = void 0;
 var canvas_js_1 = require("./canvas.js");
+var PawnEditor_js_1 = require("./PawnEditor.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Tile = /** @class */ (function () {
     function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
@@ -182,6 +183,70 @@ var Tile = /** @class */ (function () {
             ctx.restore();
         }
         ctx.closePath();
+    };
+    Tile.prototype.drawPawns = function (ctx) {
+        var _this = this;
+        var drawn = 0;
+        this.pawns.forEach(function (pawn) {
+            var style = canvas_js_1.editor.getGame().getPawnStyle().get(pawn.player);
+            if (_this.getPawns().length == 1) {
+                if (style.getType() == 'type1') {
+                    (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX(), _this.getCenterY() - 10, 10, 100, 100, style.getColor());
+                    console.log('kresli ja neviem kde je problem');
+                }
+                else {
+                    console.log('zly typ');
+                }
+            }
+            else if (_this.getPawns().length == 2) {
+                if (drawn == 0) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() + _this.radius / 2, _this.getCenterY() - 10, 8, 100, 100, style.getColor());
+                        console.log('kresli ja neviem kde je problem');
+                        drawn++;
+                    }
+                }
+                else if (drawn == 1) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius / 2, _this.getCenterY() - 10, 8, 100, 100, style.getColor());
+                        console.log('kresli ja neviem kde je problem');
+                        drawn++;
+                    }
+                }
+            }
+            else if (_this.getPawns().length > 2) {
+                if (drawn == 0) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() + _this.radius / 2, _this.getCenterY() - 15 * _this.radius / 30, 4 * _this.radius / 30, 100, 100, style.getColor());
+                        drawn++;
+                    }
+                }
+                else if (drawn == 1) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius / 2, _this.getCenterY() - 15 * _this.radius / 30, 4 * _this.radius / 30, 100, 100, style.getColor());
+                        drawn++;
+                    }
+                }
+                else if (drawn == 2) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius / 2, _this.getCenterY() + 10 * _this.radius / 30, 4 * _this.radius / 30, 100, 100, style.getColor());
+                        drawn++;
+                    }
+                }
+                else if (drawn == 3) {
+                    if (style.getType() == 'type1') {
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() + _this.radius / 2, _this.getCenterY() + 10 * _this.radius / 30, 4 * _this.radius / 30, 100, 100, style.getColor());
+                        drawn++;
+                    }
+                }
+            }
+            else {
+                console.log('pocty su zle');
+                console.log(_this.pawns);
+            }
+        });
+        console.log('spusitl draw pawns');
+        console.log(this.pawns);
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {

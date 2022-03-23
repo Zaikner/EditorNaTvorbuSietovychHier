@@ -1,5 +1,6 @@
 import { editor } from './canvas.js';
 import { Pawn } from './Pawn.js';
+import { drawPawnType1 } from './PawnEditor.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Tile{
     private type:string;
@@ -209,6 +210,76 @@ class Tile{
 
             }
         ctx.closePath()
+    }
+
+    drawPawns(ctx:CanvasRenderingContext2D){
+        let drawn = 0
+        this.pawns.forEach((pawn) => {
+            let style = editor.getGame().getPawnStyle().get(pawn.player)
+            if (this.getPawns().length == 1){
+                if (style!.getType() == 'type1'){
+                    drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10,100,100,style!.getColor())
+                    console.log('kresli ja neviem kde je problem')
+                }
+                else{
+                    console.log('zly typ')
+                }
+            }
+            else if (this.getPawns().length == 2){
+                if (drawn == 0){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8,100,100,style!.getColor())
+                        console.log('kresli ja neviem kde je problem')
+                        drawn++
+                    }
+                }
+                else if (drawn == 1){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8,100,100,style!.getColor())
+                        console.log('kresli ja neviem kde je problem')
+                        drawn++
+                    }
+                }
+              
+            }
+            else if (this.getPawns().length > 2){
+                if (drawn == 0){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                     
+                        drawn++
+                    }
+                }
+                else if (drawn == 1){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                       
+                        drawn++
+                    }
+                }
+                else if (drawn == 2){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+            
+                        drawn++
+                    }
+                }
+                else if (drawn == 3){
+                    if (style!.getType() == 'type1'){
+                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                     
+                        drawn++
+                    }
+                }
+              
+            }
+            else{
+                console.log('pocty su zle')
+                console.log(this.pawns)
+            }
+        })
+       console.log('spusitl draw pawns')
+       console.log(this.pawns)
     }
 
     isPointedAt(x:number,y:number){

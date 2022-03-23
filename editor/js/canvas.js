@@ -273,13 +273,14 @@ function reload(editor, ctx) {
     var tiles = editor.getGame().getTiles();
     tiles.forEach(function (tile) {
         tile.drawTile(canvas, ctx, false);
+        tile.drawPawns(ctx);
     });
     ctx.closePath();
     ctx.restore();
-    var pawns = editor.getGame().getPawns();
-    pawns.forEach(function (pawn) {
-        pawn.draw(ctx);
-    });
+    // let pawns = editor.getGame().getPawns()
+    // pawns.forEach((pawn:Pawn) =>{
+    //     pawn.draw(ctx)
+    // })
 }
 exports.reload = reload;
 function clear() {

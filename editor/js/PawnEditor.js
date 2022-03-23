@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.insertPawn = exports.pawnDeleteMenu = exports.pawnEditMenu = exports.pawnInsertMenu = void 0;
+exports.drawPawnType1 = exports.insertPawn = exports.pawnDeleteMenu = exports.pawnEditMenu = exports.pawnInsertMenu = void 0;
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
 var Pawn_1 = require("./Pawn");
@@ -36,7 +36,8 @@ function insertPawn(event) {
         var newPawn = new Pawn_1.Pawn(1, player.value, tile);
         //newPawn.color = colorPicker!.value
         canvas_1.editor.getGame().getPawns().push(newPawn);
-        (0, TileEditor_1.removeAllListenersAdded)();
+        tile.getPawns().push(newPawn);
+        //removeAllListenersAdded()
         (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
         console.log(newPawn);
     }
@@ -155,6 +156,7 @@ function drawPawnType1(contextik, headCenterX, headCenterY, radius, width, heigh
     contextik.lineTo(headCenterX, headCenterY + radius / 2);
     contextik.fill();
 }
+exports.drawPawnType1 = drawPawnType1;
 function drawActualPawnLook(player) {
     var cs = document.getElementById('pawnStyle');
     var style = canvas_1.editor.getGame().getPawnStyle().get(player);

@@ -331,13 +331,14 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
   let tiles = editor.getGame().getTiles()
   tiles.forEach((tile:Tile) => {
     tile.drawTile(canvas,ctx,false)
+    tile.drawPawns(ctx)
   })
   ctx.closePath()
   ctx.restore()
-  let pawns = editor.getGame().getPawns()
-  pawns.forEach((pawn:Pawn) =>{
-      pawn.draw(ctx)
-  })
+  // let pawns = editor.getGame().getPawns()
+  // pawns.forEach((pawn:Pawn) =>{
+  //     pawn.draw(ctx)
+  // })
  
   
 }

@@ -224,6 +224,7 @@ function insertTilesMenu():void{
     if (canSpawn){
       var addedTile = spawnTile(coords)
       editor.addToUndoLog([addedTile])
+      showActualState()
     }
     
   }
@@ -444,7 +445,7 @@ function insertTilesMenu():void{
    
    
   
-
+    cttttx.clearRect(0,0,cs.width,cs.height)
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
     console.log('actual state')
     console.log(tile)

@@ -38,7 +38,8 @@ function insertPawn(event:MouseEvent){
         let newPawn = new Pawn(1,player!.value,tile)
         //newPawn.color = colorPicker!.value
         editor.getGame().getPawns().push(newPawn)
-        removeAllListenersAdded()
+        tile.getPawns().push(newPawn)
+        //removeAllListenersAdded()
         reload(editor,ctx)
         console.log(newPawn)
     }
@@ -176,4 +177,4 @@ function drawActualPawnLook(player:string){
     
     
 }
-export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn}
+export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn,drawPawnType1}
