@@ -3,6 +3,7 @@ import { Pawn } from './Pawn.js';
 import { drawPawnType1 } from './PawnEditor.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Tile{
+    private id:number = 0;
     private type:string;
     private centerX:number;
     private centerY:number;
@@ -213,12 +214,17 @@ class Tile{
     }
 
     drawPawns(ctx:CanvasRenderingContext2D){
+     
         let drawn = 0
         this.pawns.forEach((pawn) => {
+            console.log('kresli babku')
+            console.log(this)
+            console.log(pawn)
             let style = editor.getGame().getPawnStyle().get(pawn.player)
+            console.log(style)
             if (this.getPawns().length == 1){
                 if (style!.getType() == 'type1'){
-                    drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10,100,100,style!.getColor())
+                    drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10*this.radius/30,100,100,style!.getColor())
                     console.log('kresli ja neviem kde je problem')
                 }
                 else{
@@ -228,14 +234,14 @@ class Tile{
             else if (this.getPawns().length == 2){
                 if (drawn == 0){
                     if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8,100,100,style!.getColor())
+                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
                         console.log('kresli ja neviem kde je problem')
                         drawn++
                     }
                 }
                 else if (drawn == 1){
                     if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8,100,100,style!.getColor())
+                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
                         console.log('kresli ja neviem kde je problem')
                         drawn++
                     }
@@ -324,7 +330,8 @@ class Tile{
                 canOccupy:this.canOccupy,
                 toggleNumber:this.toggleNumber,
                 numberingColor:this.numberingColor,
-                numberOfFollowingTile:this.numberOfFollowingTile}
+                numberOfFollowingTile:this.numberOfFollowingTile,
+                id:this.id}
             
     }
 
@@ -401,6 +408,12 @@ class Tile{
     }
     public getRadius(){
         return this.radius
+    }
+    public setId(newId:number){
+        this.id = newId
+    }
+    public getId(){
+        return this.id
     }
     public setIsOccupied(newIsOccupied:boolean){
         this.isOccupied = newIsOccupied

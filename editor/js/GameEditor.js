@@ -16,6 +16,7 @@ var GameEditor = /** @class */ (function () {
         this.startForPlayers = [];
         this.endForPlayers = [];
         this.enabledForPlayers = [];
+        this.nextTileId = 0;
         this.initNewGame();
     }
     GameEditor.prototype.initNewGame = function () {
@@ -38,12 +39,16 @@ var GameEditor = /** @class */ (function () {
         newTile.setShape(shape);
         if (add) {
             this.game.addTile(newTile);
+            this.nextTileId++;
         }
         newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx, false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber);
         newTile.setFollowingTileNumber(tileNumber + 1);
         console.log('cislo dalsieho je :' + this.game.getNextTileNumber());
+        newTile.setId(this.nextTileId);
+        console.log('pridany je ');
+        console.log(newTile);
         return newTile;
     };
     GameEditor.prototype.findTile = function (event) {
@@ -151,6 +156,15 @@ var GameEditor = /** @class */ (function () {
             console.log('rovna sa ' + tile.getTileNumber() + ' : ' + (tile.getTileNumber() === num));
         });
         return res;
+    };
+    GameEditor.prototype.findTileById = function (id) {
+        var t = new Tile_js_1.Tile('', 0, 0, 0, 0, 0, 0, 0, '', 0);
+        this.game.getTiles().forEach(function (tile) {
+            if (tile.getId() == id) {
+                t = tile;
+            }
+        });
+        return t;
     };
     GameEditor.prototype.getGame = function () {
         return this.game;

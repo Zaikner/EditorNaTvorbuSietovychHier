@@ -12,6 +12,8 @@ import { QuestionOption } from "../db/RDG/QuestionOption";
 import { QuestionFinder } from "../db/RDG/QuestionFinder";
 import { QuestionOptionFinder } from "../db/RDG/QuestionOptionFinder";
 import { QuestionWithAnswersFinder } from "../db/RDG/QuestionWithAnswersFinder";
+import { Pawn } from "../db/RDG/Pawn";
+import { PawnStyles } from "../db/RDG/PawnStyle";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -35,6 +37,7 @@ class ServerSocket{
                 
                    
                    console.log('toto returnol:'+await GameManager.loadGame(msg.name))
+                   console.log(await GameManager.loadGame(msg.name))
                     this.emitToSpecificSocket(socket.id,'connected', await GameManager.loadGame(msg.name))
                     console.log('zapol som hru'+ msg.name);
             });
@@ -42,17 +45,21 @@ class ServerSocket{
             socket.on('disconnect', () => {
                     console.log('user disconnected');
             });
-        socket.on('saveGame', (data:any) => {
+        socket.on('saveGame',async (data:any) => {
       
       console.log('odchytil')
         console.log(data)
         console.log('odchytil')
+        let last = await TileFinder.getIntance().findLast()
+        let lastId = last?.getId()
+
         let g = new Game_db()
         g.setAuthor(data.author)
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
+          t.setId(tile.id+lastId)
           t.setType(tile.type)
           t.setCenterX(tile.centerX)
           t.setCenterY(tile.centerY)
@@ -88,6 +95,25 @@ class ServerSocket{
         b.setColor(data.background.color)
         b.setImage(data.background.backgroundImage)
         b.insert()
+
+
+        data.pawns.forEach((pawn:any)=>{
+           let p = new Pawn()
+          // p.setColor(pawn.color)
+           //p.setImage(pawn.image)
+           p.setPlayer(pawn.player)
+           p.setTileId(pawn.tileId +lastId)
+           p.insert()
+        })
+        data.styles.forEach((style:any) => {
+          let s = new PawnStyles()
+          s.setGameName(data.name)
+          s.setColor(style.color)
+          s.setImage(style.image)
+          s.setType(style.type)
+          s.setPlayer(style.player)
+          s.insert()
+        });
         this.io.emit('chat message');
       });
 

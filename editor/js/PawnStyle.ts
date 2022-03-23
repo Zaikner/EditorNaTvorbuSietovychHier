@@ -10,6 +10,13 @@ export class PawnStyle{
         this.color = color
         this.type = type
     }
+
+    JSONfyStyle(){
+        return {player:this.player,
+                color:this.color,
+                type:this.type,
+                image:''}
+    }
     public setColor(newColor:string){
         this.color = newColor
     }

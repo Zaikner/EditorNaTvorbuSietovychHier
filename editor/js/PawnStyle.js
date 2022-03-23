@@ -11,6 +11,12 @@ var PawnStyle = /** @class */ (function () {
         this.color = color;
         this.type = type;
     }
+    PawnStyle.prototype.JSONfyStyle = function () {
+        return { player: this.player,
+            color: this.color,
+            type: this.type,
+            image: '' };
+    };
     PawnStyle.prototype.setColor = function (newColor) {
         this.color = newColor;
     };

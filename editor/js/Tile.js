@@ -6,6 +6,7 @@ var PawnEditor_js_1 = require("./PawnEditor.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Tile = /** @class */ (function () {
     function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
+        this.id = 0;
         this.isOccupied = false;
         this.color = "";
         this.stroke = 0;
@@ -188,10 +189,14 @@ var Tile = /** @class */ (function () {
         var _this = this;
         var drawn = 0;
         this.pawns.forEach(function (pawn) {
+            console.log('kresli babku');
+            console.log(_this);
+            console.log(pawn);
             var style = canvas_js_1.editor.getGame().getPawnStyle().get(pawn.player);
+            console.log(style);
             if (_this.getPawns().length == 1) {
                 if (style.getType() == 'type1') {
-                    (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX(), _this.getCenterY() - 10, 10, 100, 100, style.getColor());
+                    (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX(), _this.getCenterY() - 10, 10 * _this.radius / 30, 100, 100, style.getColor());
                     console.log('kresli ja neviem kde je problem');
                 }
                 else {
@@ -201,14 +206,14 @@ var Tile = /** @class */ (function () {
             else if (_this.getPawns().length == 2) {
                 if (drawn == 0) {
                     if (style.getType() == 'type1') {
-                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() + _this.radius / 2, _this.getCenterY() - 10, 8, 100, 100, style.getColor());
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() + _this.radius / 2, _this.getCenterY() - 10, 8 * _this.radius / 30, 100, 100, style.getColor());
                         console.log('kresli ja neviem kde je problem');
                         drawn++;
                     }
                 }
                 else if (drawn == 1) {
                     if (style.getType() == 'type1') {
-                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius / 2, _this.getCenterY() - 10, 8, 100, 100, style.getColor());
+                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius / 2, _this.getCenterY() - 10, 8 * _this.radius / 30, 100, 100, style.getColor());
                         console.log('kresli ja neviem kde je problem');
                         drawn++;
                     }
@@ -286,7 +291,8 @@ var Tile = /** @class */ (function () {
             canOccupy: this.canOccupy,
             toggleNumber: this.toggleNumber,
             numberingColor: this.numberingColor,
-            numberOfFollowingTile: this.numberOfFollowingTile };
+            numberOfFollowingTile: this.numberOfFollowingTile,
+            id: this.id };
     };
     Tile.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
@@ -359,6 +365,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getRadius = function () {
         return this.radius;
+    };
+    Tile.prototype.setId = function (newId) {
+        this.id = newId;
+    };
+    Tile.prototype.getId = function () {
+        return this.id;
     };
     Tile.prototype.setIsOccupied = function (newIsOccupied) {
         this.isOccupied = newIsOccupied;

@@ -33,7 +33,7 @@ function insertPawn(event) {
     }
     if (tile != undefined) {
         var player = canvas_1.doc.getElementById('playerSelect');
-        var newPawn = new Pawn_1.Pawn(1, player.value, tile);
+        var newPawn = new Pawn_1.Pawn(player.value, tile);
         //newPawn.color = colorPicker!.value
         canvas_1.editor.getGame().getPawns().push(newPawn);
         tile.getPawns().push(newPawn);

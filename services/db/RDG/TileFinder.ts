@@ -31,5 +31,35 @@ export class TileFinder{
             catch(err){
               console.log("Connection failed")
             } 
+          }
+          public async findLast(){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-last-gameTiles',
+                    text: 'SELECT * FROM  "bachelorsThesis"."Tile" ORDER BY id DESC LIMIT 1',
+                    values: [],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Tile_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                    console.log('precital')
+                    ret.push(Tile_db.load(row))
+                });
+                console.log('query preslo')
+                if (ret.length >= 1){
+                  console.log('plne')
+                  return ret[0]
+                }
+                else{
+                  console.log('prazdne')
+                  return new Tile_db()
+                }
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
           }    
 }

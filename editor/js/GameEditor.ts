@@ -4,6 +4,7 @@ import { Game } from './Game.js'
 
 import {editTiles} from './TileEditor.js'
 import { Pawn } from './Pawn.js';
+import { timeStamp } from 'console';
 
 class GameEditor{
     private game= new Game();
@@ -15,6 +16,7 @@ class GameEditor{
     private startForPlayers:Array<string> = []
     private endForPlayers:Array<string> = []
     private enabledForPlayers:Array<string> = []
+    private nextTileId = 0;
     constructor(){
         this.initNewGame()
     }
@@ -27,6 +29,7 @@ class GameEditor{
     initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
         let tileNumber = this.nextTileNumber()
         let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
+        
         if (stroke!=0){
             newTile.setStroke(stroke)
             newTile.setStrokeColor(strokeColor)
@@ -42,13 +45,18 @@ class GameEditor{
         newTile.setShape(shape)
         if (add){
             this.game.addTile(newTile)
+            this.nextTileId++;
         }
         
         newTile.drawTile(canvas,ctx,false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber)
         newTile.setFollowingTileNumber(tileNumber+1)
+        
         console.log('cislo dalsieho je :'+ this.game.getNextTileNumber())
+        newTile.setId(this.nextTileId)
+        console.log('pridany je ')
+        console.log(newTile)
         return newTile
   }
     findTile(event:MouseEvent){
@@ -159,6 +167,17 @@ class GameEditor{
             console.log('rovna sa '+tile.getTileNumber()+' : '+ (tile.getTileNumber() === num))
         })
         return res
+    }
+    findTileById(id:number):Tile{
+        let t:Tile = new Tile('',0,0,0,0,0,0,0,'',0)
+        this.game.getTiles().forEach((tile:Tile)=>{
+            if (tile.getId() == id){
+                t = tile
+              
+            }
+      
+        })
+        return t
     }
     
    

@@ -32,5 +32,8 @@ export class TileFinder{
             catch(err){
               console.log("Connection failed")
             } 
-          }    
+          }
+    
+      
+      
 }

@@ -34,6 +34,14 @@ var Game = /** @class */ (function () {
             this.tiles.forEach(function (tile) {
                 savedTiles_1.push(tile.JSONfyTile());
             });
+            var savedPawns_1 = [];
+            this.pawns.forEach(function (pawn) {
+                savedPawns_1.push(pawn.JSONfyPawn());
+            });
+            var savedPawnStyles_1 = [];
+            Array.from(this.pawnStyle.values()).forEach(function (pawnStyle) {
+                savedPawnStyles_1.push(pawnStyle.JSONfyStyle());
+            });
             canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
                 author: this.author,
                 background: {
@@ -41,7 +49,9 @@ var Game = /** @class */ (function () {
                     color: this.background.getColor()
                 },
                 tiles: savedTiles_1,
-                numOfPlayers: this.numOfPlayers
+                numOfPlayers: this.numOfPlayers,
+                pawns: savedPawns_1,
+                styles: savedPawnStyles_1
             });
             window.location.replace('/');
         }

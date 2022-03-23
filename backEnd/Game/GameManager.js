@@ -40,13 +40,15 @@ var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
 var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
+var PawnFinder_js_1 = require("../../services/db/RDG/PawnFinder.js");
+var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
 var Room = require('./Room.js');
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
     GameManager.loadGame = function (name) {
         return __awaiter(this, void 0, void 0, function () {
-            var game, tiles, background;
+            var game, tiles, background, pawns, styles;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
@@ -58,7 +60,13 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findByName(name)];
                     case 3:
                         background = _a.sent();
-                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0] }];
+                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
+                    case 4:
+                        pawns = _a.sent();
+                        return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByName(name)];
+                    case 5:
+                        styles = _a.sent();
+                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles }];
                 }
             });
         });
@@ -71,6 +79,7 @@ var GameManager = /** @class */ (function () {
                 room = new Room(id, numOfPlayers, name);
                 console.log(room);
                 this.activeRooms.push(room);
+                //+ pushni hraca
                 return [2 /*return*/, room];
             });
         });

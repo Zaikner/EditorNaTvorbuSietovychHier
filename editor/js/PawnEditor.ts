@@ -35,7 +35,7 @@ function insertPawn(event:MouseEvent){
     }
     if(tile!=undefined){
         let player:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('playerSelect')!
-        let newPawn = new Pawn(1,player!.value,tile)
+        let newPawn = new Pawn(player!.value,tile)
         //newPawn.color = colorPicker!.value
         editor.getGame().getPawns().push(newPawn)
         tile.getPawns().push(newPawn)

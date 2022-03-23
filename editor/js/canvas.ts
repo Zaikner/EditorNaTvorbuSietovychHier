@@ -20,12 +20,10 @@ const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
 
 editorSocket.on('connected',(msg)=>{
-  console.log('Editor client connected')
-  console.log(msg)
   msg.tiles.forEach((tile:any) =>{
     let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
   
-    
+     addedTile.setId(tile.id)
      addedTile.setStroke(tile.stroke)
      addedTile.setStrokeColor(tile.strokeColor)
      addedTile.setShape(tile.shape)
@@ -61,14 +59,13 @@ editorSocket.on('connected',(msg)=>{
      addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
    
     editor.getGame().addTile(addedTile)
+    
     reload(editor,ctx)
   })
   let background = new Background()
-  console.log('background je je chyba')
-  console.log(msg.background)
-  console.log(msg)
+
   background.setColor(msg.background.color)
-  console.log('background nie je chyba')
+
   if (msg.background.image!='none'){
     let backImage = new Image()
     backImage.src = msg.background.image
@@ -76,7 +73,7 @@ editorSocket.on('connected',(msg)=>{
       background.setBackgroundImage(backImage)
       
       editor.getGame().setBackground(background)
-      console.log('obrazok ready')
+    
       reload(editor,ctx)
     }
       
@@ -84,10 +81,6 @@ editorSocket.on('connected',(msg)=>{
   }
  
     
-  console.log(background)
-  console.log('sprava je pod')
-  console.log(msg.background)
-  console.log('farba je: '+msg.background.color)
   editor.getGame().setBackground(background)
   //editor.getGame().setBackground(msg.background)
 
@@ -95,13 +88,34 @@ editorSocket.on('connected',(msg)=>{
   editor.getGame().setName(msg.game.name)
   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
   initGameInfo(msg.game.name)
+
+  let i = 0
+  console.log(msg.pawns)
+  msg.pawns.forEach((pawn:any) => {
+    i++;
+    let tile = editor.findTileById(pawn.tileId)!
+    
+     let p = new Pawn(pawn.player,tile)
+     editor.getGame().getPawns().push(p)
+     tile.getPawns().push(p)
+     console.log('vlozilo pawn do robka')
+     console.log(i)
+    
+  });
+  msg.styles.forEach((style:any) => {
+    
+    let p = new PawnStyle(style.player,style.color,style.type)
+    //p.setImage(image)
+    editor.getGame().getPawnStyle().set(style.player,p)
+
+    console.log('setlo styl')
+    console.log(editor.getGame().getPawnStyle().get(style.player))
+  });
   //reload(editor,ctx)
   //edit()
+  console.log(editor.getGame())
 })
 
-
-//editorSocket.on('connected',()=>{console.log('pripojil Client Editor!')})
-console.log(window.location.href.split('/'))
 let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
@@ -113,28 +127,23 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else{
   const params = new URLSearchParams(window.location.search);
-  console.log(params.get('name'))
-  console.log('room je :')
-  console.log(params.get('room'))
-  console.log(params.get('room') == null)
-  editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
-  if (params.get('room') == null){
+
+  if (params.get('id') == null){
+    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
     //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
   }
   else{
+    initDice()
     editorSocket.emit('load room-info',{room:params.get('room')})
     //editorSocket.emit('load room-game',{room:params.get('room')})
     //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
   }
-  initDice()
+  
 }
 
-editorSocket.on('loaded game',()=>{
-  console.log('Editor client connected')
-  //edit()
-})
+
 editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)})
 editorSocket.on('loadedAnswerQuestions',(data)=>{askQuestion(data)})
 
@@ -142,7 +151,7 @@ editorSocket.on('loadedAnswerQuestions',(data)=>{askQuestion(data)})
 
 function edit(){
   mainMenu();
-  console.log('vykonal edit')
+  
 document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
 document.getElementById('insertTiles')!.addEventListener('click',function(){insertTilesMenu();} );
 document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
@@ -206,16 +215,15 @@ numOfPlayersSlider.oninput =function(){
     for (let i = 0; i < playerTokens.length - number;i++){
       playerTokens.pop()
       editor.getGame().getPawnStyle().delete('Player '+(playerTokens.length))
-      console.log(editor.getGame().getPawnStyle())
-      console.log('odobral')
+     
     }
   }
   if (number > playerTokens.length){
     for (let i = 0; i < number - playerTokens.length;i++){
       playerTokens.push('Player '+ (playerTokens.length+1))
-      console.log('pridal')
+      
       editor.getGame().getPawnStyle().set('Player '+(playerTokens.length),new PawnStyle('Player '+(playerTokens.length),'#000000','type1'))
-      console.log(editor.getGame().getPawnStyle())
+     
       //editor.getGame().getPawnStyle().Player
     }
   }
@@ -277,11 +285,9 @@ function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
       editor.getGame().setInitSizeY(window.innerHeight)
      }
      editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
-     console.log(window.innerWidth/ 3 * 2-30)
-     console.log(editor.getGame().getInitSizeX())
+   
      editor.getGame().setScaleY(window.innerHeight/editor.getGame().getInitSizeY())
-     console.log( 'x je: '+editor.getGame().getScaleX())
-     console.log( 'y je: '+editor.getGame().getScaleY())
+     
    }
    
   
@@ -294,9 +300,9 @@ function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
 
 function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
 { 
-  console.log(ctx)
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  console.log(editor.getGame().getBackground())
+
   if (editor.getGame().getBackground() != undefined){
     editor.getGame().getBackground().draw()
   }

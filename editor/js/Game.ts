@@ -36,6 +36,14 @@ class Game{
             this.tiles.forEach((tile:Tile)=>{
                 savedTiles.push(tile.JSONfyTile())
             })
+            let savedPawns:any = []
+            this.pawns.forEach((pawn:Pawn)=>{
+                savedPawns.push(pawn.JSONfyPawn())
+            })
+            let savedPawnStyles:any = []
+            Array.from(this.pawnStyle.values()).forEach((pawnStyle:PawnStyle)=>{
+                savedPawnStyles.push(pawnStyle.JSONfyStyle())
+            })
             editorSocket.emit('saveGame',{name:this.name,
                                           author:this.author,
                                           background:{
@@ -44,6 +52,8 @@ class Game{
                                           },
                                           tiles:savedTiles,
                                           numOfPlayers:this.numOfPlayers,
+                                          pawns:savedPawns,
+                                          styles:savedPawnStyles
                                         })
             window.location.replace('/')
         }

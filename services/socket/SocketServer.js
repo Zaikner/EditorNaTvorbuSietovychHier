@@ -39,10 +39,13 @@ exports.__esModule = true;
 var Game_db_1 = require("../db/RDG/Game_db");
 var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
+var TileFinder_1 = require("../db/RDG/TileFinder");
 var Question_1 = require("../db/RDG/Question");
 var QuestionOption_1 = require("../db/RDG/QuestionOption");
 var QuestionFinder_1 = require("../db/RDG/QuestionFinder");
 var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder");
+var Pawn_1 = require("../db/RDG/Pawn");
+var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
 var GameManager = require('../../backEnd/Game/GameManager.js');
@@ -56,9 +59,9 @@ var ServerSocket = /** @class */ (function () {
             console.log(socket.id);
             socket.emit('pipi');
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, _a, _b, _c, _d, _e;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                var acc, _a, _b, _c, _d, _e, _f, _g;
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
                         case 0:
                             console.log('aspon emitol load game');
                             acc = AccountManager.getAccountByClientId(msg.id);
@@ -73,12 +76,16 @@ var ServerSocket = /** @class */ (function () {
                             // let game = await GameFinder.getIntance().findByName(msg.name)
                             // let tt =await TileFinder.getIntance().findByName(msg.name)
                             // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                            _b.apply(_a, [_c + (_f.sent())]);
-                            _d = this.emitToSpecificSocket;
-                            _e = [socket.id, 'connected'];
+                            _b.apply(_a, [_c + (_h.sent())]);
+                            _e = (_d = console).log;
                             return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 2:
-                            _d.apply(this, _e.concat([_f.sent()]));
+                            _e.apply(_d, [_h.sent()]);
+                            _f = this.emitToSpecificSocket;
+                            _g = [socket.id, 'connected'];
+                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
+                        case 3:
+                            _f.apply(this, _g.concat([_h.sent()]));
                             console.log('zapol som hru' + msg.name);
                             return [2 /*return*/];
                     }
@@ -87,52 +94,81 @@ var ServerSocket = /** @class */ (function () {
             socket.on('disconnect', function () {
                 console.log('user disconnected');
             });
-            socket.on('saveGame', function (data) {
-                console.log('odchytil');
-                console.log(data);
-                console.log('odchytil');
-                var g = new Game_db_1.Game_db();
-                g.setAuthor(data.author);
-                g.setName(data.name);
-                g.setNumOfPlayers(data.numOfPlayers);
-                data.tiles.forEach(function (tile) {
-                    var t = new Tile_db_1.Tile_db();
-                    t.setType(tile.type);
-                    t.setCenterX(tile.centerX);
-                    t.setCenterY(tile.centerY);
-                    t.setX1(tile.x1);
-                    t.setX2(tile.x2);
-                    t.setY1(tile.y1);
-                    t.setY2(tile.y2);
-                    t.setRadius(tile.radius);
-                    t.setIsOccupied(tile.isOccupied);
-                    t.setColor(tile.color);
-                    t.setStroke(tile.stroke);
-                    t.setStrokeColor(tile.strokeColor);
-                    t.setShape(tile.shape);
-                    t.setBackgroundFile(tile.backgroundFile);
-                    t.setPatternFile(tile.patternFile);
-                    t.setTileNumber(tile.tileNumber);
-                    t.setIsEnding(tile.isEnding);
-                    t.setIsEndingFor(tile.isEndingFor);
-                    t.setIsStarting(tile.isStarting);
-                    t.setIsStartingFor(tile.isStartingFor);
-                    t.setBelongTo(tile.belongTo);
-                    t.setCanOccupy(tile.canOccupy);
-                    t.setToogleNumber(tile.toggleNumber);
-                    t.setNumberingColor(tile.numberingColor);
-                    t.setFollowingTileNumber(tile.numberOfFollowingTile);
-                    t.setGameName(data.name);
-                    t.insert();
+            socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var last, lastId, g, b;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log('odchytil');
+                            console.log(data);
+                            console.log('odchytil');
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
+                        case 1:
+                            last = _a.sent();
+                            lastId = last === null || last === void 0 ? void 0 : last.getId();
+                            g = new Game_db_1.Game_db();
+                            g.setAuthor(data.author);
+                            g.setName(data.name);
+                            g.setNumOfPlayers(data.numOfPlayers);
+                            data.tiles.forEach(function (tile) {
+                                var t = new Tile_db_1.Tile_db();
+                                t.setId(tile.id + lastId);
+                                t.setType(tile.type);
+                                t.setCenterX(tile.centerX);
+                                t.setCenterY(tile.centerY);
+                                t.setX1(tile.x1);
+                                t.setX2(tile.x2);
+                                t.setY1(tile.y1);
+                                t.setY2(tile.y2);
+                                t.setRadius(tile.radius);
+                                t.setIsOccupied(tile.isOccupied);
+                                t.setColor(tile.color);
+                                t.setStroke(tile.stroke);
+                                t.setStrokeColor(tile.strokeColor);
+                                t.setShape(tile.shape);
+                                t.setBackgroundFile(tile.backgroundFile);
+                                t.setPatternFile(tile.patternFile);
+                                t.setTileNumber(tile.tileNumber);
+                                t.setIsEnding(tile.isEnding);
+                                t.setIsEndingFor(tile.isEndingFor);
+                                t.setIsStarting(tile.isStarting);
+                                t.setIsStartingFor(tile.isStartingFor);
+                                t.setBelongTo(tile.belongTo);
+                                t.setCanOccupy(tile.canOccupy);
+                                t.setToogleNumber(tile.toggleNumber);
+                                t.setNumberingColor(tile.numberingColor);
+                                t.setFollowingTileNumber(tile.numberOfFollowingTile);
+                                t.setGameName(data.name);
+                                t.insert();
+                            });
+                            g.insert();
+                            b = new Background_db_1.Background_db();
+                            b.setGameName(data.name);
+                            b.setColor(data.background.color);
+                            b.setImage(data.background.backgroundImage);
+                            b.insert();
+                            data.pawns.forEach(function (pawn) {
+                                var p = new Pawn_1.Pawn();
+                                // p.setColor(pawn.color)
+                                //p.setImage(pawn.image)
+                                p.setPlayer(pawn.player);
+                                p.setTileId(pawn.tileId + lastId);
+                                p.insert();
+                            });
+                            data.styles.forEach(function (style) {
+                                var s = new PawnStyle_1.PawnStyles();
+                                s.setGameName(data.name);
+                                s.setColor(style.color);
+                                s.setImage(style.image);
+                                s.setType(style.type);
+                                s.setPlayer(style.player);
+                                s.insert();
+                            });
+                            this.io.emit('chat message');
+                            return [2 /*return*/];
+                    }
                 });
-                g.insert();
-                var b = new Background_db_1.Background_db();
-                b.setGameName(data.name);
-                b.setColor(data.background.color);
-                b.setImage(data.background.backgroundImage);
-                b.insert();
-                _this.io.emit('chat message');
-            });
+            }); });
             socket.on('relog', function (msg) { return __awaiter(_this, void 0, void 0, function () {
                 var acc;
                 return __generator(this, function (_a) {

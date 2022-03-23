@@ -36,14 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.TileFinder = void 0;
+exports.PawnFinder = void 0;
 var DbConnect_1 = require("../DbConnect");
-var Tile_db_1 = require("./Tile_db");
-var TileFinder = /** @class */ (function () {
-    function TileFinder() {
+var Pawn_1 = require("./Pawn");
+var PawnFinder = /** @class */ (function () {
+    function PawnFinder() {
     }
-    TileFinder.getIntance = function () { return this.INSTANCE; };
-    TileFinder.prototype.findByName = function (name) {
+    PawnFinder.getIntance = function () { return this.INSTANCE; };
+    PawnFinder.prototype.findByName = function (name) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -54,8 +54,8 @@ var TileFinder = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 4, , 5]);
                         query = {
-                            name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
+                            name: 'select-account-name',
+                            text: 'SELECT * FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
                             values: [name]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -64,7 +64,7 @@ var TileFinder = /** @class */ (function () {
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
                                 console.log('precital');
-                                ret.push(Tile_db_1.Tile_db.load(row));
+                                ret.push(Pawn_1.Pawn.load(row));
                             })];
                     case 3:
                         _a.sent();
@@ -78,42 +78,7 @@ var TileFinder = /** @class */ (function () {
             });
         });
     };
-    TileFinder.prototype.findLast = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var client, query, results, ret, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        client = DbConnect_1.DbConnect.get();
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        query = {
-                            name: 'select-last-gameTiles',
-                            text: 'SELECT * FROM  "bachelorsThesis"."Tile" ORDER BY DESC LIMIT 1',
-                            values: []
-                        };
-                        return [4 /*yield*/, client.query(query)];
-                    case 2:
-                        results = _a.sent();
-                        ret = [];
-                        return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
-                                ret.push(Tile_db_1.Tile_db.load(row));
-                            })];
-                    case 3:
-                        _a.sent();
-                        return [2 /*return*/, ret];
-                    case 4:
-                        err_2 = _a.sent();
-                        console.log("Connection failed");
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    TileFinder.INSTANCE = new TileFinder();
-    return TileFinder;
+    PawnFinder.INSTANCE = new PawnFinder();
+    return PawnFinder;
 }());
-exports.TileFinder = TileFinder;
+exports.PawnFinder = PawnFinder;
