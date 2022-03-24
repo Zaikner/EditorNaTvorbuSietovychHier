@@ -214,8 +214,9 @@ class Tile{
     }
 
     drawPawns(ctx:CanvasRenderingContext2D){
-     
+        
         let drawn = 0
+        ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
         this.pawns.forEach((pawn) => {
             console.log('kresli babku')
             console.log(this)
@@ -286,6 +287,8 @@ class Tile{
         })
        console.log('spusitl draw pawns')
        console.log(this.pawns)
+       ctx.resetTransform();
+       ctx.restore()
     }
 
     isPointedAt(x:number,y:number){

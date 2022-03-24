@@ -188,6 +188,7 @@ var Tile = /** @class */ (function () {
     Tile.prototype.drawPawns = function (ctx) {
         var _this = this;
         var drawn = 0;
+        ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
         this.pawns.forEach(function (pawn) {
             console.log('kresli babku');
             console.log(_this);
@@ -252,6 +253,8 @@ var Tile = /** @class */ (function () {
         });
         console.log('spusitl draw pawns');
         console.log(this.pawns);
+        ctx.resetTransform();
+        ctx.restore();
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {

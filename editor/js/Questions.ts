@@ -127,13 +127,13 @@ function evaluateQuestion(){
        
         if ((button?.getAttribute('isAnswer') === 'true' && button?.classList.contains('active')) || (button?.getAttribute('isAnswer') === 'false' && !button?.classList.contains('active'))){
         
-            button!.classList.remove('btn-info')
+            button!.classList.remove('btn-light')
             button!.classList.add('btn-success')
             button!.classList.add('active')
         
         }
         else {
-            button!.classList.remove('btn-info')
+            button!.classList.remove('btn-light')
             button!.classList.add('btn-danger')
             button!.classList.add('active')
         }
