@@ -1,6 +1,7 @@
 import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
 import { spawnButton, spawnCanvas, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
+import { Tile } from "./Tile"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
 
@@ -44,6 +45,35 @@ function insertPawn(event:MouseEvent){
         console.log(newPawn)
     }
 }
+function deletePawn(event:MouseEvent){
+    console.log('deleteto')
+    let tiles = editor.getGame().getTiles()
+    let tile:Tile = undefined!
+    let coords = calibreEventCoords(event)
+    for (let i = tiles.length-1; i >= 0;i--){
+        if (tiles[i].isPointedAt(coords.x,coords.y)){
+            tile = tiles[i]
+            break
+        }
+    }
+    if(tile!=undefined){
+        console.log('nasiel tile')
+        let pawns = tile.getPawns()
+        let stop = false
+        let player:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('playerSelect')!
+        pawns.forEach((pawn:Pawn)=>{
+            if (pawn.player == player.value && !stop){
+                console.log('nasiel pawn')
+                stop = true
+                editor.getGame().removePawn(pawn)
+                tile.removePawn(pawn)
+            }
+        })
+       
+        reload(editor,ctx)
+      
+    }
+}
 function pawnEditMenu(){
     removeAllListenersAdded()
     removeAllButtons()
@@ -85,6 +115,9 @@ function pawnEditMenu(){
 function pawnDeleteMenu(){
     removeAllListenersAdded()
     removeAllButtons()
+    spawnParagraph(doc,'tileEditingPlace','','To which player it belong?')
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    canvas.addEventListener('click',deletePawn)
 
 }
 
@@ -177,4 +210,4 @@ function drawActualPawnLook(player:string){
     
     
 }
-export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn,drawPawnType1}
+export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,insertPawn,drawPawnType1,deletePawn}

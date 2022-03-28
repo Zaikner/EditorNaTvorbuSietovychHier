@@ -337,7 +337,9 @@ class Tile{
                 id:this.id}
             
     }
-
+    removePawn(pawn:Pawn){
+        this.pawns = this.pawns.filter((p) => {return p != pawn});
+    }
     public setStroke(newStroke:number){
         this.stroke = newStroke
     }

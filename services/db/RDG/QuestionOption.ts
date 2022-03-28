@@ -50,7 +50,37 @@ export class QuestionOption{
               .then((res:any) => console.log(res.rows[0]))
               .catch((e:Error) => console.error(e.stack))}
 
+    public update(){
+                let client = DbConnect.get()
+                console.log('updatol')
+                console.log(this)
+                    const query = {
+                        name: 'update-option',
+                        
+                        text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2, "questionId" = $3 WHERE id = $4;',
+                        values: [this.text,this.isAnswer,this.questionId,this.id],
+                      }
+                      client
+                      .query(query)
+                      .then((res:any) => console.log(res.rows[0]))
+                      .catch((e:Error) => console.error(e.stack))}
 
+    public delete(){
+                        let client = DbConnect.get()
+                        console.log('updatol')
+                        console.log(this)
+                            const query = {
+                                name: 'update-option',
+                                
+                                text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',
+                                values: [this.id],
+                              }
+                              client
+                              .query(query)
+                              .then((res:any) => console.log(res.rows[0]))
+                              .catch((e:Error) => console.error(e.stack))}
+
+    
     public static load(data:any){
                 let ret = new QuestionOption()
                 ret.setId(data.id)

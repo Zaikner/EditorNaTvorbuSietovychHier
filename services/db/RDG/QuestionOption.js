@@ -44,6 +44,32 @@ var QuestionOption = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
+    QuestionOption.prototype.update = function () {
+        var client = DbConnect_1.DbConnect.get();
+        console.log('updatol');
+        console.log(this);
+        var query = {
+            name: 'update-option',
+            text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2, "questionId" = $3 WHERE id = $4;',
+            values: [this.text, this.isAnswer, this.questionId, this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
+    QuestionOption.prototype["delete"] = function () {
+        var client = DbConnect_1.DbConnect.get();
+        console.log('updatol');
+        console.log(this);
+        var query = {
+            name: 'update-option',
+            text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',
+            values: [this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
     QuestionOption.load = function (data) {
         var ret = new QuestionOption();
         ret.setId(data.id);

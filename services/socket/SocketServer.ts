@@ -10,10 +10,14 @@ import { TileFinder } from "../db/RDG/TileFinder";
 import { Question } from "../db/RDG/Question";
 import { QuestionOption } from "../db/RDG/QuestionOption";
 import { QuestionFinder } from "../db/RDG/QuestionFinder";
-import { QuestionOptionFinder } from "../db/RDG/QuestionOptionFinder";
+
 import { QuestionWithAnswersFinder } from "../db/RDG/QuestionWithAnswersFinder";
 import { Pawn } from "../db/RDG/Pawn";
 import { PawnStyles } from "../db/RDG/PawnStyle";
+import { QuestionWithAnswers } from "../db/RDG/QuestionsWithAnswers";
+import { text } from "body-parser";
+import { addOption } from "../../editor/js/Questions";
+import { BlobOptions } from "buffer";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -130,10 +134,24 @@ class ServerSocket{
         console.log('pripojil'+acc)
       })
 
-      socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean}>,id:string})=>{
+      socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean}>,id:string,questionId:number})=>{
         let quest = new Question()
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
-        let id = lastQuest![0].getId()+1
+        let id = 0
+        if (data.questionId < 0){
+          
+          try{
+            id = lastQuest![0].getId()+1
+          }
+          catch{
+            id = 0
+          }
+        }
+        else{
+          id = data.questionId
+        }
+        
+       
         quest.setText(data.question)
         quest.setId(id)
         //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
@@ -149,10 +167,48 @@ class ServerSocket{
           option.insert()
         })
 
-        console.log(await QuestionWithAnswersFinder.getIntance().findAll())
+        //console.log(await QuestionWithAnswersFinder.getIntance().findAll())
       })
+      socket.on('editOption', async(data:{isAnswer:boolean,text:string,id:string})=>{
+        console.log('edituje')
+        let opt = new QuestionOption()
+        opt.setId(parseInt(data.id))
+        opt.setText(data.text)
+        opt.setIsAnswer(data.isAnswer)
+        opt.update()
+        
+      })
+      socket.on('editQuestion', async(data:{text:string,id:number})=>{
+        console.log('edituje')
+        let quest = new Question()
+        quest.setId(data.id)
+        quest.setText(data.text)
+        quest.update()
+        
+      })
+      socket.on('deleteQuestion', async(data:{id:string})=>{
+        console.log('edituje')
+        let opt = new QuestionOption()
+        opt.setId(parseInt(data.id))
+        opt.delete()
+        
+      })
+      socket.on('insertQuestion', async(data:{text:string,isAnswer:boolean})=>{
+        console.log('edituje')
+        let opt = new QuestionOption()
+        opt.setText(data.text)
+        opt.setIsAnswer(data.isAnswer)
+        opt.insert()
+        let last = (await QuestionFinder.getIntance().findWithLastId())![0].getId()
+        socket.edit('add Opt',{text:data.text,isAnswer:data.isAnswer,id:last+1})
+        //addOption('editQuestion',data.text,data.isAnswer,last+1)
+        
+      })
+      
       socket.on('loadQuestions',async()=>{
         let questions = await QuestionWithAnswersFinder.getIntance().findAll()
+        console.log('tieto nasiel')
+        console.log(questions)
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {
           data.push({
@@ -163,7 +219,7 @@ class ServerSocket{
             author: question.getAuthor(),
             isAnswer: question.getIsAnswer()})
         })
-      
+        
         socket.emit('loadedQuestions',data)
       })
 

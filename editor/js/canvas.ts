@@ -12,7 +12,7 @@ import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
-import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion} from "./Questions";
+import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation} from "./Questions";
 import { removeAllListeners } from "process";
 import { PawnStyle } from "./PawnStyle";
 const editor = new GameEditor()
@@ -146,6 +146,9 @@ else{
 
 editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)})
 editorSocket.on('loadedAnswerQuestions',(data)=>{askQuestion(data)})
+editorSocket.on('add Opt',(data:any) =>{
+  addOption('editQuestion',data.text,data.isAnswer,data.id)
+})
 
 
 
@@ -158,7 +161,11 @@ document.getElementById('moveTiles')!.addEventListener('click',function(){moveTi
 document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
-document.getElementById('questionManager')!.addEventListener('click',function(){editorSocket.emit('loadQuestions');} )
+document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
+                                                                                editorSocket.emit('loadQuestions');} )
+// document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
+// document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
+
 //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
 document.getElementById('generalInfoButton')!.addEventListener('click',function(){
   removeAllButtons()
@@ -167,8 +174,15 @@ document.getElementById('generalInfoButton')!.addEventListener('click',function(
 
 document.getElementById('answerButton')!.addEventListener('click',function(){evaluateQuestion();})
 document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:7})})
-document.getElementById('addButton')!.addEventListener('click',function(){addOption();})
-document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion();})
+document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
+document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
+document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation('questionOptions');})
+
+document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
+document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
+document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
+
+
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 document.getElementById('deletePawn')!.addEventListener('click',function(){pawnDeleteMenu()} );

@@ -119,6 +119,9 @@ else {
 }
 editorSocket.on('loadedQuestions', function (data) { (0, Questions_1.showAllQuestions)(data); });
 editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQuestion)(data); });
+editorSocket.on('add Opt', function (data) {
+    (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
+});
 function edit() {
     mainMenu();
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
@@ -126,7 +129,12 @@ function edit() {
     document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
     document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
-    document.getElementById('questionManager').addEventListener('click', function () { editorSocket.emit('loadQuestions'); });
+    document.getElementById('questionManager').addEventListener('click', function () {
+        elementDeleter('listContainer');
+        editorSocket.emit('loadQuestions');
+    });
+    // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
+    // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
     //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
     document.getElementById('generalInfoButton').addEventListener('click', function () {
         (0, TileEditor_js_1.removeAllButtons)();
@@ -135,8 +143,12 @@ function edit() {
     });
     document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
     document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 7 }); });
-    document.getElementById('addButton').addEventListener('click', function () { (0, Questions_1.addOption)(); });
-    document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(); });
+    document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
+    document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
+    document.getElementById('createQuestionButtonModal').addEventListener('click', function () { (0, Questions_1.initCreation)('questionOptions'); });
+    document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
+    document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
+    document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
     document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });

@@ -43,7 +43,7 @@ export class QuestionFinder{
                   }
                 var results = await  client.query(query)
                 var ret:Array<Question> = []
-              
+               
                 await results.rows.forEach((row:any) => {
                     console.log('precital')
                     ret.push(Question.load(row))

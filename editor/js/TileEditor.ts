@@ -6,7 +6,7 @@ import { editTrack, endDrawingPath } from './PathEditor.js'
 import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'
 import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
-import { insertPawn } from './PawnEditor.js'
+import { deletePawn, insertPawn } from './PawnEditor.js'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event)   
 reload(editor,ctx)
@@ -202,6 +202,7 @@ function insertTilesMenu():void{
     canvas.removeEventListener('click',moveEventHandler)
     canvas.removeEventListener('click',deleteHandler)
     canvas.removeEventListener('click',insertPawn)
+    canvas.removeEventListener('click',deletePawn)
     endDrawingPath()
   }
 

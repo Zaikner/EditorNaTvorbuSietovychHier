@@ -37,6 +37,17 @@ var Question = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Question.prototype.update = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'update-question',
+            text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,author = $2 WHERE id = $3;',
+            values: [this.text, this.author, this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Question.load = function (data) {
         var ret = new Question();
         ret.setId(data.id);

@@ -297,6 +297,9 @@ var Tile = /** @class */ (function () {
             numberOfFollowingTile: this.numberOfFollowingTile,
             id: this.id };
     };
+    Tile.prototype.removePawn = function (pawn) {
+        this.pawns = this.pawns.filter(function (p) { return p != pawn; });
+    };
     Tile.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
     };

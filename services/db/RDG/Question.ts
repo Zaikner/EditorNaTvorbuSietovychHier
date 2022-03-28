@@ -43,6 +43,19 @@ export class Question{
               .then((res:any) => console.log(res.rows[0]))
               .catch((e:Error) => console.error(e.stack))}
 
+    public update(){
+                let client = DbConnect.get()
+                    const query = {
+                        name: 'update-question',
+                        
+                        text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,author = $2 WHERE id = $3;',
+                        values: [this.text,this.author,this.id],
+                      }
+                      client
+                      .query(query)
+                      .then((res:any) => console.log(res.rows[0]))
+                      .catch((e:Error) => console.error(e.stack))}
+
 
     public static load(data:any){
                 let ret = new Question()

@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.QuestionWithAnswers = void 0;
+var DbConnect_1 = require("../DbConnect");
 var QuestionWithAnswers = /** @class */ (function () {
     function QuestionWithAnswers() {
         this.questionId = 0;
@@ -45,6 +46,17 @@ var QuestionWithAnswers = /** @class */ (function () {
     };
     QuestionWithAnswers.prototype.setIsAnswer = function (newAnswer) {
         this.isAnswer = newAnswer;
+    };
+    QuestionWithAnswers.prototype.deleteOptionsByQuestionId = function (questionId) {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'delete-option',
+            text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
+            values: [questionId]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
     QuestionWithAnswers.load = function (data) {
         console.log(data);

@@ -184,15 +184,26 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var quest, lastQuest, id, _a, _b;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                var quest, lastQuest, id;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
                             quest = new Question_1.Question();
                             return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findWithLastId()];
                         case 1:
-                            lastQuest = _c.sent();
-                            id = lastQuest[0].getId() + 1;
+                            lastQuest = _a.sent();
+                            id = 0;
+                            if (data.questionId < 0) {
+                                try {
+                                    id = lastQuest[0].getId() + 1;
+                                }
+                                catch (_b) {
+                                    id = 0;
+                                }
+                            }
+                            else {
+                                id = data.questionId;
+                            }
                             quest.setText(data.question);
                             quest.setId(id);
                             //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
@@ -205,10 +216,57 @@ var ServerSocket = /** @class */ (function () {
                                 console.log(option);
                                 option.insert();
                             });
-                            _b = (_a = console).log;
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
-                        case 2:
-                            _b.apply(_a, [_c.sent()]);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+            socket.on('editOption', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var opt;
+                return __generator(this, function (_a) {
+                    console.log('edituje');
+                    opt = new QuestionOption_1.QuestionOption();
+                    opt.setId(parseInt(data.id));
+                    opt.setText(data.text);
+                    opt.setIsAnswer(data.isAnswer);
+                    opt.update();
+                    return [2 /*return*/];
+                });
+            }); });
+            socket.on('editQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var quest;
+                return __generator(this, function (_a) {
+                    console.log('edituje');
+                    quest = new Question_1.Question();
+                    quest.setId(data.id);
+                    quest.setText(data.text);
+                    quest.update();
+                    return [2 /*return*/];
+                });
+            }); });
+            socket.on('deleteQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var opt;
+                return __generator(this, function (_a) {
+                    console.log('edituje');
+                    opt = new QuestionOption_1.QuestionOption();
+                    opt.setId(parseInt(data.id));
+                    opt["delete"]();
+                    return [2 /*return*/];
+                });
+            }); });
+            socket.on('insertQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+                var opt, last;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log('edituje');
+                            opt = new QuestionOption_1.QuestionOption();
+                            opt.setText(data.text);
+                            opt.setIsAnswer(data.isAnswer);
+                            opt.insert();
+                            return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findWithLastId()];
+                        case 1:
+                            last = (_a.sent())[0].getId();
+                            socket.edit('add Opt', { text: data.text, isAnswer: data.isAnswer, id: last + 1 });
                             return [2 /*return*/];
                     }
                 });
@@ -220,6 +278,8 @@ var ServerSocket = /** @class */ (function () {
                         case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
                         case 1:
                             questions = _a.sent();
+                            console.log('tieto nasiel');
+                            console.log(questions);
                             data = [];
                             questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
                                 data.push({

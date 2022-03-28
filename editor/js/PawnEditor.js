@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.drawPawnType1 = exports.insertPawn = exports.pawnDeleteMenu = exports.pawnEditMenu = exports.pawnInsertMenu = void 0;
+exports.deletePawn = exports.drawPawnType1 = exports.insertPawn = exports.pawnDeleteMenu = exports.pawnEditMenu = exports.pawnInsertMenu = void 0;
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
 var Pawn_1 = require("./Pawn");
@@ -43,6 +43,34 @@ function insertPawn(event) {
     }
 }
 exports.insertPawn = insertPawn;
+function deletePawn(event) {
+    console.log('deleteto');
+    var tiles = canvas_1.editor.getGame().getTiles();
+    var tile = undefined;
+    var coords = (0, canvas_1.calibreEventCoords)(event);
+    for (var i = tiles.length - 1; i >= 0; i--) {
+        if (tiles[i].isPointedAt(coords.x, coords.y)) {
+            tile = tiles[i];
+            break;
+        }
+    }
+    if (tile != undefined) {
+        console.log('nasiel tile');
+        var pawns = tile.getPawns();
+        var stop_1 = false;
+        var player_1 = canvas_1.doc.getElementById('playerSelect');
+        pawns.forEach(function (pawn) {
+            if (pawn.player == player_1.value && !stop_1) {
+                console.log('nasiel pawn');
+                stop_1 = true;
+                canvas_1.editor.getGame().removePawn(pawn);
+                tile.removePawn(pawn);
+            }
+        });
+        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+    }
+}
+exports.deletePawn = deletePawn;
 function pawnEditMenu() {
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
@@ -86,6 +114,9 @@ exports.pawnEditMenu = pawnEditMenu;
 function pawnDeleteMenu() {
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', 'To which player it belong?');
+    (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', [], canvas_1.editor.getGame().getPlayerTokens());
+    canvas_1.canvas.addEventListener('click', deletePawn);
 }
 exports.pawnDeleteMenu = pawnDeleteMenu;
 function drawStyles(color) {

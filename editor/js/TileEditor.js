@@ -170,6 +170,7 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('click', moveEventHandler);
     canvas_js_1.canvas.removeEventListener('click', deleteHandler);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.insertPawn);
+    canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.deletePawn);
     (0, PathEditor_js_1.endDrawingPath)();
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
