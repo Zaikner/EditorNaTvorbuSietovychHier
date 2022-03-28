@@ -64,10 +64,9 @@ function addOption(parent, txt, is, id) {
         editButton.textContent = 'Edit!';
         editButton.classList.add('btn');
         editButton.classList.add('btn-secondary');
-        editButton.type = 'button';
         editButton.addEventListener('click', function () {
             editOption(id, check, text);
-            $('#editModal').modal('show');
+            //$('#editModal').modal('show')
         });
         div.appendChild(editButton);
         var deleteButton = document.createElement('button');
@@ -112,6 +111,7 @@ function addOption(parent, txt, is, id) {
         // //deleteButton.classList.add('btn btn-secondary')
         // div.appendChild(insertButton)
         div.appendChild(deleteButton);
+        text.setAttribute('questionId', 'none');
     }
     div.style.marginBottom = '5px';
     (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(div);
@@ -132,7 +132,7 @@ function createQuestion(id) {
     console.log(newQuestions);
     for (var a = 0; a < newQuestions.length; a++) {
         var i = newQuestions[a];
-        if (document.getElementById('check' + i) != undefined) {
+        if (document.getElementById('check' + i) != undefined && document.getElementById('ans' + i).getAttribute('questionId') === 'none') {
             options.push({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value });
         }
         else {
@@ -143,6 +143,7 @@ function createQuestion(id) {
     var data = { question: '', options: options, id: localStorage.getItem('id'), questionId: id };
     data.question = document.getElementById('question').value;
     num = 0;
+    console.log('vklada otazky');
     console.log(data);
     canvas_1.editorSocket.emit('newQuestion', data);
 }
@@ -185,10 +186,13 @@ function showAllQuestions(data) {
     });
 }
 exports.showAllQuestions = showAllQuestions;
+var func = function () { };
 function editQuestionMenu(id, txt, elem) {
     var _a;
     (0, canvas_1.elementDeleter)('editQuestion');
-    document.getElementById('questionEditButton').addEventListener('click', function () { createQuestion(id); });
+    document.getElementById('questionEditButton').removeEventListener('click', func);
+    func = function () { createQuestion(id); };
+    document.getElementById('questionEditButton').addEventListener('click', func);
     newQuestions = [];
     num = 0;
     var div = canvas_1.doc.createElement('div');
@@ -224,12 +228,14 @@ function editQuestionMenu(id, txt, elem) {
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
 }
 function editOption(id, check, text) {
+    console.log('emitol edit option');
+    console.log({ id: id, isAnswer: check.checked, text: text.value });
     canvas_1.editorSocket.emit('editOption', { id: id, isAnswer: check.checked, text: text.value });
-    $('#editModal').modal('show');
+    //$('#editModal').modal('show')
 }
 function editQuestion(id, text) {
     canvas_1.editorSocket.emit('editQuestion', { id: id, text: text.value });
-    $('#editModal').modal('show');
+    //$('#editModal').modal('show')
 }
 function askQuestion(data) {
     var questions = new Map();

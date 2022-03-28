@@ -6,7 +6,7 @@ import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder
 
 import {doc, editorSocket, elementDeleter} from './canvas'
 import { spawnButton } from './Elements';
-import { removeAllButtons } from './TileEditor';
+import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 
 let num = 0
 let newQuestions:Array<number> = []
@@ -80,10 +80,10 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
         editButton.textContent = 'Edit!'
         editButton.classList.add('btn')
         editButton.classList.add('btn-secondary')
-        editButton.type = 'button'
+      
         editButton.addEventListener('click',function(){
             editOption(id,check,text)
-            $('#editModal').modal('show')
+            //$('#editModal').modal('show')
         })
         div.appendChild(editButton)
        
@@ -131,6 +131,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
         // //deleteButton.classList.add('btn btn-secondary')
         // div.appendChild(insertButton)
         div.appendChild(deleteButton)
+        text.setAttribute('questionId','none')
        
      }
 
@@ -152,7 +153,7 @@ function createQuestion(id:number){
     console.log(newQuestions)
     for (let a = 0; a < newQuestions.length;a++){
         let i = newQuestions[a]
-        if(<HTMLInputElement>document.getElementById('check'+i)!=undefined){
+        if(<HTMLInputElement>document.getElementById('check'+i)!=undefined && document.getElementById('ans'+i)!.getAttribute('questionId') === 'none'){
             options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value})
         }
         else{
@@ -165,6 +166,7 @@ function createQuestion(id:number){
     let data = {question:'',options:options,id:localStorage.getItem('id'),questionId:id}
     data.question = (<HTMLInputElement>document.getElementById('question')!).value
     num  = 0;
+    console.log('vklada otazky')
     console.log(data)
     editorSocket.emit('newQuestion',data)
 }
@@ -209,9 +211,13 @@ function showAllQuestions(data:any){
     })
 }
 
+let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
     elementDeleter('editQuestion')
-    document.getElementById('questionEditButton')!.addEventListener('click',function(){createQuestion(id);})
+    document.getElementById('questionEditButton')!.removeEventListener('click',func)
+    func = function(){createQuestion(id)}
+
+    document.getElementById('questionEditButton')!.addEventListener('click',func)
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -256,12 +262,14 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     
 }
 function editOption(id:number,check:HTMLInputElement,text:HTMLInputElement){  
+    console.log('emitol edit option')
+    console.log({id:id,isAnswer:check.checked,text:text.value})
     editorSocket.emit('editOption',{id:id,isAnswer:check.checked,text:text.value})
-    $('#editModal').modal('show')
+    //$('#editModal').modal('show')
 }
 function editQuestion(id:number,text:HTMLInputElement){
     editorSocket.emit('editQuestion',{id:id,text:text.value})
-    $('#editModal').modal('show')
+    //$('#editModal').modal('show')
 }
 function askQuestion(data:any){
     let questions:Map<number,HTMLDivElement> = new Map()

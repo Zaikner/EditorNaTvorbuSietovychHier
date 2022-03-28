@@ -224,6 +224,7 @@ var ServerSocket = /** @class */ (function () {
                 var opt;
                 return __generator(this, function (_a) {
                     console.log('edituje');
+                    console.log(data);
                     opt = new QuestionOption_1.QuestionOption();
                     opt.setId(parseInt(data.id));
                     opt.setText(data.text);
@@ -278,8 +279,6 @@ var ServerSocket = /** @class */ (function () {
                         case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
                         case 1:
                             questions = _a.sent();
-                            console.log('tieto nasiel');
-                            console.log(questions);
                             data = [];
                             questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
                                 data.push({

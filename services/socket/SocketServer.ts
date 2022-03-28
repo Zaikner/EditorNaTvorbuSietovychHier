@@ -171,6 +171,7 @@ class ServerSocket{
       })
       socket.on('editOption', async(data:{isAnswer:boolean,text:string,id:string})=>{
         console.log('edituje')
+        console.log(data)
         let opt = new QuestionOption()
         opt.setId(parseInt(data.id))
         opt.setText(data.text)
@@ -180,9 +181,11 @@ class ServerSocket{
       })
       socket.on('editQuestion', async(data:{text:string,id:number})=>{
         console.log('edituje')
+
         let quest = new Question()
         quest.setId(data.id)
         quest.setText(data.text)
+        
         quest.update()
         
       })
@@ -207,8 +210,7 @@ class ServerSocket{
       
       socket.on('loadQuestions',async()=>{
         let questions = await QuestionWithAnswersFinder.getIntance().findAll()
-        console.log('tieto nasiel')
-        console.log(questions)
+
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {
           data.push({

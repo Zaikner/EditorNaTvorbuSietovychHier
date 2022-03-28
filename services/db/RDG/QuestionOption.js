@@ -50,8 +50,8 @@ var QuestionOption = /** @class */ (function () {
         console.log(this);
         var query = {
             name: 'update-option',
-            text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2, "questionId" = $3 WHERE id = $4;',
-            values: [this.text, this.isAnswer, this.questionId, this.id]
+            text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2 WHERE id = $3;',
+            values: [this.text, this.isAnswer, this.id]
         };
         client
             .query(query)
