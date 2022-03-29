@@ -179,6 +179,7 @@ class GameEditor{
         })
         return t
     }
+  
     
    
   getGame(){

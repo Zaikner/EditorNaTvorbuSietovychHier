@@ -24,6 +24,7 @@ var Game = /** @class */ (function () {
         this.scaleX = 1;
         this.scaleY = 1;
         this.pawns = [];
+        this.rules = '';
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -51,7 +52,8 @@ var Game = /** @class */ (function () {
                 tiles: savedTiles_1,
                 numOfPlayers: this.numOfPlayers,
                 pawns: savedPawns_1,
-                styles: savedPawnStyles_1
+                styles: savedPawnStyles_1,
+                rules: this.rules
             });
             window.location.replace('/');
         }
@@ -92,6 +94,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getName = function () {
         return this.name;
+    };
+    Game.prototype.setRules = function (newRules) {
+        this.rules = newRules;
+    };
+    Game.prototype.getRules = function () {
+        return this.rules;
     };
     Game.prototype.setName = function (newName) {
         this.name = newName;

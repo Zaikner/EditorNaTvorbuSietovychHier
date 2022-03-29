@@ -46,6 +46,7 @@ var QuestionFinder_1 = require("../db/RDG/QuestionFinder");
 var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder");
 var Pawn_1 = require("../db/RDG/Pawn");
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
+var Rules_1 = require("../db/RDG/Rules");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
 var GameManager = require('../../backEnd/Game/GameManager.js');
@@ -95,7 +96,7 @@ var ServerSocket = /** @class */ (function () {
                 console.log('user disconnected');
             });
             socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var last, lastId, g, b;
+                var last, lastId, g, b, rule;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -164,25 +165,26 @@ var ServerSocket = /** @class */ (function () {
                                 s.setPlayer(style.player);
                                 s.insert();
                             });
+                            rule = new Rules_1.Rules();
+                            rule.setGameName(data.name);
+                            rule.setText(data.rules);
+                            rule.upsert();
                             this.io.emit('chat message');
                             return [2 /*return*/];
                     }
                 });
             }); });
-            socket.on('relog', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc;
-                return __generator(this, function (_a) {
-                    console.log('skusil relognut' + msg.id);
-                    acc = AccountManager.getAccountByClientId(msg.id);
-                    if (acc === undefined) {
-                        return [2 /*return*/];
-                    }
-                    AccountManager.login(acc);
-                    socket.emit('set cookie');
-                    console.log('pripojil' + acc);
-                    return [2 /*return*/];
-                });
-            }); });
+            // socket.on('relog',async(msg:{id:string})=>{
+            //   console.log('skusil relognut'+msg.id)
+            //   //console.log(msg.id)
+            //   let acc = AccountManager.getAccountByClientId(msg.id)
+            //   if(acc === undefined){
+            //     return
+            //   }
+            //   AccountManager.login(acc)
+            //   socket.emit('set cookie')
+            //   console.log('pripojil'+acc)
+            // })
             socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var quest, lastQuest, id;
                 return __generator(this, function (_a) {
@@ -254,6 +256,16 @@ var ServerSocket = /** @class */ (function () {
                     return [2 /*return*/];
                 });
             }); });
+            // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{
+            //   console.log('upsertuje Rule')
+            //   let find = await  RulesFinder.getIntance().findByName(data.gameName)
+            //   let rule = new Rules()
+            //   rule.setGameName(data.gameName)
+            //   rule.setText(data.text)
+            //   if (find!.length > 0){
+            //     rule.setId(find![0].getId())
+            //   }
+            // })
             socket.on('insertQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var opt, last;
                 return __generator(this, function (_a) {

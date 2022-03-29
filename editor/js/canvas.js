@@ -123,6 +123,7 @@ editorSocket.on('add Opt', function (data) {
     (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
 });
 function edit() {
+    var _a, _b;
     mainMenu();
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
     document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
@@ -149,6 +150,13 @@ function edit() {
     document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
     document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
+    (_a = document.getElementById('questionRuleButton')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        editor.getGame().setRules(document.getElementById("ruleInput").value);
+    });
+    (_b = document.getElementById("showRulesButton")) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+        document.getElementById("ruleInput").value = editor.getGame().getRules();
+        $('#rulesModal').modal('show');
+    });
     document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });

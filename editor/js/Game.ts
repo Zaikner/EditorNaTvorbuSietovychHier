@@ -23,6 +23,7 @@ class Game{
     private scaleX:number = 1;
     private scaleY:number = 1;
     private pawns:Array<Pawn> = []
+    private rules:string = ''
     
 
     constructor(){}
@@ -53,7 +54,8 @@ class Game{
                                           tiles:savedTiles,
                                           numOfPlayers:this.numOfPlayers,
                                           pawns:savedPawns,
-                                          styles:savedPawnStyles
+                                          styles:savedPawnStyles,
+                                          rules:this.rules
                                         })
             window.location.replace('/')
         }
@@ -96,6 +98,12 @@ class Game{
     }
     getName(){
         return this.name;
+    }
+    setRules(newRules:string){
+        this.rules = newRules;
+    }
+    getRules(){
+        return this.rules;
     }
     setName(newName:string){
         this.name = newName

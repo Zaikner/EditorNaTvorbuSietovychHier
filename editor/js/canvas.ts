@@ -15,6 +15,7 @@ import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation} from "./Questions";
 import { removeAllListeners } from "process";
 import { PawnStyle } from "./PawnStyle";
+
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
@@ -181,7 +182,14 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
-
+document.getElementById('questionRuleButton')?.addEventListener('click',function(){
+ 
+  editor.getGame().setRules((<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value)
+})
+document.getElementById("showRulesButton")?.addEventListener('click',function(){
+  (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
+  $('#rulesModal').modal('show')
+})
 
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );

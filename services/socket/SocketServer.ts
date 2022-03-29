@@ -18,6 +18,8 @@ import { QuestionWithAnswers } from "../db/RDG/QuestionsWithAnswers";
 import { text } from "body-parser";
 import { addOption } from "../../editor/js/Questions";
 import { BlobOptions } from "buffer";
+import { Rules } from "../db/RDG/Rules";
+import { RulesFinder } from "../db/RDG/RulesFinder";
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -118,21 +120,26 @@ class ServerSocket{
           s.setPlayer(style.player)
           s.insert()
         });
+        let rule = new Rules()
+        rule.setGameName(data.name)
+        rule.setText(data.rules)
+        rule.upsert()
+
         this.io.emit('chat message');
       });
 
 
-      socket.on('relog',async(msg:{id:string})=>{
-        console.log('skusil relognut'+msg.id)
-        //console.log(msg.id)
-        let acc = AccountManager.getAccountByClientId(msg.id)
-        if(acc === undefined){
-          return
-        }
-        AccountManager.login(acc)
-        socket.emit('set cookie')
-        console.log('pripojil'+acc)
-      })
+      // socket.on('relog',async(msg:{id:string})=>{
+      //   console.log('skusil relognut'+msg.id)
+      //   //console.log(msg.id)
+      //   let acc = AccountManager.getAccountByClientId(msg.id)
+      //   if(acc === undefined){
+      //     return
+      //   }
+      //   AccountManager.login(acc)
+      //   socket.emit('set cookie')
+      //   console.log('pripojil'+acc)
+      // })
 
       socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean}>,id:string,questionId:number})=>{
         let quest = new Question()
@@ -196,6 +203,18 @@ class ServerSocket{
         opt.delete()
         
       })
+      // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{
+      //   console.log('upsertuje Rule')
+      //   let find = await  RulesFinder.getIntance().findByName(data.gameName)
+      //   let rule = new Rules()
+      //   rule.setGameName(data.gameName)
+      //   rule.setText(data.text)
+      //   if (find!.length > 0){
+      //     rule.setId(find![0].getId())
+      //   }
+       
+        
+      // })
       socket.on('insertQuestion', async(data:{text:string,isAnswer:boolean})=>{
         console.log('edituje')
         let opt = new QuestionOption()

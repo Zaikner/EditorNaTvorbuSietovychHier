@@ -14,14 +14,14 @@
           <a class="navbar-brand" href="#">Editor</a>
       </div>
       </div>
-
+      <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="showRulesButton" style=" width:500px; margin-right: 10px;">Show Rules</button>
       <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
         <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Rules editing place
+          Event editing place
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-          <li><button type="button" class="btn btn-secondary dropdown-item" id="insertRule" >Insert Rules</button></li>
-          <li><button type="button" class="btn btn-secondary dropdown-item" id="editRule" >Edit Rules</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="insertRule" >Insert Event</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="editRule" >Edit Event</button></li>
         </ul>
       </li>
       <!-- <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
@@ -63,7 +63,7 @@
           </ul>
         </li>
 
-        <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="generalInfoButton" style=" width:200px; margin-right: 10px;">General info</button>
+        <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="generalInfoButton" style=" width:200px; margin-right: 10px;" >General info</button>
       
       <form action="/" method="get">
         <button type="submit" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:200px; margin-right: 10px;">Main Menu</button>
@@ -276,7 +276,39 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="rulesModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" style=" width: 100vh; height: 100vh;">
+    <div class="modal-content" style="background-color: #292b2c; width: 100vh; ">
+      <div class="modal-header">
+    
+        <div class="container"  style="text-align: center;">
+          <h5 class="modal-title" id="modalHeader" style="color: white; text-align: center;">Game rules!</h5>
+          </div>
+       
+        
+      </div>
+      <div class="modal-body" id="modalBody">
+        <textarea style="width: 100%; height: 50vh;" id="ruleInput"></textarea>
+        <div class="container"  style="text-align: center;">
+          <button type="button" class="btn btn-secondary" onclick="$('#rulesModal').modal('hide');">Ok!</button>
+          <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
+          </div>
+        </div>
 
+    </div>
+      <!-- <div class="container" id = 'containerAdd' style="text-align: center;"></div> -->
+     
+    
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+      
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
 
         
         </div>
