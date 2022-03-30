@@ -20,6 +20,13 @@ class GameEditor{
     constructor(){
         this.initNewGame()
     }
+    nullEditor(){
+        this.startForPlayers = []
+        this.endForPlayers = []
+        this.enabledForPlayers = []
+        this.image = undefined!
+        this.pattern = undefined!
+    }
 
     initNewGame(){
         this.game = new Game()

@@ -6,6 +6,7 @@ var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Warning_js_1 = require("./Warning.js");
+var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
 var Game = /** @class */ (function () {
     function Game() {
@@ -25,6 +26,7 @@ var Game = /** @class */ (function () {
         this.scaleY = 1;
         this.pawns = [];
         this.rules = '';
+        this.numberOfStartingPawns = 1;
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -56,6 +58,12 @@ var Game = /** @class */ (function () {
                 rules: this.rules
             });
             window.location.replace('/');
+        }
+    };
+    Game.prototype.insertPawns = function (player, tile) {
+        for (var i = 0; i < this.numberOfStartingPawns; i++) {
+            var pwn = new Pawn_js_1.Pawn(player, tile);
+            this.pawns.push(pwn);
         }
     };
     Game.prototype.removeTile = function (tile) {
@@ -142,6 +150,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getScaleY = function () {
         return this.scaleY;
+    };
+    Game.prototype.setNumberOfStartingPawns = function (newNum) {
+        return this.numberOfStartingPawns = newNum;
+    };
+    Game.prototype.getNumberOfStartingPawns = function () {
+        return this.numberOfStartingPawns;
     };
     Game.prototype.setScaleY = function (newCoord) {
         return this.scaleY = newCoord;

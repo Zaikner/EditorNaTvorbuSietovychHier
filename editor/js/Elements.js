@@ -125,6 +125,15 @@ function spawnMultiSelect(doc, parent, id, options, type) {
         option.id = types[i];
         option.style.backgroundColor = 'white';
         option.classList.add("dropdown-item", 'btn');
+        if (type == 'start' && canvas_1.editor.getStartForPlayers().includes(types[i])) {
+            option.style.backgroundColor = 'yellow';
+        }
+        if (type == 'end' && canvas_1.editor.getEndForPlayers().includes(types[i])) {
+            option.style.backgroundColor = 'yellow';
+        }
+        if (type == 'enabled' && canvas_1.editor.getEnabledForPlayers().includes(types[i])) {
+            option.style.backgroundColor = 'yellow';
+        }
         option.addEventListener('click', function (e) {
             if (type == 'start') {
                 if (canvas_1.editor.getStartForPlayers().includes(types[i])) {

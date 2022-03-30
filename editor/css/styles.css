@@ -45,7 +45,7 @@ canvas{
 #canvasPlace{
   background-color:#292b2c;
 }
-#numOfPlayers,#sizeOfTileSlider,#sizeOfOutlineSlider{
+#numOfPlayers,#sizeOfTileSlider,#sizeOfOutlineSlider,#tileNumberSlider{
   background-color:white;
   width: 80%;
 }

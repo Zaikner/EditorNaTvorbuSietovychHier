@@ -11,7 +11,8 @@ export class Pawn{
     constructor(player:string,tile:Tile){
         this.player = player
         this.tile = tile
-        this.tileId = tile.getId()     
+        this.tileId = tile.getId()
+        tile.getPawns().push(this)     
     }
 
 

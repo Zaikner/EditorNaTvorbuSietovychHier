@@ -183,15 +183,28 @@ function mainMenu() {
     text.textContent = 'Počet hráčov:';
     document.getElementById("numOfPlayersPlace").appendChild(text);
     document.getElementById("numOfPlayersPlace").appendChild(numShower);
-    numOfPlayersSlider.oninput = function () {
+    numOfPlayersSlider.onclick = function () {
         document.getElementById("numShower").textContent = numOfPlayersSlider.value;
         editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value));
         var number = parseInt(numOfPlayersSlider.value);
         var playerTokens = editor.getGame().getPlayerTokens();
         if (number < playerTokens.length) {
-            for (var i = 0; i < playerTokens.length - number; i++) {
+            var _loop_1 = function (i) {
                 playerTokens.pop();
-                editor.getGame().getPawnStyle()["delete"]('Player ' + (playerTokens.length));
+                editor.getGame().getPawnStyle()["delete"]('Player ' + (playerTokens.length + 1));
+                var rem = [];
+                editor.getGame().getPawns().forEach(function (pawn) {
+                    if (pawn.player == ('Player ' + (playerTokens.length + 1))) {
+                        rem.push(pawn);
+                    }
+                });
+                rem.forEach(function (pawn) {
+                    editor.getGame().removePawn(pawn);
+                    pawn.tile.removePawn(pawn);
+                });
+            };
+            for (var i = 0; i < playerTokens.length - number; i++) {
+                _loop_1(i);
             }
         }
         if (number > playerTokens.length) {
@@ -201,7 +214,10 @@ function mainMenu() {
                 //editor.getGame().getPawnStyle().Player
             }
         }
+        console.log(playerTokens);
+        console.log(editor.getGame().getPawnStyle());
         editor.getGame().setPlayerTokens(playerTokens);
+        reload(editor, ctx);
     };
     document.getElementById("numOfPlayersPlace").appendChild(numOfPlayersSlider);
     var gameName = document.createElement('input');
@@ -220,6 +236,61 @@ function mainMenu() {
     text.textContent = 'Typ hry:';
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
+    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Set number of pawns per starting tile');
+    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '0', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
+    slid.onchange = function () {
+        var max = parseInt(slid.value);
+        if (max > editor.getGame().getNumberOfStartingPawns()) {
+            editor.getGame().getPlayerTokens().forEach(function (player) {
+                for (var i = 0; i < (max - editor.getGame().getNumberOfStartingPawns()); i++) {
+                    editor.getGame().getTiles().forEach(function (tile) {
+                        if (tile.getIsStartingFor().includes(player)) {
+                            var newPawn = new Pawn_1.Pawn(player, tile);
+                            editor.getGame().getPawns().push(newPawn);
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            editor.getGame().getPlayerTokens().forEach(function (player) {
+                var num = 0;
+                var rem = [];
+                //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
+                editor.getGame().getTiles().forEach(function (tile) {
+                    num = 0;
+                    tile.getPawns().forEach(function (pawn) {
+                        if (pawn.player == player) {
+                            num++;
+                            if (num > max) {
+                                rem.push(pawn);
+                            }
+                        }
+                        rem.forEach(function (pawn) {
+                            editor.getGame().removePawn(pawn);
+                            pawn.tile.removePawn(pawn);
+                        });
+                    });
+                });
+                //     editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+                //       if (pawn.player == player){
+                //         num++;
+                //         if (num > max){
+                //           rem.push(pawn)
+                //         }
+                //       }
+                //     })
+                //     rem.forEach((pawn:Pawn)=>{
+                //       editor.getGame().removePawn(pawn)
+                //       pawn.tile.removePawn(pawn)
+                //     })
+            });
+        }
+        editor.getGame().setNumberOfStartingPawns(max);
+        console.log(editor.getGame().getNumberOfStartingPawns());
+        console.log(editor.getGame().getPawns());
+        reload(editor, ctx);
+    };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], 'Save game to database!', function () {
         editor.getGame().saveGame();
         //window.location.replace('/')

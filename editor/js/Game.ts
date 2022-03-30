@@ -24,6 +24,7 @@ class Game{
     private scaleY:number = 1;
     private pawns:Array<Pawn> = []
     private rules:string = ''
+    private numberOfStartingPawns:number = 1;
     
 
     constructor(){}
@@ -60,6 +61,13 @@ class Game{
             window.location.replace('/')
         }
         
+       
+    }
+    insertPawns(player:string,tile:Tile){
+        for (let i = 0; i<this.numberOfStartingPawns; i++){
+            let pwn = new Pawn(player,tile)
+            this.pawns.push(pwn)
+        }
        
     }
     removeTile(tile:Tile){
@@ -149,6 +157,12 @@ class Game{
     }
     getScaleY(){
         return this.scaleY
+    }
+    setNumberOfStartingPawns(newNum:number){
+        return this.numberOfStartingPawns = newNum
+    }
+    getNumberOfStartingPawns(){
+        return this.numberOfStartingPawns
     }
     setScaleY(newCoord:number){
         return this.scaleY = newCoord

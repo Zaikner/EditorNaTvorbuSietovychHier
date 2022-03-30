@@ -1,3 +1,4 @@
+import e = require("express");
 import { editor } from "./canvas";
 import { showActualState } from "./TileEditor";
 
@@ -132,6 +133,18 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array
         option.id = types[i];
         option.style.backgroundColor = 'white'
         option.classList.add("dropdown-item",'btn')
+        
+        if (type == 'start' && editor.getStartForPlayers().includes(types[i])){
+          option.style.backgroundColor = 'yellow'
+        }
+        if (type == 'end' && editor.getEndForPlayers().includes(types[i])){
+          option.style.backgroundColor = 'yellow'
+        }
+        if (type == 'enabled' && editor.getEnabledForPlayers().includes(types[i])){
+          option.style.backgroundColor = 'yellow'
+        }
+      
+      
         option.addEventListener('click',function(e){
           if (type == 'start'){
             if (editor.getStartForPlayers().includes(types[i])){

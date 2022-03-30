@@ -7,6 +7,7 @@ import { spawnButton } from './Elements.js';
 
 var can = false
 function editTrack(){
+  editor.nullEditor()
   removeAllButtons()
   removeAllListenersAdded()
     spawnButton(doc,"buttonPlace",'start',["btn","btn-dark"],'Start Inserting!',startDrawingPath) 

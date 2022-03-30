@@ -6,6 +6,7 @@ var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
 var Warning_js_1 = require("./Warning.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
+var Pawn_js_1 = require("./Pawn.js");
 var moveEventHandler = function (event) {
     canvas_js_1.editor.findTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
@@ -97,6 +98,7 @@ function insertTilesMenu() {
 }
 exports.insertTilesMenu = insertTilesMenu;
 function startInsertingByOne() {
+    canvas_js_1.editor.nullEditor();
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     removeAllButtons();
     removeAllListenersAdded();
@@ -116,12 +118,20 @@ function saveInsertingTiles() {
 }
 exports.saveInsertingTiles = saveInsertingTiles;
 function editTiles() {
+    canvas_js_1.editor.nullEditor();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     removeAllButtons();
     canvas_js_1.editor.setIsMoving(false);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveEditingTiles);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
+    if (canvas_js_1.editor.getChoosenTile() != undefined) {
+        canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
+        canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor());
+        canvas_js_1.editor.setEnabledForPlayers(canvas_js_1.editor.getChoosenTile().getCanOccupy());
+        console.log('zmenil starting players');
+        console.log(canvas_js_1.editor.getStartForPlayers());
+    }
     spawnElements();
     setValues(undefined);
     showActualState();
@@ -193,6 +203,9 @@ var insert = function (event) {
     if (canSpawn) {
         var addedTile = spawnTile(coords);
         canvas_js_1.editor.addToUndoLog([addedTile]);
+        addedTile.getIsStartingFor().forEach(function (player) {
+            canvas_js_1.editor.getGame().insertPawns(player, addedTile);
+        });
         showActualState();
     }
 };
@@ -242,6 +255,7 @@ var spawnTile = function (coords) {
 };
 exports.spawnTile = spawnTile;
 var update = function () {
+    var _a, _b;
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -258,13 +272,48 @@ var update = function () {
     if (!patternChecker.checked) {
         pattImage = undefined;
     }
+    console.log('starting values povodny a a novy');
+    console.log(canvas_js_1.editor.getStartForPlayers());
+    console.log(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
     canvas_js_1.editor.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), outlineChecker.checked, parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
+    (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
+    (_b = canvas_js_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
+        for (var i = 0; i < canvas_js_1.editor.getGame().getNumberOfStartingPawns(); i++) {
+            canvas_js_1.editor.getGame().getPawns().push(new Pawn_js_1.Pawn(player, canvas_js_1.editor.getChoosenTile()));
+        }
+    });
+    // let set:Set<string> = new Set()
+    // editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+    //   set.add(pawn.player)
+    // })
+    // editor.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
+    //   set.delete(player)
+    // })
+    // set.forEach((player:string)=>{
+    //   for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
+    //     editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+    //   }
+    // })
+    // editor.getStartForPlayers().forEach((player:string)=>{
+    //   if( !editor.getChoosenTile()!.getIsStartingFor().includes(player)){
+    //     for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
+    //       editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+    //     }
+    //   }
+    //   else{
+    //     console.log(player + ' sa nachadza v ')
+    //     console.log(editor.getChoosenTile()!.getIsStartingFor())
+    //     console.log(editor.getStartForPlayers())
+    //   }
+    // })
     canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
     canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
     canvas_js_1.editor.getChoosenTile().setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
     canvas_js_1.editor.getChoosenTile().setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
+    console.log('prerobeny');
+    console.log(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         canvas_js_1.editor.getChoosenTile().setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
@@ -273,6 +322,13 @@ var update = function () {
             tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
         }
     }
+    canvas_js_1.editor.getChoosenTile().getPawns().forEach(function (pawn) {
+        var _a;
+        if (!canvas_js_1.editor.getChoosenTile().getIsStartingFor().includes(pawn.player)) {
+            (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.removePawn(pawn);
+            canvas_js_1.editor.getGame().removePawn(pawn);
+        }
+    });
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 var setValues = function (tile) {
@@ -309,6 +365,8 @@ var setValues = function (tile) {
         outlineChecker.checked = tile.getStroke() > 0;
         tileNumberSetter.value = tile.getTileNumber().toString();
         tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
+        console.log('je startovne pre');
+        console.log(canvas_js_1.editor.getStartForPlayers());
         if (outlineChecker.checked) {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
         }
@@ -339,6 +397,7 @@ var setValues = function (tile) {
             canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'no';
         }
     }
+    //startingFor = doc.getElementById('')
     return tile;
 };
 var moveTile = function (event) {

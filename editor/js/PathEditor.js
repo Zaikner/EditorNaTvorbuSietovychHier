@@ -7,6 +7,7 @@ var TileEditor_js_1 = require("./TileEditor.js");
 var Elements_js_1 = require("./Elements.js");
 var can = false;
 function editTrack() {
+    canvas_js_1.editor.nullEditor();
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'start', ["btn", "btn-dark"], 'Start Inserting!', startDrawingPath);

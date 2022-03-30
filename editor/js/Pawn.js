@@ -7,6 +7,7 @@ var Pawn = /** @class */ (function () {
         this.player = player;
         this.tile = tile;
         this.tileId = tile.getId();
+        tile.getPawns().push(this);
     }
     Pawn.prototype.move = function (numOfTiles) {
     };

@@ -7,6 +7,7 @@ import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,
 import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
 import { deletePawn, insertPawn } from './PawnEditor.js'
+import { Pawn } from './Pawn.js'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event)   
 reload(editor,ctx)
@@ -113,6 +114,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
 }
 
 function insertTilesMenu():void{
+  
   doc.getElementById("canvasPlace")!.style.cursor = 'default'
   removeAllListenersAdded()
   editor.makeAllTilesNotChoosen()
@@ -125,6 +127,7 @@ function insertTilesMenu():void{
     
 }
   function startInsertingByOne(){
+    editor.nullEditor()
     doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons()
     removeAllListenersAdded()
@@ -147,13 +150,26 @@ function insertTilesMenu():void{
   }
 
   function editTiles():void{
+    editor.nullEditor()
+    
     removeAllListenersAdded()
     canvas.addEventListener('click',moveEventHandler)
     removeAllButtons()
     editor.setIsMoving(false)
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveEditingTiles)
     spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],'Edit button!',update)   
+
+    if ( editor.getChoosenTile()!= undefined){
+      editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor())
+      editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor())
+      editor.setEnabledForPlayers(editor.getChoosenTile()!.getCanOccupy())
+      console.log('zmenil starting players')
+      console.log(editor.getStartForPlayers())
+    }
+  
+
       spawnElements()
+
       setValues(undefined!)
     showActualState()      
     }
@@ -225,6 +241,9 @@ function insertTilesMenu():void{
     if (canSpawn){
       var addedTile = spawnTile(coords)
       editor.addToUndoLog([addedTile])
+      addedTile.getIsStartingFor().forEach((player:string)=>{
+        editor.getGame().insertPawns(player,addedTile)
+      })
       showActualState()
     }
     
@@ -299,14 +318,56 @@ function insertTilesMenu():void{
         pattImage = undefined!
       }
       
+      console.log('starting values povodny a a novy')
+      console.log(editor.getStartForPlayers())
+      console.log(editor.getChoosenTile()!.getIsStartingFor())
     editor.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),outlineChecker!.checked,parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
+    
+
+    editor.getChoosenTile()?.setPawns([])
+
+    editor.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
+         for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
+        editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+      }
+    })
+    // let set:Set<string> = new Set()
+    
+    // editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+    //   set.add(pawn.player)
+    // })
+    // editor.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
+    //   set.delete(player)
+    // })
+
+    // set.forEach((player:string)=>{
+    //   for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
+    //     editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+    //   }
+    // })
+    // editor.getStartForPlayers().forEach((player:string)=>{
+    //   if( !editor.getChoosenTile()!.getIsStartingFor().includes(player)){
+    //     for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
+    //       editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+    //     }
+    //   }
+    //   else{
+    //     console.log(player + ' sa nachadza v ')
+    //     console.log(editor.getChoosenTile()!.getIsStartingFor())
+    //     console.log(editor.getStartForPlayers())
+    //   }
+     
+      
+    // })
+    
     editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers())
     editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers())
     editor.getChoosenTile()!.setCanOccupy(editor.getEnabledForPlayers())
     editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     editor.getChoosenTile()!.setPatternFile(pattImage)
-
+      console.log('prerobeny')
+      console.log(editor.getChoosenTile()!.getIsStartingFor())
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     
@@ -317,6 +378,12 @@ function insertTilesMenu():void{
       }
        
     }
+    editor.getChoosenTile()!.getPawns().forEach((pawn:Pawn)=>{
+      if (!editor.getChoosenTile()!.getIsStartingFor().includes(pawn.player)){
+        editor.getChoosenTile()?.removePawn(pawn)
+        editor.getGame().removePawn(pawn)
+      }})
+    
     reload(editor,ctx)
   }
   let setValues = function(tile:Tile){
@@ -358,6 +425,9 @@ function insertTilesMenu():void{
       tileNumberSetter.value = tile!.getTileNumber().toString()
       tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
       
+      
+      console.log('je startovne pre')
+      console.log(editor.getStartForPlayers())
       if (outlineChecker.checked){
         doc.getElementById("outlineCheckerShower")!.textContent = 'yes'
       }
@@ -395,6 +465,7 @@ function insertTilesMenu():void{
         doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'no'
       }
     }
+    //startingFor = doc.getElementById('')
     return tile
   }
 

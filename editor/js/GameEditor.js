@@ -19,6 +19,13 @@ var GameEditor = /** @class */ (function () {
         this.nextTileId = 0;
         this.initNewGame();
     }
+    GameEditor.prototype.nullEditor = function () {
+        this.startForPlayers = [];
+        this.endForPlayers = [];
+        this.enabledForPlayers = [];
+        this.image = undefined;
+        this.pattern = undefined;
+    };
     GameEditor.prototype.initNewGame = function () {
         this.game = new Game_js_1.Game();
         console.log(this.getGame());

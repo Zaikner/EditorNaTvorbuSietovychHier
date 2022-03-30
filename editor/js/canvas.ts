@@ -5,7 +5,7 @@ import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, remo
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
-import { spawnButton } from "./Elements";
+import { spawnButton, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
 
 
 import { Background } from "./Background";
@@ -228,16 +228,26 @@ text.textContent = 'Počet hráčov:'
 document.getElementById("numOfPlayersPlace")!.appendChild(text);
 document.getElementById("numOfPlayersPlace")!.appendChild(numShower);
 
-numOfPlayersSlider.oninput =function(){
+numOfPlayersSlider.onclick =function(){
   document.getElementById("numShower")!.textContent =numOfPlayersSlider.value ;
   editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value))
   let number =  parseInt(numOfPlayersSlider.value)
   let playerTokens = editor.getGame().getPlayerTokens()
   if (number < playerTokens.length){
+  
     for (let i = 0; i < playerTokens.length - number;i++){
       playerTokens.pop()
-      editor.getGame().getPawnStyle().delete('Player '+(playerTokens.length))
-     
+      editor.getGame().getPawnStyle().delete('Player '+(playerTokens.length+1))
+      let rem:Array<Pawn> = []
+      editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+        if (pawn.player == ('Player '+(playerTokens.length+1))){
+          rem.push(pawn)
+        }
+      })
+      rem.forEach((pawn:Pawn)=>{
+        editor.getGame().removePawn(pawn)
+        pawn.tile.removePawn(pawn)
+      })
     }
   }
   if (number > playerTokens.length){
@@ -249,8 +259,10 @@ numOfPlayersSlider.oninput =function(){
       //editor.getGame().getPawnStyle().Player
     }
   }
- 
+  console.log(playerTokens)
+  console.log(editor.getGame().getPawnStyle())
   editor.getGame().setPlayerTokens(playerTokens)
+  reload(editor,ctx)
 }
 document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
 
@@ -273,6 +285,67 @@ text = document.createElement('p')
 text.textContent = 'Typ hry:'
 document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
+
+spawnParagraph(document,'tileEditingPlace','','Set number of pawns per starting tile')
+let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider','0','4','1',editor.getGame().getNumberOfStartingPawns().toString())
+slid.onchange = function(){
+  let max = parseInt(slid!.value)
+  if (max > editor.getGame().getNumberOfStartingPawns()){
+    editor.getGame().getPlayerTokens().forEach((player:string) => {
+      for (let i = 0;i<(max-editor.getGame().getNumberOfStartingPawns());i++){
+        editor.getGame().getTiles().forEach((tile:Tile)=>{
+          if (tile.getIsStartingFor().includes(player)){
+            let newPawn = new Pawn(player,tile)
+    
+            editor.getGame().getPawns().push(newPawn)
+          }
+        })
+      }
+  })
+    
+  }
+  else{
+    editor.getGame().getPlayerTokens().forEach((player:string) => {
+      let num = 0
+      let rem:Array<Pawn> = []
+      //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
+      editor.getGame().getTiles().forEach((tile:Tile)=>{
+        num = 0
+        tile.getPawns().forEach((pawn:Pawn)=>{
+          if (pawn.player == player){
+                    num++;
+                    if (num > max){
+                      rem.push(pawn)
+                    }
+                  }
+                  rem.forEach((pawn:Pawn)=>{
+                          editor.getGame().removePawn(pawn)
+                          pawn.tile.removePawn(pawn)
+                        })
+        })
+      })
+      
+  //     editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+  //       if (pawn.player == player){
+  //         num++;
+  //         if (num > max){
+  //           rem.push(pawn)
+  //         }
+  //       }
+  //     })
+  //     rem.forEach((pawn:Pawn)=>{
+  //       editor.getGame().removePawn(pawn)
+  //       pawn.tile.removePawn(pawn)
+  //     })
+     });
+   }
+  editor.getGame().setNumberOfStartingPawns(max)
+  console.log(editor.getGame().getNumberOfStartingPawns())
+  console.log(editor.getGame().getPawns())
+
+ 
+  reload(editor,ctx)
+}
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Save game to database!',function(){
   editor.getGame().saveGame()

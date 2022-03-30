@@ -1,3 +1,4 @@
+import { timeStamp } from 'console';
 import { editor } from './canvas.js';
 import { Pawn } from './Pawn.js';
 import { drawPawnType1 } from './PawnEditor.js';
@@ -22,11 +23,11 @@ class Tile{
     private patternFile?:HTMLImageElement = undefined;
     private tileNumber:number;
     private isEnding:boolean = false;
-    private isEndingFor:Array<String>=[]
+    private isEndingFor:Array<string>=[]
     private isStarting:boolean = false;
-    private isStartingFor:Array<String>=[]
+    private isStartingFor:Array<string>=[]
     private belongTo:string = '';
-    private canOccupy:Array<String> = []
+    private canOccupy:Array<string> = []
     private toggleNumber:boolean = true;
     private numberingColor:string = '#000000'
     private numberOfFollowingTile:number;
@@ -214,81 +215,124 @@ class Tile{
     }
 
     drawPawns(ctx:CanvasRenderingContext2D){
-        
+        let num = 0
         let drawn = 0
+        let pawndiff =0
+        let diff = 0;//10*this.radius/50
+        if (this.pawns.length == 1){
+            diff = 30*this.radius/50
+        }
+        if (this.pawns.length == 2){
+            diff = 20*this.radius/50
+        }
+        let diffY = 10
         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
-        this.pawns.forEach((pawn) => {
-            console.log('kresli babku')
-            console.log(this)
-            console.log(pawn)
-            let style = editor.getGame().getPawnStyle().get(pawn.player)
-            console.log(style)
-            if (this.getPawns().length == 1){
-                if (style!.getType() == 'type1'){
-                    drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10*this.radius/30,100,100,style!.getColor())
-                    console.log('kresli ja neviem kde je problem')
-                }
-                else{
-                    console.log('zly typ')
-                }
-            }
-            else if (this.getPawns().length == 2){
-                if (drawn == 0){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
-                        console.log('kresli ja neviem kde je problem')
-                        drawn++
+        editor.getGame().getPlayerTokens().forEach((player)=>{
+            drawn = 0
+            this.pawns.forEach((pawn) => {
+                if(pawn.player == player){
+                    num++;
+                    let style = editor.getGame().getPawnStyle().get(pawn.player)
+                    //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
+                    if (this.pawns.length == 2 && num == 2){
+                        diff = 30*this.radius/50
                     }
-                }
-                else if (drawn == 1){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
-                        console.log('kresli ja neviem kde je problem')
-                        drawn++
+                    if (num == 9){
+                        diff = 15*this.radius/50
+                        diffY = 40
                     }
-                }
-              
-            }
-            else if (this.getPawns().length > 2){
-                if (drawn == 0){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-                     
-                        drawn++
+                    else if (num == 13){
+                        diff = 15*this.radius/50
+                        diffY = -20
                     }
-                }
-                else if (drawn == 1){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-                       
-                        drawn++
+                    if (this.pawns.length == 1){
+                        drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
                     }
+                    else{
+                        drawPawnType1( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                    }
+                   
+                    //drawPawnType1( ctx,this.getCenterX()-20+drawn*15,this.getCenterY()-10-10,4*this.radius/30,100,100,style!.getColor())
+                    drawn++;
                 }
-                else if (drawn == 2){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
             
-                        drawn++
-                    }
-                }
-                else if (drawn == 3){
-                    if (style!.getType() == 'type1'){
-                        drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-                     
-                        drawn++
-                    }
-                }
-              
-            }
-            else{
-                console.log('pocty su zle')
-                console.log(this.pawns)
-            }
+            })
+            diff = diff+(drawn*10*this.radius/50)
         })
-       console.log('spusitl draw pawns')
-       console.log(this.pawns)
-       ctx.resetTransform();
+       
+        ctx.resetTransform();
        ctx.restore()
+    //     this.pawns.forEach((pawn) => {
+    //         console.log('kresli babku')
+    //         console.log(this)
+    //         console.log(pawn)
+    //         let style = editor.getGame().getPawnStyle().get(pawn.player)
+    //         console.log(style)
+    //         if (this.getPawns().length == 1){
+    //             if (style!.getType() == 'type1'){
+    //                 drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10*this.radius/30,100,100,style!.getColor())
+    //                 console.log('kresli ja neviem kde je problem')
+    //             }
+    //             else{
+    //                 console.log('zly typ')
+    //             }
+    //         }
+    //         else if (this.getPawns().length == 2){
+    //             if (drawn == 0){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
+    //                     console.log('kresli ja neviem kde je problem')
+    //                     drawn++
+    //                 }
+    //             }
+    //             else if (drawn == 1){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
+    //                     console.log('kresli ja neviem kde je problem')
+    //                     drawn++
+    //                 }
+    //             }
+              
+    //         }
+    //         else if (this.getPawns().length > 2){
+    //             if (drawn == 0){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                     
+    //                     drawn++
+    //                 }
+    //             }
+    //             else if (drawn == 1){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                       
+    //                     drawn++
+    //                 }
+    //             }
+    //             else if (drawn == 2){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+            
+    //                     drawn++
+    //                 }
+    //             }
+    //             else if (drawn == 3){
+    //                 if (style!.getType() == 'type1'){
+    //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
+                     
+    //                     drawn++
+    //                 }
+    //             }
+              
+    //         }
+    //         else{
+    //             console.log('pocty su zle')
+    //             console.log(this.pawns)
+    //         }
+    //     })
+    //    console.log('spusitl draw pawns')
+    //    console.log(this.pawns)
+       
     }
 
     isPointedAt(x:number,y:number){
