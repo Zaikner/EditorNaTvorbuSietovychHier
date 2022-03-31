@@ -42,13 +42,14 @@ var TileFinder_1 = require("../../services/db/RDG/TileFinder");
 var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
 var PawnFinder_js_1 = require("../../services/db/RDG/PawnFinder.js");
 var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
+var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
 var Room = require('./Room.js');
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
     GameManager.loadGame = function (name) {
         return __awaiter(this, void 0, void 0, function () {
-            var game, tiles, background, pawns, styles;
+            var game, tiles, background, pawns, styles, rules;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
@@ -66,7 +67,12 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByName(name)];
                     case 5:
                         styles = _a.sent();
-                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles }];
+                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByName(name)];
+                    case 6:
+                        rules = _a.sent();
+                        console.log('nasiel tieto pravidla');
+                        console.log(rules);
+                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText() }];
                 }
             });
         });

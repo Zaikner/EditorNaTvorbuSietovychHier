@@ -88,6 +88,16 @@ editorSocket.on('connected',(msg)=>{
   editor.getGame().setAuthor(msg.game.author)
   editor.getGame().setName(msg.game.name)
   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
+  console.log('pravidla su:')
+  console.log(msg.rules)
+  editor.getGame().setRules(msg.rules)
+  
+  
+  let tokens:Array<string> = []
+  for (let i = 1; i <= 6; i++){
+    tokens.push('Player '+i)
+  }
+  editor.getGame().setPlayerTokens(tokens)
   initGameInfo(msg.game.name)
 
   let i = 0
@@ -98,7 +108,7 @@ editorSocket.on('connected',(msg)=>{
     
      let p = new Pawn(pawn.player,tile)
      editor.getGame().getPawns().push(p)
-     tile.getPawns().push(p)
+     //tile.getPawns().push(p)
      console.log('vlozilo pawn do robka')
      console.log(i)
     
@@ -121,12 +131,23 @@ let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
   edit()
+  let butt = spawnButton(document,'rulesButtons',"questionRuleButton" ,["btn","btn-secondary"],"Edit Changes!",function(){
+    $('#rulesModal').modal('hide');
+   
+  })
+  butt.onclick = function(){
+    editor.getGame().setRules( (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value)
+  }
+  //document.getElementById('rulesButtons')!
+ // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
   isEditor = true;
   //editor.getGame().setInitSizeX(window.innerWidth)
   //editor.getGame().setInitSizeY(window.innerHeight)
   
 }
 else{
+
+  
   const params = new URLSearchParams(window.location.search);
 
 
@@ -151,11 +172,17 @@ editorSocket.on('add Opt',(data:any) =>{
   addOption('editQuestion',data.text,data.isAnswer,data.id)
 })
 
+document.getElementById("showRulesButton")?.addEventListener('click',function(){
+ 
+  $('#rulesModal').modal('show');
+  (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
+  
+})
 
 
 function edit(){
   mainMenu();
-  
+  //$('#rulesModal').modal('show');
 document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
 document.getElementById('insertTiles')!.addEventListener('click',function(){insertTilesMenu();} );
 document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
@@ -182,14 +209,6 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
-document.getElementById('questionRuleButton')?.addEventListener('click',function(){
- 
-  editor.getGame().setRules((<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value)
-})
-document.getElementById("showRulesButton")?.addEventListener('click',function(){
-  (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
-  $('#rulesModal').modal('show')
-})
 
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );

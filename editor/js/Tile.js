@@ -187,6 +187,9 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.drawPawns = function (ctx) {
         var _this = this;
+        console.log(' zavolal draw Pawns');
+        console.log('tokeny su');
+        console.log(canvas_js_1.editor.getGame().getPlayerTokens());
         var num = 0;
         var drawn = 0;
         var pawndiff = 0;
@@ -200,11 +203,18 @@ var Tile = /** @class */ (function () {
         var diffY = 10;
         ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
         canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (player) {
+            console.log('zacal kreslit playera' + player);
             drawn = 0;
             _this.pawns.forEach(function (pawn) {
-                if (pawn.player == player) {
+                if (pawn.player == player && num <= canvas_js_1.editor.getGame().getPlayerTokens().length) {
+                    console.log(num);
                     num++;
                     var style = canvas_js_1.editor.getGame().getPawnStyle().get(pawn.player);
+                    console.log('Pustil dalej hraca ' + player);
+                    console.log('kresli:');
+                    console.log(pawn);
+                    console.log(style);
+                    console.log(canvas_js_1.editor.getGame().getPawns());
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (_this.pawns.length == 2 && num == 2) {
                         diff = 30 * _this.radius / 50;

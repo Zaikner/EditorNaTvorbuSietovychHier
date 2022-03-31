@@ -9,6 +9,7 @@ import { Tile_db } from '../../services/db/RDG/Tile_db.js';
 import { BackgroundFinder } from '../../services/db/RDG/BackgroundFinder.js';
 import { PawnFinder } from '../../services/db/RDG/PawnFinder.js';
 import { PawnStyleFinder } from '../../services/db/RDG/PawnStyleFinder.js';
+import { RulesFinder } from '../../services/db/RDG/RulesFinder.js';
 const Room = require('./Room.js')
 
 
@@ -22,7 +23,10 @@ class GameManager{
             let background = await BackgroundFinder.getIntance().findByName(name)
             let pawns = await PawnFinder.getIntance().findByName(name)
             let styles = await PawnStyleFinder.getIntance().findByName(name)
-       return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles}
+            let rules = await RulesFinder.getIntance().findByName(name)
+            console.log('nasiel tieto pravidla')
+            console.log(rules)
+       return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText()}
     }
       
     public static async createRoom(name:string,numOfPlayers:number){

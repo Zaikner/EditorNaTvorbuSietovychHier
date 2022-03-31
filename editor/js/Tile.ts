@@ -215,6 +215,9 @@ class Tile{
     }
 
     drawPawns(ctx:CanvasRenderingContext2D){
+        console.log(' zavolal draw Pawns')
+        console.log('tokeny su')
+        console.log(editor.getGame().getPlayerTokens())
         let num = 0
         let drawn = 0
         let pawndiff =0
@@ -228,11 +231,20 @@ class Tile{
         let diffY = 10
         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
         editor.getGame().getPlayerTokens().forEach((player)=>{
+            console.log('zacal kreslit playera' + player)
             drawn = 0
+            
             this.pawns.forEach((pawn) => {
-                if(pawn.player == player){
+            
+                if(pawn.player == player && num <= editor.getGame().getPlayerTokens().length){
+                    console.log(num)
                     num++;
                     let style = editor.getGame().getPawnStyle().get(pawn.player)
+                    console.log('Pustil dalej hraca '+ player)
+                    console.log('kresli:')
+                    console.log(pawn)
+                    console.log(style)
+                    console.log(editor.getGame().getPawns())
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (this.pawns.length == 2 && num == 2){
                         diff = 30*this.radius/50

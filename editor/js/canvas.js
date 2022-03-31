@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 exports.__esModule = true;
 exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
@@ -73,6 +74,14 @@ editorSocket.on('connected', function (msg) {
     editor.getGame().setAuthor(msg.game.author);
     editor.getGame().setName(msg.game.name);
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
+    console.log('pravidla su:');
+    console.log(msg.rules);
+    editor.getGame().setRules(msg.rules);
+    var tokens = [];
+    for (var i_1 = 1; i_1 <= 6; i_1++) {
+        tokens.push('Player ' + i_1);
+    }
+    editor.getGame().setPlayerTokens(tokens);
     (0, Gameplay_1.initGameInfo)(msg.game.name);
     var i = 0;
     console.log(msg.pawns);
@@ -81,7 +90,7 @@ editorSocket.on('connected', function (msg) {
         var tile = editor.findTileById(pawn.tileId);
         var p = new Pawn_1.Pawn(pawn.player, tile);
         editor.getGame().getPawns().push(p);
-        tile.getPawns().push(p);
+        //tile.getPawns().push(p)
         console.log('vlozilo pawn do robka');
         console.log(i);
     });
@@ -100,6 +109,14 @@ var isEditor = false;
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
     edit();
+    var butt = (0, Elements_1.spawnButton)(document, 'rulesButtons', "questionRuleButton", ["btn", "btn-secondary"], "Edit Changes!", function () {
+        $('#rulesModal').modal('hide');
+    });
+    butt.onclick = function () {
+        editor.getGame().setRules(document.getElementById("ruleInput").value);
+    };
+    //document.getElementById('rulesButtons')!
+    // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
     isEditor = true;
     //editor.getGame().setInitSizeX(window.innerWidth)
     //editor.getGame().setInitSizeY(window.innerHeight)
@@ -122,9 +139,13 @@ editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQu
 editorSocket.on('add Opt', function (data) {
     (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
 });
+(_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+    $('#rulesModal').modal('show');
+    document.getElementById("ruleInput").value = editor.getGame().getRules();
+});
 function edit() {
-    var _a, _b;
     mainMenu();
+    //$('#rulesModal').modal('show');
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
     document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
     document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
@@ -150,13 +171,6 @@ function edit() {
     document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
     document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
-    (_a = document.getElementById('questionRuleButton')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        editor.getGame().setRules(document.getElementById("ruleInput").value);
-    });
-    (_b = document.getElementById("showRulesButton")) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
-        document.getElementById("ruleInput").value = editor.getGame().getRules();
-        $('#rulesModal').modal('show');
-    });
     document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });
