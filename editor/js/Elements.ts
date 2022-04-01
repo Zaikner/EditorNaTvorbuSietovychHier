@@ -17,6 +17,7 @@ function spawnParagraph(doc:HTMLDocument,parent:string,id:string,textCont:string
     let text = doc.createElement('p')
     text.textContent = textCont
     doc.getElementById(parent)!.appendChild(text);
+    text.style.color ='#FFFFFF'
     return text
 }
 

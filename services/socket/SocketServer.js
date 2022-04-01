@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.ServerSocket = void 0;
 var Game_db_1 = require("../db/RDG/Game_db");
 var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
@@ -47,6 +48,7 @@ var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder")
 var Pawn_1 = require("../db/RDG/Pawn");
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
+var Player = require("../../backEnd/Game/Player");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
 var GameManager = require('../../backEnd/Game/GameManager.js');
@@ -140,6 +142,7 @@ var ServerSocket = /** @class */ (function () {
                                 t.setNumberingColor(tile.numberingColor);
                                 t.setFollowingTileNumber(tile.numberOfFollowingTile);
                                 t.setGameName(data.name);
+                                t.setQuestionId(tile.questionId);
                                 t.insert();
                             });
                             g.insert();
@@ -174,6 +177,28 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
+            socket.on('set Socket', function (msg) {
+                var acc = AccountManager.getAccountByClientId(msg.id);
+                if (acc === undefined) {
+                    return;
+                }
+                acc.setSocketId(socket.id);
+                console.log(GameManager.getActiveRooms());
+                console.log(msg.room);
+                console.log(GameManager.getActiveRooms().get(parseInt(msg.room)));
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                r.join(new Player(acc, 'Player ' + (r.getNumOfPlayers() + 1)));
+                console.log(r);
+            });
+            socket.on('join player to Room', function (msg) {
+                var acc = AccountManager.getAccountByClientId(msg.id);
+                if (acc === undefined) {
+                    return;
+                }
+                socket.join(msg.roomId);
+                GameManager.getActiveRooms();
+                _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.' });
+            });
             // socket.on('relog',async(msg:{id:string})=>{
             //   console.log('skusil relognut'+msg.id)
             //   //console.log(msg.id)
@@ -303,6 +328,7 @@ var ServerSocket = /** @class */ (function () {
                                 });
                             });
                             socket.emit('loadedQuestions', data);
+                            socket.emit('picked');
                             return [2 /*return*/];
                     }
                 });
@@ -334,6 +360,11 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
+            socket.on('join Room', function (msg) {
+                socket.join(msg.roomName);
+            });
+            socket.join('leave Room', function () {
+            });
         });
     };
     ServerSocket.getIo = function () {
@@ -345,6 +376,10 @@ var ServerSocket = /** @class */ (function () {
     ServerSocket.emitToSpecificSocket = function (socketId, event, msg) {
         this.io.to(socketId).emit(event, msg);
     };
+    ServerSocket.emitToRoom = function (roomName, event, data) {
+        this.io.to(roomName).emit(event, data);
+    };
     return ServerSocket;
 }());
+exports.ServerSocket = ServerSocket;
 module.exports = ServerSocket;

@@ -32,6 +32,7 @@ class Tile{
     private numberingColor:string = '#000000'
     private numberOfFollowingTile:number;
     private pawns:Array<Pawn> = []
+    private questionId:number = -1
 
     constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
@@ -390,6 +391,7 @@ class Tile{
                 toggleNumber:this.toggleNumber,
                 numberingColor:this.numberingColor,
                 numberOfFollowingTile:this.numberOfFollowingTile,
+                questionId:this.questionId,
                 id:this.id}
             
     }
@@ -556,6 +558,12 @@ class Tile{
     }
     public getFollowingTileNumber(){
         return this.numberOfFollowingTile
+    }
+    public setQuestionId(newId:number){
+        this.questionId = newId
+    }
+    public getQuestionId(){
+        return this.questionId
     }
     public setFollowingTileNumber(newNumber:number){
         this.numberOfFollowingTile = newNumber

@@ -70,6 +70,17 @@ class Game{
         }
        
     }
+
+    findTileByTileId(id:number){
+        let tile = undefined
+        this.tiles.forEach((t:Tile)=>{
+            if (t.getId() == id){
+                tile = t
+            }
+        })
+
+        return tile
+    }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
     }

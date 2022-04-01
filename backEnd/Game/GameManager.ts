@@ -10,13 +10,14 @@ import { BackgroundFinder } from '../../services/db/RDG/BackgroundFinder.js';
 import { PawnFinder } from '../../services/db/RDG/PawnFinder.js';
 import { PawnStyleFinder } from '../../services/db/RDG/PawnStyleFinder.js';
 import { RulesFinder } from '../../services/db/RDG/RulesFinder.js';
-const Room = require('./Room.js')
+import { Room } from './Room.js';
+//const Room = require('./Room.js')
 
 
 
 
 class GameManager{
-    private static activeRooms:Array<typeof Room> = []
+    private static activeRooms:Map<number,Room> = new Map()
     public static async loadGame(name:string){
          let game = await GameFinder.getIntance().findByName(name)
             let tiles =await TileFinder.getIntance().findByName(name)
@@ -30,18 +31,31 @@ class GameManager{
     }
       
     public static async createRoom(name:string,numOfPlayers:number){
-        let id = Math.floor(Math.random()*9000)+1000
-
+        //let id = Math.floor(Math.random()*9000)+1000
+        let stop = false
+        let id = 0
+        while(!stop){
+            stop = true
+            id++;
+            this.activeRooms.forEach((room:Room)=>{
+                if (room.getId()==id){
+                    stop = false
+                }
+            })
+        }
+        
+      
         let room = new Room(id,numOfPlayers,name)
         console.log(room)
-        this.activeRooms.push(room)
+        this.activeRooms.set(id,room)
         //+ pushni hraca
         return room
     }
+  
     public static getActiveRooms(){
         return this.activeRooms
     }
-    public static setActiveRooms(newRooms:Array<typeof Room>){
+    public static setActiveRooms(newRooms:Map<number,Room>){
         return this.activeRooms = newRooms;
     }
     

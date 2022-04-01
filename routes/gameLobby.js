@@ -3,6 +3,7 @@ const path = require('path');
 
 const AccountManager = require('../backEnd/Accounts/AccountManager.js');
 const GameManager = require('../backEnd/Game/GameManager.js');
+const { Player } = require('../backEnd/Game/Player.js');
 const { Account_db } = require('../services/db/RDG/Account_db.js');
 const { GameFinder } = require('../services/db/RDG/GameFinder_db.js');
 const { Game_db } = require('../services/db/RDG/Game_db.js');
@@ -13,9 +14,20 @@ router
 .route("/")
 .get( async(request,res) =>
 {   
+
+    let acc = AccountManager.getAccountByClientId(request.cookies.id)
+    if(acc === undefined){
+      return
+    }
     console.log(await GameFinder.getIntance().findAll())
     let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
-    let rooms = GameManager.getActiveRooms().map(room => [room.getId(),"Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getNumOfPlayers()])
+    let rooms = Array.from(GameManager.getActiveRooms().values())
+    .map(room => [room.getId(),
+        "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
+        room.getGameName(),
+        function(){
+            room.join(new Player(acc))
+        }])
     console.log(rooms)
     res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms});
 });

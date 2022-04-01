@@ -12,7 +12,7 @@ import { Background } from "./Background";
 import { initGameInfo,initDice } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
-import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation} from "./Questions";
+import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion} from "./Questions";
 import { removeAllListeners } from "process";
 import { PawnStyle } from "./PawnStyle";
 
@@ -127,6 +127,18 @@ editorSocket.on('connected',(msg)=>{
   console.log(editor.getGame())
 })
 
+editorSocket.on('join Room',(msg:{id:string})=>{
+  console.log('chce Joinut izbu' + msg.id)
+  editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
+})
+
+editorSocket.on('player joined',(msg:{msg:string})=>console.log(msg.msg))
+
+
+const params = new URLSearchParams(window.location.search);
+console.log('rooom je :'+params.get('room'))
+editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
+
 let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
@@ -148,7 +160,7 @@ if (zoz[zoz.length-2] === 'editor'){
 else{
 
   
-  const params = new URLSearchParams(window.location.search);
+  
 
 
   if (params.get('id') == null){
@@ -157,7 +169,8 @@ else{
   }
   else{
     initDice()
-    editorSocket.emit('load room-info',{room:params.get('room')})
+    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+   // editorSocket.emit('load room-info',{room:params.get('room')})
     //editorSocket.emit('load room-game',{room:params.get('room')})
     //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
@@ -166,7 +179,9 @@ else{
 }
 
 
-editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)})
+editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)
+                                           pickQuestion(data)})
+//editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
 editorSocket.on('loadedAnswerQuestions',(data)=>{askQuestion(data)})
 editorSocket.on('add Opt',(data:any) =>{
   addOption('editQuestion',data.text,data.isAnswer,data.id)
@@ -176,6 +191,8 @@ document.getElementById("showRulesButton")?.addEventListener('click',function(){
  
   $('#rulesModal').modal('show');
   (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
+  console.log('clickol')
+  console.log('pravidla: '+ editor.getGame().getRules())
   
 })
 
@@ -213,6 +230,11 @@ document.getElementById('questionSubmitButton')!.addEventListener('click',functi
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 document.getElementById('deletePawn')!.addEventListener('click',function(){pawnDeleteMenu()} );
+document.getElementById("resetQuestionID")!.addEventListener('click',function(){
+  editor.setQuestionId(-1);
+  (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Not picked!'
+  console.log(editor.getQuestionId())
+})
 }
 
 var doc = document;

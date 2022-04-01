@@ -1,17 +1,32 @@
 "use strict";
 exports.__esModule = true;
 exports.Room = void 0;
+var SocketServer_1 = require("../../services/socket/SocketServer");
 var Room = /** @class */ (function () {
     function Room(id, numOfPlayers, gameName) {
         this.id = 0;
         this.socketId = '';
-        this.numOfPlayers = 0;
+        this.maxPlayers = 0;
+        this.numOfPresentPlayers = 0;
         this.players = [];
         this.gameName = '';
         this.id = id;
-        this.numOfPlayers = numOfPlayers;
+        this.maxPlayers = numOfPlayers;
         this.gameName = gameName;
     }
+    Room.prototype.join = function (player) {
+        this.players.push(player);
+        player.setToken('Player ' + (this.numOfPresentPlayers + 1));
+        this.numOfPresentPlayers++;
+        SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString() });
+        console.log(' joinol a emitol playerovi: ' + player.getAccount().getSocketId());
+    };
+    Room.prototype.leave = function (player) {
+        this.players = this.players.filter(function (t) { return t != player; });
+        this.numOfPresentPlayers--;
+    };
+    Room.prototype.broadcast = function (msg) {
+    };
     //constructor(){}
     Room.prototype.getId = function () {
         return this.id;
@@ -20,10 +35,16 @@ var Room = /** @class */ (function () {
         this.id = newId;
     };
     Room.prototype.getNumOfPlayers = function () {
-        return this.numOfPlayers;
+        return this.numOfPresentPlayers;
     };
     Room.prototype.setNumOfPlayers = function (newNum) {
-        this.numOfPlayers = newNum;
+        this.numOfPresentPlayers = newNum;
+    };
+    Room.prototype.getMaxPlayers = function () {
+        return this.maxPlayers;
+    };
+    Room.prototype.setMaxPlayers = function (newNum) {
+        this.maxPlayers = newNum;
     };
     Room.prototype.getPlayers = function () {
         return this.players;
@@ -46,4 +67,3 @@ var Room = /** @class */ (function () {
     return Room;
 }());
 exports.Room = Room;
-module.exports = Room;

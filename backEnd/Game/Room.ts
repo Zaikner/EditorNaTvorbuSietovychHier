@@ -1,17 +1,36 @@
 import { Account } from "../Accounts/Account";
-
+import { Player } from "./Player";
+import { ServerSocket } from "../../services/socket/SocketServer";
 export class Room{
         private id:number = 0;
         private socketId:string = '';
-        private numOfPlayers:number = 0;
-        private players:Array<Account> = []
+        private maxPlayers:number = 0;
+        private numOfPresentPlayers = 0;
+        private players:Array<Player> = []
         private gameName:string = ''
 
         constructor(id:number,numOfPlayers:number,gameName:string){
             this.id = id;
-            this.numOfPlayers = numOfPlayers;
+            this.maxPlayers = numOfPlayers;
             this.gameName = gameName;
         }
+
+        public join(player:Player){
+            this.players.push(player)
+            player.setToken('Player '+ (this.numOfPresentPlayers+1))
+            this.numOfPresentPlayers++;
+            ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString()})
+            console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
+        }
+
+        public leave(player:Player){
+            this.players = this.players.filter((t) => {return t != player});
+            this.numOfPresentPlayers--;
+        }
+        public broadcast(msg:string){
+
+        }
+    
         //constructor(){}
 
 
@@ -23,15 +42,21 @@ export class Room{
         }
 
         public getNumOfPlayers() : number {
-            return this.numOfPlayers
+            return this.numOfPresentPlayers
         }
         public setNumOfPlayers(newNum:number){
-            this.numOfPlayers = newNum
+            this.numOfPresentPlayers = newNum
+        }
+        public getMaxPlayers() : number {
+            return this.maxPlayers
+        }
+        public setMaxPlayers(newNum:number){
+            this.maxPlayers = newNum
         }
         public getPlayers(){
             return this.players
         }
-        public setPlayers(newPlayers:Array<Account>){
+        public setPlayers(newPlayers:Array<Player>){
             this.players = newPlayers
         }
 
@@ -48,5 +73,3 @@ export class Room{
             this.socketId = newId
         }
     }
-
-module.exports = Room

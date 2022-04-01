@@ -51,9 +51,10 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                  each room in rooms
                     form(action='/room?game:'+room[2] method='get' name='name' value = room[0])
                       strong 
-                        li.list-group-item(name='room' value = room[0])= room[1]
-                          | 
-                          button(type = 'submit' name='room' value = room[0]).btn.btn-danger Join
+                        li.list-group-item(name='room' value = room[2])= room[1]
+                          |
+                          input(type='hidden' name='id' value=room[0])
+                          button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-danger Join
                
               hr
             div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;')

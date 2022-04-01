@@ -4,7 +4,7 @@ import { QuestionOption } from '../../services/db/RDG/QuestionOption';
 import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
 
 
-import {doc, editorSocket, elementDeleter} from './canvas'
+import {doc, editor, editorSocket, elementDeleter} from './canvas'
 import { spawnButton } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 
@@ -210,7 +210,41 @@ function showAllQuestions(data:any){
        
     })
 }
+function pickQuestion(data:any){
+    elementDeleter('listPickerContainer')
+    let questions:Map<number,HTMLDivElement> = new Map()
+    data.forEach((elem:any) =>{
+        console.log('vykonal')
+        if (questions.get(elem.questionId) === undefined){
+            let list = document.createElement('div')
+            list.classList.add("list-group")
+            list.style.marginBottom = "5%";
+            questions.set(elem.questionId,list)
 
+            let quest = document.createElement('button')
+            quest.type = 'button';
+            quest.classList.add("list-group-item","list-group-item-action","active","btn-info")
+            quest.style.textAlign =  'center';
+            quest.textContent = 'Question ID '+ elem.questionId +' : ' +elem.questionText
+            quest.onclick =function(){ 
+                                     $('#pickQuestionModal').modal('hide')
+                                     editor.setQuestionId(elem.questionId)
+                                     console.log('Question id je teraz:'+editor.getQuestionId());
+                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Choosen Question Id: '+(elem.questionId)
+                                     }
+            list.appendChild(quest)
+
+            document.getElementById('listPickerContainer')?.appendChild(list)
+        }
+        let opt = document.createElement('button')
+        opt.type = 'button';
+        opt.classList.add("list-group-item","list-group-item-action")
+        //quest.style.textAlign =  'center';
+        opt.textContent = elem.optionText
+        questions.get(elem.questionId)?.appendChild(opt)
+       
+    })
+}
 let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
     elementDeleter('editQuestion')
@@ -333,4 +367,4 @@ function evaluateQuestion(){
         $('#answerModal').modal('hide')
     }, 5000)
 }
-export {addOption,createQuestion,showAllQuestions,askQuestion,evaluateQuestion,removeLastOption,initCreation}
+export {addOption,createQuestion,showAllQuestions,askQuestion,evaluateQuestion,removeLastOption,initCreation,pickQuestion}

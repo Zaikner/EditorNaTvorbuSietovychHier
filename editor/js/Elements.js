@@ -15,6 +15,7 @@ function spawnParagraph(doc, parent, id, textCont) {
     var text = doc.createElement('p');
     text.textContent = textCont;
     doc.getElementById(parent).appendChild(text);
+    text.style.color = '#FFFFFF';
     return text;
 }
 exports.spawnParagraph = spawnParagraph;

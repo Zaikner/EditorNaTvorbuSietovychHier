@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
+exports.pickQuestion = exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
 var canvas_1 = require("./canvas");
 var num = 0;
 var newQuestions = [];
@@ -186,6 +186,40 @@ function showAllQuestions(data) {
     });
 }
 exports.showAllQuestions = showAllQuestions;
+function pickQuestion(data) {
+    (0, canvas_1.elementDeleter)('listPickerContainer');
+    var questions = new Map();
+    data.forEach(function (elem) {
+        var _a, _b;
+        console.log('vykonal');
+        if (questions.get(elem.questionId) === undefined) {
+            var list = document.createElement('div');
+            list.classList.add("list-group");
+            list.style.marginBottom = "5%";
+            questions.set(elem.questionId, list);
+            var quest = document.createElement('button');
+            quest.type = 'button';
+            quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-info");
+            quest.style.textAlign = 'center';
+            quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
+            quest.onclick = function () {
+                $('#pickQuestionModal').modal('hide');
+                canvas_1.editor.setQuestionId(elem.questionId);
+                console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
+                document.getElementById('bindQuestion').textContent = 'Choosen Question Id: ' + (elem.questionId);
+            };
+            list.appendChild(quest);
+            (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+        }
+        var opt = document.createElement('button');
+        opt.type = 'button';
+        opt.classList.add("list-group-item", "list-group-item-action");
+        //quest.style.textAlign =  'center';
+        opt.textContent = elem.optionText;
+        (_b = questions.get(elem.questionId)) === null || _b === void 0 ? void 0 : _b.appendChild(opt);
+    });
+}
+exports.pickQuestion = pickQuestion;
 var func = function () { };
 function editQuestionMenu(id, txt, elem) {
     var _a;

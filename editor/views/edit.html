@@ -137,6 +137,30 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="pickQuestionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl ">
+    <div class="modal-content" style="background-color: #292b2c" >
+      <div class="modal-header">
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky; color: white;">Question manager</h2></div>
+       
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody" style="overflow-y: auto; height:70vh">
+        <div class="container"  id='listPickerContainer'>
+      
+        </div>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <div class="container" style="text-align: center;"><button type="button" class="btn btn-secondary"style="text-align: center;" onclick="$('#pickQuestionModal').modal('hide');">Leave!</button>
+          <button type="button" class="btn btn-secondary" style="text-align: center; " id="resetQuestionID"  onclick=" $('#pickQuestionModal').modal('hide')">Reset choice!</button></div>
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+       
+        
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content" style="background-color: #292b2c">

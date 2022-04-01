@@ -66,6 +66,15 @@ var Game = /** @class */ (function () {
             this.pawns.push(pwn);
         }
     };
+    Game.prototype.findTileByTileId = function (id) {
+        var tile = undefined;
+        this.tiles.forEach(function (t) {
+            if (t.getId() == id) {
+                tile = t;
+            }
+        });
+        return tile;
+    };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
     };

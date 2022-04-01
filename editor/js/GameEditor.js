@@ -17,6 +17,7 @@ var GameEditor = /** @class */ (function () {
         this.endForPlayers = [];
         this.enabledForPlayers = [];
         this.nextTileId = 0;
+        this.questionId = -1;
         this.initNewGame();
     }
     GameEditor.prototype.nullEditor = function () {
@@ -217,6 +218,12 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.getEnabledForPlayers = function () {
         return this.enabledForPlayers;
+    };
+    GameEditor.prototype.getQuestionId = function () {
+        return this.questionId;
+    };
+    GameEditor.prototype.setQuestionId = function (newId) {
+        this.questionId = newId;
     };
     return GameEditor;
 }());

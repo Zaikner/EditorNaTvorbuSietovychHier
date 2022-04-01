@@ -17,6 +17,7 @@ class GameEditor{
     private endForPlayers:Array<string> = []
     private enabledForPlayers:Array<string> = []
     private nextTileId = 0;
+    private questionId = -1;
     constructor(){
         this.initNewGame()
     }
@@ -233,6 +234,12 @@ class GameEditor{
     }
     public getEnabledForPlayers():Array<string>{
         return this.enabledForPlayers
+    }
+    public getQuestionId(){
+        return this.questionId
+    }
+    public setQuestionId(newId:number){
+        this.questionId = newId
     }
     
 }

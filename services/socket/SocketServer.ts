@@ -1,5 +1,5 @@
 
-import { Server as ioServer } from "socket.io";
+import { Server as ioServer, Socket } from "socket.io";
 
 import { Game_db } from "../db/RDG/Game_db";
 import { Tile_db } from "../db/RDG/Tile_db";
@@ -20,10 +20,13 @@ import { addOption } from "../../editor/js/Questions";
 import { BlobOptions } from "buffer";
 import { Rules } from "../db/RDG/Rules";
 import { RulesFinder } from "../db/RDG/RulesFinder";
+import { access } from "fs";
+import { editor } from "../../editor/js/canvas";
+const Player = require("../../backEnd/Game/Player") ;
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
-class ServerSocket{
+export class ServerSocket{
     private static io:ioServer;
     
 
@@ -92,6 +95,7 @@ class ServerSocket{
           t.setNumberingColor(tile.numberingColor)
           t.setFollowingTileNumber(tile.numberOfFollowingTile)
           t.setGameName(data.name)
+          t.setQuestionId(tile.questionId)
           t.insert()
         })
         g.insert()
@@ -128,7 +132,33 @@ class ServerSocket{
         this.io.emit('chat message');
       });
 
-
+      socket.on('set Socket',(msg:{id:string,room:string})=>
+      {
+        let acc = AccountManager.getAccountByClientId(msg.id)
+           if(acc === undefined){
+             return
+           }
+          acc.setSocketId(socket.id)
+          console.log( GameManager.getActiveRooms())
+          console.log(msg.room)
+           console.log(GameManager.getActiveRooms().get(parseInt(msg.room)))
+          let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+          r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+      
+          console.log(r)
+ 
+      }
+      
+      )
+      socket.on('join player to Room',(msg:{id:string,roomId:string})=>{
+        let acc = AccountManager.getAccountByClientId(msg.id)
+        if(acc === undefined){
+          return
+        }
+        socket.join(msg.roomId)
+        GameManager.getActiveRooms()
+        this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.'})
+      })
       // socket.on('relog',async(msg:{id:string})=>{
       //   console.log('skusil relognut'+msg.id)
       //   //console.log(msg.id)
@@ -242,6 +272,7 @@ class ServerSocket{
         })
         
         socket.emit('loadedQuestions',data)
+        socket.emit('picked')
       })
 
       socket.on('answerQuestion',async(msg:{id:number})=>{
@@ -263,7 +294,16 @@ class ServerSocket{
       
         socket.emit('loadedAnswerQuestions',data)
       })
+
+      socket.on('join Room',(msg:{roomName:string})=>{
+        socket.join(msg.roomName)
+      })
+      socket.join('leave Room',()=>{
+        
+      })
           });
+
+    
     }
   
     static getIo(){
@@ -274,6 +314,9 @@ class ServerSocket{
     }
     static emitToSpecificSocket(socketId:string,event:string,msg:Object){
         this.io.to(socketId).emit(event,msg)
+    }
+    static emitToRoom(roomName:string,event:string,data:any){
+      this.io.to(roomName).emit(event,data);
     }
     //static setSocketToAccount()
 }

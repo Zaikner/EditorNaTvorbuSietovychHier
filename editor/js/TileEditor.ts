@@ -1,5 +1,5 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload} from './canvas.js'
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket} from './canvas.js'
 
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
@@ -111,6 +111,47 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
 
     spawnParagraph(doc,"tileEditingPlace",'','Which number follows ?! (Insert a number into textfield)')
     spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
+
+
+    
+    spawnParagraph(document,'tileEditingPlace','','Is pawn elemination on this tile allowed ?')
+    spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,['no','yes'])
+
+    spawnParagraph(document,'tileEditingPlace','',"Which players can't be eliminated on this tile?")
+    spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
+
+    spawnParagraph(document,'tileEditingPlace','','Ask question on this tile?')
+    let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,['no','yes'])
+
+    spawnParagraph(document,'tileEditingPlace','','Pick question')
+    spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],'Not picked!',function(){
+      
+      if (!questionChecker.checked){
+        Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
+      }
+      else{
+        editorSocket.emit('loadQuestions')
+        $('#pickQuestionModal').modal('show');
+      }
+    
+
+    })
+    spawnParagraph(document,'tileEditingPlace','','Does event occur when moving to this tile ??')
+    let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
+
+    spawnParagraph(document,'tileEditingPlace','','Pick event')
+    spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],'Not picked!',function(){
+      
+      // if (!questionChecker.checked){
+      //   Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
+      // }
+      // else{
+      //   editorSocket.emit('loadQuestions')
+      //   $('#pickQuestionModal').modal('show');
+      // }
+    
+
+    })
 }
 
 function insertTilesMenu():void{
@@ -296,6 +337,13 @@ function insertTilesMenu():void{
     if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
       addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
     }
+    
+    if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+      addedTile.setQuestionId(editor.getQuestionId())
+    }
+    else{
+      addedTile.setQuestionId(-1)
+    }
     reload(editor,ctx)
     console.log(addedTile)
     return addedTile    
@@ -383,6 +431,8 @@ function insertTilesMenu():void{
         editor.getChoosenTile()?.removePawn(pawn)
         editor.getGame().removePawn(pawn)
       }})
+
+    
     
     reload(editor,ctx)
   }

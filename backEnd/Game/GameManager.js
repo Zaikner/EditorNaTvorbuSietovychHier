@@ -43,7 +43,8 @@ var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js")
 var PawnFinder_js_1 = require("../../services/db/RDG/PawnFinder.js");
 var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
 var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
-var Room = require('./Room.js');
+var Room_js_1 = require("./Room.js");
+//const Room = require('./Room.js')
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
@@ -79,12 +80,22 @@ var GameManager = /** @class */ (function () {
     };
     GameManager.createRoom = function (name, numOfPlayers) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, room;
+            var stop, id, room;
             return __generator(this, function (_a) {
-                id = Math.floor(Math.random() * 9000) + 1000;
-                room = new Room(id, numOfPlayers, name);
+                stop = false;
+                id = 0;
+                while (!stop) {
+                    stop = true;
+                    id++;
+                    this.activeRooms.forEach(function (room) {
+                        if (room.getId() == id) {
+                            stop = false;
+                        }
+                    });
+                }
+                room = new Room_js_1.Room(id, numOfPlayers, name);
                 console.log(room);
-                this.activeRooms.push(room);
+                this.activeRooms.set(id, room);
                 //+ pushni hraca
                 return [2 /*return*/, room];
             });
@@ -96,7 +107,7 @@ var GameManager = /** @class */ (function () {
     GameManager.setActiveRooms = function (newRooms) {
         return this.activeRooms = newRooms;
     };
-    GameManager.activeRooms = [];
+    GameManager.activeRooms = new Map();
     return GameManager;
 }());
 module.exports = GameManager;

@@ -83,6 +83,34 @@ function spawnElements() {
     tileNumberSetter.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which number follows ?! (Insert a number into textfield)');
     (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileFollowingSetter');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Is pawn elemination on this tile allowed ?');
+    (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eleminationChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Which players can't be eliminated on this tile?");
+    (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', canvas_js_1.editor.getGame().getPlayerTokens(), 'immune');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Ask question on this tile?');
+    var questionChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'askQuestionChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick question');
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindQuestion', ['btn', 'btn-secondary'], 'Not picked!', function () {
+        if (!questionChecker.checked) {
+            Warning_js_1.Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.');
+        }
+        else {
+            canvas_js_1.editorSocket.emit('loadQuestions');
+            $('#pickQuestionModal').modal('show');
+        }
+    });
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Does event occur when moving to this tile ??');
+    var eventChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eventChecker', false, ['no', 'yes']);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick event');
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], 'Not picked!', function () {
+        // if (!questionChecker.checked){
+        //   Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
+        // }
+        // else{
+        //   editorSocket.emit('loadQuestions')
+        //   $('#pickQuestionModal').modal('show');
+        // }
+    });
 }
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
@@ -248,6 +276,12 @@ var spawnTile = function (coords) {
     }
     if (document.getElementById('tileFollowingSetter').value.length > 0) {
         addedTile.setFollowingTileNumber(parseInt(document.getElementById('tileFollowingSetter').value));
+    }
+    if (document.getElementById('askQuestionChecker').checked) {
+        addedTile.setQuestionId(canvas_js_1.editor.getQuestionId());
+    }
+    else {
+        addedTile.setQuestionId(-1);
     }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     console.log(addedTile);

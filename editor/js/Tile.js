@@ -24,6 +24,7 @@ var Tile = /** @class */ (function () {
         this.toggleNumber = true;
         this.numberingColor = '#000000';
         this.pawns = [];
+        this.questionId = -1;
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -345,6 +346,7 @@ var Tile = /** @class */ (function () {
             toggleNumber: this.toggleNumber,
             numberingColor: this.numberingColor,
             numberOfFollowingTile: this.numberOfFollowingTile,
+            questionId: this.questionId,
             id: this.id };
     };
     Tile.prototype.removePawn = function (pawn) {
@@ -508,6 +510,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getFollowingTileNumber = function () {
         return this.numberOfFollowingTile;
+    };
+    Tile.prototype.setQuestionId = function (newId) {
+        this.questionId = newId;
+    };
+    Tile.prototype.getQuestionId = function () {
+        return this.questionId;
     };
     Tile.prototype.setFollowingTileNumber = function (newNumber) {
         this.numberOfFollowingTile = newNumber;

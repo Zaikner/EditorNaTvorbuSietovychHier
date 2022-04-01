@@ -10,14 +10,18 @@ router
 .route("/")
 .get((request,res) =>
 {   
-    // console.log(request.query)
+    console.log(request.query)
     // console.log(request.params)
     if (request.query.name == undefined){
     //     request.query = {name: "hra", room:request.query.room}
-           res.redirect("/room?room="+request.query.room+'&name=Hra2')
+    res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
     }
+    else{
+        res.sendFile('room.html',{root:'./editor/views'});
+    }
+    
     // console.log('sem ho poslal')
-    res.sendFile('room.html',{root:'./editor/views'});
+    
 });
 
 

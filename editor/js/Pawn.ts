@@ -17,7 +17,15 @@ export class Pawn{
 
 
     move(numOfTiles:number){
+        let startTile = this.tile;
+        let actuallTile = this.tile;
+        let endTile = this.tile;
 
+        for (let i = 0;i < numOfTiles ; i++){
+            actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
+        }
+
+        this.tile = actuallTile
     }
     JSONfyPawn(){
         return{player:this.player,
