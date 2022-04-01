@@ -16,6 +16,7 @@ var GameEditor = /** @class */ (function () {
         this.startForPlayers = [];
         this.endForPlayers = [];
         this.enabledForPlayers = [];
+        this.cantBeEliminatedOnTile = [];
         this.nextTileId = 0;
         this.questionId = -1;
         this.initNewGame();
@@ -218,6 +219,12 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.getEnabledForPlayers = function () {
         return this.enabledForPlayers;
+    };
+    GameEditor.prototype.setCantBeEliminatedOnTile = function (newPlayers) {
+        this.cantBeEliminatedOnTile = newPlayers;
+    };
+    GameEditor.prototype.getCantBeEliminatedOnTile = function () {
+        return this.cantBeEliminatedOnTile;
     };
     GameEditor.prototype.getQuestionId = function () {
         return this.questionId;

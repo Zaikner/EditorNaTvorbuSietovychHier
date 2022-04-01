@@ -29,6 +29,7 @@ export class Tile_db{
     private numberOfFollowingTile:number = 0
     private gameName:string = '';
     private questionId:number = -1;
+    private cantBeEliminatedOnTile:Array<string> = []
 
     public setStroke(newStroke:number){
         this.stroke = newStroke
@@ -208,13 +209,19 @@ export class Tile_db{
     public setGameName(newName:string){
         this.gameName  = newName
     }
+    public setCantBeEliminatedOnTile(newPlayers:Array<string>){
+        this.cantBeEliminatedOnTile = newPlayers
+    }
+    public getCantBeEliminatedOnTile():Array<string>{
+        return this.cantBeEliminatedOnTile
+    }
 
     public insert(){
         let client = DbConnect.get()
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29);',
-                values: [this.id,this.type,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.isOccupied,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEnding,this.isEndingFor,this.isStarting,this.isStartingFor,this.belongTo,this.canOccupy,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
+                values: [this.id,this.type,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.isOccupied,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEnding,this.isEndingFor,this.isStarting,this.isStartingFor,this.belongTo,this.canOccupy,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile],
               }
               client
               .query(query)
@@ -252,6 +259,7 @@ export class Tile_db{
         ret.setFollowingTileNumber(data.numberOfFollowingTile)
         ret.setGameName(data.gameName)
         ret.setQuestionId(data.questionId)
+        ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile)
         return ret
         }
 }

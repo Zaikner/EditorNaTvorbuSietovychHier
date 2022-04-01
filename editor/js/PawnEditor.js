@@ -105,7 +105,7 @@ function pawnEditMenu() {
         };
         drawActualPawnLook('Player 1');
     };
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i <= 7; i++) {
         _loop_1(i);
     }
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
@@ -173,6 +173,74 @@ function drawStyles(color) {
     contextik.lineTo(90, 40);
     contextik.lineTo(50, 90);
     contextik.lineTo(10, 40);
+    contextik.fill();
+    cs = document.getElementById('canvasPawn4');
+    cs.width = 100;
+    cs.height = 100;
+    contextik = cs.getContext("2d");
+    contextik.resetTransform();
+    width = cs.width;
+    height = cs.height;
+    contextik.beginPath();
+    contextik.arc(50, 20, 20, 0, 2 * Math.PI);
+    contextik.fillStyle = color;
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 85, 25, 47, 0, 0, Math.PI, true);
+    contextik.fill();
+    cs = document.getElementById('canvasPawn5');
+    cs.width = 100;
+    cs.height = 100;
+    contextik = cs.getContext("2d");
+    contextik.resetTransform();
+    width = cs.width;
+    height = cs.height;
+    contextik.beginPath();
+    contextik.arc(50, 20, 20, 0, 2 * Math.PI);
+    contextik.fillStyle = color;
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 90, 10, 80, 0, 0, Math.PI, true);
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 90, 30, 30, 0, 0, Math.PI, true);
+    contextik.fill();
+    cs = document.getElementById('canvasPawn6');
+    cs.width = 100;
+    cs.height = 100;
+    contextik = cs.getContext("2d");
+    contextik.resetTransform();
+    width = cs.width;
+    height = cs.height;
+    contextik.beginPath();
+    contextik.arc(50, 20, 20, 0, 2 * Math.PI);
+    contextik.fillStyle = color;
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 85, 20, 47, 0, 0, Math.PI, true);
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 90, 30, 30, 0, 0, Math.PI, true);
+    contextik.fill();
+    cs = document.getElementById('canvasPawn7');
+    cs.width = 100;
+    cs.height = 100;
+    contextik = cs.getContext("2d");
+    contextik.resetTransform();
+    width = cs.width;
+    height = cs.height;
+    contextik.beginPath();
+    contextik.arc(50, 20, 20, 0, 2 * Math.PI);
+    contextik.fillStyle = color;
+    contextik.fill();
+    contextik.beginPath();
+    contextik.moveTo(50, 20 + 20 / 2);
+    contextik.lineTo(30, 20 + 20 * 3);
+    contextik.lineTo(70, 20 + 20 * 3);
+    contextik.lineTo(50, 20 + 20 / 2);
+    contextik.fill();
+    contextik.beginPath();
+    contextik.ellipse(50, 90, 30, 30, 0, 0, Math.PI, true);
     contextik.fill();
 }
 function drawPawnType1(contextik, headCenterX, headCenterY, radius, width, height, color) {

@@ -96,6 +96,7 @@ export class ServerSocket{
           t.setFollowingTileNumber(tile.numberOfFollowingTile)
           t.setGameName(data.name)
           t.setQuestionId(tile.questionId)
+          t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
           t.insert()
         })
         g.insert()

@@ -21,6 +21,7 @@ var Tile = /** @class */ (function () {
         this.isStartingFor = [];
         this.belongTo = '';
         this.canOccupy = [];
+        this.cantBeEliminatedOnTile = [];
         this.toggleNumber = true;
         this.numberingColor = '#000000';
         this.pawns = [];
@@ -347,6 +348,7 @@ var Tile = /** @class */ (function () {
             numberingColor: this.numberingColor,
             numberOfFollowingTile: this.numberOfFollowingTile,
             questionId: this.questionId,
+            cantBeEliminatedOnTile: this.cantBeEliminatedOnTile,
             id: this.id };
     };
     Tile.prototype.removePawn = function (pawn) {
@@ -525,6 +527,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getPawns = function () {
         return this.pawns;
+    };
+    Tile.prototype.setCantBeEliminatedOnTile = function (newPlayers) {
+        this.cantBeEliminatedOnTile = newPlayers;
+    };
+    Tile.prototype.getCantBeEliminatedOnTile = function () {
+        return this.cantBeEliminatedOnTile;
     };
     return Tile;
 }());

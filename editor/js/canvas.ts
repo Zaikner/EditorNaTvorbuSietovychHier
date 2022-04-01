@@ -58,6 +58,7 @@ editorSocket.on('connected',(msg)=>{
      addedTile.setToogleNumber(tile.toggleNumber)
      addedTile.setNumberingColor(tile.numberingColor)
      addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
+     addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
    
     editor.getGame().addTile(addedTile)
     
@@ -130,14 +131,18 @@ editorSocket.on('connected',(msg)=>{
 editorSocket.on('join Room',(msg:{id:string})=>{
   console.log('chce Joinut izbu' + msg.id)
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
-})
+  $('#waitingModal').modal('show')
 
-editorSocket.on('player joined',(msg:{msg:string})=>console.log(msg.msg))
+
+editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
+ 
+})
+})
 
 
 const params = new URLSearchParams(window.location.search);
 console.log('rooom je :'+params.get('room'))
-editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
+//editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 
 let isEditor = false;
 let zoz = window.location.href.split('/')
@@ -159,7 +164,7 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else{
 
-  
+  editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
   
 
 

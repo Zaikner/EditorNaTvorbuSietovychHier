@@ -28,6 +28,7 @@ class Tile{
     private isStartingFor:Array<string>=[]
     private belongTo:string = '';
     private canOccupy:Array<string> = []
+    private cantBeEliminatedOnTile:Array<string> = []
     private toggleNumber:boolean = true;
     private numberingColor:string = '#000000'
     private numberOfFollowingTile:number;
@@ -392,6 +393,7 @@ class Tile{
                 numberingColor:this.numberingColor,
                 numberOfFollowingTile:this.numberOfFollowingTile,
                 questionId:this.questionId,
+                cantBeEliminatedOnTile:this.cantBeEliminatedOnTile,
                 id:this.id}
             
     }
@@ -574,7 +576,12 @@ class Tile{
     public getPawns(){
         return this.pawns
     }
-    
+    public setCantBeEliminatedOnTile(newPlayers:Array<string>){
+        this.cantBeEliminatedOnTile = newPlayers
+    }
+    public getCantBeEliminatedOnTile():Array<string>{
+        return this.cantBeEliminatedOnTile
+    }
     
 }
 

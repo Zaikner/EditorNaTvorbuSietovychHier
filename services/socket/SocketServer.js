@@ -143,6 +143,7 @@ var ServerSocket = /** @class */ (function () {
                                 t.setFollowingTileNumber(tile.numberOfFollowingTile);
                                 t.setGameName(data.name);
                                 t.setQuestionId(tile.questionId);
+                                t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
                                 t.insert();
                             });
                             g.insert();

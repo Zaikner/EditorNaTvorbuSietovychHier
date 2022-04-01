@@ -54,6 +54,7 @@ editorSocket.on('connected', function (msg) {
         addedTile.setToogleNumber(tile.toggleNumber);
         addedTile.setNumberingColor(tile.numberingColor);
         addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
+        addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
         editor.getGame().addTile(addedTile);
         reload(editor, ctx);
     });
@@ -108,11 +109,14 @@ editorSocket.on('connected', function (msg) {
 editorSocket.on('join Room', function (msg) {
     console.log('chce Joinut izbu' + msg.id);
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
+    $('#waitingModal').modal('show');
+    editorSocket.on('player joined', function (msg) {
+        console.log(msg.msg);
+    });
 });
-editorSocket.on('player joined', function (msg) { return console.log(msg.msg); });
 var params = new URLSearchParams(window.location.search);
 console.log('rooom je :' + params.get('room'));
-editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
+//editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 var isEditor = false;
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
@@ -130,6 +134,7 @@ if (zoz[zoz.length - 2] === 'editor') {
     //editor.getGame().setInitSizeY(window.innerHeight)
 }
 else {
+    editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
     if (params.get('id') == null) {
         editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
         //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})

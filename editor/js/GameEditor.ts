@@ -16,6 +16,7 @@ class GameEditor{
     private startForPlayers:Array<string> = []
     private endForPlayers:Array<string> = []
     private enabledForPlayers:Array<string> = []
+    private cantBeEliminatedOnTile:Array<string> = []
     private nextTileId = 0;
     private questionId = -1;
     constructor(){
@@ -234,6 +235,12 @@ class GameEditor{
     }
     public getEnabledForPlayers():Array<string>{
         return this.enabledForPlayers
+    }
+    public setCantBeEliminatedOnTile(newPlayers:Array<string>){
+        this.cantBeEliminatedOnTile = newPlayers
+    }
+    public getCantBeEliminatedOnTile():Array<string>{
+        return this.cantBeEliminatedOnTile
     }
     public getQuestionId(){
         return this.questionId
