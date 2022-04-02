@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.initDice = exports.initGameInfo = void 0;
+exports.changeWaitingRoom = exports.initDice = exports.initGameInfo = void 0;
 var Elements_1 = require("./Elements");
 var canvas_1 = require("./canvas");
 var diceImages = [];
@@ -75,3 +75,29 @@ function throwDice() {
         //.getElementById('dicePlace')?.append(dice)
     }, 200);
 }
+function changeWaitingRoom(accs) {
+    var div = document.getElementById('waitingContainer');
+    var i = 0;
+    var _loop_3 = function () {
+        var quest = document.createElement('button');
+        quest.type = 'button';
+        quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-danger");
+        quest.style.textAlign = 'center';
+        quest.textContent = accs[i].name;
+        div.appendChild(quest);
+        var image = document.createElement("IMG");
+        image.src = accs[i].avatar;
+        image.style.width = '50px';
+        image.style.height = '50px';
+        image.style.textAlign = 'right';
+        image.onload = function () {
+            quest.appendChild(image);
+        };
+        i++;
+    };
+    while (i < accs.length) {
+        _loop_3();
+    }
+    console.log('vykonal change');
+}
+exports.changeWaitingRoom = changeWaitingRoom;

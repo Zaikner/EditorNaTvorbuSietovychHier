@@ -9,7 +9,7 @@ import { spawnButton, spawnParagraph, spawnSliderWithValueShower } from "./Eleme
 
 
 import { Background } from "./Background";
-import { initGameInfo,initDice } from "./Gameplay";
+import { initGameInfo,initDice, changeWaitingRoom } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion} from "./Questions";
@@ -135,11 +135,12 @@ editorSocket.on('join Room',(msg:{id:string})=>{
 
 
 editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
- 
+  editorSocket.emit('reload waiting room',{room:params.get('id')})
 })
 })
-
-
+editorSocket.on('player left',(msg:{msg:string})=>{console.log(msg.msg)
+  editorSocket.emit('reload waiting room',{room:params.get('id')})
+})
 const params = new URLSearchParams(window.location.search);
 console.log('rooom je :'+params.get('room'))
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
@@ -162,25 +163,15 @@ if (zoz[zoz.length-2] === 'editor'){
   //editor.getGame().setInitSizeY(window.innerHeight)
   
 }
-else{
+else {
+  editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
-  editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
-  
-
-
-  if (params.get('id') == null){
-    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
-    //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
-  }
-  else{
+  if (params.get('id') != null){
+    editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
     initDice()
-    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
-   // editorSocket.emit('load room-info',{room:params.get('room')})
-    //editorSocket.emit('load room-game',{room:params.get('room')})
-    //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
-
+    
   }
-  
+ 
 }
 
 
@@ -192,6 +183,10 @@ editorSocket.on('add Opt',(data:any) =>{
   addOption('editQuestion',data.text,data.isAnswer,data.id)
 })
 
+editorSocket.on('reloaded waiting room',(msg)=>{
+  changeWaitingRoom(msg.names)
+ 
+})
 document.getElementById("showRulesButton")?.addEventListener('click',function(){
  
   $('#rulesModal').modal('show');

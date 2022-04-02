@@ -11,6 +11,8 @@ import { PawnFinder } from '../../services/db/RDG/PawnFinder.js';
 import { PawnStyleFinder } from '../../services/db/RDG/PawnStyleFinder.js';
 import { RulesFinder } from '../../services/db/RDG/RulesFinder.js';
 import { Room } from './Room.js';
+import { Player } from './Player.js';
+import { ServerSocket } from '../../services/socket/SocketServer.js';
 //const Room = require('./Room.js')
 
 
@@ -44,12 +46,23 @@ class GameManager{
             })
         }
         
-      
         let room = new Room(id,numOfPlayers,name)
         console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
         return room
+    }
+    
+    static findRoomBySocketId(socketId:string){
+        Array.from(this.activeRooms.values()).forEach((room:Room)=>{
+            room.getPlayers().forEach((player:Player)=>{
+                if (player.getAccount().getSocketId() == socketId){
+                    room.leave(player)
+                    ServerSocket.getIo().to(room.getId.toString()).emit('player left',{msg:'Player '+player.getAccount().getName()+' has left the room.'})
+                    
+                }
+            })
+        })
     }
   
     public static getActiveRooms(){

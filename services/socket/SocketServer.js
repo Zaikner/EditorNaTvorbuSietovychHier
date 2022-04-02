@@ -95,7 +95,7 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('disconnect', function () {
-                console.log('user disconnected');
+                GameManager.findRoomBySocketId(socket.id);
             });
             socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var last, lastId, g, b, rule;
@@ -364,7 +364,13 @@ var ServerSocket = /** @class */ (function () {
             socket.on('join Room', function (msg) {
                 socket.join(msg.roomName);
             });
-            socket.join('leave Room', function () {
+            socket.on('reload waiting room', function (msg) {
+                var names = [];
+                GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach(function (player) {
+                    names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar() });
+                });
+                console.log('emitol reload waiting');
+                _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });
             });
         });
     };

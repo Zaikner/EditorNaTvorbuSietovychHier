@@ -69,4 +69,33 @@ function throwDice(){
 
 }
 
-export{initGameInfo,initDice}
+function changeWaitingRoom(accs:any){
+    let div = <HTMLDivElement>document.getElementById('waitingContainer')
+   
+    let i = 0
+  
+    while (i < accs.length){
+    
+        let quest = document.createElement('button')
+        quest.type = 'button';
+        quest.classList.add("list-group-item","list-group-item-action","active","btn-danger")
+        quest.style.textAlign =  'center';
+        quest.textContent =accs[i].name
+        div.appendChild(quest)
+
+        let image:HTMLImageElement =<HTMLImageElement> document.createElement("IMG");
+        image.src =accs[i].avatar
+        image.style.width = '50px'
+        image.style.height = '50px'
+        image.style.textAlign = 'right'
+        image.onload = function(){
+            quest.appendChild(image)
+        }
+        i++;
+    }
+
+
+    console.log('vykonal change')
+   
+}
+export{initGameInfo,initDice,changeWaitingRoom}

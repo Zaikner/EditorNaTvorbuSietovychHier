@@ -22,7 +22,9 @@ import { Rules } from "../db/RDG/Rules";
 import { RulesFinder } from "../db/RDG/RulesFinder";
 import { access } from "fs";
 import { editor } from "../../editor/js/canvas";
-const Player = require("../../backEnd/Game/Player") ;
+import { Account } from "../../backEnd/Accounts/Account";
+
+const Player = require( "../../backEnd/Game/Player")
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
@@ -52,7 +54,8 @@ export class ServerSocket{
             });
             
             socket.on('disconnect', () => {
-                    console.log('user disconnected');
+                    
+                GameManager.findRoomBySocketId(socket.id)
             });
         socket.on('saveGame',async (data:any) => {
       
@@ -299,9 +302,21 @@ export class ServerSocket{
       socket.on('join Room',(msg:{roomName:string})=>{
         socket.join(msg.roomName)
       })
-      socket.join('leave Room',()=>{
-        
+      socket.on('reload waiting room',(msg:{room:string})=>{
+        let names:Array<{name:string,avatar:string}>= []
+        GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach((player:any)=>{
+          names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar()})
+        }
+        )
+        console.log('emitol reload waiting')
+        this.io.in(msg.room).emit('reloaded waiting room',{names:names})
       })
+
+   
+      
+
+    
+      
           });
 
     

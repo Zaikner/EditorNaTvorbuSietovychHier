@@ -26,6 +26,7 @@ export class Room{
         public leave(player:Player){
             this.players = this.players.filter((t) => {return t != player});
             this.numOfPresentPlayers--;
+           
         }
         public broadcast(msg:string){
 

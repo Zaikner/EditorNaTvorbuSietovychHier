@@ -44,6 +44,7 @@ var PawnFinder_js_1 = require("../../services/db/RDG/PawnFinder.js");
 var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
 var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
 var Room_js_1 = require("./Room.js");
+var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
 //const Room = require('./Room.js')
 var GameManager = /** @class */ (function () {
     function GameManager() {
@@ -98,6 +99,16 @@ var GameManager = /** @class */ (function () {
                 this.activeRooms.set(id, room);
                 //+ pushni hraca
                 return [2 /*return*/, room];
+            });
+        });
+    };
+    GameManager.findRoomBySocketId = function (socketId) {
+        Array.from(this.activeRooms.values()).forEach(function (room) {
+            room.getPlayers().forEach(function (player) {
+                if (player.getAccount().getSocketId() == socketId) {
+                    room.leave(player);
+                    SocketServer_js_1.ServerSocket.getIo().to(room.getId.toString()).emit('player left', { msg: 'Player ' + player.getAccount().getName() + ' has left the room.' });
+                }
             });
         });
     };

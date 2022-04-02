@@ -112,7 +112,12 @@ editorSocket.on('join Room', function (msg) {
     $('#waitingModal').modal('show');
     editorSocket.on('player joined', function (msg) {
         console.log(msg.msg);
+        editorSocket.emit('reload waiting room', { room: params.get('id') });
     });
+});
+editorSocket.on('player left', function (msg) {
+    console.log(msg.msg);
+    editorSocket.emit('reload waiting room', { room: params.get('id') });
 });
 var params = new URLSearchParams(window.location.search);
 console.log('rooom je :' + params.get('room'));
@@ -134,17 +139,10 @@ if (zoz[zoz.length - 2] === 'editor') {
     //editor.getGame().setInitSizeY(window.innerHeight)
 }
 else {
-    editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
-    if (params.get('id') == null) {
-        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
-        //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
-    }
-    else {
+    editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+    if (params.get('id') != null) {
+        editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
         (0, Gameplay_1.initDice)();
-        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
-        // editorSocket.emit('load room-info',{room:params.get('room')})
-        //editorSocket.emit('load room-game',{room:params.get('room')})
-        //editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
     }
 }
 editorSocket.on('loadedQuestions', function (data) {
@@ -155,6 +153,9 @@ editorSocket.on('loadedQuestions', function (data) {
 editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQuestion)(data); });
 editorSocket.on('add Opt', function (data) {
     (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
+});
+editorSocket.on('reloaded waiting room', function (msg) {
+    (0, Gameplay_1.changeWaitingRoom)(msg.names);
 });
 (_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
     $('#rulesModal').modal('show');
