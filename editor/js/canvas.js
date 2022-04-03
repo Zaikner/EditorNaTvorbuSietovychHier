@@ -1,5 +1,5 @@
 "use strict";
-var _a;
+var _a, _b;
 exports.__esModule = true;
 exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
@@ -113,6 +113,13 @@ editorSocket.on('join Room', function (msg) {
     editorSocket.on('player joined', function (msg) {
         console.log(msg.msg);
         editorSocket.emit('reload waiting room', { room: params.get('id') });
+        var chat = document.getElementById('chat');
+        if (chat.value == '') {
+            chat.value = msg.msg;
+        }
+        else {
+            chat.value = chat.value + '\n' + msg.msg;
+        }
     });
 });
 editorSocket.on('player left', function (msg) {
@@ -144,7 +151,22 @@ else {
         editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
         (0, Gameplay_1.initDice)();
     }
+    (_a = document.getElementById('messageSubmitButton')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
+        // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+        // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+        // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
+    });
 }
+editorSocket.on('add chat message', function (data) {
+    var chat = document.getElementById('chat');
+    if (chat.value == '') {
+        chat.value = data.name + ':' + data.msg;
+    }
+    else {
+        chat.value = chat.value + '\n' + data.name + ':' + data.msg;
+    }
+});
 editorSocket.on('loadedQuestions', function (data) {
     (0, Questions_1.showAllQuestions)(data);
     (0, Questions_1.pickQuestion)(data);
@@ -157,7 +179,7 @@ editorSocket.on('add Opt', function (data) {
 editorSocket.on('reloaded waiting room', function (msg) {
     (0, Gameplay_1.changeWaitingRoom)(msg.names);
 });
-(_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+(_b = document.getElementById("showRulesButton")) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
     $('#rulesModal').modal('show');
     document.getElementById("ruleInput").value = editor.getGame().getRules();
     console.log('clickol');
@@ -433,3 +455,8 @@ $('#addButton').on('load', function () {
 }
 //document.getElementById('addButton')!.addEventListener('click',addOption)}
 );
+window.onload = function () {
+    if (params.get('id') != null) {
+        editorSocket.emit('reload waiting room', { room: params.get('id') });
+    }
+};

@@ -99,9 +99,20 @@
         </button>
       </div>
       <div class="modal-body" id="modalBody" style="text-align:center;">
-        <div class="container"  id='waitingContainer'>
+        <div  style="text-align:center; margin: 3%;">
+          <h5>Player waiting in lobby:</h5>
+          <div class="container"  id='waitingContainer'>
+        
+          </div>
+        </div>
+       
+        <div  style="text-align:center; margin: 3%;">
+          <h5>Player chat:</h5>
+          <textarea rows = '10' id="chat" style="width:100%; max-height: 25vh; resize: none;" readonly></textarea>
+          <input type="text"  id='messagePlace' placeholder="Enter a chat message" style="width:100%; max-height: 5vh; resize: none;" ></input><button type = 'button' id='messageSubmitButton' style="width:100%; max-height: 7vh; resize: none;">Submit</button>
       
         </div>
+         
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->

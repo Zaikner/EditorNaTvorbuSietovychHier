@@ -136,6 +136,13 @@ editorSocket.on('join Room',(msg:{id:string})=>{
 
 editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
   editorSocket.emit('reload waiting room',{room:params.get('id')})
+  let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
+  if (chat.value == ''){
+    chat.value =  msg.msg
+  }
+  else{
+    chat.value = chat.value +  '\n' + msg.msg;}
+
 })
 })
 editorSocket.on('player left',(msg:{msg:string})=>{console.log(msg.msg)
@@ -171,9 +178,24 @@ else {
     initDice()
     
   }
- 
+  
+  document.getElementById('messageSubmitButton')?.addEventListener('click',function(){
+    editorSocket.emit('chat-waitingRoom',{roomId:params.get('id'),id:getCookie('id'),msg:(<HTMLInputElement>document.getElementById('messagePlace'))!.value});
+    // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+    // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+    // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
+    })
 }
 
+editorSocket.on('add chat message',(data:{name:string,msg:string})=>{
+  let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
+  if (chat.value == ''){
+    chat.value =  data.name+':'+ data.msg
+  }
+  else{
+    chat.value = chat.value +  '\n' + data.name+':'+ data.msg;
+  }}
+ )
 
 editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)
                                            pickQuestion(data)})
@@ -515,4 +537,11 @@ $('#addButton').on('load', function() {
   //document.getElementById('addButton')!.addEventListener('click',addOption)}
   )
 
+
+window.onload = function(){
+  if(params.get('id') != null){
+    editorSocket.emit('reload waiting room',{room:params.get('id')})
+  }
+
+}
 export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize};

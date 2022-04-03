@@ -71,7 +71,7 @@ function throwDice(){
 
 function changeWaitingRoom(accs:any){
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
-   
+    elementDeleter('waitingContainer')
     let i = 0
   
     while (i < accs.length){

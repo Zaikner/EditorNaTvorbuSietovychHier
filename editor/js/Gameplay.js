@@ -77,6 +77,7 @@ function throwDice() {
 }
 function changeWaitingRoom(accs) {
     var div = document.getElementById('waitingContainer');
+    (0, canvas_1.elementDeleter)('waitingContainer');
     var i = 0;
     var _loop_3 = function () {
         var quest = document.createElement('button');

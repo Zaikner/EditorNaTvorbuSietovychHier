@@ -94,6 +94,10 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
+            socket.on('chat-waitingRoom', function (data) {
+                var acc = AccountManager.getAccountByClientId(data.id);
+                _this.io.to(data.roomId).emit('add chat message', { name: acc.getName(), msg: data.msg });
+            });
             socket.on('disconnect', function () {
                 GameManager.findRoomBySocketId(socket.id);
             });

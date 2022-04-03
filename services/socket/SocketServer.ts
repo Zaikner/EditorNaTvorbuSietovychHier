@@ -52,7 +52,10 @@ export class ServerSocket{
                     this.emitToSpecificSocket(socket.id,'connected', await GameManager.loadGame(msg.name))
                     console.log('zapol som hru'+ msg.name);
             });
-            
+            socket.on('chat-waitingRoom',(data:{roomId:string;id:string,msg:string})=>{
+              let acc = AccountManager.getAccountByClientId(data.id)
+              this.io.to(data.roomId).emit('add chat message',{name:acc.getName(),msg:data.msg})
+            })
             socket.on('disconnect', () => {
                     
                 GameManager.findRoomBySocketId(socket.id)
