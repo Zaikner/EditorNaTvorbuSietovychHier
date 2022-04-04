@@ -85,7 +85,7 @@ class Game{
 
         return tile
     }
-    findPawnById(id:number,value:number){
+    movePawnById(id:number,value:number){
         
         this.pawns.forEach((p:Pawn)=>{
             console.log(p)

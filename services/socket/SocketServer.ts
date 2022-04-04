@@ -39,7 +39,7 @@ export class ServerSocket{
             console.log(socket.id)
             socket.emit('pipi')
             
-            socket.on('load game',async (msg:{id:string,name:string}) => {
+            socket.on('load game',async (msg:{id:string,name:string,room:string}) => {
                     console.log('aspon emitol load game')
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
@@ -49,8 +49,16 @@ export class ServerSocket{
                 
                    
                    console.log('toto returnol:'+await GameManager.loadGame(msg.name))
+                   let emit = await GameManager.loadGame(msg.name)
+                   if (msg.room!=undefined){
+                    let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+                    emit.pawns.forEach((pawn:Pawn)=>{
+                        pawn.tileId = r.getPawnPositions().get(pawn.getId())
+                    })
+                   }
+                
                    console.log(await GameManager.loadGame(msg.name))
-                    this.emitToSpecificSocket(socket.id,'connected', await GameManager.loadGame(msg.name))
+                    this.emitToSpecificSocket(socket.id,'connected', emit)
                     console.log('zapol som hru'+ msg.name);
             });
             socket.on('chat-waitingRoom',(data:{roomId:string;id:string,msg:string})=>{
@@ -193,7 +201,14 @@ export class ServerSocket{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
         
       })
-        
+      socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number})=>{
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        r.getPawnPositions().set(msg.pawnId,msg.tileId)
+        console.log(msg.pawnId)
+        console.log(msg.tileId)
+        console.log('zmenil poziciu pawnu')
+        console.log(r)
+      })
        
 
 

@@ -50,6 +50,15 @@ class GameManager{
         console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
+          let pawns = await PawnFinder.getIntance().findByName(name)
+
+        pawns!.forEach((pawn)=>{
+           
+            room.getPawnPositions().set(pawn.getId(),pawn.getTileId())
+            console.log(pawn)
+        })
+        console.log('vytvoril roomky')
+        console.log(room)
         return room
     }
     

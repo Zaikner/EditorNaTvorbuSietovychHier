@@ -81,24 +81,35 @@ var GameManager = /** @class */ (function () {
     };
     GameManager.createRoom = function (name, numOfPlayers) {
         return __awaiter(this, void 0, void 0, function () {
-            var stop, id, room;
+            var stop, id, room, pawns;
             return __generator(this, function (_a) {
-                stop = false;
-                id = 0;
-                while (!stop) {
-                    stop = true;
-                    id++;
-                    this.activeRooms.forEach(function (room) {
-                        if (room.getId() == id) {
-                            stop = false;
+                switch (_a.label) {
+                    case 0:
+                        stop = false;
+                        id = 0;
+                        while (!stop) {
+                            stop = true;
+                            id++;
+                            this.activeRooms.forEach(function (room) {
+                                if (room.getId() == id) {
+                                    stop = false;
+                                }
+                            });
                         }
-                    });
+                        room = new Room_js_1.Room(id, numOfPlayers, name);
+                        console.log(room);
+                        this.activeRooms.set(id, room);
+                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
+                    case 1:
+                        pawns = _a.sent();
+                        pawns.forEach(function (pawn) {
+                            room.getPawnPositions().set(pawn.getId(), pawn.getTileId());
+                            console.log(pawn);
+                        });
+                        console.log('vytvoril roomky');
+                        console.log(room);
+                        return [2 /*return*/, room];
                 }
-                room = new Room_js_1.Room(id, numOfPlayers, name);
-                console.log(room);
-                this.activeRooms.set(id, room);
-                //+ pushni hraca
-                return [2 /*return*/, room];
             });
         });
     };

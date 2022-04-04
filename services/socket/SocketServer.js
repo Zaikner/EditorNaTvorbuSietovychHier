@@ -62,9 +62,9 @@ var ServerSocket = /** @class */ (function () {
             console.log(socket.id);
             socket.emit('pipi');
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, _a, _b, _c, _d, _e, _f, _g;
-                return __generator(this, function (_h) {
-                    switch (_h.label) {
+                var acc, _a, _b, _c, emit, r_1, _d, _e;
+                return __generator(this, function (_f) {
+                    switch (_f.label) {
                         case 0:
                             console.log('aspon emitol load game');
                             acc = AccountManager.getAccountByClientId(msg.id);
@@ -79,16 +79,21 @@ var ServerSocket = /** @class */ (function () {
                             // let game = await GameFinder.getIntance().findByName(msg.name)
                             // let tt =await TileFinder.getIntance().findByName(msg.name)
                             // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                            _b.apply(_a, [_c + (_h.sent())]);
-                            _e = (_d = console).log;
+                            _b.apply(_a, [_c + (_f.sent())]);
                             return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 2:
-                            _e.apply(_d, [_h.sent()]);
-                            _f = this.emitToSpecificSocket;
-                            _g = [socket.id, 'connected'];
+                            emit = _f.sent();
+                            if (msg.room != undefined) {
+                                r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
+                                emit.pawns.forEach(function (pawn) {
+                                    pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
+                                });
+                            }
+                            _e = (_d = console).log;
                             return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 3:
-                            _f.apply(this, _g.concat([_h.sent()]));
+                            _e.apply(_d, [_f.sent()]);
+                            this.emitToSpecificSocket(socket.id, 'connected', emit);
                             console.log('zapol som hru' + msg.name);
                             return [2 /*return*/];
                     }
@@ -220,6 +225,14 @@ var ServerSocket = /** @class */ (function () {
             socket.on('player thrown', function (msg) {
                 console.log('emitol player thrown');
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
+            });
+            socket.on('change Pawn position', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                r.getPawnPositions().set(msg.pawnId, msg.tileId);
+                console.log(msg.pawnId);
+                console.log(msg.tileId);
+                console.log('zmenil poziciu pawnu');
+                console.log(r);
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);

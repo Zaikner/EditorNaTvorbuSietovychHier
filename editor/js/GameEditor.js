@@ -184,6 +184,9 @@ var GameEditor = /** @class */ (function () {
     GameEditor.prototype.getChoosenTile = function () {
         return this.choosenTile;
     };
+    GameEditor.prototype.setChoosenTile = function (newTile) {
+        this.choosenTile = newTile;
+    };
     GameEditor.prototype.getIsMoving = function () {
         return this.isMoving;
     };

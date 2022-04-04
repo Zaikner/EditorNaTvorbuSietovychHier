@@ -20,7 +20,8 @@ import { Warning } from "./Warning";
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 //socket.emit('chat message', 'hi');
-
+const canvas = document.createElement('canvas');
+const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
 editorSocket.on('connected',(msg)=>{
   msg.tiles.forEach((tile:any) =>{
     let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
@@ -159,6 +160,7 @@ editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
   else{
     chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
   }
+  reload(editor,ctx)
 })})
 editorSocket.on('player left',(msg:{msg:string})=>{console.log(msg.msg)
   editorSocket.emit('reload waiting room',{room:params.get('id')})
@@ -190,7 +192,8 @@ console.log('rooom je :'+params.get('room'))
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
- let pawn:any = (editor.getGame().findPawnById(msg.pawn,msg.value))!
+ let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
+  editor.setChoosenTile(undefined!)
  console.log('pawn cislo:'+msg.pawn)
  
   console.log('hodil')
@@ -215,13 +218,19 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else {
   
-  editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+  
 
   if (params.get('id') != null){
     editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
+    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name'),room:params.get('id')})
     initDice()
     
   }
+  else{
+    
+    editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
+  }
+  reload(editor,ctx)
   document.getElementById("leaveWaitinRoom")?.addEventListener('click',function(){
     window.location.replace('/gameLobby')
   })
@@ -347,7 +356,7 @@ document.getElementById("resetQuestionID")!.addEventListener('click',function(){
 }
 
 var doc = document;
-const canvas = document.createElement('canvas');
+
 
 
 document.getElementById("canvasPlace")!.appendChild(canvas);
@@ -507,7 +516,7 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],'Sav
  
 
  var length:number =0;
-const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
+
 ctx.scale(2, -2);
 resize(editor,ctx);
 

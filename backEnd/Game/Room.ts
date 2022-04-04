@@ -1,6 +1,7 @@
 import { Account } from "../Accounts/Account";
 import { Player } from "./Player";
 import { ServerSocket } from "../../services/socket/SocketServer";
+
 export class Room{
         private id:number = 0;
         private socketId:string = '';
@@ -11,6 +12,8 @@ export class Room{
         private hasStarted:boolean = false;
         private playerOnTurn:Player = undefined!
         private lastPlayerId:number = 0
+       
+        private pawnPositions:Map<number,number> = new Map()
 
         constructor(id:number,numOfPlayers:number,gameName:string){
             this.id = id;
@@ -101,5 +104,11 @@ export class Room{
         public setPlayerOnTurn(newPlayer:Player){
             this.playerOnTurn = newPlayer
         }
-
+      
+        public setPawnPositions(newPos:Map<number,number>){
+            this.pawnPositions = newPos;
+        }
+        public getPawnPositions(){
+            return this.pawnPositions
+        }
     }

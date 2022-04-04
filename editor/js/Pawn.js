@@ -23,14 +23,23 @@ var Pawn = /** @class */ (function () {
                 actuallTile.removePawn(p);
                 actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber());
                 actuallTile.getPawns().push(p);
+                p.tileId = actuallTile.getId();
                 console.log(actuallTile);
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
-            }, 1000);
+            }, 500 * i);
         }
         this.tile = actuallTile;
         //this.tile.getPawns().push(this)
         //startTile.removePawn(this)
-        console.log('posunul');
+        var params = new URLSearchParams(window.location.search);
+        p = this;
+        setTimeout(function () {
+            canvas_1.editorSocket.emit('change Pawn position', { pawnId: p.id, tileId: p.tileId, room: params.get('id') });
+            startTile.setIsChoosen(false);
+            canvas_1.editor.setChoosenTile(undefined);
+            (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+            console.log('posunul');
+        }, 600 * numOfTiles);
     };
     Pawn.prototype.JSONfyPawn = function () {
         return { player: this.player,

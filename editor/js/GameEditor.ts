@@ -200,6 +200,9 @@ class GameEditor{
     getChoosenTile(){
         return this.choosenTile
     }
+    setChoosenTile(newTile: Tile){
+         this.choosenTile = newTile
+    }
     public getIsMoving() : boolean {
         return this.isMoving
     }

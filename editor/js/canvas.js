@@ -20,6 +20,10 @@ exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
 //socket.emit('chat message', 'hi');
+var canvas = document.createElement('canvas');
+exports.canvas = canvas;
+var ctx = canvas.getContext("2d");
+exports.ctx = ctx;
 editorSocket.on('connected', function (msg) {
     msg.tiles.forEach(function (tile) {
         var addedTile = new Tile_js_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
@@ -132,6 +136,7 @@ editorSocket.on('join Room', function (msg) {
         else {
             chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
         }
+        reload(editor, ctx);
     });
 });
 editorSocket.on('player left', function (msg) {
@@ -162,7 +167,8 @@ console.log('rooom je :' + params.get('room'));
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
-    var pawn = (editor.getGame().findPawnById(msg.pawn, msg.value));
+    var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
+    editor.setChoosenTile(undefined);
     console.log('pawn cislo:' + msg.pawn);
     console.log('hodil');
 });
@@ -183,11 +189,15 @@ if (zoz[zoz.length - 2] === 'editor') {
     //editor.getGame().setInitSizeY(window.innerHeight)
 }
 else {
-    editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
     if (params.get('id') != null) {
         editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
+        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
         (0, Gameplay_1.initDice)();
     }
+    else {
+        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+    }
+    reload(editor, ctx);
     (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         window.location.replace('/gameLobby');
     });
@@ -300,8 +310,6 @@ function edit() {
 }
 var doc = document;
 exports.doc = doc;
-var canvas = document.createElement('canvas');
-exports.canvas = canvas;
 document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
 function mainMenu() {
@@ -435,8 +443,6 @@ function mainMenu() {
 }
 exports.mainMenu = mainMenu;
 var length = 0;
-var ctx = canvas.getContext("2d");
-exports.ctx = ctx;
 ctx.scale(2, -2);
 resize(editor, ctx);
 window.addEventListener('resize', function () { resize(editor, ctx); });

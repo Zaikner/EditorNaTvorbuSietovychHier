@@ -1,5 +1,5 @@
-import { ctx, editor, reload } from "./canvas";
-import { drawPawnType1 } from "./PawnEditor";
+import { ctx, editor, editorSocket, reload } from "./canvas";
+import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
 import { Tile } from "./Tile";
 
 export class Pawn{
@@ -30,15 +30,25 @@ export class Pawn{
                 actuallTile.removePawn(p)
                 actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
                 actuallTile.getPawns().push(p)
+                p.tileId = actuallTile.getId()
                 console.log(actuallTile)
             reload(editor,ctx)
-            }, 1000)
+            }, 500*i)
         }
 
         this.tile = actuallTile
         //this.tile.getPawns().push(this)
         //startTile.removePawn(this)
+        const params = new URLSearchParams(window.location.search);
+        p = this
+        setTimeout(function(){
+            editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id')})
+            startTile.setIsChoosen(false)
+            editor.setChoosenTile(undefined!)
+            reload(editor,ctx)
         console.log('posunul')
+        }, 600*numOfTiles)
+        
     }
     JSONfyPawn(){
         return{player:this.player,

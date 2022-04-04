@@ -13,6 +13,7 @@ var Room = /** @class */ (function () {
         this.hasStarted = false;
         this.playerOnTurn = undefined;
         this.lastPlayerId = 0;
+        this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
         this.gameName = gameName;
@@ -86,6 +87,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.setPlayerOnTurn = function (newPlayer) {
         this.playerOnTurn = newPlayer;
+    };
+    Room.prototype.setPawnPositions = function (newPos) {
+        this.pawnPositions = newPos;
+    };
+    Room.prototype.getPawnPositions = function () {
+        return this.pawnPositions;
     };
     return Room;
 }());
