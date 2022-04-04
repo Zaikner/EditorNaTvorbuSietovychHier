@@ -193,11 +193,15 @@ var ServerSocket = /** @class */ (function () {
                 console.log(GameManager.getActiveRooms().get(parseInt(msg.room)));
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 var cont = true;
-                r.getPlayers().forEach(function (player) {
-                    if (player.getAccount() == acc) {
-                        cont = false;
-                    }
-                });
+                // r.getPlayers().forEach((player:any)=>{
+                //   if (player.getAccount().getName() == acc.getName()){
+                //     cont = false
+                //   }
+                //   else{
+                //     console.log(player.getAccount().getName())
+                //     console.log(pl)
+                //   }
+                // })
                 if (r.getHasStarted() && cont) {
                     r.join(new Player(acc, 'spectator'));
                 }
@@ -210,6 +214,8 @@ var ServerSocket = /** @class */ (function () {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 r.setHasStarted(true);
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!' });
+                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName() });
+                _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw');
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);

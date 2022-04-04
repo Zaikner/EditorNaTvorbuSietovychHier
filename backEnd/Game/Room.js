@@ -11,6 +11,8 @@ var Room = /** @class */ (function () {
         this.players = [];
         this.gameName = '';
         this.hasStarted = false;
+        this.playerOnTurn = undefined;
+        this.lastPlayerId = 0;
         this.id = id;
         this.maxPlayers = numOfPlayers;
         this.gameName = gameName;
@@ -23,6 +25,9 @@ var Room = /** @class */ (function () {
         }
         SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString() });
         console.log(' joinol a emitol playerovi: ' + player.getAccount().getSocketId());
+        if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator') {
+            this.playerOnTurn = this.players[0];
+        }
     };
     Room.prototype.leave = function (player) {
         if (player.getToken() != 'spectator') {
@@ -32,6 +37,7 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.broadcast = function (msg) {
     };
+    Room.prototype.nextTurn = function () { };
     //constructor(){}
     Room.prototype.getId = function () {
         return this.id;
@@ -74,6 +80,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.getHasStarted = function () {
         return this.hasStarted;
+    };
+    Room.prototype.getPlayerOnTurn = function () {
+        return this.playerOnTurn;
+    };
+    Room.prototype.setPlayerOnTurn = function (newPlayer) {
+        this.playerOnTurn = newPlayer;
     };
     return Room;
 }());

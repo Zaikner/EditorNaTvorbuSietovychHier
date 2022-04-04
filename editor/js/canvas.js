@@ -200,6 +200,15 @@ else {
         // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
     });
 }
+editorSocket.on('turn', function (msg) {
+    elementDeleter('onTurnPlace');
+    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
+    console.log('init turn');
+});
+editorSocket.on('can throw', function () {
+    var _a;
+    (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { (0, Gameplay_1.throwDice)(); });
+});
 editorSocket.on('add chat message', function (data) {
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");

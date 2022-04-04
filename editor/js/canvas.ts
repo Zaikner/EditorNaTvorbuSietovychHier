@@ -9,7 +9,7 @@ import { spawnButton, spawnParagraph, spawnSliderWithValueShower } from "./Eleme
 
 
 import { Background } from "./Background";
-import { initGameInfo,initDice, changeWaitingRoom } from "./Gameplay";
+import { initGameInfo,initDice, changeWaitingRoom, throwDice } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion} from "./Questions";
@@ -198,6 +198,7 @@ if (zoz[zoz.length-2] === 'editor'){
   
 }
 else {
+  
   editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
 
   if (params.get('id') != null){
@@ -234,6 +235,15 @@ else {
       })
 }
 
+editorSocket.on('turn',(msg:{player:string})=>{
+  elementDeleter('onTurnPlace')
+  spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
+  console.log('init turn')
+})
+
+editorSocket.on('can throw',()=>{
+  document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+})
 editorSocket.on('add chat message',(data:{name:string,msg:string})=>{
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!

@@ -179,7 +179,17 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         r.setHasStarted(true)
         
-        this.io.in(msg.room).emit('game started',{msg:'Game has started!'})})
+        this.io.in(msg.room).emit('game started',{msg:'Game has started!'})
+        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName()})
+        this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw')
+      }
+        
+      
+        )
+       
+          
+        
+       
 
 
       socket.on('join player to Room',(msg:{id:string,roomId:string})=>{

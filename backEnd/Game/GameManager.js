@@ -107,10 +107,13 @@ var GameManager = /** @class */ (function () {
             room.getPlayers().forEach(function (player) {
                 if (player.getAccount().getSocketId() == socketId) {
                     room.leave(player);
-                    SocketServer_js_1.ServerSocket.getIo().to(room.getId.toString()).emit('player left', { msg: 'Player ' + player.getAccount().getName() + ' has left the room.' });
+                    SocketServer_js_1.ServerSocket.getIo().to(room.getId().toString()).emit('player left', { msg: 'Player ' + player.getAccount().getName() + ' has left the room.' });
+                    console.log('emitol player left');
                 }
             });
         });
+    };
+    GameManager.findPlayerBySocketId = function (socketId) {
     };
     GameManager.getActiveRooms = function () {
         return this.activeRooms;

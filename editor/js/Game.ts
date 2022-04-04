@@ -28,6 +28,7 @@ class Game{
     
     //----------playing---------
     private hasStarted = false;
+    
 
 
     constructor(){}

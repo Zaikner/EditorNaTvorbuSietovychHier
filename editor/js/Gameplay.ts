@@ -23,7 +23,7 @@ function initDice(){
     dice.id = 'Dice'
     dice.onload = function(){
         document.getElementById('dicePlace')?.append(dice)
-        document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+        
     }
         
     for (let i = 1; i <=6; i++){
@@ -44,7 +44,7 @@ function throwDice(){
         if (times == 10){
             console.log('vypol interaval')
             clearInterval(interval)
-            document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+            //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else{
             times++;
@@ -105,4 +105,4 @@ function changeWaitingRoom(accs:any){
     console.log('vykonal change')
    
 }
-export{initGameInfo,initDice,changeWaitingRoom}
+export{initGameInfo,initDice,changeWaitingRoom,throwDice}

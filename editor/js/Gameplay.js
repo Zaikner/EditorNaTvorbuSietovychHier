@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.changeWaitingRoom = exports.initDice = exports.initGameInfo = void 0;
+exports.throwDice = exports.changeWaitingRoom = exports.initDice = exports.initGameInfo = void 0;
 var Elements_1 = require("./Elements");
 var canvas_1 = require("./canvas");
 var diceImages = [];
@@ -25,9 +25,8 @@ function initDice() {
     dice.src = '../../src/Dice1.png';
     dice.id = 'Dice';
     dice.onload = function () {
-        var _a, _b;
+        var _a;
         (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(dice);
-        (_b = document.getElementById('Dice')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () { throwDice(); });
     };
     var _loop_2 = function (i) {
         var image = new Image();
@@ -48,11 +47,10 @@ function throwDice() {
     var t = 0;
     var times = 0;
     var interval = setInterval(function () {
-        var _a;
         if (times == 10) {
             console.log('vypol interaval');
             clearInterval(interval);
-            (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { throwDice(); });
+            //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {
             times++;
@@ -75,6 +73,7 @@ function throwDice() {
         //.getElementById('dicePlace')?.append(dice)
     }, 200);
 }
+exports.throwDice = throwDice;
 function changeWaitingRoom(accs) {
     var div = document.getElementById('waitingContainer');
     var divPlaying = document.getElementById('playingContainer');
