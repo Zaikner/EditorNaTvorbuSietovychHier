@@ -26,6 +26,9 @@ class Game{
     private rules:string = ''
     private numberOfStartingPawns:number = 1;
     
+    //----------playing---------
+    private hasStarted = false;
+
 
     constructor(){}
 
@@ -190,7 +193,12 @@ class Game{
     getPawnStyle(){
         return this.pawnStyle
     }
-    
+    getHasStarted(){
+        return  this.hasStarted
+    }
+    setHasStarted(newStarted:boolean){
+        this.hasStarted = newStarted
+    }
 }
 
 export{Game}

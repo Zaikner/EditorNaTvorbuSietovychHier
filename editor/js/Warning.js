@@ -7,8 +7,9 @@ var Warning = /** @class */ (function () {
     function Warning() {
     }
     Warning.show = function (txt) {
-        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'modalBody', '', txt);
-        $('#exampleModal').modal('toggle');
+        (0, canvas_1.elementDeleter)('warningModalBody');
+        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'warningModalBody', '', txt);
+        $('#WarningModal').modal('toggle');
     };
     return Warning;
 }());

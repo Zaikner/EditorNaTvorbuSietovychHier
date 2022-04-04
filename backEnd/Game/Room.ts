@@ -8,6 +8,7 @@ export class Room{
         private numOfPresentPlayers = 0;
         private players:Array<Player> = []
         private gameName:string = ''
+        private hasStarted:boolean = false;
 
         constructor(id:number,numOfPlayers:number,gameName:string){
             this.id = id;
@@ -16,16 +17,22 @@ export class Room{
         }
 
         public join(player:Player){
-            this.players.push(player)
-            player.setToken('Player '+ (this.numOfPresentPlayers+1))
-            this.numOfPresentPlayers++;
+            if (player.getToken() != 'spectator'){
+                this.players.push(player)
+                player.setToken('Player '+ (this.numOfPresentPlayers+1))
+                this.numOfPresentPlayers++;
+            }
+         
             ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString()})
             console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
         }
 
         public leave(player:Player){
-            this.players = this.players.filter((t) => {return t != player});
-            this.numOfPresentPlayers--;
+        
+            if (player.getToken() != 'spectator'){
+                this.players = this.players.filter((t) => {return t != player});
+                this.numOfPresentPlayers--;
+            }
            
         }
         public broadcast(msg:string){
@@ -72,5 +79,11 @@ export class Room{
         }
         public setSocketId(newId:string){
             this.socketId = newId
+        }
+        public setHasStarted(has:boolean){
+            this.hasStarted = has
+        }
+        public getHasStarted(){
+            return this.hasStarted
         }
     }

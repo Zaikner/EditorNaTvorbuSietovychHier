@@ -10,20 +10,25 @@ var Room = /** @class */ (function () {
         this.numOfPresentPlayers = 0;
         this.players = [];
         this.gameName = '';
+        this.hasStarted = false;
         this.id = id;
         this.maxPlayers = numOfPlayers;
         this.gameName = gameName;
     }
     Room.prototype.join = function (player) {
-        this.players.push(player);
-        player.setToken('Player ' + (this.numOfPresentPlayers + 1));
-        this.numOfPresentPlayers++;
+        if (player.getToken() != 'spectator') {
+            this.players.push(player);
+            player.setToken('Player ' + (this.numOfPresentPlayers + 1));
+            this.numOfPresentPlayers++;
+        }
         SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString() });
         console.log(' joinol a emitol playerovi: ' + player.getAccount().getSocketId());
     };
     Room.prototype.leave = function (player) {
-        this.players = this.players.filter(function (t) { return t != player; });
-        this.numOfPresentPlayers--;
+        if (player.getToken() != 'spectator') {
+            this.players = this.players.filter(function (t) { return t != player; });
+            this.numOfPresentPlayers--;
+        }
     };
     Room.prototype.broadcast = function (msg) {
     };
@@ -63,6 +68,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.setSocketId = function (newId) {
         this.socketId = newId;
+    };
+    Room.prototype.setHasStarted = function (has) {
+        this.hasStarted = has;
+    };
+    Room.prototype.getHasStarted = function () {
+        return this.hasStarted;
     };
     return Room;
 }());

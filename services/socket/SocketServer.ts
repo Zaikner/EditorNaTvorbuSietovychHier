@@ -23,6 +23,7 @@ import { RulesFinder } from "../db/RDG/RulesFinder";
 import { access } from "fs";
 import { editor } from "../../editor/js/canvas";
 import { Account } from "../../backEnd/Accounts/Account";
+import e = require("express");
 
 const Player = require( "../../backEnd/Game/Player")
 const path = require('path');
@@ -150,21 +151,52 @@ export class ServerSocket{
           console.log(msg.room)
            console.log(GameManager.getActiveRooms().get(parseInt(msg.room)))
           let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-          r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+          let cont = true
+          // r.getPlayers().forEach((player:any)=>{
+          //   if (player.getAccount().getName() == acc.getName()){
+          //     cont = false
+          //   }
+          //   else{
+          //     console.log(player.getAccount().getName())
+          //     console.log(pl)
+          //   }
+          // })
+         
+          if (r.getHasStarted() && cont){
+            r.join(new Player(acc,'spectator'))
+          }
+          else if (cont){
+            r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+          }
+         
       
           console.log(r)
  
       }
       
       )
+      socket.on('game has started',(msg:{room:string})=>{
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        r.setHasStarted(true)
+        
+        this.io.in(msg.room).emit('game started',{msg:'Game has started!'})})
+
+
       socket.on('join player to Room',(msg:{id:string,roomId:string})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
         if(acc === undefined){
           return
         }
         socket.join(msg.roomId)
-        GameManager.getActiveRooms()
-        this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.'})
+       
+        let r = GameManager.getActiveRooms().get(parseInt(msg.roomId))
+        if (r.getHasStarted()){
+          this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
+
+        }
+        else{
+          this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.'})
+        }
       })
       // socket.on('relog',async(msg:{id:string})=>{
       //   console.log('skusil relognut'+msg.id)

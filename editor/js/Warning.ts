@@ -1,10 +1,11 @@
-import { doc } from "./canvas";
+import { doc, elementDeleter } from "./canvas";
 import {spawnParagraph} from './Elements.js'
 
 class Warning{
     static show(txt:string){
-        let p = spawnParagraph(doc,'modalBody','',txt)
-        $('#exampleModal').modal('toggle')
+        elementDeleter('warningModalBody')
+        let p = spawnParagraph(doc,'warningModalBody','',txt)
+        $('#WarningModal').modal('toggle')
     }
 }
 

@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b;
+var _a, _b, _c, _d, _e, _f;
 exports.__esModule = true;
 exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
@@ -14,6 +14,7 @@ var PawnEditor_1 = require("./PawnEditor");
 var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
+var Warning_1 = require("./Warning");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -114,17 +115,41 @@ editorSocket.on('join Room', function (msg) {
         console.log(msg.msg);
         editorSocket.emit('reload waiting room', { room: params.get('id') });
         var chat = document.getElementById('chat');
+        var chatPlaying = document.getElementById("chatPlaying");
         if (chat.value == '') {
             chat.value = msg.msg;
         }
         else {
             chat.value = chat.value + '\n' + msg.msg;
         }
+        if (chatPlaying.value == '') {
+            chatPlaying.value = msg.msg;
+        }
+        else {
+            chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
+        }
     });
 });
 editorSocket.on('player left', function (msg) {
     console.log(msg.msg);
     editorSocket.emit('reload waiting room', { room: params.get('id') });
+});
+editorSocket.on('game started', function (msg) {
+    editor.getGame().setHasStarted(true);
+    var chat = document.getElementById('chat');
+    var chatPlaying = document.getElementById("chatPlaying");
+    if (chat.value == '') {
+        chat.value = msg.msg;
+    }
+    else {
+        chat.value = chat.value + '\n' + msg.msg;
+    }
+    if (chatPlaying.value == '') {
+        chatPlaying.value = msg.msg;
+    }
+    else {
+        chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
+    }
 });
 var params = new URLSearchParams(window.location.search);
 console.log('rooom je :' + params.get('room'));
@@ -151,8 +176,25 @@ else {
         editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
         (0, Gameplay_1.initDice)();
     }
-    (_a = document.getElementById('messageSubmitButton')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+    (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        window.location.replace('/gameLobby');
+    });
+    (_b = document.getElementById('startGameRoom')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+        Warning_1.Warning.show('Are you sure to start the Game ? After start no one will be able to join!');
+    });
+    (_c = document.getElementById("confirmStart")) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
+        editorSocket.emit('game has started', { room: params.get('id') });
+    });
+    (_d = document.getElementById('messageSubmitButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
         editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
+        document.getElementById('messagePlace').value = '';
+        // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+        // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
+        // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
+    });
+    (_e = document.getElementById('messagePlayingSubmitButton')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
+        editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlayingPlace').value });
+        document.getElementById('messagePlayingPlace').value = '';
         // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
         // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
         // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
@@ -160,11 +202,18 @@ else {
 }
 editorSocket.on('add chat message', function (data) {
     var chat = document.getElementById('chat');
+    var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
         chat.value = data.name + ':' + data.msg;
     }
     else {
         chat.value = chat.value + '\n' + data.name + ':' + data.msg;
+    }
+    if (chatPlaying.value == '') {
+        chatPlaying.value = data.name + ':' + data.msg;
+    }
+    else {
+        chatPlaying.value = chatPlaying.value + '\n' + data.name + ':' + data.msg;
     }
 });
 editorSocket.on('loadedQuestions', function (data) {
@@ -179,7 +228,7 @@ editorSocket.on('add Opt', function (data) {
 editorSocket.on('reloaded waiting room', function (msg) {
     (0, Gameplay_1.changeWaitingRoom)(msg.names);
 });
-(_b = document.getElementById("showRulesButton")) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+(_f = document.getElementById("showRulesButton")) === null || _f === void 0 ? void 0 : _f.addEventListener('click', function () {
     $('#rulesModal').modal('show');
     document.getElementById("ruleInput").value = editor.getGame().getRules();
     console.log('clickol');
@@ -458,5 +507,12 @@ $('#addButton').on('load', function () {
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
+    }
+    if (editor.getGame().getHasStarted()) {
+        $('#waitingModal').modal('hide');
+    }
+    else {
+        console.log('nepresetol');
+        console.log(editor.getGame().getHasStarted());
     }
 };

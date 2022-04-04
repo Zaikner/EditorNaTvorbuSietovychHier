@@ -47,9 +47,23 @@
           </div>
           <div class="col-12" id="gameTypePlace">      
           </div>
-          <div class="col-12" id="tileEditingPlace">      
-          </div>
+          
           <div class="col-12" id="dicePlace">      
+          </div>
+          <div class="col-12" id="tileEditingPlace">
+            <div  style="text-align:center; margin: 3%;">
+              <h5>Players:</h5>
+              <div class="container"  id='playingContainer'>
+            
+              </div>
+            </div>
+           
+            <div  style="text-align:center; margin: 3%;">
+              <h5>Player chat:</h5>
+              <textarea rows = '10' id="chatPlaying" style="width:100%; max-height: 25vh; resize: none;" readonly></textarea>
+              <input type="text"  id='messagePlayingPlace' placeholder="Enter a chat message" style="width:100%; max-height: 5vh; resize: none;" ></input><button type = 'button' id='messagePlayingSubmitButton' style="width:100%; max-height: 7vh; resize: none;">Submit</button>
+          
+            </div>      
           </div>
           <div class="modal fade" id="rulesModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" style=" width: 100vh; height: 100vh;">
@@ -90,6 +104,24 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="WarningModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Warning!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="warningModalBody">
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary" id="backToWaitingRoom" onclick="$('#WarningModal').modal('hide');$('#waitingModal').modal('show')">Waiting Room!</button>
+        <button type="button" class="btn btn-secondary" id= "confirmStart" onclick="$('#WarningModal').modal('hide')">Start the game!</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="waitingModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -117,8 +149,8 @@
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <div class="container" style="text-align: center;">
-          <button type="button" class="btn btn-secondary"style="text-align: center;" onclick="$('#waitingModal').modal('hide');">Start game!</button>
-          <button type="button" class="btn btn-secondary" style="text-align: center; " id="resetQuestionID"  onclick=" $('#waitingModal').modal('hide')">Leave Room!</button>
+          <button type="button" class="btn btn-secondary"style="text-align: center;" id="startGameRoom" onclick="$('#waitingModal').modal('hide');">Start game!</button>
+          <button type="button" class="btn btn-secondary" style="text-align: center; " id="leaveWaitinRoom"  onclick=" $('#waitingModal').modal('hide')">Leave Room!</button>
         </div>
       
       </div>

@@ -192,8 +192,24 @@ var ServerSocket = /** @class */ (function () {
                 console.log(msg.room);
                 console.log(GameManager.getActiveRooms().get(parseInt(msg.room)));
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                r.join(new Player(acc, 'Player ' + (r.getNumOfPlayers() + 1)));
+                var cont = true;
+                r.getPlayers().forEach(function (player) {
+                    if (player.getAccount() == acc) {
+                        cont = false;
+                    }
+                });
+                if (r.getHasStarted() && cont) {
+                    r.join(new Player(acc, 'spectator'));
+                }
+                else if (cont) {
+                    r.join(new Player(acc, 'Player ' + (r.getNumOfPlayers() + 1)));
+                }
                 console.log(r);
+            });
+            socket.on('game has started', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                r.setHasStarted(true);
+                _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!' });
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);
@@ -201,8 +217,13 @@ var ServerSocket = /** @class */ (function () {
                     return;
                 }
                 socket.join(msg.roomId);
-                GameManager.getActiveRooms();
-                _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.' });
+                var r = GameManager.getActiveRooms().get(parseInt(msg.roomId));
+                if (r.getHasStarted()) {
+                    _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.(spectating)' });
+                }
+                else {
+                    _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.' });
+                }
             });
             // socket.on('relog',async(msg:{id:string})=>{
             //   console.log('skusil relognut'+msg.id)

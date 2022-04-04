@@ -77,7 +77,9 @@ function throwDice() {
 }
 function changeWaitingRoom(accs) {
     var div = document.getElementById('waitingContainer');
+    var divPlaying = document.getElementById('playingContainer');
     (0, canvas_1.elementDeleter)('waitingContainer');
+    (0, canvas_1.elementDeleter)('playingContainer');
     var i = 0;
     var _loop_3 = function () {
         var quest = document.createElement('button');
@@ -86,6 +88,9 @@ function changeWaitingRoom(accs) {
         quest.style.textAlign = 'center';
         quest.textContent = accs[i].name;
         div.appendChild(quest);
+        var questClone = quest.cloneNode();
+        questClone.textContent = accs[i].name;
+        divPlaying.appendChild(questClone);
         var image = document.createElement("IMG");
         image.src = accs[i].avatar;
         image.style.width = '50px';
@@ -93,6 +98,7 @@ function changeWaitingRoom(accs) {
         image.style.textAlign = 'right';
         image.onload = function () {
             quest.appendChild(image);
+            questClone.appendChild(image.cloneNode());
         };
         i++;
     };

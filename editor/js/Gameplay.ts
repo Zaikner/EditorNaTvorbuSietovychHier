@@ -71,7 +71,9 @@ function throwDice(){
 
 function changeWaitingRoom(accs:any){
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
+    let divPlaying = <HTMLDivElement>document.getElementById('playingContainer')
     elementDeleter('waitingContainer')
+    elementDeleter('playingContainer')
     let i = 0
   
     while (i < accs.length){
@@ -82,6 +84,9 @@ function changeWaitingRoom(accs:any){
         quest.style.textAlign =  'center';
         quest.textContent =accs[i].name
         div.appendChild(quest)
+        let questClone = quest.cloneNode()
+        questClone.textContent =accs[i].name
+        divPlaying.appendChild(questClone)
 
         let image:HTMLImageElement =<HTMLImageElement> document.createElement("IMG");
         image.src =accs[i].avatar
@@ -90,6 +95,8 @@ function changeWaitingRoom(accs:any){
         image.style.textAlign = 'right'
         image.onload = function(){
             quest.appendChild(image)
+            questClone.appendChild(image.cloneNode())
+
         }
         i++;
     }

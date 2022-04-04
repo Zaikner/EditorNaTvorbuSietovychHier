@@ -27,6 +27,8 @@ var Game = /** @class */ (function () {
         this.pawns = [];
         this.rules = '';
         this.numberOfStartingPawns = 1;
+        //----------playing---------
+        this.hasStarted = false;
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -180,6 +182,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPawnStyle = function () {
         return this.pawnStyle;
+    };
+    Game.prototype.getHasStarted = function () {
+        return this.hasStarted;
+    };
+    Game.prototype.setHasStarted = function (newStarted) {
+        this.hasStarted = newStarted;
     };
     return Game;
 }());
