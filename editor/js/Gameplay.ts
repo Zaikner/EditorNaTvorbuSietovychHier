@@ -1,5 +1,6 @@
 import { spawnParagraph } from "./Elements";
-import {doc,elementDeleter} from './canvas'
+import {doc,editor,editorSocket,elementDeleter} from './canvas'
+import { Pawn } from "./Pawn";
 
 
 const diceImages:Array<HTMLImageElement> = []
@@ -37,19 +38,23 @@ function initDice(){
         }
     }
 }
-function throwDice(){
+function throwDice(player:string,pawn:Pawn){
     let t = 0
     let times = 0
+    let n  = 0
     let interval = setInterval(function () {
         if (times == 10){
             console.log('vypol interaval')
             clearInterval(interval)
+            console.log(player+' : '+'hodil:' +n)
+            const params = new URLSearchParams(window.location.search);
+            editorSocket.emit('player thrown',{room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else{
             times++;
             console.log(times)
-            let n  = Math.floor(Math.random()*6)+1
+            n  = Math.floor(Math.random()*6)+1
             if (t!=n){
                 t=n
             }

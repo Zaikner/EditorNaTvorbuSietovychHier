@@ -9,6 +9,8 @@ var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
 var Game = /** @class */ (function () {
+    //----------playing---------
+    //private hasStarted = false;
     function Game() {
         this.name = "";
         this.author = "";
@@ -27,8 +29,6 @@ var Game = /** @class */ (function () {
         this.pawns = [];
         this.rules = '';
         this.numberOfStartingPawns = 1;
-        //----------playing---------
-        this.hasStarted = false;
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -71,11 +71,20 @@ var Game = /** @class */ (function () {
     Game.prototype.findTileByTileId = function (id) {
         var tile = undefined;
         this.tiles.forEach(function (t) {
-            if (t.getId() == id) {
+            if (t.getTileNumber() == id) {
                 tile = t;
             }
         });
         return tile;
+    };
+    Game.prototype.findPawnById = function (id, value) {
+        this.pawns.forEach(function (p) {
+            console.log(p);
+            if (p.id == id) {
+                p.move(value);
+                return p;
+            }
+        });
     };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
@@ -182,12 +191,6 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPawnStyle = function () {
         return this.pawnStyle;
-    };
-    Game.prototype.getHasStarted = function () {
-        return this.hasStarted;
-    };
-    Game.prototype.setHasStarted = function (newStarted) {
-        this.hasStarted = newStarted;
     };
     return Game;
 }());

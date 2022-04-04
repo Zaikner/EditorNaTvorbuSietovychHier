@@ -175,19 +175,24 @@ export class ServerSocket{
       }
       
       )
+     
       socket.on('game has started',(msg:{room:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         r.setHasStarted(true)
         
         this.io.in(msg.room).emit('game started',{msg:'Game has started!'})
-        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName()})
+        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
         this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw')
       }
         
       
         )
        
-          
+      socket.on('player thrown',(msg:{room:string,player:string,value:number,tileId:number,pawn:number})=>{
+        console.log('emitol player thrown')
+        this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
+        
+      })
         
        
 

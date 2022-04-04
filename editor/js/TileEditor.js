@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.insertTilesMenu = void 0;
+exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.pickTile = exports.moveEventHandler = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
@@ -8,9 +8,15 @@ var Warning_js_1 = require("./Warning.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
 var moveEventHandler = function (event) {
-    canvas_js_1.editor.findTile(event);
+    canvas_js_1.editor.findTile(event, true);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
+exports.moveEventHandler = moveEventHandler;
+var pickTile = function (event) {
+    canvas_js_1.editor.findTile(event, false);
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+};
+exports.pickTile = pickTile;
 var deleteHandler = function (event) {
     canvas_js_1.editor.deleteTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);

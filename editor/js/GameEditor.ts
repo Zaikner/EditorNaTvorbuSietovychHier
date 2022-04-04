@@ -68,7 +68,7 @@ class GameEditor{
         console.log(newTile)
         return newTile
   }
-    findTile(event:MouseEvent){
+    findTile(event:MouseEvent,edit:boolean){
         
         let coords = calibreEventCoords(event)
         let tiles = this.game.getTiles()
@@ -86,7 +86,7 @@ class GameEditor{
                     }              
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
-                    if (!this.isMoving)editTiles()
+                    if (!this.isMoving && edit)editTiles()
                 }
                 break
             }

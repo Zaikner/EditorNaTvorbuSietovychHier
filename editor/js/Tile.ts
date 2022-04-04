@@ -400,6 +400,28 @@ class Tile{
     removePawn(pawn:Pawn){
         this.pawns = this.pawns.filter((p) => {return p != pawn});
     }
+    havePawnOnTile(player:string){
+        let ret = undefined
+        console.log(this.pawns)
+        console.log('zahladal')
+        this.pawns.forEach((pawn:Pawn)=>{
+            console.log('potocil')
+            if (pawn.player == player){
+                ret = pawn
+            }
+            else{
+                console.log('mena')
+                console.log(pawn.player)
+                console.log(pawn)
+                console.log (pawn.player == player)
+                console.log([pawn.player,player])
+            }
+        })
+        console.log('vratil')
+        console.log(ret)
+        return ret
+    }
+    
     public setStroke(newStroke:number){
         this.stroke = newStroke
     }

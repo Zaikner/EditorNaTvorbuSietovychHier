@@ -214,8 +214,12 @@ var ServerSocket = /** @class */ (function () {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 r.setHasStarted(true);
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!' });
-                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName() });
+                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw');
+            });
+            socket.on('player thrown', function (msg) {
+                console.log('emitol player thrown');
+                _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);

@@ -26,7 +26,7 @@ export class Room{
                 this.numOfPresentPlayers++;
             }
          
-            ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString()})
+            ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString(),started:this.hasStarted})
             console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
            
             if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator'){
@@ -101,5 +101,5 @@ export class Room{
         public setPlayerOnTurn(newPlayer:Player){
             this.playerOnTurn = newPlayer
         }
-        
+
     }

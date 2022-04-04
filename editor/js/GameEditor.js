@@ -60,7 +60,7 @@ var GameEditor = /** @class */ (function () {
         console.log(newTile);
         return newTile;
     };
-    GameEditor.prototype.findTile = function (event) {
+    GameEditor.prototype.findTile = function (event, edit) {
         var coords = (0, canvas_js_1.calibreEventCoords)(event);
         var tiles = this.game.getTiles();
         for (var i = tiles.length - 1; i >= 0; i--) {
@@ -75,7 +75,7 @@ var GameEditor = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
-                    if (!this.isMoving)
+                    if (!this.isMoving && edit)
                         (0, TileEditor_js_1.editTiles)();
                 }
                 break;

@@ -91,9 +91,11 @@ editorSocket.on('connected', function (msg) {
         i++;
         var tile = editor.findTileById(pawn.tileId);
         var p = new Pawn_1.Pawn(pawn.player, tile);
+        p.id = pawn.id;
         editor.getGame().getPawns().push(p);
         //tile.getPawns().push(p)
         console.log('vlozilo pawn do robka');
+        console.log(p);
         console.log(i);
     });
     msg.styles.forEach(function (style) {
@@ -110,7 +112,9 @@ editorSocket.on('connected', function (msg) {
 editorSocket.on('join Room', function (msg) {
     console.log('chce Joinut izbu' + msg.id);
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
-    $('#waitingModal').modal('show');
+    if (!msg.started) {
+        $('#waitingModal').modal('show');
+    }
     editorSocket.on('player joined', function (msg) {
         console.log(msg.msg);
         editorSocket.emit('reload waiting room', { room: params.get('id') });
@@ -135,7 +139,9 @@ editorSocket.on('player left', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
 });
 editorSocket.on('game started', function (msg) {
-    editor.getGame().setHasStarted(true);
+    // editor.getGame().setHasStarted(true)
+    console.log('game started');
+    //console.log(editor.getGame().getHasStarted())
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
@@ -154,6 +160,12 @@ editorSocket.on('game started', function (msg) {
 var params = new URLSearchParams(window.location.search);
 console.log('rooom je :' + params.get('room'));
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
+editorSocket.on('move Pawn', function (msg) {
+    //msg.pawn.move(msg.value)
+    var pawn = (editor.getGame().findPawnById(msg.pawn, msg.value));
+    console.log('pawn cislo:' + msg.pawn);
+    console.log('hodil');
+});
 var isEditor = false;
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
@@ -201,14 +213,20 @@ else {
     });
 }
 editorSocket.on('turn', function (msg) {
+    var _a;
     elementDeleter('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
+    canvas.addEventListener('click', TileEditor_js_1.pickTile);
+    (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        var pawn = editor.getChoosenTile().havePawnOnTile(msg.token);
+        if (editor.getChoosenTile() != undefined && pawn != undefined)
+            (0, Gameplay_1.throwDice)(msg.player, pawn);
+    });
     console.log('init turn');
 });
-editorSocket.on('can throw', function () {
-    var _a;
-    (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { (0, Gameplay_1.throwDice)(); });
-});
+// editorSocket.on('can throw',()=>{
+//   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+// })
 editorSocket.on('add chat message', function (data) {
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
@@ -516,12 +534,5 @@ $('#addButton').on('load', function () {
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
-    }
-    if (editor.getGame().getHasStarted()) {
-        $('#waitingModal').modal('hide');
-    }
-    else {
-        console.log('nepresetol');
-        console.log(editor.getGame().getHasStarted());
     }
 };

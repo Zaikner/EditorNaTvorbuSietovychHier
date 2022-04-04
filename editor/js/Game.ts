@@ -27,7 +27,7 @@ class Game{
     private numberOfStartingPawns:number = 1;
     
     //----------playing---------
-    private hasStarted = false;
+    //private hasStarted = false;
     
 
 
@@ -78,13 +78,24 @@ class Game{
     findTileByTileId(id:number){
         let tile = undefined
         this.tiles.forEach((t:Tile)=>{
-            if (t.getId() == id){
+            if (t.getTileNumber() == id){
                 tile = t
             }
         })
 
         return tile
     }
+    findPawnById(id:number,value:number){
+        
+        this.pawns.forEach((p:Pawn)=>{
+            console.log(p)
+            if (p.id == id){
+                p.move(value)
+                return p
+            }
+        })}
+
+        
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
     }
@@ -194,12 +205,12 @@ class Game{
     getPawnStyle(){
         return this.pawnStyle
     }
-    getHasStarted(){
-        return  this.hasStarted
-    }
-    setHasStarted(newStarted:boolean){
-        this.hasStarted = newStarted
-    }
+    // getHasStarted(){
+    //     return  this.hasStarted
+    // }
+    // setHasStarted(newStarted:boolean){
+    //     this.hasStarted = newStarted
+    // }
 }
 
 export{Game}

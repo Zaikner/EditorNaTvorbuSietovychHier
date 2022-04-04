@@ -354,6 +354,27 @@ var Tile = /** @class */ (function () {
     Tile.prototype.removePawn = function (pawn) {
         this.pawns = this.pawns.filter(function (p) { return p != pawn; });
     };
+    Tile.prototype.havePawnOnTile = function (player) {
+        var ret = undefined;
+        console.log(this.pawns);
+        console.log('zahladal');
+        this.pawns.forEach(function (pawn) {
+            console.log('potocil');
+            if (pawn.player == player) {
+                ret = pawn;
+            }
+            else {
+                console.log('mena');
+                console.log(pawn.player);
+                console.log(pawn);
+                console.log(pawn.player == player);
+                console.log([pawn.player, player]);
+            }
+        });
+        console.log('vratil');
+        console.log(ret);
+        return ret;
+    };
     Tile.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
     };

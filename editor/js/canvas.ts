@@ -1,7 +1,7 @@
 
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded } from "./TileEditor.js";
+import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile } from "./TileEditor.js";
 import { editBackground } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
@@ -109,9 +109,11 @@ editorSocket.on('connected',(msg)=>{
     let tile = editor.findTileById(pawn.tileId)!
     
      let p = new Pawn(pawn.player,tile)
+     p.id = pawn.id
      editor.getGame().getPawns().push(p)
      //tile.getPawns().push(p)
      console.log('vlozilo pawn do robka')
+     console.log(p)
      console.log(i)
     
   });
@@ -129,10 +131,15 @@ editorSocket.on('connected',(msg)=>{
   console.log(editor.getGame())
 })
 
-editorSocket.on('join Room',(msg:{id:string})=>{
+editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
   console.log('chce Joinut izbu' + msg.id)
+ 
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
-  $('#waitingModal').modal('show')
+
+  if (!msg.started){
+    $('#waitingModal').modal('show')
+  }
+  
 
 
 editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
@@ -158,7 +165,9 @@ editorSocket.on('player left',(msg:{msg:string})=>{console.log(msg.msg)
 })
 
 editorSocket.on('game started',(msg:{msg:string})=>{
-  editor.getGame().setHasStarted(true)
+ // editor.getGame().setHasStarted(true)
+  console.log('game started')
+  //console.log(editor.getGame().getHasStarted())
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
@@ -179,6 +188,13 @@ const params = new URLSearchParams(window.location.search);
 console.log('rooom je :'+params.get('room'))
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 
+editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
+  //msg.pawn.move(msg.value)
+ let pawn:any = (editor.getGame().findPawnById(msg.pawn,msg.value))!
+ console.log('pawn cislo:'+msg.pawn)
+ 
+  console.log('hodil')
+})
 let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
@@ -235,15 +251,21 @@ else {
       })
 }
 
-editorSocket.on('turn',(msg:{player:string})=>{
+editorSocket.on('turn',(msg:{player:string,token:string})=>{
   elementDeleter('onTurnPlace')
   spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
+  canvas.addEventListener('click',pickTile)
+  document.getElementById('Dice')?.addEventListener('click',function()
+  { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
+    if (editor.getChoosenTile()!=undefined && pawn!= undefined)throwDice(msg.player,pawn)})
   console.log('init turn')
 })
 
-editorSocket.on('can throw',()=>{
-  document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
-})
+
+
+// editorSocket.on('can throw',()=>{
+//   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+// })
 editorSocket.on('add chat message',(data:{name:string,msg:string})=>{
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
@@ -606,13 +628,6 @@ $('#addButton').on('load', function() {
 window.onload = function(){
   if(params.get('id') != null){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
-  }
-  if(editor.getGame().getHasStarted()){
-    $('#waitingModal').modal('hide')
-  }
-  else{
-    console.log('nepresetol')
-    console.log(editor.getGame().getHasStarted())
   }
 }
 export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize};

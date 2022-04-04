@@ -43,19 +43,24 @@ function initDice() {
     }
 }
 exports.initDice = initDice;
-function throwDice() {
+function throwDice(player, pawn) {
     var t = 0;
     var times = 0;
+    var n = 0;
     var interval = setInterval(function () {
+        var _a;
         if (times == 10) {
             console.log('vypol interaval');
             clearInterval(interval);
+            console.log(player + ' : ' + 'hodil:' + n);
+            var params = new URLSearchParams(window.location.search);
+            canvas_1.editorSocket.emit('player thrown', { room: params.get('id'), player: player, value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), pawn: pawn.id });
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {
             times++;
             console.log(times);
-            var n = Math.floor(Math.random() * 6) + 1;
+            n = Math.floor(Math.random() * 6) + 1;
             if (t != n) {
                 t = n;
             }

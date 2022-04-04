@@ -9,9 +9,12 @@ import {Warning} from './Warning.js'
 import { deletePawn, insertPawn } from './PawnEditor.js'
 import { Pawn } from './Pawn.js'
 
-let moveEventHandler = function(event:MouseEvent) {editor.findTile(event)   
+let moveEventHandler = function(event:MouseEvent) {editor.findTile(event,true)   
 reload(editor,ctx)
 }
+let pickTile = function(event:MouseEvent) {editor.findTile(event,false)   
+  reload(editor,ctx)
+  }
 let deleteHandler = function(event:MouseEvent){
   editor.deleteTile(event)
   reload(editor,ctx)}
@@ -576,7 +579,7 @@ function insertTilesMenu():void{
     
   }
   
-  export{insertTilesMenu,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
+  export{insertTilesMenu,moveEventHandler,pickTile,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
 
 
   
