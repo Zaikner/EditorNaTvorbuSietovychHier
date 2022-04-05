@@ -177,7 +177,7 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.reactToTile = function (tile) {
         var params = new URLSearchParams(window.location.search);
-        canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId() });
+        canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id') });
     };
     GameEditor.prototype.getGame = function () {
         return this.game;

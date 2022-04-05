@@ -39,7 +39,7 @@ var Room = /** @class */ (function () {
     Room.prototype.broadcast = function (msg) {
     };
     Room.prototype.nextTurn = function () {
-        if (this.lastPlayerId == this.players.length) {
+        if (this.lastPlayerId + 1 == this.players.length) {
             this.lastPlayerId = 0;
         }
         else {

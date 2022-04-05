@@ -65,7 +65,7 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
-                            acc.setSocketId(msg.id);
+                            acc.setSocketId(socket.id);
                             return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 1:
                             emit = _a.sent();
@@ -194,7 +194,9 @@ var ServerSocket = /** @class */ (function () {
                 r.setHasStarted(true);
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!' });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw');
+                console.log('toto poslal ' + r.getPlayerOnTurn().getAccount().getSocketId());
+                console.log(socket.id);
+                _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
             });
             socket.on('player thrown', function (msg) {
                 console.log('emitol player thrown');
@@ -202,12 +204,15 @@ var ServerSocket = /** @class */ (function () {
             });
             socket.on('react to tile', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                console.log('reacted to tile');
-                _this.io["in"](msg.room).emit('ended turn');
-                r.nextTurn();
-                console.log('emitol dalsi turn:');
-                console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
+                    console.log('reacted to tile');
+                    _this.io["in"](msg.room).emit('ended turn');
+                    r.nextTurn();
+                    console.log('emitol dalsi turn:');
+                    console.log(r);
+                    console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                    _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                }
             });
             socket.on('change Pawn position', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));

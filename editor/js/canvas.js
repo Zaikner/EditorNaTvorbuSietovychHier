@@ -205,9 +205,12 @@ else {
     });
 }
 editorSocket.on('turn', function (msg) {
-    var _a;
     elementDeleter('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
+});
+editorSocket.on('turnMove', function (msg) {
+    var _a;
+    console.log('aktivoval listener');
     canvas.addEventListener('click', TileEditor_js_1.pickTile);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         var pawn = editor.getChoosenTile().havePawnOnTile(msg.token);

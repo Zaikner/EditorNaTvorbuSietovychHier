@@ -35,13 +35,12 @@ export class ServerSocket{
 
     static serverListen(){
         this.io.on('connection', (socket:any) => {
-        
             socket.emit('pipi')
             
             socket.on('load game',async (msg:{id:string,name:string,room:string}) => {
                
                     let acc = AccountManager.getAccountByClientId(msg.id)
-                    acc.setSocketId(msg.id)
+                    acc.setSocketId(socket.id)
                     // let game = await GameFinder.getIntance().findByName(msg.name)
                     // let tt =await TileFinder.getIntance().findByName(msg.name)
                     // let background = await BackgroundFinder.getIntance().findByName(msg.name)
@@ -184,7 +183,9 @@ export class ServerSocket{
         
         this.io.in(msg.room).emit('game started',{msg:'Game has started!'})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-        this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('can throw')
+        console.log('toto poslal '+r.getPlayerOnTurn().getAccount().getSocketId())
+        console.log(socket.id)
+        this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
       }
         
       
@@ -195,15 +196,20 @@ export class ServerSocket{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
         
       })
-      socket.on('react to tile',(msg:{room:string,questionId:number})=>{
+      socket.on('react to tile',(msg:{room:string,questionId:number,id:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-        console.log('reacted to tile')
-        this.io.in(msg.room).emit('ended turn')
-
-        r.nextTurn()
-        console.log('emitol dalsi turn:')
-        console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+        if (r.getPlayerOnTurn().getAccount() ==  AccountManager.getAccountByClientId(msg.id)){
+          console.log('reacted to tile')
+          this.io.in(msg.room).emit('ended turn')
+  
+          r.nextTurn()
+          console.log('emitol dalsi turn:')
+          console.log(r)
+          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+          this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+   
+        }
+         
       })
       socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number,id:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))

@@ -260,12 +260,18 @@ else {
 editorSocket.on('turn',(msg:{player:string,token:string})=>{
   elementDeleter('onTurnPlace')
   spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
+ 
+  
+})
+editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
+  console.log('aktivoval listener')
   canvas.addEventListener('click',pickTile)
   document.getElementById('Dice')?.addEventListener('click',function()
   { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
     if (editor.getChoosenTile()!=undefined && pawn!= undefined)throwDice(msg.player,pawn)})
   
 })
+
 
 
 

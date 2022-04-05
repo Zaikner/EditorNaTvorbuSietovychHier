@@ -52,7 +52,7 @@ export class Room{
         public nextTurn()
         {
 
-            if (this.lastPlayerId  == this.players.length){
+            if (this.lastPlayerId+1  == this.players.length){
                 this.lastPlayerId = 0
             }
             else{

@@ -1,4 +1,4 @@
-import {canvas,ctx, calibreEventCoords, editorSocket} from './canvas.js'
+import {canvas,ctx, calibreEventCoords, editorSocket, getCookie} from './canvas.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 
@@ -191,9 +191,9 @@ class GameEditor{
   
     reactToTile(tile:Tile){
         const params = new URLSearchParams(window.location.search);
-  
+       
         
-        editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId()})
+        editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id')})
     }
    
   getGame(){
