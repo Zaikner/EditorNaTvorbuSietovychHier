@@ -22,7 +22,7 @@ export class QuestionFinder{
                 var ret:Array<Question> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+               
                     ret.push(Question.load(row))
                 });
                
@@ -45,7 +45,7 @@ export class QuestionFinder{
                 var ret:Array<Question> = []
                
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+              
                     ret.push(Question.load(row))
                 });
                

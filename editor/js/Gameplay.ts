@@ -18,7 +18,7 @@ function initGameInfo(name:string){
 
 
 function initDice(){
-    console.log('document je doc:'+doc)
+  
     let dice = new Image()
     dice.src = '../../src/Dice1.png'
     dice.id = 'Dice'
@@ -30,11 +30,11 @@ function initDice(){
     for (let i = 1; i <=6; i++){
         let image = new Image()
         image.src = '../../src/Dice'+i+'.png'
-        console.log()
+       
         image.onload = function(){
-            console.log(image.src)
+            
             diceImages.push(image)
-            console.log('loaded'+i)
+           
         }
     }
 }
@@ -44,16 +44,16 @@ function throwDice(player:string,pawn:Pawn){
     let n  = 0
     let interval = setInterval(function () {
         if (times == 10){
-            console.log('vypol interaval')
+           
             clearInterval(interval)
-            console.log(player+' : '+'hodil:' +n)
+           
             const params = new URLSearchParams(window.location.search);
             editorSocket.emit('player thrown',{room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else{
             times++;
-            console.log(times)
+           
             n  = Math.floor(Math.random()*6)+1
             if (t!=n){
                 t=n
@@ -61,7 +61,7 @@ function throwDice(player:string,pawn:Pawn){
             let image = new Image()
             image.src = '../../src/Dice'+t+'.png'
             image.id = 'Dice'
-            console.log()
+           
             image.onload = function(){
                 let rem  = document.getElementById('Dice')
                 elementDeleter('dicePlace')
@@ -107,7 +107,7 @@ function changeWaitingRoom(accs:any){
     }
 
 
-    console.log('vykonal change')
+    
    
 }
 export{initGameInfo,initDice,changeWaitingRoom,throwDice}

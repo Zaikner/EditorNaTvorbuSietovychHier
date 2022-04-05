@@ -207,8 +207,7 @@ function insertTilesMenu():void{
       editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor())
       editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor())
       editor.setEnabledForPlayers(editor.getChoosenTile()!.getCanOccupy())
-      console.log('zmenil starting players')
-      console.log(editor.getStartForPlayers())
+     
     }
   
 
@@ -272,8 +271,7 @@ function insertTilesMenu():void{
   }
 
   let  insert = function(event:MouseEvent){
-    console.log('scales'+editor.getGame().getScaleX())
-    console.log('scales'+editor.getGame().getScaleY())
+  
     let coords = calibreEventCoords(event)
     let canSpawn = true
     if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
@@ -348,7 +346,7 @@ function insertTilesMenu():void{
       addedTile.setQuestionId(-1)
     }
     reload(editor,ctx)
-    console.log(addedTile)
+  
     return addedTile    
   }
   let update = function(){
@@ -368,10 +366,7 @@ function insertTilesMenu():void{
       if (!patternChecker.checked){
         pattImage = undefined!
       }
-      
-      console.log('starting values povodny a a novy')
-      console.log(editor.getStartForPlayers())
-      console.log(editor.getChoosenTile()!.getIsStartingFor())
+     
     editor.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),outlineChecker!.checked,parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
     
 
@@ -417,8 +412,7 @@ function insertTilesMenu():void{
     editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     editor.getChoosenTile()!.setPatternFile(pattImage)
-      console.log('prerobeny')
-      console.log(editor.getChoosenTile()!.getIsStartingFor())
+   
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     
@@ -442,11 +436,10 @@ function insertTilesMenu():void{
   let setValues = function(tile:Tile){
     if (tile == undefined){
       tile = editor.getChoosenTile()!
-      console.log('je undefined')
+    
     }
-    else{
-      console.log('nie je undefined')
-    }
+    else{}
+     
   
     if (tile!=undefined){
      
@@ -464,12 +457,10 @@ function insertTilesMenu():void{
       let tileNumberSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileNumberSetter')!
       let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
       //let choosenTile = editor.getChoosenTile()
-      console.log('pred zmenou farby')
-      console.log(tile)
+      
 
       colorPicker.value = tile!.getColor()
-      console.log('po zmene farby')
-      console.log(tile)
+    
       numberingColor.value = tile!.getNumberingColor()
       sizeOfTileSlider.value = tile!.getRadius().toString()
       sizeOfOutlineSlider.value = tile!.getStroke().toString()
@@ -477,10 +468,7 @@ function insertTilesMenu():void{
       outlineChecker.checked = tile!.getStroke()>0
       tileNumberSetter.value = tile!.getTileNumber().toString()
       tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
-      
-      
-      console.log('je startovne pre')
-      console.log(editor.getStartForPlayers())
+     
       if (outlineChecker.checked){
         doc.getElementById("outlineCheckerShower")!.textContent = 'yes'
       }
@@ -528,9 +516,7 @@ function insertTilesMenu():void{
   }
 
   function showActualState(){
-    console.log('vykonal aktualizaciu')
-
-    console.log(editor.getGame().getTiles())
+    
     let cs = <HTMLCanvasElement>document.getElementById('changeCanvas')!
     let cttttx = <CanvasRenderingContext2D> cs.getContext("2d");
     reload(editor,cttttx)
@@ -572,8 +558,7 @@ function insertTilesMenu():void{
   
     cttttx.clearRect(0,0,cs.width,cs.height)
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
-    console.log('actual state')
-    console.log(tile)
+    
     reload(editor,ctx)
    
     

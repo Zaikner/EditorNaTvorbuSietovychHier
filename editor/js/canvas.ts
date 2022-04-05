@@ -91,8 +91,7 @@ editorSocket.on('connected',(msg)=>{
   editor.getGame().setAuthor(msg.game.author)
   editor.getGame().setName(msg.game.name)
   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
-  console.log('pravidla su:')
-  console.log(msg.rules)
+ 
   editor.getGame().setRules(msg.rules)
   
   
@@ -104,7 +103,7 @@ editorSocket.on('connected',(msg)=>{
   initGameInfo(msg.game.name)
 
   let i = 0
-  console.log(msg.pawns)
+ 
   msg.pawns.forEach((pawn:any) => {
     i++;
     let tile = editor.findTileById(pawn.tileId)!
@@ -113,9 +112,7 @@ editorSocket.on('connected',(msg)=>{
      p.id = pawn.id
      editor.getGame().getPawns().push(p)
      //tile.getPawns().push(p)
-     console.log('vlozilo pawn do robka')
-     console.log(p)
-     console.log(i)
+    
     
   });
   msg.styles.forEach((style:any) => {
@@ -124,26 +121,25 @@ editorSocket.on('connected',(msg)=>{
     //p.setImage(image)
     editor.getGame().getPawnStyle().set(style.player,p)
 
-    console.log('setlo styl')
-    console.log(editor.getGame().getPawnStyle().get(style.player))
+
   });
-  //reload(editor,ctx)
-  //edit()
-  console.log(editor.getGame())
+  
 })
 
 editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
-  console.log('chce Joinut izbu' + msg.id)
+  
  
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
 
   if (!msg.started){
     $('#waitingModal').modal('show')
+    
   }
+  reload(editor,ctx)
   
 
 
-editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
+editorSocket.on('player joined',(msg:{msg:string})=>{
   editorSocket.emit('reload waiting room',{room:params.get('id')})
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
@@ -162,14 +158,14 @@ editorSocket.on('player joined',(msg:{msg:string})=>{console.log(msg.msg)
   }
   reload(editor,ctx)
 })})
-editorSocket.on('player left',(msg:{msg:string})=>{console.log(msg.msg)
+editorSocket.on('player left',(msg:{msg:string})=>{
   editorSocket.emit('reload waiting room',{room:params.get('id')})
+  reload(editor,ctx)
 })
 
 editorSocket.on('game started',(msg:{msg:string})=>{
  // editor.getGame().setHasStarted(true)
-  console.log('game started')
-  //console.log(editor.getGame().getHasStarted())
+
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
@@ -187,16 +183,14 @@ editorSocket.on('game started',(msg:{msg:string})=>{
   }
 })
 const params = new URLSearchParams(window.location.search);
-console.log('rooom je :'+params.get('room'))
+
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
  let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
   editor.setChoosenTile(undefined!)
- console.log('pawn cislo:'+msg.pawn)
- 
-  console.log('hodil')
+
 })
 let isEditor = false;
 let zoz = window.location.href.split('/')
@@ -245,18 +239,14 @@ else {
     
     editorSocket.emit('chat-waitingRoom',{roomId:params.get('id'),id:getCookie('id'),msg:(<HTMLInputElement>document.getElementById('messagePlace'))!.value});
     (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
-    // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-    // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-    // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
+    
     })
 
     document.getElementById('messagePlayingSubmitButton')?.addEventListener('click',function(){
     
       editorSocket.emit('chat-waitingRoom',{roomId:params.get('id'),id:getCookie('id'),msg:(<HTMLInputElement>document.getElementById('messagePlayingPlace'))!.value});
       (<HTMLInputElement>document.getElementById('messagePlayingPlace'))!.value = '';
-      // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-      // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-      // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
+    
       })
 }
 
@@ -267,7 +257,7 @@ editorSocket.on('turn',(msg:{player:string,token:string})=>{
   document.getElementById('Dice')?.addEventListener('click',function()
   { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
     if (editor.getChoosenTile()!=undefined && pawn!= undefined)throwDice(msg.player,pawn)})
-  console.log('init turn')
+  
 })
 
 
@@ -309,8 +299,7 @@ document.getElementById("showRulesButton")?.addEventListener('click',function(){
  
   $('#rulesModal').modal('show');
   (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
-  console.log('clickol')
-  console.log('pravidla: '+ editor.getGame().getRules())
+ 
   
 })
 
@@ -351,7 +340,7 @@ document.getElementById('deletePawn')!.addEventListener('click',function(){pawnD
 document.getElementById("resetQuestionID")!.addEventListener('click',function(){
   editor.setQuestionId(-1);
   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Not picked!'
-  console.log(editor.getQuestionId())
+ 
 })
 }
 
@@ -418,8 +407,7 @@ numOfPlayersSlider.onclick =function(){
       //editor.getGame().getPawnStyle().Player
     }
   }
-  console.log(playerTokens)
-  console.log(editor.getGame().getPawnStyle())
+  
   editor.getGame().setPlayerTokens(playerTokens)
   reload(editor,ctx)
 }
@@ -499,8 +487,7 @@ slid.onchange = function(){
      });
    }
   editor.getGame().setNumberOfStartingPawns(max)
-  console.log(editor.getGame().getNumberOfStartingPawns())
-  console.log(editor.getGame().getPawns())
+  
 
  
   reload(editor,ctx)
@@ -572,8 +559,7 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
       num++;
       continue;
     }
-    //console.log(from);
-    //console.log(to);
+   
 
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
@@ -628,10 +614,7 @@ function getCookie(name:string) {
   })
   return cookie.get(name);
 }
-$('#addButton').on('load', function() {
-  console.log('tototottoott')}
-  //document.getElementById('addButton')!.addEventListener('click',addOption)}
-  )
+
 
 
 window.onload = function(){

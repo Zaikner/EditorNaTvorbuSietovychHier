@@ -63,7 +63,6 @@ var BackgroundFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Background_db_1.Background_db.load(row));
                             })];
                     case 3:

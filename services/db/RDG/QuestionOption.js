@@ -46,8 +46,6 @@ var QuestionOption = /** @class */ (function () {
     };
     QuestionOption.prototype.update = function () {
         var client = DbConnect_1.DbConnect.get();
-        console.log('updatol');
-        console.log(this);
         var query = {
             name: 'update-option',
             text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2 WHERE id = $3;',
@@ -59,8 +57,6 @@ var QuestionOption = /** @class */ (function () {
     };
     QuestionOption.prototype["delete"] = function () {
         var client = DbConnect_1.DbConnect.get();
-        console.log('updatol');
-        console.log(this);
         var query = {
             name: 'update-option',
             text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',

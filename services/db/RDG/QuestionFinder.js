@@ -63,7 +63,6 @@ var QuestionFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Question_1.Question.load(row));
                             })];
                     case 3:
@@ -98,7 +97,6 @@ var QuestionFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Question_1.Question.load(row));
                             })];
                     case 3:

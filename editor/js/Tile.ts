@@ -1,4 +1,4 @@
-import { timeStamp } from 'console';
+
 import { editor } from './canvas.js';
 import { Pawn } from './Pawn.js';
 import { drawPawnType1 } from './PawnEditor.js';
@@ -51,16 +51,7 @@ class Tile{
 
 
     public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
-        // // kresli//
-        // console.log('vykonal')
-        // if (showOnlyChange){
-        //     ctx = <CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d");
-        // }
-        // else{
-        //     console.log(editor.getGame().getTiles())
-        //     console.log('vytlacil cez false')
-        //     console.log(this)
-        // }   
+     
         
         ctx.beginPath();
         //obrazec bez outline -- nuluje
@@ -81,7 +72,7 @@ class Tile{
             }
             ctx.resetTransform();
             ctx.fill();
-            console.log('nakreslil')
+         
         }
         else if (this.backgroundFile != undefined){
                 // //kresli image
@@ -402,23 +393,15 @@ class Tile{
     }
     havePawnOnTile(player:string){
         let ret = undefined
-        console.log(this.pawns)
-        console.log('zahladal')
+      
         this.pawns.forEach((pawn:Pawn)=>{
-            console.log('potocil')
+       
             if (pawn.player == player){
                 ret = pawn
             }
-            else{
-                console.log('mena')
-                console.log(pawn.player)
-                console.log(pawn)
-                console.log (pawn.player == player)
-                console.log([pawn.player,player])
-            }
+         
         })
-        console.log('vratil')
-        console.log(ret)
+    
         return ret
     }
     

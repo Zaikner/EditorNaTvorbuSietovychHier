@@ -129,17 +129,11 @@ var AccountManager = /** @class */ (function () {
     };
     AccountManager.logout = function (name) {
         var lout = undefined;
-        console.log('ucty su');
-        console.log(this.loggedAccounts);
         this.loggedAccounts.forEach(function (acc) {
             if (acc.getClientId() == name) {
                 lout = acc;
-                console.log('odlogol' + acc.getName());
             }
             else {
-                console.log('nerovnaju sa');
-                console.log(acc.getClientId());
-                console.log(name);
             }
         });
         if (lout != undefined) {

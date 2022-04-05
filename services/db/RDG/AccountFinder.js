@@ -63,7 +63,6 @@ var AccountFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Account_db_1.Account_db.load(row));
                             })];
                     case 3:

@@ -49,7 +49,6 @@ var PawnStyles = /** @class */ (function () {
     };
     PawnStyles.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
-        console.log('insertuje');
         var query = {
             name: 'insert-pawn-style',
             text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameName",type) VALUES($1,$2,$3,$4,$5);',

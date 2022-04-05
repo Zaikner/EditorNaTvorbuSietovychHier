@@ -65,7 +65,7 @@ export class QuestionWithAnswers{
     
     public static load(data:any){
      
-        console.log(data)
+      
                 let ret = new QuestionWithAnswers()
                 ret.setQuestionId(data.questionId)
                 ret.setOptionId(data.optionId)

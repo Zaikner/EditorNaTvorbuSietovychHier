@@ -20,7 +20,6 @@ function initGameInfo(name) {
 }
 exports.initGameInfo = initGameInfo;
 function initDice() {
-    console.log('document je doc:' + canvas_1.doc);
     var dice = new Image();
     dice.src = '../../src/Dice1.png';
     dice.id = 'Dice';
@@ -31,11 +30,8 @@ function initDice() {
     var _loop_2 = function (i) {
         var image = new Image();
         image.src = '../../src/Dice' + i + '.png';
-        console.log();
         image.onload = function () {
-            console.log(image.src);
             diceImages.push(image);
-            console.log('loaded' + i);
         };
     };
     for (var i = 1; i <= 6; i++) {
@@ -50,16 +46,13 @@ function throwDice(player, pawn) {
     var interval = setInterval(function () {
         var _a;
         if (times == 10) {
-            console.log('vypol interaval');
             clearInterval(interval);
-            console.log(player + ' : ' + 'hodil:' + n);
             var params = new URLSearchParams(window.location.search);
             canvas_1.editorSocket.emit('player thrown', { room: params.get('id'), player: player, value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), pawn: pawn.id });
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {
             times++;
-            console.log(times);
             n = Math.floor(Math.random() * 6) + 1;
             if (t != n) {
                 t = n;
@@ -67,7 +60,6 @@ function throwDice(player, pawn) {
             var image_1 = new Image();
             image_1.src = '../../src/Dice' + t + '.png';
             image_1.id = 'Dice';
-            console.log();
             image_1.onload = function () {
                 var _a;
                 var rem = document.getElementById('Dice');
@@ -109,6 +101,5 @@ function changeWaitingRoom(accs) {
     while (i < accs.length) {
         _loop_3();
     }
-    console.log('vykonal change');
 }
 exports.changeWaitingRoom = changeWaitingRoom;

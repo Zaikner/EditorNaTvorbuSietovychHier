@@ -63,7 +63,6 @@ var RulesFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Rules_1.Rules.load(row));
                             })];
                     case 3:

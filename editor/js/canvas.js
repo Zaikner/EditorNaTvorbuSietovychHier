@@ -80,8 +80,6 @@ editorSocket.on('connected', function (msg) {
     editor.getGame().setAuthor(msg.game.author);
     editor.getGame().setName(msg.game.name);
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
-    console.log('pravidla su:');
-    console.log(msg.rules);
     editor.getGame().setRules(msg.rules);
     var tokens = [];
     for (var i_1 = 1; i_1 <= 6; i_1++) {
@@ -90,7 +88,6 @@ editorSocket.on('connected', function (msg) {
     editor.getGame().setPlayerTokens(tokens);
     (0, Gameplay_1.initGameInfo)(msg.game.name);
     var i = 0;
-    console.log(msg.pawns);
     msg.pawns.forEach(function (pawn) {
         i++;
         var tile = editor.findTileById(pawn.tileId);
@@ -98,29 +95,20 @@ editorSocket.on('connected', function (msg) {
         p.id = pawn.id;
         editor.getGame().getPawns().push(p);
         //tile.getPawns().push(p)
-        console.log('vlozilo pawn do robka');
-        console.log(p);
-        console.log(i);
     });
     msg.styles.forEach(function (style) {
         var p = new PawnStyle_1.PawnStyle(style.player, style.color, style.type);
         //p.setImage(image)
         editor.getGame().getPawnStyle().set(style.player, p);
-        console.log('setlo styl');
-        console.log(editor.getGame().getPawnStyle().get(style.player));
     });
-    //reload(editor,ctx)
-    //edit()
-    console.log(editor.getGame());
 });
 editorSocket.on('join Room', function (msg) {
-    console.log('chce Joinut izbu' + msg.id);
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
     if (!msg.started) {
         $('#waitingModal').modal('show');
     }
+    reload(editor, ctx);
     editorSocket.on('player joined', function (msg) {
-        console.log(msg.msg);
         editorSocket.emit('reload waiting room', { room: params.get('id') });
         var chat = document.getElementById('chat');
         var chatPlaying = document.getElementById("chatPlaying");
@@ -140,13 +128,11 @@ editorSocket.on('join Room', function (msg) {
     });
 });
 editorSocket.on('player left', function (msg) {
-    console.log(msg.msg);
     editorSocket.emit('reload waiting room', { room: params.get('id') });
+    reload(editor, ctx);
 });
 editorSocket.on('game started', function (msg) {
     // editor.getGame().setHasStarted(true)
-    console.log('game started');
-    //console.log(editor.getGame().getHasStarted())
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
@@ -163,14 +149,11 @@ editorSocket.on('game started', function (msg) {
     }
 });
 var params = new URLSearchParams(window.location.search);
-console.log('rooom je :' + params.get('room'));
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
-    console.log('pawn cislo:' + msg.pawn);
-    console.log('hodil');
 });
 var isEditor = false;
 var zoz = window.location.href.split('/');
@@ -210,16 +193,10 @@ else {
     (_d = document.getElementById('messageSubmitButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
         editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
         document.getElementById('messagePlace').value = '';
-        // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-        // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-        // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
     });
     (_e = document.getElementById('messagePlayingSubmitButton')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlayingPlace').value });
         document.getElementById('messagePlayingPlace').value = '';
-        // console.log((<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-        // (<HTMLTextAreaElement>document.getElementById('chat'))!.value = ((<HTMLTextAreaElement>document.getElementById('chat'))!.value + '\n' +(<HTMLInputElement>document.getElementById('messagePlace'))!.value);
-        // (<HTMLInputElement>document.getElementById('messagePlace'))!.value = '';
     });
 }
 editorSocket.on('turn', function (msg) {
@@ -232,7 +209,6 @@ editorSocket.on('turn', function (msg) {
         if (editor.getChoosenTile() != undefined && pawn != undefined)
             (0, Gameplay_1.throwDice)(msg.player, pawn);
     });
-    console.log('init turn');
 });
 // editorSocket.on('can throw',()=>{
 //   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
@@ -268,8 +244,6 @@ editorSocket.on('reloaded waiting room', function (msg) {
 (_f = document.getElementById("showRulesButton")) === null || _f === void 0 ? void 0 : _f.addEventListener('click', function () {
     $('#rulesModal').modal('show');
     document.getElementById("ruleInput").value = editor.getGame().getRules();
-    console.log('clickol');
-    console.log('pravidla: ' + editor.getGame().getRules());
 });
 function edit() {
     mainMenu();
@@ -305,7 +279,6 @@ function edit() {
     document.getElementById("resetQuestionID").addEventListener('click', function () {
         editor.setQuestionId(-1);
         document.getElementById('bindQuestion').textContent = 'Not picked!';
-        console.log(editor.getQuestionId());
     });
 }
 var doc = document;
@@ -359,8 +332,6 @@ function mainMenu() {
                 //editor.getGame().getPawnStyle().Player
             }
         }
-        console.log(playerTokens);
-        console.log(editor.getGame().getPawnStyle());
         editor.getGame().setPlayerTokens(playerTokens);
         reload(editor, ctx);
     };
@@ -432,8 +403,6 @@ function mainMenu() {
             });
         }
         editor.getGame().setNumberOfStartingPawns(max);
-        console.log(editor.getGame().getNumberOfStartingPawns());
-        console.log(editor.getGame().getPawns());
         reload(editor, ctx);
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], 'Save game to database!', function () {
@@ -480,8 +449,6 @@ function reload(editor, ctx) {
             num++;
             continue;
         }
-        //console.log(from);
-        //console.log(to);
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -532,11 +499,6 @@ function getCookie(name) {
     });
     return cookie.get(name);
 }
-$('#addButton').on('load', function () {
-    console.log('tototottoott');
-}
-//document.getElementById('addButton')!.addEventListener('click',addOption)}
-);
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });

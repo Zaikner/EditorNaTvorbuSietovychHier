@@ -24,7 +24,7 @@ export class RulesFinder{
                 var ret:Array<Rules> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+              
                     ret.push(Rules.load(row))
                 });
                

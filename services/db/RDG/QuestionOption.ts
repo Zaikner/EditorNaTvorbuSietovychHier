@@ -52,8 +52,7 @@ export class QuestionOption{
 
     public update(){
                 let client = DbConnect.get()
-                console.log('updatol')
-                console.log(this)
+                
                     const query = {
                         name: 'update-option',
                         
@@ -67,8 +66,7 @@ export class QuestionOption{
 
     public delete(){
                         let client = DbConnect.get()
-                        console.log('updatol')
-                        console.log(this)
+                      
                             const query = {
                                 name: 'update-option',
                                 

@@ -25,7 +25,7 @@ export class QuestionWithAnswersFinder{
                 var ret:Array<QuestionWithAnswers> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+                   
                     ret.push(QuestionWithAnswers.load(row))
                 });
                
@@ -37,7 +37,7 @@ export class QuestionWithAnswersFinder{
             } 
           }
           public async findById(id:number){
-            console.log('typ id je :' + typeof id)
+            
             let client = DbConnect.get()
             try {
               
@@ -50,7 +50,7 @@ export class QuestionWithAnswersFinder{
                 var ret:Array<QuestionWithAnswers> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+              
                     ret.push(QuestionWithAnswers.load(row))
                 });
                

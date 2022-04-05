@@ -19,7 +19,7 @@ export class AccountFinder{
             var ret:Array<Account_db> = []
           
             await results.rows.forEach((row:any) => {
-                console.log('precital')
+         
                 ret.push(Account_db.load(row))
             });
            

@@ -21,7 +21,7 @@ public async findByName(name:string){
         var ret:Array<Background_db> = []
       
         await results.rows.forEach((row:any) => {
-            console.log('precital')
+          
             ret.push(Background_db.load(row))
         });
        

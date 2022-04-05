@@ -98,18 +98,14 @@ var TileFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Tile_db_1.Tile_db.load(row));
                             })];
                     case 3:
                         _a.sent();
-                        console.log('query preslo');
                         if (ret.length >= 1) {
-                            console.log('plne');
                             return [2 /*return*/, ret[0]];
                         }
                         else {
-                            console.log('prazdne');
                             return [2 /*return*/, new Tile_db_1.Tile_db()];
                         }
                         return [3 /*break*/, 5];

@@ -22,7 +22,7 @@ export class TileFinder{
                 var ret:Array<Tile_db> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+                   
                     ret.push(Tile_db.load(row))
                 });
                

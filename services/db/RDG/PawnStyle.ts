@@ -50,7 +50,7 @@ export class PawnStyles{
     
     public insert(){
         let client = DbConnect.get()
-        console.log('insertuje')
+       
             const query = {
                 name: 'insert-pawn-style',
                 text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameName",type) VALUES($1,$2,$3,$4,$5);',

@@ -67,17 +67,14 @@ export class AccountManager{
     }
     public static logout(name:string){
         let lout:Account = undefined!;
-        console.log('ucty su')
-        console.log(this.loggedAccounts)
+       
         this.loggedAccounts.forEach((acc:Account)=>{
             if (acc.getClientId() == name){
                 lout = acc
-                console.log('odlogol' + acc.getName())
+             
             }
             else{
-                console.log('nerovnaju sa')
-                console.log(acc.getClientId())
-                console.log(name)
+           
             }
         })
         if (lout != undefined!){

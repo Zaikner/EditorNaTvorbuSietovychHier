@@ -44,16 +44,16 @@ export class TileFinder{
                 var ret:Array<Tile_db> = []
               
                 await results.rows.forEach((row:any) => {
-                    console.log('precital')
+                   
                     ret.push(Tile_db.load(row))
                 });
-                console.log('query preslo')
+             
                 if (ret.length >= 1){
-                  console.log('plne')
+              
                   return ret[0]
                 }
                 else{
-                  console.log('prazdne')
+               
                   return new Tile_db()
                 }
         

@@ -63,7 +63,6 @@ var PawnStyleFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(PawnStyle_1.PawnStyles.load(row));
                             })];
                     case 3:

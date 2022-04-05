@@ -20,7 +20,7 @@ export class PawnStyleFinder{
             var ret:Array<PawnStyles> = []
           
             await results.rows.forEach((row:any) => {
-                console.log('precital')
+            
                 ret.push(PawnStyles.load(row))
             });
            

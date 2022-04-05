@@ -35,12 +35,11 @@ export class ServerSocket{
 
     static serverListen(){
         this.io.on('connection', (socket:any) => {
-            console.log('a user connected');
-            console.log(socket.id)
+        
             socket.emit('pipi')
             
             socket.on('load game',async (msg:{id:string,name:string,room:string}) => {
-                    console.log('aspon emitol load game')
+               
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(msg.id)
                     // let game = await GameFinder.getIntance().findByName(msg.name)
@@ -48,7 +47,7 @@ export class ServerSocket{
                     // let background = await BackgroundFinder.getIntance().findByName(msg.name)
                 
                    
-                   console.log('toto returnol:'+await GameManager.loadGame(msg.name))
+                  
                    let emit = await GameManager.loadGame(msg.name)
                    if (msg.room!=undefined){
                     let r = GameManager.getActiveRooms().get(parseInt(msg.room))
@@ -57,9 +56,9 @@ export class ServerSocket{
                     })
                    }
                 
-                   console.log(await GameManager.loadGame(msg.name))
+              
                     this.emitToSpecificSocket(socket.id,'connected', emit)
-                    console.log('zapol som hru'+ msg.name);
+                 
             });
             socket.on('chat-waitingRoom',(data:{roomId:string;id:string,msg:string})=>{
               let acc = AccountManager.getAccountByClientId(data.id)
@@ -71,9 +70,6 @@ export class ServerSocket{
             });
         socket.on('saveGame',async (data:any) => {
       
-      console.log('odchytil')
-        console.log(data)
-        console.log('odchytil')
         let last = await TileFinder.getIntance().findLast()
         let lastId = last?.getId()
 
@@ -155,9 +151,7 @@ export class ServerSocket{
              return
            }
           acc.setSocketId(socket.id)
-          console.log( GameManager.getActiveRooms())
-          console.log(msg.room)
-           console.log(GameManager.getActiveRooms().get(parseInt(msg.room)))
+   
           let r = GameManager.getActiveRooms().get(parseInt(msg.room))
           let cont = true
           // r.getPlayers().forEach((player:any)=>{

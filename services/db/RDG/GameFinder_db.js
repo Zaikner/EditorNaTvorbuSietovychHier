@@ -63,7 +63,6 @@ var GameFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Game_db_1.Game_db.load(row));
                             })];
                     case 3:
@@ -85,8 +84,6 @@ var GameFinder = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         client = DbConnect_1.DbConnect.get();
-                        console.log(process.env.DATABASE_URL);
-                        console.log('pripojil');
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 4, , 5]);
@@ -95,21 +92,15 @@ var GameFinder = /** @class */ (function () {
                             text: 'SELECT * FROM "bachelorsThesis"."Game";',
                             values: []
                         };
-                        console.log('vykonal query');
                         return [4 /*yield*/, client.query(query)];
                     case 2:
                         results = _a.sent();
-                        console.log('query zbehlo');
                         ret = [];
-                        console.log('travelz');
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Game_db_1.Game_db.load(row));
                             })];
                     case 3:
                         _a.sent();
-                        console.log('presiel traverz');
-                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_2 = _a.sent();

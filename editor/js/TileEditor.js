@@ -163,8 +163,6 @@ function editTiles() {
         canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
         canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor());
         canvas_js_1.editor.setEnabledForPlayers(canvas_js_1.editor.getChoosenTile().getCanOccupy());
-        console.log('zmenil starting players');
-        console.log(canvas_js_1.editor.getStartForPlayers());
     }
     spawnElements();
     setValues(undefined);
@@ -224,8 +222,6 @@ function undoTileInsert() {
 }
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
-    console.log('scales' + canvas_js_1.editor.getGame().getScaleX());
-    console.log('scales' + canvas_js_1.editor.getGame().getScaleY());
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
     var canSpawn = true;
     if (document.getElementById('tileFollowingSetter').value.length > 0) {
@@ -290,7 +286,6 @@ var spawnTile = function (coords) {
         addedTile.setQuestionId(-1);
     }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
-    console.log(addedTile);
     return addedTile;
 };
 exports.spawnTile = spawnTile;
@@ -312,9 +307,6 @@ var update = function () {
     if (!patternChecker.checked) {
         pattImage = undefined;
     }
-    console.log('starting values povodny a a novy');
-    console.log(canvas_js_1.editor.getStartForPlayers());
-    console.log(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
     canvas_js_1.editor.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), outlineChecker.checked, parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
     (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
     (_b = canvas_js_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
@@ -352,8 +344,6 @@ var update = function () {
     canvas_js_1.editor.getChoosenTile().setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
-    console.log('prerobeny');
-    console.log(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         canvas_js_1.editor.getChoosenTile().setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
@@ -374,11 +364,8 @@ var update = function () {
 var setValues = function (tile) {
     if (tile == undefined) {
         tile = canvas_js_1.editor.getChoosenTile();
-        console.log('je undefined');
     }
-    else {
-        console.log('nie je undefined');
-    }
+    else { }
     if (tile != undefined) {
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
@@ -393,11 +380,7 @@ var setValues = function (tile) {
         var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
         var tileFollowingSetter = canvas_js_1.doc.getElementById('tileFollowingSetter');
         //let choosenTile = editor.getChoosenTile()
-        console.log('pred zmenou farby');
-        console.log(tile);
         colorPicker.value = tile.getColor();
-        console.log('po zmene farby');
-        console.log(tile);
         numberingColor.value = tile.getNumberingColor();
         sizeOfTileSlider.value = tile.getRadius().toString();
         sizeOfOutlineSlider.value = tile.getStroke().toString();
@@ -405,8 +388,6 @@ var setValues = function (tile) {
         outlineChecker.checked = tile.getStroke() > 0;
         tileNumberSetter.value = tile.getTileNumber().toString();
         tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
-        console.log('je startovne pre');
-        console.log(canvas_js_1.editor.getStartForPlayers());
         if (outlineChecker.checked) {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
         }
@@ -445,8 +426,6 @@ var moveTile = function (event) {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 function showActualState() {
-    console.log('vykonal aktualizaciu');
-    console.log(canvas_js_1.editor.getGame().getTiles());
     var cs = document.getElementById('changeCanvas');
     var cttttx = cs.getContext("2d");
     (0, canvas_js_1.reload)(canvas_js_1.editor, cttttx);
@@ -482,8 +461,6 @@ function showActualState() {
     //tile = setValues(tile)
     cttttx.clearRect(0, 0, cs.width, cs.height);
     tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
-    console.log('actual state');
-    console.log(tile);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.showActualState = showActualState;

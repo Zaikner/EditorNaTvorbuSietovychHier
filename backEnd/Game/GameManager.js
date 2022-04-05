@@ -72,8 +72,6 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByName(name)];
                     case 6:
                         rules = _a.sent();
-                        console.log('nasiel tieto pravidla');
-                        console.log(rules);
                         return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText() }];
                 }
             });
@@ -97,17 +95,13 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
-                        console.log(room);
                         this.activeRooms.set(id, room);
                         return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
                     case 1:
                         pawns = _a.sent();
                         pawns.forEach(function (pawn) {
                             room.getPawnPositions().set(pawn.getId(), pawn.getTileId());
-                            console.log(pawn);
                         });
-                        console.log('vytvoril roomky');
-                        console.log(room);
                         return [2 /*return*/, room];
                 }
             });
@@ -119,7 +113,6 @@ var GameManager = /** @class */ (function () {
                 if (player.getAccount().getSocketId() == socketId) {
                     room.leave(player);
                     SocketServer_js_1.ServerSocket.getIo().to(room.getId().toString()).emit('player left', { msg: 'Player ' + player.getAccount().getName() + ' has left the room.' });
-                    console.log('emitol player left');
                 }
             });
         });

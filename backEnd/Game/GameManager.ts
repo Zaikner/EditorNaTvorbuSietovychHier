@@ -27,8 +27,7 @@ class GameManager{
             let pawns = await PawnFinder.getIntance().findByName(name)
             let styles = await PawnStyleFinder.getIntance().findByName(name)
             let rules = await RulesFinder.getIntance().findByName(name)
-            console.log('nasiel tieto pravidla')
-            console.log(rules)
+            
        return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText()}
     }
       
@@ -47,7 +46,7 @@ class GameManager{
         }
         
         let room = new Room(id,numOfPlayers,name)
-        console.log(room)
+       
         this.activeRooms.set(id,room)
         //+ pushni hraca
           let pawns = await PawnFinder.getIntance().findByName(name)
@@ -55,10 +54,9 @@ class GameManager{
         pawns!.forEach((pawn)=>{
            
             room.getPawnPositions().set(pawn.getId(),pawn.getTileId())
-            console.log(pawn)
+           
         })
-        console.log('vytvoril roomky')
-        console.log(room)
+       
         return room
     }
     
@@ -68,7 +66,7 @@ class GameManager{
                 if (player.getAccount().getSocketId() == socketId){
                     room.leave(player)
                     ServerSocket.getIo().to(room.getId().toString()).emit('player left',{msg:'Player '+player.getAccount().getName()+' has left the room.'})
-                    console.log('emitol player left')
+                 
                 }
             })
         })

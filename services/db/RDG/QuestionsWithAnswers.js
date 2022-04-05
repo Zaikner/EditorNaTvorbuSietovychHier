@@ -59,7 +59,6 @@ var QuestionWithAnswers = /** @class */ (function () {
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
     QuestionWithAnswers.load = function (data) {
-        console.log(data);
         var ret = new QuestionWithAnswers();
         ret.setQuestionId(data.questionId);
         ret.setOptionId(data.optionId);

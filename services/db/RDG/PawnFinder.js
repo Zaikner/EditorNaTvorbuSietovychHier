@@ -63,7 +63,6 @@ var PawnFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(Pawn_1.Pawn.load(row));
                             })];
                     case 3:

@@ -58,43 +58,24 @@ var ServerSocket = /** @class */ (function () {
     ServerSocket.serverListen = function () {
         var _this = this;
         this.io.on('connection', function (socket) {
-            console.log('a user connected');
-            console.log(socket.id);
             socket.emit('pipi');
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, _a, _b, _c, emit, r_1, _d, _e;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                var acc, emit, r_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
-                            console.log('aspon emitol load game');
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(msg.id);
-                            // let game = await GameFinder.getIntance().findByName(msg.name)
-                            // let tt =await TileFinder.getIntance().findByName(msg.name)
-                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                            _b = (_a = console).log;
-                            _c = 'toto returnol:';
                             return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 1:
-                            // let game = await GameFinder.getIntance().findByName(msg.name)
-                            // let tt =await TileFinder.getIntance().findByName(msg.name)
-                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                            _b.apply(_a, [_c + (_f.sent())]);
-                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
-                        case 2:
-                            emit = _f.sent();
+                            emit = _a.sent();
                             if (msg.room != undefined) {
                                 r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
                                 emit.pawns.forEach(function (pawn) {
                                     pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
                                 });
                             }
-                            _e = (_d = console).log;
-                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
-                        case 3:
-                            _e.apply(_d, [_f.sent()]);
                             this.emitToSpecificSocket(socket.id, 'connected', emit);
-                            console.log('zapol som hru' + msg.name);
                             return [2 /*return*/];
                     }
                 });
@@ -110,11 +91,7 @@ var ServerSocket = /** @class */ (function () {
                 var last, lastId, g, b, rule;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            console.log('odchytil');
-                            console.log(data);
-                            console.log('odchytil');
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
+                        case 0: return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
                         case 1:
                             last = _a.sent();
                             lastId = last === null || last === void 0 ? void 0 : last.getId();
@@ -193,9 +170,6 @@ var ServerSocket = /** @class */ (function () {
                     return;
                 }
                 acc.setSocketId(socket.id);
-                console.log(GameManager.getActiveRooms());
-                console.log(msg.room);
-                console.log(GameManager.getActiveRooms().get(parseInt(msg.room)));
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 var cont = true;
                 // r.getPlayers().forEach((player:any)=>{

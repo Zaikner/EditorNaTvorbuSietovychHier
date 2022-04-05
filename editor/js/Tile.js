@@ -39,16 +39,6 @@ var Tile = /** @class */ (function () {
         this.numberOfFollowingTile = tileNumber + 1;
     }
     Tile.prototype.drawTile = function (canvas, ctx, showOnlyChange) {
-        // // kresli//
-        // console.log('vykonal')
-        // if (showOnlyChange){
-        //     ctx = <CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d");
-        // }
-        // else{
-        //     console.log(editor.getGame().getTiles())
-        //     console.log('vytlacil cez false')
-        //     console.log(this)
-        // }   
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.backgroundFile == undefined && this.patternFile == undefined) {
@@ -64,7 +54,6 @@ var Tile = /** @class */ (function () {
             }
             ctx.resetTransform();
             ctx.fill();
-            console.log('nakreslil');
         }
         else if (this.backgroundFile != undefined) {
             // //kresli image
@@ -356,23 +345,11 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.havePawnOnTile = function (player) {
         var ret = undefined;
-        console.log(this.pawns);
-        console.log('zahladal');
         this.pawns.forEach(function (pawn) {
-            console.log('potocil');
             if (pawn.player == player) {
                 ret = pawn;
             }
-            else {
-                console.log('mena');
-                console.log(pawn.player);
-                console.log(pawn);
-                console.log(pawn.player == player);
-                console.log([pawn.player, player]);
-            }
         });
-        console.log('vratil');
-        console.log(ret);
         return ret;
     };
     Tile.prototype.setStroke = function (newStroke) {

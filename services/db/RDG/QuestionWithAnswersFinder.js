@@ -63,7 +63,6 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
                             })];
                     case 3:
@@ -84,7 +83,6 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('typ id je :' + typeof id);
                         client = DbConnect_1.DbConnect.get();
                         _a.label = 1;
                     case 1:
@@ -99,7 +97,6 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
                                 ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
                             })];
                     case 3:
