@@ -205,6 +205,8 @@ var ServerSocket = /** @class */ (function () {
                 console.log('reacted to tile');
                 _this.io["in"](msg.room).emit('ended turn');
                 r.nextTurn();
+                console.log('emitol dalsi turn:');
+                console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
             });
             socket.on('change Pawn position', function (msg) {

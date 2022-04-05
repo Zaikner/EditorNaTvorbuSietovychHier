@@ -78,9 +78,12 @@ var Game = /** @class */ (function () {
         return tile;
     };
     Game.prototype.movePawnById = function (id, value) {
+        var moved = false;
         this.pawns.forEach(function (p) {
             console.log(p);
-            if (p.id == id) {
+            if (p.id == id && !moved) {
+                console.log('pohol som idkcom' + id);
+                moved = true;
                 p.move(value);
                 return p;
             }

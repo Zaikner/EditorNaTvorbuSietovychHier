@@ -44,10 +44,11 @@ function throwDice(player:string,pawn:Pawn){
     let n  = 0
     let interval = setInterval(function () {
         if (times == 10){
-           
-            clearInterval(interval)
-           
             const params = new URLSearchParams(window.location.search);
+            clearInterval(interval)
+            console.log('player emitol takyto hod:')
+            console.log({room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
+            
             editorSocket.emit('player thrown',{room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }

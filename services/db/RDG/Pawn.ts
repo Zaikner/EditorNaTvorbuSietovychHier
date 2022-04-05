@@ -56,6 +56,8 @@ export class Pawn{
 
 
     public static load(data:any){
+                console.log('tooto vyplula dataza')
+                console.log(data)
                 let ret = new Pawn()
                 ret.setId(data.id)
                 ret.setTileId(data.tileId)

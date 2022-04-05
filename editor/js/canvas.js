@@ -91,9 +91,12 @@ editorSocket.on('connected', function (msg) {
     msg.pawns.forEach(function (pawn) {
         i++;
         var tile = editor.findTileById(pawn.tileId);
+        console.log('nahral takyto pawn');
         var p = new Pawn_1.Pawn(pawn.player, tile);
         p.id = pawn.id;
         editor.getGame().getPawns().push(p);
+        console.log(pawn);
+        console.log(p);
         //tile.getPawns().push(p)
     });
     msg.styles.forEach(function (style) {
@@ -153,6 +156,7 @@ var params = new URLSearchParams(window.location.search);
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
+    console.log('vykonal move pawn pre pawn:' + msg.pawn);
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
 });

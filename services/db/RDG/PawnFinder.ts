@@ -13,8 +13,9 @@ export class PawnFinder{
         try {
             const query = {
                 name: 'select-pawn-find-name',
-                text: 'SELECT * FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
+                text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
                 values: [name],
+               
               }
             var results = await  client.query(query)
             var ret:Array<Pawn> = []

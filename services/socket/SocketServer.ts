@@ -199,7 +199,10 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         console.log('reacted to tile')
         this.io.in(msg.room).emit('ended turn')
+
         r.nextTurn()
+        console.log('emitol dalsi turn:')
+        console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
       })
       socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number,id:string})=>{

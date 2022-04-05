@@ -38,7 +38,15 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.broadcast = function (msg) {
     };
-    Room.prototype.nextTurn = function () { };
+    Room.prototype.nextTurn = function () {
+        if (this.lastPlayerId == this.players.length) {
+            this.lastPlayerId = 0;
+        }
+        else {
+            this.lastPlayerId++;
+        }
+        this.playerOnTurn = this.players[this.lastPlayerId];
+    };
     //constructor(){}
     Room.prototype.getId = function () {
         return this.id;

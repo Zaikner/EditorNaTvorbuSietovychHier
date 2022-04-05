@@ -44,11 +44,13 @@ function throwDice(player, pawn) {
     var times = 0;
     var n = 0;
     var interval = setInterval(function () {
-        var _a;
+        var _a, _b;
         if (times == 10) {
-            clearInterval(interval);
             var params = new URLSearchParams(window.location.search);
-            canvas_1.editorSocket.emit('player thrown', { room: params.get('id'), player: player, value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), pawn: pawn.id });
+            clearInterval(interval);
+            console.log('player emitol takyto hod:');
+            console.log({ room: params.get('id'), player: player, value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), pawn: pawn.id });
+            canvas_1.editorSocket.emit('player thrown', { room: params.get('id'), player: player, value: n, tileId: (_b = canvas_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getId(), pawn: pawn.id });
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {

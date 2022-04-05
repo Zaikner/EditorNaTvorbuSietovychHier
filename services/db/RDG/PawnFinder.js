@@ -55,7 +55,7 @@ var PawnFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-pawn-find-name',
-                            text: 'SELECT * FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
+                            text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
                             values: [name]
                         };
                         return [4 /*yield*/, client.query(query)];

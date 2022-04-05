@@ -52,6 +52,8 @@ var Pawn = /** @class */ (function () {
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
     Pawn.load = function (data) {
+        console.log('tooto vyplula dataza');
+        console.log(data);
         var ret = new Pawn();
         ret.setId(data.id);
         ret.setTileId(data.tileId);

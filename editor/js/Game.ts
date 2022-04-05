@@ -86,10 +86,12 @@ class Game{
         return tile
     }
     movePawnById(id:number,value:number){
-        
+        let  moved = false
         this.pawns.forEach((p:Pawn)=>{
             console.log(p)
-            if (p.id == id){
+            if (p.id == id && !moved){
+                console.log('pohol som idkcom' + id)
+                moved = true
                 p.move(value)
                 return p
             }

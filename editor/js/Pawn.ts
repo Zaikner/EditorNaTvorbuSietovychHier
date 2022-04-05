@@ -23,28 +23,28 @@ export class Pawn{
         let actuallTile = this.tile;
         let endTile = this.tile;
         console.log(actuallTile)
+        
         let p = this;
         for (let i = 0;i < numOfTiles ; i++){
         
             setTimeout(function(){
+                console.log('pohol som pawnom:')
+                console.log(p)
                 actuallTile.removePawn(p)
                 actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
                 console.log('nextTile je:')
                 actuallTile.getPawns().push(p)
+                console.log('pawny tohto policka su:')
+                console.log(actuallTile.getPawns())
                 p.tileId = actuallTile.getId()
                 p.tile = actuallTile
                 console.log(actuallTile)
             reload(editor,ctx)
             }, 500*i)
         }
-        console.log('konečny tile je :')
-        console.log(actuallTile)
-        console.log(this.tile)
-        this.tile = actuallTile
-        //this.tile.getPawns().push(this)
-        //startTile.removePawn(this)
+     
         const params = new URLSearchParams(window.location.search);
-        p = this
+    
         setTimeout(function(){
             editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id'),id:getCookie('id')})
             startTile.setIsChoosen(false)

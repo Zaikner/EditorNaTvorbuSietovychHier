@@ -107,10 +107,14 @@ editorSocket.on('connected',(msg)=>{
   msg.pawns.forEach((pawn:any) => {
     i++;
     let tile = editor.findTileById(pawn.tileId)!
-    
+    console.log('nahral takyto pawn')
+   
      let p = new Pawn(pawn.player,tile)
      p.id = pawn.id
+
      editor.getGame().getPawns().push(p)
+     console.log(pawn)
+     console.log(p)
      //tile.getPawns().push(p)
     
     
@@ -188,6 +192,7 @@ const params = new URLSearchParams(window.location.search);
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
+  console.log('vykonal move pawn pre pawn:' + msg.pawn)
  let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
   editor.setChoosenTile(undefined!)
 
