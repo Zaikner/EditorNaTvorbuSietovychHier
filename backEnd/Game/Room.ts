@@ -50,7 +50,16 @@ export class Room{
         }
 
         public nextTurn()
-        {}
+        {
+
+            if (this.lastPlayerId  == this.players.length){
+                this.lastPlayerId = 0
+            }
+            else{
+                this.lastPlayerId++;
+            }
+            this.playerOnTurn = this.players[this.lastPlayerId]
+        }
         //constructor(){}
 
 

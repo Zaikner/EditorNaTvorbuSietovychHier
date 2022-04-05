@@ -195,13 +195,28 @@ export class ServerSocket{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
         
       })
-      socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number})=>{
+      socket.on('react to tile',(msg:{room:string,questionId:number})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-        r.getPawnPositions().set(msg.pawnId,msg.tileId)
-        console.log(msg.pawnId)
-        console.log(msg.tileId)
-        console.log('zmenil poziciu pawnu')
-        console.log(r)
+        console.log('reacted to tile')
+        this.io.in(msg.room).emit('ended turn')
+        r.nextTurn()
+        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+      })
+      socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number,id:string})=>{
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r.getPlayerOnTurn().getAccount() ==  AccountManager.getAccountByClientId(msg.id)){
+          r.getPawnPositions().set(msg.pawnId,msg.tileId)
+          console.log(msg.pawnId)
+          console.log(msg.tileId)
+          console.log('zmenil poziciu pawnu len raz')
+          console.log(r)
+        }
+        else{
+          console.log('nerovnaju sa !')
+          //console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
+        }
+        
+       
       })
        
 

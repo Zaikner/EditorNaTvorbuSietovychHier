@@ -1,7 +1,7 @@
 "use strict";
 var _a, _b, _c, _d, _e, _f;
 exports.__esModule = true;
-exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
@@ -133,6 +133,7 @@ editorSocket.on('player left', function (msg) {
 });
 editorSocket.on('game started', function (msg) {
     // editor.getGame().setHasStarted(true)
+    $('#waitingModal').modal('hide');
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
@@ -499,6 +500,7 @@ function getCookie(name) {
     });
     return cookie.get(name);
 }
+exports.getCookie = getCookie;
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });

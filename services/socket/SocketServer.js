@@ -200,13 +200,26 @@ var ServerSocket = /** @class */ (function () {
                 console.log('emitol player thrown');
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
             });
+            socket.on('react to tile', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                console.log('reacted to tile');
+                _this.io["in"](msg.room).emit('ended turn');
+                r.nextTurn();
+                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+            });
             socket.on('change Pawn position', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                r.getPawnPositions().set(msg.pawnId, msg.tileId);
-                console.log(msg.pawnId);
-                console.log(msg.tileId);
-                console.log('zmenil poziciu pawnu');
-                console.log(r);
+                if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
+                    r.getPawnPositions().set(msg.pawnId, msg.tileId);
+                    console.log(msg.pawnId);
+                    console.log(msg.tileId);
+                    console.log('zmenil poziciu pawnu len raz');
+                    console.log(r);
+                }
+                else {
+                    console.log('nerovnaju sa !');
+                    //console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
+                }
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);

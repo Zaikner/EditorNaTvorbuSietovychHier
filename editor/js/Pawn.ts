@@ -1,4 +1,4 @@
-import { ctx, editor, editorSocket, reload } from "./canvas";
+import { ctx, editor, editorSocket, getCookie, reload } from "./canvas";
 import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
 import { Tile } from "./Tile";
 
@@ -29,25 +29,34 @@ export class Pawn{
             setTimeout(function(){
                 actuallTile.removePawn(p)
                 actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
+                console.log('nextTile je:')
                 actuallTile.getPawns().push(p)
                 p.tileId = actuallTile.getId()
+                p.tile = actuallTile
                 console.log(actuallTile)
             reload(editor,ctx)
             }, 500*i)
         }
-
+        console.log('konečny tile je :')
+        console.log(actuallTile)
+        console.log(this.tile)
         this.tile = actuallTile
         //this.tile.getPawns().push(this)
         //startTile.removePawn(this)
         const params = new URLSearchParams(window.location.search);
         p = this
         setTimeout(function(){
-            editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id')})
+            editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id'),id:getCookie('id')})
             startTile.setIsChoosen(false)
             editor.setChoosenTile(undefined!)
+            editor.reactToTile(actuallTile)
+            console.log('posunuty tile:')
+            console.log(p.tile)
+            console.log('posunuta figurka')
+            console.log(p)
             reload(editor,ctx)
         console.log('posunul')
-        }, 600*numOfTiles)
+        }, 550*numOfTiles)
         
     }
     JSONfyPawn(){

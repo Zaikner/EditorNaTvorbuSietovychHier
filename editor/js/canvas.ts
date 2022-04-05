@@ -165,7 +165,7 @@ editorSocket.on('player left',(msg:{msg:string})=>{
 
 editorSocket.on('game started',(msg:{msg:string})=>{
  // editor.getGame().setHasStarted(true)
-
+ $('#waitingModal').modal('hide')
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
@@ -192,6 +192,8 @@ editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   editor.setChoosenTile(undefined!)
 
 })
+
+
 let isEditor = false;
 let zoz = window.location.href.split('/')
 if (zoz[zoz.length-2] === 'editor'){
@@ -622,4 +624,4 @@ window.onload = function(){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
   }
 }
-export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize};
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize,getCookie};

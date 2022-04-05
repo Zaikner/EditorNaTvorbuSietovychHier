@@ -175,6 +175,10 @@ var GameEditor = /** @class */ (function () {
         });
         return t;
     };
+    GameEditor.prototype.reactToTile = function (tile) {
+        var params = new URLSearchParams(window.location.search);
+        canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId() });
+    };
     GameEditor.prototype.getGame = function () {
         return this.game;
     };
