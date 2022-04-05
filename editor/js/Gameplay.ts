@@ -1,5 +1,6 @@
 import { spawnParagraph } from "./Elements";
-import {doc,editor,editorSocket,elementDeleter} from './canvas'
+import {canvas, doc,editor,editorSocket,elementDeleter} from './canvas'
+import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
 
 

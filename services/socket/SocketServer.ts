@@ -198,16 +198,20 @@ export class ServerSocket{
       })
       socket.on('react to tile',(msg:{room:string,questionId:number,id:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-        if (r.getPlayerOnTurn().getAccount() ==  AccountManager.getAccountByClientId(msg.id)){
+        if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           console.log('reacted to tile')
           this.io.in(msg.room).emit('ended turn')
-  
+          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
           r.nextTurn()
           console.log('emitol dalsi turn:')
-          console.log(r)
+          //console.log(r)
           console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+          this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
           this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
    
+        }
+        else{
+          console.log([r.getPlayerOnTurn().getAccount().getSocketId(),socket.id])
         }
          
       })

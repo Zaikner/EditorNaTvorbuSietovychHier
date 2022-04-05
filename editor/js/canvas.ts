@@ -257,7 +257,9 @@ else {
       })
 }
 
+
 editorSocket.on('turn',(msg:{player:string,token:string})=>{
+  canvas.removeEventListener('click',pickTile)
   elementDeleter('onTurnPlace')
   spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
  
@@ -268,7 +270,9 @@ editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
   canvas.addEventListener('click',pickTile)
   document.getElementById('Dice')?.addEventListener('click',function()
   { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
-    if (editor.getChoosenTile()!=undefined && pawn!= undefined)throwDice(msg.player,pawn)})
+    if (editor.getChoosenTile()!=undefined && pawn!= undefined){
+    canvas.removeEventListener('click',pickTile)
+    throwDice(msg.player,pawn)}})
   
 })
 

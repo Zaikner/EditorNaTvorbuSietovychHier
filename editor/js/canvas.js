@@ -205,6 +205,7 @@ else {
     });
 }
 editorSocket.on('turn', function (msg) {
+    canvas.removeEventListener('click', TileEditor_js_1.pickTile);
     elementDeleter('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
 });
@@ -214,8 +215,10 @@ editorSocket.on('turnMove', function (msg) {
     canvas.addEventListener('click', TileEditor_js_1.pickTile);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         var pawn = editor.getChoosenTile().havePawnOnTile(msg.token);
-        if (editor.getChoosenTile() != undefined && pawn != undefined)
+        if (editor.getChoosenTile() != undefined && pawn != undefined) {
+            canvas.removeEventListener('click', TileEditor_js_1.pickTile);
             (0, Gameplay_1.throwDice)(msg.player, pawn);
+        }
     });
 });
 // editorSocket.on('can throw',()=>{
