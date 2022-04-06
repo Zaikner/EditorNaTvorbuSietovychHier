@@ -62,6 +62,13 @@ editorSocket.on('connected',(msg)=>{
      addedTile.setNumberingColor(tile.numberingColor)
      addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
      addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
+
+     addedTile.setSkip(tile.skip)
+      addedTile.setRepeat(tile.repeat)
+      addedTile.setForward(tile.forward)
+      addedTile.setBackward(tile.backward)
+      addedTile.setMustThrown(tile.mustThrown)
+      addedTile.setTurnsToSetFree(tile.turnToSetFree)
    
     editor.getGame().addTile(addedTile)
     
@@ -221,7 +228,7 @@ if (zoz[zoz.length-2] === 'editor'){
 else {
   
   
-
+  
   if (params.get('id') != null){
     editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
     editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name'),room:params.get('id')})
@@ -360,7 +367,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
     console.log(editor)
-    document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + nums +' times.'
+    document.getElementById('bindEvent')!.textContent ='Skip: ' + nums +' times.'
   })
   
 })
@@ -374,7 +381,7 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
     console.log(editor)
-    document.getElementById('bindEvent')!.textContent ='Skip: ' + nums +' times.'
+    document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + nums +' times.'
   })
   
 });

@@ -1,7 +1,7 @@
 import { Account } from "../Accounts/Account";
 import { Player } from "./Player";
 import { ServerSocket } from "../../services/socket/SocketServer";
-
+const GameManager = require('./GameManager')
 export class Room{
         private id:number = 0;
         private socketId:string = '';
@@ -12,6 +12,7 @@ export class Room{
         private hasStarted:boolean = false;
         private playerOnTurn:Player = undefined!
         private lastPlayerId:number = 0
+        private gameData:any = undefined!;
        
         private pawnPositions:Map<number,number> = new Map()
 
@@ -19,8 +20,14 @@ export class Room{
             this.id = id;
             this.maxPlayers = numOfPlayers;
             this.gameName = gameName;
+            
         }
 
+        // public  async initGameData(){
+        //     this.gameData = await GameManager.loadGame(this.gameName)
+        //     console.log('zavolal initGameData')
+        //     console.log(this.gameData)
+        // }
         public join(player:Player){
             if (player.getToken() != 'spectator'){
                 this.players.push(player)
@@ -120,4 +127,12 @@ export class Room{
         public getPawnPositions(){
             return this.pawnPositions
         }
+        public getGameData(){
+            return this.gameData
+        }
+        public setGameData(newData:any){
+            this.gameData = newData!
+        }
+            
+        
     }

@@ -58,7 +58,7 @@ var QuestionOption = /** @class */ (function () {
     QuestionOption.prototype["delete"] = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
-            name: 'update-option',
+            name: 'delete-option',
             text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',
             values: [this.id]
         };

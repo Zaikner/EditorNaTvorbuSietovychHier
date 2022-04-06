@@ -60,6 +60,12 @@ editorSocket.on('connected', function (msg) {
         addedTile.setNumberingColor(tile.numberingColor);
         addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
         addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
+        addedTile.setSkip(tile.skip);
+        addedTile.setRepeat(tile.repeat);
+        addedTile.setForward(tile.forward);
+        addedTile.setBackward(tile.backward);
+        addedTile.setMustThrown(tile.mustThrown);
+        addedTile.setTurnsToSetFree(tile.turnToSetFree);
         editor.getGame().addTile(addedTile);
         reload(editor, ctx);
     });
@@ -290,7 +296,7 @@ function edit() {
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             console.log(editor);
-            document.getElementById('bindEvent').textContent = 'Repeat turn: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = 'Skip: ' + nums + ' times.';
         });
     });
     document.getElementById('repeatButton').addEventListener('click', function () {
@@ -302,7 +308,7 @@ function edit() {
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             console.log(editor);
-            document.getElementById('bindEvent').textContent = 'Skip: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = 'Repeat turn: ' + nums + ' times.';
         });
     });
     document.getElementById('stopButton').addEventListener('click', function () {

@@ -199,12 +199,15 @@ var Tile = /** @class */ (function () {
         }
         var diffY = 10;
         ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+        console.log(this.pawns);
         canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (player) {
             //console.log('zacal kreslit playera' + player)
             drawn = 0;
+            console.log(player);
             _this.pawns.forEach(function (pawn) {
-                if (pawn.player == player && num <= canvas_js_1.editor.getGame().getPlayerTokens().length) {
-                    console.log(num);
+                if (pawn.player == player) {
+                    console.log(pawn);
+                    //console.log(num)
                     num++;
                     var style = canvas_js_1.editor.getGame().getPawnStyle().get(pawn.player);
                     // console.log('Pustil dalej hraca '+ player)
@@ -344,6 +347,12 @@ var Tile = /** @class */ (function () {
             numberOfFollowingTile: this.numberOfFollowingTile,
             questionId: this.questionId,
             cantBeEliminatedOnTile: this.cantBeEliminatedOnTile,
+            skip: this.skip,
+            repeat: this.repeat,
+            forward: this.forward,
+            backward: this.backward,
+            mustThrown: this.mustThrown,
+            turnToSetFree: this.turnToSetFree,
             id: this.id };
     };
     Tile.prototype.removePawn = function (pawn) {

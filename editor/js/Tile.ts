@@ -229,14 +229,16 @@ class Tile{
         }
         let diffY = 10
         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+        console.log(this.pawns)
         editor.getGame().getPlayerTokens().forEach((player)=>{
             //console.log('zacal kreslit playera' + player)
             drawn = 0
-            
+            console.log(player)
             this.pawns.forEach((pawn) => {
-            
-                if(pawn.player == player && num <= editor.getGame().getPlayerTokens().length){
-                    console.log(num)
+                
+                if(pawn.player == player){
+                    console.log(pawn)
+                    //console.log(num)
                     num++;
                     let style = editor.getGame().getPawnStyle().get(pawn.player)
                     // console.log('Pustil dalej hraca '+ player)
@@ -391,6 +393,12 @@ class Tile{
                 numberOfFollowingTile:this.numberOfFollowingTile,
                 questionId:this.questionId,
                 cantBeEliminatedOnTile:this.cantBeEliminatedOnTile,
+                skip:this.skip,
+                repeat:this.repeat,
+                forward:this.forward,
+                backward:this.backward,
+                mustThrown:this.mustThrown,
+                turnToSetFree:this.turnToSetFree,
                 id:this.id}
             
     }

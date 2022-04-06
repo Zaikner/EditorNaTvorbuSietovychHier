@@ -312,6 +312,12 @@ class GameEditor{
     public setBackward(newBackward:number){
         this.backward = newBackward
     }
+    public getNextTileId(){
+        return this.nextTileId
+    }
+    public setNextTileId(newId:number){
+        this.nextTileId = newId
+    }
     public getMustThrown(){
         return this.mustThrown
     }

@@ -68,7 +68,7 @@ export class QuestionOption{
                         let client = DbConnect.get()
                       
                             const query = {
-                                name: 'update-option',
+                                name: 'delete-option',
                                 
                                 text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',
                                 values: [this.id],

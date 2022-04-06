@@ -15,6 +15,26 @@ reload(editor,ctx)
 let pickTile = function(event:MouseEvent) {editor.findTile(event,false)   
   reload(editor,ctx)
   }
+
+let copyTile = function(event:MouseEvent) {
+  removeAllButtons()
+  spawnElements()
+  editor.findTile(event,false)
+  setValues(undefined!,false)
+  showActualState()
+  editor.getChoosenTile()?.setIsChoosen(false)
+  editor.setChoosenTile(undefined!)   
+
+  spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
+    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],'Stop inserting!',insertTilesMenu)   
+  
+
+    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile!',undoTileInsert)
+    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],'Copy Tile Style!',copyTileStyle)
+  
+    reload(editor,ctx)
+    canvas.addEventListener('mousedown', insert);
+    }
 let deleteHandler = function(event:MouseEvent){
   editor.deleteTile(event)
   reload(editor,ctx)}
@@ -190,9 +210,20 @@ function insertTilesMenu():void{
     spawnElements()
 
     spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile!',undoTileInsert)
+    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],'Copy Tile Style!',copyTileStyle)
     showActualState()
   }
 
+  function copyTileStyle(){
+    editor.nullEditor()
+    removeAllButtons()
+    removeAllListenersAdded()
+    spawnParagraph(document,'tileEditingPlace','',"Click on Tile to copy it's style")
+    document.getElementById('wholeBody')!.style.cursor = 'pointer'
+    canvas.style.cursor = 'pointer'
+    document.getElementById('optionPlace')!.style.cursor = 'pointer'
+    canvas.addEventListener('click',copyTile)
+  }
   function saveInsertingTiles(){
     removeAllButtons()
     removeAllListenersAdded()
@@ -221,7 +252,7 @@ function insertTilesMenu():void{
 
       spawnElements()
 
-      setValues(undefined!)
+      setValues(undefined!,true)
     showActualState()      
     }
   
@@ -270,7 +301,13 @@ function insertTilesMenu():void{
     canvas.removeEventListener('click',deleteHandler)
     canvas.removeEventListener('click',insertPawn)
     canvas.removeEventListener('click',deletePawn)
+    canvas.removeEventListener('click',copyTile)
     endDrawingPath()
+
+    document.getElementById('wholeBody')!.style.cursor = 'default'
+    canvas.style.cursor = 'default'
+    document.getElementById('optionPlace')!.style.cursor = 'default'
+    reload(editor,ctx)
   }
 
   function undoTileInsert(){
@@ -332,12 +369,24 @@ function insertTilesMenu():void{
     addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
     addedTile.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
-    addedTile.setSkip(editor.getSkip())
-    addedTile.setRepeat(editor.getRepeat())
-    addedTile.setForward(editor.getForward())
-    addedTile.setBackward(editor.getBackward())
-    addedTile.setMustThrown(editor.getMustThrown())
-    addedTile.setTurnsToSetFree(editor.getTurnsToSetFree())
+
+    if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
+      addedTile.setSkip(editor.getSkip())
+      addedTile.setRepeat(editor.getRepeat())
+      addedTile.setForward(editor.getForward())
+      addedTile.setBackward(editor.getBackward())
+      addedTile.setMustThrown(editor.getMustThrown())
+      addedTile.setTurnsToSetFree(editor.getTurnsToSetFree())
+    }
+    else{
+      addedTile.setSkip(0)
+    addedTile.setRepeat(0)
+    addedTile.setForward(0)
+    addedTile.setBackward(0)
+    addedTile.setMustThrown(0)
+    addedTile.setTurnsToSetFree(0)
+    }
+   
     
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       
@@ -431,14 +480,25 @@ function insertTilesMenu():void{
     editor.getChoosenTile()!.setPatternFile(pattImage)
    
     editor.getChoosenTile()!.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
+  
+    if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
+     
     editor.getChoosenTile()!.setSkip(editor.getSkip())
     editor.getChoosenTile()!.setRepeat(editor.getRepeat())
     editor.getChoosenTile()!.setForward(editor.getForward())
     editor.getChoosenTile()!.setBackward(editor.getBackward())
     editor.getChoosenTile()!.setMustThrown(editor.getMustThrown())
     editor.getChoosenTile()!.setTurnsToSetFree(editor.getTurnsToSetFree())
-
-    if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
+    }
+    else{
+      editor.getChoosenTile()!.setSkip(0)
+      editor.getChoosenTile()!.setRepeat(0)
+      editor.getChoosenTile()!.setForward(0)
+      editor.getChoosenTile()!.setBackward(0)
+      editor.getChoosenTile()!.setMustThrown(0)
+      editor.getChoosenTile()!.setTurnsToSetFree(0)
+    }
+    if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0  && editor.getChoosenTile()?.getTileNumber()!= parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)){
       editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     
       let tileWithSameNumber = editor.getGame().getTiles()
@@ -454,11 +514,16 @@ function insertTilesMenu():void{
         editor.getGame().removePawn(pawn)
       }})
 
-    
+      if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+        editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
+      }
+      else{
+        editor.getChoosenTile()?.setQuestionId(-1)
+      }
     
     reload(editor,ctx)
   }
-  let setValues = function(tile:Tile){
+  let setValues = function(tile:Tile,copyNumber:boolean){
     if (tile == undefined){
       tile = editor.getChoosenTile()!
     
@@ -491,9 +556,54 @@ function insertTilesMenu():void{
       sizeOfOutlineSlider.value = tile!.getStroke().toString()
       outlineColorPicker.value = tile!.getStrokeColor()
       outlineChecker.checked = tile!.getStroke()>0
-      tileNumberSetter.value = tile!.getTileNumber().toString()
-      tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
-     
+      if (copyNumber){
+        tileNumberSetter.value = tile!.getTileNumber().toString()
+        tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
+      }
+      else{
+        console.log('nastavil spravne')
+        tileNumberSetter.value = ''
+        tileFollowingSetter.value = ''
+      }
+      
+      
+
+      if (tile.getQuestionId()!=-1){
+        (<HTMLInputElement>document.getElementById('askQuestionChecker')).checked = true;
+        (doc.getElementById("askQuestionCheckerShower"))!.textContent = 'yes'
+        
+        document.getElementById('bindQuestion')!.textContent = 'Choosen Question Id: '+tile.getQuestionId()
+       
+
+      }
+      if (tile.getSkip()!=0){
+        (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
+        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes'
+        document.getElementById('bindEvent')!.textContent ='Skip: ' + tile.getSkip() +' times.'
+        
+      }
+      if (tile.getRepeat()!=0){
+        (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
+        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
+        document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + tile.getRepeat() +' times.'
+        
+      }
+      if (tile.getForward()!=0){
+        (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
+        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
+        document.getElementById('bindEvent')!.textContent ='Go forward: ' + tile.getForward() +' times.'
+      }
+      if (tile.getBackward()!=0){
+        (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
+        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
+        document.getElementById('bindEvent')!.textContent ='Go backward: ' + tile.getBackward() +' times.'
+      }
+      if (tile.getMustThrown()!=0){
+        (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
+        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
+        document.getElementById('bindEvent')!.textContent ='Thrown: ' + tile.getMustThrown() +' . Or wait ' +tile.getTurnsToSetFree()+ ' turns';
+      }
+
       if (outlineChecker.checked){
         doc.getElementById("outlineCheckerShower")!.textContent = 'yes'
       }
@@ -531,6 +641,7 @@ function insertTilesMenu():void{
         doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'no'
       }
     }
+
     //startingFor = doc.getElementById('')
     return tile
   }
@@ -588,8 +699,7 @@ function insertTilesMenu():void{
    
     
   }
-  
-
+ 
 
   
   export{insertTilesMenu,moveEventHandler,pickTile,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}

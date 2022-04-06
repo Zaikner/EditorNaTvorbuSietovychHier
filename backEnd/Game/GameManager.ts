@@ -46,7 +46,9 @@ class GameManager{
         }
         
         let room = new Room(id,numOfPlayers,name)
-       
+        room.setGameData(await GameManager.loadGame(name))
+        
+        console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
           let pawns = await PawnFinder.getIntance().findByName(name)

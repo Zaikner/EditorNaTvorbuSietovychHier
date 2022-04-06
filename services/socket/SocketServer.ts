@@ -23,7 +23,7 @@ import { RulesFinder } from "../db/RDG/RulesFinder";
 import { access } from "fs";
 import { editor } from "../../editor/js/canvas";
 import { Account } from "../../backEnd/Accounts/Account";
-import e = require("express");
+
 
 const Player = require( "../../backEnd/Game/Player")
 const path = require('path');
@@ -47,12 +47,17 @@ export class ServerSocket{
                 
                    
                   
-                   let emit = await GameManager.loadGame(msg.name)
+                   let emit;
                    if (msg.room!=undefined){
+                     
                     let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+                    emit  = r.getGameData()
                     emit.pawns.forEach((pawn:Pawn)=>{
                         pawn.tileId = r.getPawnPositions().get(pawn.getId())
                     })
+                   }
+                   else{
+                    emit = await GameManager.loadGame(msg.name)
                    }
                 
               
@@ -107,6 +112,13 @@ export class ServerSocket{
           t.setGameName(data.name)
           t.setQuestionId(tile.questionId)
           t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
+         
+          t.setSkip(tile.skip)
+          t.setRepeat(tile.repeat)
+          t.setForward(tile.forward)
+          t.setBackward(tile.backward)
+          t.setMustThrown(tile.mustThrown)
+          t.setTurnsToSetFree(tile.turnToSetFree)
           t.insert()
         })
         g.insert()

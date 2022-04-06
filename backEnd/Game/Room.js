@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.Room = void 0;
 var SocketServer_1 = require("../../services/socket/SocketServer");
+var GameManager = require('./GameManager');
 var Room = /** @class */ (function () {
     function Room(id, numOfPlayers, gameName) {
         this.id = 0;
@@ -13,11 +14,17 @@ var Room = /** @class */ (function () {
         this.hasStarted = false;
         this.playerOnTurn = undefined;
         this.lastPlayerId = 0;
+        this.gameData = undefined;
         this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
         this.gameName = gameName;
     }
+    // public  async initGameData(){
+    //     this.gameData = await GameManager.loadGame(this.gameName)
+    //     console.log('zavolal initGameData')
+    //     console.log(this.gameData)
+    // }
     Room.prototype.join = function (player) {
         if (player.getToken() != 'spectator') {
             this.players.push(player);
@@ -101,6 +108,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.getPawnPositions = function () {
         return this.pawnPositions;
+    };
+    Room.prototype.getGameData = function () {
+        return this.gameData;
+    };
+    Room.prototype.setGameData = function (newData) {
+        this.gameData = newData;
     };
     return Room;
 }());

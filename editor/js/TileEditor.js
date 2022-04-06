@@ -17,6 +17,22 @@ var pickTile = function (event) {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 exports.pickTile = pickTile;
+var copyTile = function (event) {
+    var _a;
+    removeAllButtons();
+    spawnElements();
+    canvas_js_1.editor.findTile(event, false);
+    setValues(undefined, false);
+    showActualState();
+    (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
+    canvas_js_1.editor.setChoosenTile(undefined);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], 'Copy Tile Style!', copyTileStyle);
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.canvas.addEventListener('mousedown', insert);
+};
 var deleteHandler = function (event) {
     canvas_js_1.editor.deleteTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
@@ -148,7 +164,18 @@ function startInsertingByOne() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
     spawnElements();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], 'Copy Tile Style!', copyTileStyle);
     showActualState();
+}
+function copyTileStyle() {
+    canvas_js_1.editor.nullEditor();
+    removeAllButtons();
+    removeAllListenersAdded();
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Click on Tile to copy it's style");
+    document.getElementById('wholeBody').style.cursor = 'pointer';
+    canvas_js_1.canvas.style.cursor = 'pointer';
+    document.getElementById('optionPlace').style.cursor = 'pointer';
+    canvas_js_1.canvas.addEventListener('click', copyTile);
 }
 function saveInsertingTiles() {
     removeAllButtons();
@@ -172,7 +199,7 @@ function editTiles() {
         canvas_js_1.editor.setEnabledForPlayers(canvas_js_1.editor.getChoosenTile().getCanOccupy());
     }
     spawnElements();
-    setValues(undefined);
+    setValues(undefined, true);
     showActualState();
 }
 exports.editTiles = editTiles;
@@ -220,7 +247,12 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('click', deleteHandler);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.insertPawn);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.deletePawn);
+    canvas_js_1.canvas.removeEventListener('click', copyTile);
     (0, PathEditor_js_1.endDrawingPath)();
+    document.getElementById('wholeBody').style.cursor = 'default';
+    canvas_js_1.canvas.style.cursor = 'default';
+    document.getElementById('optionPlace').style.cursor = 'default';
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
 function undoTileInsert() {
@@ -276,12 +308,22 @@ var spawnTile = function (coords) {
     addedTile.setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     addedTile.setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     addedTile.setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
-    addedTile.setSkip(canvas_js_1.editor.getSkip());
-    addedTile.setRepeat(canvas_js_1.editor.getRepeat());
-    addedTile.setForward(canvas_js_1.editor.getForward());
-    addedTile.setBackward(canvas_js_1.editor.getBackward());
-    addedTile.setMustThrown(canvas_js_1.editor.getMustThrown());
-    addedTile.setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
+    if (document.getElementById('eventChecker').checked) {
+        addedTile.setSkip(canvas_js_1.editor.getSkip());
+        addedTile.setRepeat(canvas_js_1.editor.getRepeat());
+        addedTile.setForward(canvas_js_1.editor.getForward());
+        addedTile.setBackward(canvas_js_1.editor.getBackward());
+        addedTile.setMustThrown(canvas_js_1.editor.getMustThrown());
+        addedTile.setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
+    }
+    else {
+        addedTile.setSkip(0);
+        addedTile.setRepeat(0);
+        addedTile.setForward(0);
+        addedTile.setBackward(0);
+        addedTile.setMustThrown(0);
+        addedTile.setTurnsToSetFree(0);
+    }
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         addedTile.setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
@@ -306,7 +348,7 @@ var spawnTile = function (coords) {
 };
 exports.spawnTile = spawnTile;
 var update = function () {
-    var _a, _b;
+    var _a, _b, _c, _d, _e;
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -361,13 +403,23 @@ var update = function () {
     canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
     canvas_js_1.editor.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
-    canvas_js_1.editor.getChoosenTile().setSkip(canvas_js_1.editor.getSkip());
-    canvas_js_1.editor.getChoosenTile().setRepeat(canvas_js_1.editor.getRepeat());
-    canvas_js_1.editor.getChoosenTile().setForward(canvas_js_1.editor.getForward());
-    canvas_js_1.editor.getChoosenTile().setBackward(canvas_js_1.editor.getBackward());
-    canvas_js_1.editor.getChoosenTile().setMustThrown(canvas_js_1.editor.getMustThrown());
-    canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
-    if (document.getElementById('tileNumberSetter').value.length > 0) {
+    if (document.getElementById('eventChecker').checked) {
+        canvas_js_1.editor.getChoosenTile().setSkip(canvas_js_1.editor.getSkip());
+        canvas_js_1.editor.getChoosenTile().setRepeat(canvas_js_1.editor.getRepeat());
+        canvas_js_1.editor.getChoosenTile().setForward(canvas_js_1.editor.getForward());
+        canvas_js_1.editor.getChoosenTile().setBackward(canvas_js_1.editor.getBackward());
+        canvas_js_1.editor.getChoosenTile().setMustThrown(canvas_js_1.editor.getMustThrown());
+        canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
+    }
+    else {
+        canvas_js_1.editor.getChoosenTile().setSkip(0);
+        canvas_js_1.editor.getChoosenTile().setRepeat(0);
+        canvas_js_1.editor.getChoosenTile().setForward(0);
+        canvas_js_1.editor.getChoosenTile().setBackward(0);
+        canvas_js_1.editor.getChoosenTile().setMustThrown(0);
+        canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(0);
+    }
+    if (document.getElementById('tileNumberSetter').value.length > 0 && ((_c = canvas_js_1.editor.getChoosenTile()) === null || _c === void 0 ? void 0 : _c.getTileNumber()) != parseInt(document.getElementById('tileNumberSetter').value)) {
         canvas_js_1.editor.getChoosenTile().setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
             .filter(function (t) { return t.getTileNumber() === parseInt(document.getElementById('tileNumberSetter').value); });
@@ -382,9 +434,15 @@ var update = function () {
             canvas_js_1.editor.getGame().removePawn(pawn);
         }
     });
+    if (document.getElementById('askQuestionChecker').checked) {
+        (_d = canvas_js_1.editor.getChoosenTile()) === null || _d === void 0 ? void 0 : _d.setQuestionId(canvas_js_1.editor.getQuestionId());
+    }
+    else {
+        (_e = canvas_js_1.editor.getChoosenTile()) === null || _e === void 0 ? void 0 : _e.setQuestionId(-1);
+    }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
-var setValues = function (tile) {
+var setValues = function (tile, copyNumber) {
     if (tile == undefined) {
         tile = canvas_js_1.editor.getChoosenTile();
     }
@@ -409,8 +467,45 @@ var setValues = function (tile) {
         sizeOfOutlineSlider.value = tile.getStroke().toString();
         outlineColorPicker.value = tile.getStrokeColor();
         outlineChecker.checked = tile.getStroke() > 0;
-        tileNumberSetter.value = tile.getTileNumber().toString();
-        tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
+        if (copyNumber) {
+            tileNumberSetter.value = tile.getTileNumber().toString();
+            tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
+        }
+        else {
+            console.log('nastavil spravne');
+            tileNumberSetter.value = '';
+            tileFollowingSetter.value = '';
+        }
+        if (tile.getQuestionId() != -1) {
+            document.getElementById('askQuestionChecker').checked = true;
+            (canvas_js_1.doc.getElementById("askQuestionCheckerShower")).textContent = 'yes';
+            document.getElementById('bindQuestion').textContent = 'Choosen Question Id: ' + tile.getQuestionId();
+        }
+        if (tile.getSkip() != 0) {
+            document.getElementById('eventChecker').checked = true;
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
+            document.getElementById('bindEvent').textContent = 'Skip: ' + tile.getSkip() + ' times.';
+        }
+        if (tile.getRepeat() != 0) {
+            document.getElementById('eventChecker').checked = true;
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
+            document.getElementById('bindEvent').textContent = 'Repeat turn: ' + tile.getRepeat() + ' times.';
+        }
+        if (tile.getForward() != 0) {
+            document.getElementById('eventChecker').checked = true;
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
+            document.getElementById('bindEvent').textContent = 'Go forward: ' + tile.getForward() + ' times.';
+        }
+        if (tile.getBackward() != 0) {
+            document.getElementById('eventChecker').checked = true;
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
+            document.getElementById('bindEvent').textContent = 'Go backward: ' + tile.getBackward() + ' times.';
+        }
+        if (tile.getMustThrown() != 0) {
+            document.getElementById('eventChecker').checked = true;
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
+            document.getElementById('bindEvent').textContent = 'Thrown: ' + tile.getMustThrown() + ' . Or wait ' + tile.getTurnsToSetFree() + ' turns';
+        }
         if (outlineChecker.checked) {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
         }

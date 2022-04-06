@@ -66,15 +66,18 @@ var ServerSocket = /** @class */ (function () {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(socket.id);
-                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
-                        case 1:
+                            if (!(msg.room != undefined)) return [3 /*break*/, 1];
+                            r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
+                            emit = r_1.getGameData();
+                            emit.pawns.forEach(function (pawn) {
+                                pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
+                            });
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, GameManager.loadGame(msg.name)];
+                        case 2:
                             emit = _a.sent();
-                            if (msg.room != undefined) {
-                                r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
-                                emit.pawns.forEach(function (pawn) {
-                                    pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
-                                });
-                            }
+                            _a.label = 3;
+                        case 3:
                             this.emitToSpecificSocket(socket.id, 'connected', emit);
                             return [2 /*return*/];
                     }
@@ -130,6 +133,12 @@ var ServerSocket = /** @class */ (function () {
                                 t.setGameName(data.name);
                                 t.setQuestionId(tile.questionId);
                                 t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
+                                t.setSkip(tile.skip);
+                                t.setRepeat(tile.repeat);
+                                t.setForward(tile.forward);
+                                t.setBackward(tile.backward);
+                                t.setMustThrown(tile.mustThrown);
+                                t.setTurnsToSetFree(tile.turnToSetFree);
                                 t.insert();
                             });
                             g.insert();

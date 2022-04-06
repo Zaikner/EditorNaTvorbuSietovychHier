@@ -293,6 +293,12 @@ var GameEditor = /** @class */ (function () {
     GameEditor.prototype.setBackward = function (newBackward) {
         this.backward = newBackward;
     };
+    GameEditor.prototype.getNextTileId = function () {
+        return this.nextTileId;
+    };
+    GameEditor.prototype.setNextTileId = function (newId) {
+        this.nextTileId = newId;
+    };
     GameEditor.prototype.getMustThrown = function () {
         return this.mustThrown;
     };

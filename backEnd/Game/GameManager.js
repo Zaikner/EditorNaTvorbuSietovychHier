@@ -79,9 +79,9 @@ var GameManager = /** @class */ (function () {
     };
     GameManager.createRoom = function (name, numOfPlayers) {
         return __awaiter(this, void 0, void 0, function () {
-            var stop, id, room, pawns;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var stop, id, room, _a, _b, pawns;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         stop = false;
                         id = 0;
@@ -95,10 +95,15 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
+                        _b = (_a = room).setGameData;
+                        return [4 /*yield*/, GameManager.loadGame(name)];
+                    case 1:
+                        _b.apply(_a, [_c.sent()]);
+                        console.log(room);
                         this.activeRooms.set(id, room);
                         return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
-                    case 1:
-                        pawns = _a.sent();
+                    case 2:
+                        pawns = _c.sent();
                         pawns.forEach(function (pawn) {
                             room.getPawnPositions().set(pawn.getId(), pawn.getTileId());
                         });
