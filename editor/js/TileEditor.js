@@ -109,6 +109,12 @@ function spawnElements() {
     var eventChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eventChecker', false, ['no', 'yes']);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick event');
     (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], 'Not picked!', function () {
+        if (!eventChecker.checked) {
+            Warning_js_1.Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.');
+        }
+        else {
+            $('#EventModal').modal('show');
+        }
         // if (!questionChecker.checked){
         //   Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
         // }
@@ -116,6 +122,7 @@ function spawnElements() {
         //   editorSocket.emit('loadQuestions')
         //   $('#pickQuestionModal').modal('show');
         // }
+        //$('#EventModal').modal('show');
     });
 }
 exports.spawnElements = spawnElements;
@@ -268,6 +275,13 @@ var spawnTile = function (coords) {
     addedTile.setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
     addedTile.setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     addedTile.setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
+    addedTile.setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
+    addedTile.setSkip(canvas_js_1.editor.getSkip());
+    addedTile.setRepeat(canvas_js_1.editor.getRepeat());
+    addedTile.setForward(canvas_js_1.editor.getForward());
+    addedTile.setBackward(canvas_js_1.editor.getBackward());
+    addedTile.setMustThrown(canvas_js_1.editor.getMustThrown());
+    addedTile.setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         addedTile.setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()
@@ -286,6 +300,8 @@ var spawnTile = function (coords) {
         addedTile.setQuestionId(-1);
     }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    console.log(addedTile);
+    console.log(canvas_js_1.editor);
     return addedTile;
 };
 exports.spawnTile = spawnTile;
@@ -344,6 +360,13 @@ var update = function () {
     canvas_js_1.editor.getChoosenTile().setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
+    canvas_js_1.editor.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
+    canvas_js_1.editor.getChoosenTile().setSkip(canvas_js_1.editor.getSkip());
+    canvas_js_1.editor.getChoosenTile().setRepeat(canvas_js_1.editor.getRepeat());
+    canvas_js_1.editor.getChoosenTile().setForward(canvas_js_1.editor.getForward());
+    canvas_js_1.editor.getChoosenTile().setBackward(canvas_js_1.editor.getBackward());
+    canvas_js_1.editor.getChoosenTile().setMustThrown(canvas_js_1.editor.getMustThrown());
+    canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
     if (document.getElementById('tileNumberSetter').value.length > 0) {
         canvas_js_1.editor.getChoosenTile().setTileNumber(parseInt(document.getElementById('tileNumberSetter').value));
         var tileWithSameNumber = canvas_js_1.editor.getGame().getTiles()

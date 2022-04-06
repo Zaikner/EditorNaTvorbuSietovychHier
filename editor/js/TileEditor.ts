@@ -142,9 +142,17 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnParagraph(document,'tileEditingPlace','','Does event occur when moving to this tile ??')
     let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
 
+    
+
     spawnParagraph(document,'tileEditingPlace','','Pick event')
     spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],'Not picked!',function(){
-      
+      if (!eventChecker.checked){
+        Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
+      }
+      else{
+       
+        $('#EventModal').modal('show');
+      }
       // if (!questionChecker.checked){
       //   Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
       // }
@@ -152,8 +160,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
       //   editorSocket.emit('loadQuestions')
       //   $('#pickQuestionModal').modal('show');
       // }
-    
-
+      //$('#EventModal').modal('show');
+      
     })
 }
 
@@ -323,6 +331,14 @@ function insertTilesMenu():void{
     addedTile.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
+    addedTile.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
+    addedTile.setSkip(editor.getSkip())
+    addedTile.setRepeat(editor.getRepeat())
+    addedTile.setForward(editor.getForward())
+    addedTile.setBackward(editor.getBackward())
+    addedTile.setMustThrown(editor.getMustThrown())
+    addedTile.setTurnsToSetFree(editor.getTurnsToSetFree())
+    
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       
       addedTile.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
@@ -346,7 +362,8 @@ function insertTilesMenu():void{
       addedTile.setQuestionId(-1)
     }
     reload(editor,ctx)
-  
+    console.log(addedTile)
+    console.log(editor)
     return addedTile    
   }
   let update = function(){
@@ -413,6 +430,14 @@ function insertTilesMenu():void{
     editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     editor.getChoosenTile()!.setPatternFile(pattImage)
    
+    editor.getChoosenTile()!.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
+    editor.getChoosenTile()!.setSkip(editor.getSkip())
+    editor.getChoosenTile()!.setRepeat(editor.getRepeat())
+    editor.getChoosenTile()!.setForward(editor.getForward())
+    editor.getChoosenTile()!.setBackward(editor.getBackward())
+    editor.getChoosenTile()!.setMustThrown(editor.getMustThrown())
+    editor.getChoosenTile()!.setTurnsToSetFree(editor.getTurnsToSetFree())
+
     if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     
@@ -563,6 +588,9 @@ function insertTilesMenu():void{
    
     
   }
+  
+
+
   
   export{insertTilesMenu,moveEventHandler,pickTile,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
 

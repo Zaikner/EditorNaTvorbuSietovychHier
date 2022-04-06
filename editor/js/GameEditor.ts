@@ -19,6 +19,12 @@ class GameEditor{
     private cantBeEliminatedOnTile:Array<string> = []
     private nextTileId = 0;
     private questionId = -1;
+    private skip = 0;
+    private repeat = 0;
+    private forward = 0;
+    private backward = 0;
+    private mustThrown = 0;
+    private turnToSetFree = 0;
     constructor(){
         this.initNewGame()
     }
@@ -196,6 +202,32 @@ class GameEditor{
         editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id')})
     }
    
+
+    setEvents(type:string,values:{num:number,value:number}){
+        this.skip = 0
+        this.repeat = 0
+        this.forward = 0
+        this.backward = 0
+        this.mustThrown = 0;
+        this.turnToSetFree = 0;
+        if (type == 'skip'){
+            this.skip = values.num   
+        }
+        else  if (type == 'repeat'){
+            this.repeat = values.num
+        }
+        else  if (type == 'forward'){
+            this.forward = values.num
+        }
+        else if (type == 'backward'){       
+            this.backward = values.num
+        }
+        else if (type == 'stop'){
+            this.mustThrown = values.value;
+            this.turnToSetFree = values.num;
+        }
+        
+    }
   getGame(){
     return this.game
 }
@@ -255,6 +287,42 @@ class GameEditor{
     }
     public setQuestionId(newId:number){
         this.questionId = newId
+    }
+    public getSkip(){
+        return this.skip
+    }
+    public setSkip(newSkip:number){
+        this.skip = newSkip
+    }
+    public getRepeat(){
+        return this.repeat
+    }
+    public setRepeat(newRepeat:number){
+        this.repeat = newRepeat
+    }
+    public getForward(){
+        return this.forward
+    }
+    public setForward(newForward:number){
+        this.forward = newForward
+    }
+    public getBackward(){
+        return this.backward
+    }
+    public setBackward(newBackward:number){
+        this.backward = newBackward
+    }
+    public getMustThrown(){
+        return this.mustThrown
+    }
+    public setMustThrown(newThrown:number){
+        this.mustThrown = newThrown
+    }
+    public getTurnsToSetFree(){
+        return this.turnToSetFree
+    }
+    public setTurnsToSetFree(newTurns:number){
+        this.turnToSetFree = newTurns
     }
     
 }

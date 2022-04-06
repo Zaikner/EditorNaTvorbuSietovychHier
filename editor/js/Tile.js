@@ -26,6 +26,12 @@ var Tile = /** @class */ (function () {
         this.numberingColor = '#000000';
         this.pawns = [];
         this.questionId = -1;
+        this.skip = 0;
+        this.repeat = 0;
+        this.forward = 0;
+        this.backward = 0;
+        this.mustThrown = 0;
+        this.turnToSetFree = 0;
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -531,6 +537,42 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getCantBeEliminatedOnTile = function () {
         return this.cantBeEliminatedOnTile;
+    };
+    Tile.prototype.getSkip = function () {
+        return this.skip;
+    };
+    Tile.prototype.setSkip = function (newSkip) {
+        this.skip = newSkip;
+    };
+    Tile.prototype.getRepeat = function () {
+        return this.repeat;
+    };
+    Tile.prototype.setRepeat = function (newRepeat) {
+        this.repeat = newRepeat;
+    };
+    Tile.prototype.getForward = function () {
+        return this.forward;
+    };
+    Tile.prototype.setForward = function (newForward) {
+        this.forward = newForward;
+    };
+    Tile.prototype.getBackward = function () {
+        return this.backward;
+    };
+    Tile.prototype.setBackward = function (newBackward) {
+        this.backward = newBackward;
+    };
+    Tile.prototype.getMustThrown = function () {
+        return this.mustThrown;
+    };
+    Tile.prototype.setMustThrown = function (newThrown) {
+        this.mustThrown = newThrown;
+    };
+    Tile.prototype.getTurnsToSetFree = function () {
+        return this.turnToSetFree;
+    };
+    Tile.prototype.setTurnsToSetFree = function (newTurns) {
+        this.turnToSetFree = newTurns;
     };
     return Tile;
 }());

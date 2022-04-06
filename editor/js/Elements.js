@@ -135,6 +135,9 @@ function spawnMultiSelect(doc, parent, id, options, type) {
         if (type == 'enabled' && canvas_1.editor.getEnabledForPlayers().includes(types[i])) {
             option.style.backgroundColor = 'yellow';
         }
+        if (type == 'immune' && canvas_1.editor.getCantBeEliminatedOnTile().includes(types[i])) {
+            option.style.backgroundColor = 'yellow';
+        }
         option.addEventListener('click', function (e) {
             if (type == 'start') {
                 if (canvas_1.editor.getStartForPlayers().includes(types[i])) {
@@ -158,6 +161,14 @@ function spawnMultiSelect(doc, parent, id, options, type) {
                 }
                 else {
                     canvas_1.editor.getEnabledForPlayers().push(types[i]);
+                }
+            }
+            else if (type == 'immune') {
+                if (canvas_1.editor.getCantBeEliminatedOnTile().includes(types[i])) {
+                    canvas_1.editor.setCantBeEliminatedOnTile(canvas_1.editor.getCantBeEliminatedOnTile().filter(function (t) { return t != types[i]; }));
+                }
+                else {
+                    canvas_1.editor.getCantBeEliminatedOnTile().push(types[i]);
                 }
             }
             console.log(canvas_1.editor.getStartForPlayers());

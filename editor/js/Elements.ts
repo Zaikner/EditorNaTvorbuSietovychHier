@@ -144,6 +144,11 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array
         if (type == 'enabled' && editor.getEnabledForPlayers().includes(types[i])){
           option.style.backgroundColor = 'yellow'
         }
+        if (type == 'immune' && editor.getCantBeEliminatedOnTile().includes(types[i])){
+          option.style.backgroundColor = 'yellow'
+        }
+
+        
       
       
         option.addEventListener('click',function(e){
@@ -169,6 +174,14 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array
             }
             else{
               editor.getEnabledForPlayers().push(types[i])
+            }
+          }
+          else if (type == 'immune'){
+            if (editor.getCantBeEliminatedOnTile().includes(types[i])){
+              editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
+            }
+            else{
+              editor.getCantBeEliminatedOnTile().push(types[i])
             }
           }
           console.log(editor.getStartForPlayers())

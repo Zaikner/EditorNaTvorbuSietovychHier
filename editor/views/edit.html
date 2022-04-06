@@ -15,15 +15,8 @@
       </div>
       </div>
       <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="showRulesButton" style=" width:500px; margin-right: 10px;">Show Rules</button>
-      <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
-        <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Event editing place
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-          <li><button type="button" class="btn btn-secondary dropdown-item" id="insertRule" >Insert Event</button></li>
-          <li><button type="button" class="btn btn-secondary dropdown-item" id="editRule" >Edit Event</button></li>
-        </ul>
-      </li>
+      
+       <!-- <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2"  id="insertEvent" onclick="$('#EventModal').modal('show')"  style=" width:200px; margin-right: 10px;" >Event manager</button> -->
       <!-- <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
         <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Quizz Questions
@@ -109,7 +102,54 @@
       </div>
       <div class="modal-footer" id="modalFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <button type="button" class="btn btn-secondary" onclick="$('#exampleModal').modal('hide')">Ok!</button>
+        <button type="button" class="btn btn-secondary" onclick=" $('#WarningModal').modal('hide')">Ok!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="EventModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Add event to you tile!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="eventModalBody" style="text-align: center;">
+        <h6 class="modal-title" id="modalHeader" style="color: white;">Choose by clicking on option!</h6>
+        <div style="width:100%; margin: 20px;">  <button type="button" style="width: 90%; height: 120%;" class="btn btn-secondary" id ='forwardButton' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')">Go forward with a Pawn!</button></div>
+        <div style="width:100%; margin: 20px;">   <button type="button"  style="width: 90%; height: 120%;" class="btn btn-secondary" id = 'backwardButton' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')">Go backwards with a Pawn!</button></div>
+        <div style="width:100%; margin: 20px;"><button type="button"  style="width: 90%; height: 120%;" class="btn btn-secondary" id ='skipButton' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')">Skip your turn</button></div>
+        <div style="width:100%; margin: 20px;"> <button type="button"  style="width: 90%; height: 120%;" class="btn btn-secondary" id = 'repeatButton' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')">Repeat your turn</button></div>
+        <div style="width:100%; margin: 20px;"> <button type="button"  style="width: 90%; height: 120%;" class="btn btn-secondary" id = 'stopButton' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')">Stop till value on dice is thrown</button></div>
+      
+      
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary" onclick="$('#EventModal').modal('hide')">Ok!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editEventModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Add event to you tile!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="eventEditorModalBody" style="text-align: center;">
+         
+         <input id="howManytimes" type="number" style="text-align:center" placeholder="Enter the number!"></input>
+         <div id="askTheQuestionEventEdit" style="text-align:center"></div>
+      
+      </div>
+      <div class="modal-footer" id="editEventFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary" onclick="$('#EventModal').modal('show');$('#editEventModal').modal('hide')">Leave!</button>
+        <!-- <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button> -->
       </div>
     </div>
   </div>

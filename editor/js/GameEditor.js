@@ -19,6 +19,12 @@ var GameEditor = /** @class */ (function () {
         this.cantBeEliminatedOnTile = [];
         this.nextTileId = 0;
         this.questionId = -1;
+        this.skip = 0;
+        this.repeat = 0;
+        this.forward = 0;
+        this.backward = 0;
+        this.mustThrown = 0;
+        this.turnToSetFree = 0;
         this.initNewGame();
     }
     GameEditor.prototype.nullEditor = function () {
@@ -179,6 +185,30 @@ var GameEditor = /** @class */ (function () {
         var params = new URLSearchParams(window.location.search);
         canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id') });
     };
+    GameEditor.prototype.setEvents = function (type, values) {
+        this.skip = 0;
+        this.repeat = 0;
+        this.forward = 0;
+        this.backward = 0;
+        this.mustThrown = 0;
+        this.turnToSetFree = 0;
+        if (type == 'skip') {
+            this.skip = values.num;
+        }
+        else if (type == 'repeat') {
+            this.repeat = values.num;
+        }
+        else if (type == 'forward') {
+            this.forward = values.num;
+        }
+        else if (type == 'backward') {
+            this.backward = values.num;
+        }
+        else if (type == 'stop') {
+            this.mustThrown = values.value;
+            this.turnToSetFree = values.num;
+        }
+    };
     GameEditor.prototype.getGame = function () {
         return this.game;
     };
@@ -238,6 +268,42 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.setQuestionId = function (newId) {
         this.questionId = newId;
+    };
+    GameEditor.prototype.getSkip = function () {
+        return this.skip;
+    };
+    GameEditor.prototype.setSkip = function (newSkip) {
+        this.skip = newSkip;
+    };
+    GameEditor.prototype.getRepeat = function () {
+        return this.repeat;
+    };
+    GameEditor.prototype.setRepeat = function (newRepeat) {
+        this.repeat = newRepeat;
+    };
+    GameEditor.prototype.getForward = function () {
+        return this.forward;
+    };
+    GameEditor.prototype.setForward = function (newForward) {
+        this.forward = newForward;
+    };
+    GameEditor.prototype.getBackward = function () {
+        return this.backward;
+    };
+    GameEditor.prototype.setBackward = function (newBackward) {
+        this.backward = newBackward;
+    };
+    GameEditor.prototype.getMustThrown = function () {
+        return this.mustThrown;
+    };
+    GameEditor.prototype.setMustThrown = function (newThrown) {
+        this.mustThrown = newThrown;
+    };
+    GameEditor.prototype.getTurnsToSetFree = function () {
+        return this.turnToSetFree;
+    };
+    GameEditor.prototype.setTurnsToSetFree = function (newTurns) {
+        this.turnToSetFree = newTurns;
     };
     return GameEditor;
 }());

@@ -258,6 +258,70 @@ editorSocket.on('reloaded waiting room', function (msg) {
 });
 function edit() {
     mainMenu();
+    document.getElementById('forwardButton').addEventListener('click', function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go ahead?');
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+            var nums = document.getElementById('howManytimes').value;
+            editor.setEvents('forward', { num: parseInt(nums), value: 0 });
+            $('#editEventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            console.log(editor);
+            document.getElementById('bindEvent').textContent = 'Go forward: ' + nums + ' times.';
+        });
+    });
+    document.getElementById('backwardButton').addEventListener('click', function () {
+        elementDeleter('askTheQuestionEventEdit');
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go backwards?');
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+            var nums = document.getElementById('howManytimes').value;
+            editor.setEvents('backward', { num: parseInt(nums), value: 0 });
+            $('#editEventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            console.log(editor);
+            document.getElementById('bindEvent').textContent = 'Go backward: ' + nums + ' times.';
+        });
+    });
+    document.getElementById('skipButton').addEventListener('click', function () {
+        elementDeleter('askTheQuestionEventEdit');
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many turns should player skip?');
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+            var nums = document.getElementById('howManytimes').value;
+            editor.setEvents('skip', { num: parseInt(nums), value: 0 });
+            $('#editEventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            console.log(editor);
+            document.getElementById('bindEvent').textContent = 'Repeat turn: ' + nums + ' times.';
+        });
+    });
+    document.getElementById('repeatButton').addEventListener('click', function () {
+        elementDeleter('askTheQuestionEventEdit');
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many times can player repeat his turn?');
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+            var nums = document.getElementById('howManytimes').value;
+            editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
+            $('#editEventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            console.log(editor);
+            document.getElementById('bindEvent').textContent = 'Skip: ' + nums + ' times.';
+        });
+    });
+    document.getElementById('stopButton').addEventListener('click', function () {
+        elementDeleter('askTheQuestionEventEdit');
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many turns should player skip his turn if value was not thrown');
+        var freeInput = (0, Elements_1.spawnNumberInput)(document, 'askTheQuestionEventEdit', 'freeInput');
+        freeInput.max = '6';
+        freeInput.min = '1';
+        freeInput.placeholder = 'Enter the number!';
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'Which value can set pawn free');
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+            var nums = document.getElementById('howManytimes').value;
+            editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
+            $('#editEventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            console.log(editor);
+            document.getElementById('bindEvent').textContent = 'Thrown: ' + freeInput.value + ' . Or wait ' + nums + ' turns';
+        });
+    });
     //$('#rulesModal').modal('show');
     document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
     document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });

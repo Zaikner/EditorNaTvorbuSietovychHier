@@ -34,6 +34,12 @@ class Tile{
     private numberOfFollowingTile:number;
     private pawns:Array<Pawn> = []
     private questionId:number = -1
+    private skip = 0;
+    private repeat = 0;
+    private forward = 0;
+    private backward = 0;
+    private mustThrown = 0;
+    private turnToSetFree = 0;
 
     constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
@@ -587,7 +593,42 @@ class Tile{
     public getCantBeEliminatedOnTile():Array<string>{
         return this.cantBeEliminatedOnTile
     }
-    
+    public getSkip(){
+        return this.skip
+    }
+    public setSkip(newSkip:number){
+        this.skip = newSkip
+    }
+    public getRepeat(){
+        return this.repeat
+    }
+    public setRepeat(newRepeat:number){
+        this.repeat = newRepeat
+    }
+    public getForward(){
+        return this.forward
+    }
+    public setForward(newForward:number){
+        this.forward = newForward
+    }
+    public getBackward(){
+        return this.backward
+    }
+    public setBackward(newBackward:number){
+        this.backward = newBackward
+    }
+    public getMustThrown(){
+        return this.mustThrown
+    }
+    public setMustThrown(newThrown:number){
+        this.mustThrown = newThrown
+    }
+    public getTurnsToSetFree(){
+        return this.turnToSetFree
+    }
+    public setTurnsToSetFree(newTurns:number){
+        this.turnToSetFree = newTurns
+    }
 }
 
 export{Tile};
