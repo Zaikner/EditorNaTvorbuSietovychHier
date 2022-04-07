@@ -5,6 +5,7 @@ const AccountManager = require('../Accounts/AccountManager.js')
 import { Game_db } from '../../services/db/RDG/Game_db.js';
 import { GameFinder } from '../../services/db/RDG/GameFinder_db.js';
 import { TileFinder } from '../../services/db/RDG/TileFinder';
+import { TextsFinder } from '../../services/db/RDG/TextFinder';
 import { Tile_db } from '../../services/db/RDG/Tile_db.js';
 import { BackgroundFinder } from '../../services/db/RDG/BackgroundFinder.js';
 import { PawnFinder } from '../../services/db/RDG/PawnFinder.js';
@@ -30,7 +31,10 @@ class GameManager{
             
        return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText()}
     }
-      
+    
+    public static async loadTexts(){
+        return {texts:await TextsFinder.getIntance().findAll()}
+    }
     public static async createRoom(name:string,numOfPlayers:number){
         //let id = Math.floor(Math.random()*9000)+1000
         let stop = false

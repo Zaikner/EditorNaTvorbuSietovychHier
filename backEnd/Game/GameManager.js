@@ -39,6 +39,7 @@ exports.__esModule = true;
 var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
+var TextFinder_1 = require("../../services/db/RDG/TextFinder");
 var BackgroundFinder_js_1 = require("../../services/db/RDG/BackgroundFinder.js");
 var PawnFinder_js_1 = require("../../services/db/RDG/PawnFinder.js");
 var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
@@ -73,6 +74,19 @@ var GameManager = /** @class */ (function () {
                     case 6:
                         rules = _a.sent();
                         return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText() }];
+                }
+            });
+        });
+    };
+    GameManager.loadTexts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = {};
+                        return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
+                    case 1: return [2 /*return*/, (_a.texts = _b.sent(), _a)];
                 }
             });
         });

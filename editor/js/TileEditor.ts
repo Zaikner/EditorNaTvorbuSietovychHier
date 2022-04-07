@@ -333,6 +333,7 @@ function insertTilesMenu():void{
       })
       showActualState()
     }
+    console.log(editor.getGame())
     
   }
 

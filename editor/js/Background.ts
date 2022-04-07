@@ -6,7 +6,7 @@ class Background{
     private color:string = 'wheat'
 
     public draw(){
-        console.log('spustil draw')
+      
         if (this.backgroundImage!= undefined){
              ctx.drawImage(this.backgroundImage,0,0,canvas.width,canvas.height)
         }
@@ -21,9 +21,8 @@ class Background{
         this.color = 'wheat'
     }
     public setColor(newColor:string){
-        console.log ('setol '+ this.color)
+
         this.color = newColor
-        console.log ('setol '+ this.color)
     }
     public getColor(){
         return this.color

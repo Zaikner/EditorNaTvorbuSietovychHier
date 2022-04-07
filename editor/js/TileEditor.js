@@ -277,6 +277,7 @@ var insert = function (event) {
         });
         showActualState();
     }
+    console.log(canvas_js_1.editor.getGame());
 };
 var spawnTile = function (coords) {
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');

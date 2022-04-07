@@ -259,6 +259,8 @@ var Tile_db = /** @class */ (function () {
     };
     Tile_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
+        console.log('insertuje toto');
+        console.log(this);
         var query = {
             name: 'insert-tile',
             text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36);',
@@ -305,7 +307,7 @@ var Tile_db = /** @class */ (function () {
         ret.setForward(data.forward);
         ret.setBackward(data.backward);
         ret.setMustThrown(data.mustThrown);
-        ret.setTurnsToSetFree(data.turnsToSetFree);
+        ret.setTurnsToSetFree(data.turnToSetFree);
         return ret;
     };
     return Tile_db;

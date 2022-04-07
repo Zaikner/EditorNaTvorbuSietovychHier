@@ -73,12 +73,13 @@ export class ServerSocket{
                 GameManager.findRoomBySocketId(socket.id)
             });
         socket.on('saveGame',async (data:any) => {
-      
+          let acc = AccountManager.getAccountByClientId(data.id)
+     
         let last = await TileFinder.getIntance().findLast()
         let lastId = last?.getId()
-
+      
         let g = new Game_db()
-        g.setAuthor(data.author)
+        g.setAuthor(acc.getName())
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
         data.tiles.forEach((tile:any) =>{
@@ -122,6 +123,7 @@ export class ServerSocket{
           t.insert()
         })
         g.insert()
+      
 
         let b = new Background_db()
         b.setGameName(data.name)
@@ -183,7 +185,7 @@ export class ServerSocket{
           }
          
       
-          console.log(r)
+     
  
       }
       
@@ -195,8 +197,7 @@ export class ServerSocket{
         
         this.io.in(msg.room).emit('game started',{msg:'Game has started!'})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-        console.log('toto poslal '+r.getPlayerOnTurn().getAccount().getSocketId())
-        console.log(socket.id)
+     
         this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
       }
         
@@ -204,21 +205,28 @@ export class ServerSocket{
         )
        
       socket.on('player thrown',(msg:{room:string,player:string,value:number,tileId:number,pawn:number})=>{
-        console.log('emitol player thrown')
+        console.log('recieved player thrown' +msg.player)
+        console.log('emited movePawn')
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
         
       })
       socket.on('react to tile',(msg:{room:string,questionId:number,id:string})=>{
+        console.log('recieved react to tile id: '+msg.id)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
-          console.log('reacted to tile')
+        
           this.io.in(msg.room).emit('ended turn')
+          console.log('pred zmenou turnu')
           console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+
           r.nextTurn()
-          console.log('emitol dalsi turn:')
+      
           //console.log(r)
+          console.log('emited turn: ')
           console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
           this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+          console.log('emited turnMove:')
+          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
           this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
    
         }
@@ -231,13 +239,10 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r.getPlayerOnTurn().getAccount() ==  AccountManager.getAccountByClientId(msg.id)){
           r.getPawnPositions().set(msg.pawnId,msg.tileId)
-          console.log(msg.pawnId)
-          console.log(msg.tileId)
-          console.log('zmenil poziciu pawnu len raz')
-          console.log(r)
+  
         }
         else{
-          console.log('nerovnaju sa !')
+        
           //console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
         }
         

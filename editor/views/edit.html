@@ -12,8 +12,10 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Editor</a>
+          
       </div>
       </div>
+      <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="loadGameButton" style=" width:500px; margin-right: 10px;" onclick="$('#loadGameModal').modal('show')">Load Game</button>
       <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="showRulesButton" style=" width:500px; margin-right: 10px;">Show Rules</button>
       
        <!-- <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2"  id="insertEvent" onclick="$('#EventModal').modal('show')"  style=" width:200px; margin-right: 10px;" >Event manager</button> -->
@@ -149,6 +151,28 @@
       <div class="modal-footer" id="editEventFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <button type="button" class="btn btn-secondary" onclick="$('#EventModal').modal('show');$('#editEventModal').modal('hide')">Leave!</button>
+        <!-- <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="loadGameModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Do you want to load created game ?</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="eventEditorModalBody" style="text-align: center;">
+         
+         <input id="gameNameInput" type="text" style="text-align:center" placeholder="Enter the game name!"></input>
+         <button type="button" class="btn btn-secondary" id='loadCreatedGameModal' onclick="$('#loadGameModal').modal('hide')">Load!</button>
+      
+      </div>
+      <div class="modal-footer" id="editEventFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary" onclick="$('#loadGameModal').modal('hide')">Leave!</button>
         <!-- <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button> -->
       </div>
     </div>

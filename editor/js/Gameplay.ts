@@ -6,6 +6,10 @@ import { Pawn } from "./Pawn";
 
 const diceImages:Array<HTMLImageElement> = []
 let dice:HTMLImageElement;
+
+
+
+
 for (let i = 1; i <=6; i++){
     let image = new Image()
     image.src = '../../src/Dice1.png'

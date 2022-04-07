@@ -36,7 +36,6 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.initNewGame = function () {
         this.game = new Game_js_1.Game();
-        console.log(this.getGame());
     };
     GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background, pattern) {
         var tileNumber = this.nextTileNumber();
@@ -60,10 +59,7 @@ var GameEditor = /** @class */ (function () {
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber);
         newTile.setFollowingTileNumber(tileNumber + 1);
-        console.log('cislo dalsieho je :' + this.game.getNextTileNumber());
         newTile.setId(this.nextTileId);
-        console.log('pridany je ');
-        console.log(newTile);
         return newTile;
     };
     GameEditor.prototype.findTile = function (event, edit) {
@@ -138,7 +134,6 @@ var GameEditor = /** @class */ (function () {
         this.choosenTile = undefined;
     };
     GameEditor.prototype.addToUndoLog = function (addition) {
-        console.log('pridal do undoLogu');
         this.undoLog.push(addition);
     };
     GameEditor.prototype.removeLastFromUndoLog = function () {
@@ -168,7 +163,6 @@ var GameEditor = /** @class */ (function () {
             if (tile.getTileNumber() === num) {
                 res = true;
             }
-            console.log('rovna sa ' + tile.getTileNumber() + ' : ' + (tile.getTileNumber() === num));
         });
         return res;
     };
@@ -183,7 +177,12 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.reactToTile = function (tile) {
         var params = new URLSearchParams(window.location.search);
-        canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id') });
+        if (this.game.getIsOnturn()) {
+            console.log('emited react to tile');
+            console.log(this.game.getIsOnturn());
+            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id') });
+            this.game.setIsOnTurn(false);
+        }
     };
     GameEditor.prototype.setEvents = function (type, values) {
         this.skip = 0;

@@ -1,7 +1,7 @@
 import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
-import { editorSocket} from './canvas.js';
+import { editorSocket, getCookie} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
@@ -28,6 +28,7 @@ class Game{
     
     //----------playing---------
     //private hasStarted = false;
+    private isOnTurn = false
     
 
 
@@ -60,7 +61,8 @@ class Game{
                                           numOfPlayers:this.numOfPlayers,
                                           pawns:savedPawns,
                                           styles:savedPawnStyles,
-                                          rules:this.rules
+                                          rules:this.rules,
+                                          id:getCookie('id')
                                         })
             window.location.replace('/')
         }
@@ -123,7 +125,7 @@ class Game{
         return this.tiles
     }
     addTile(newTile:Tile){
-        console.log('aspon spustil')
+        
         this.tiles.push(newTile)
     }
     getAuthor(){
@@ -206,6 +208,13 @@ class Game{
     }
     getPawnStyle(){
         return this.pawnStyle
+    }
+
+    setIsOnTurn(is:boolean){
+        this.isOnTurn = is
+    }
+    getIsOnturn(){
+        return this.isOnTurn
     }
     // getHasStarted(){
     //     return  this.hasStarted

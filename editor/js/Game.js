@@ -9,8 +9,6 @@ var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
 var Game = /** @class */ (function () {
-    //----------playing---------
-    //private hasStarted = false;
     function Game() {
         this.name = "";
         this.author = "";
@@ -29,6 +27,9 @@ var Game = /** @class */ (function () {
         this.pawns = [];
         this.rules = '';
         this.numberOfStartingPawns = 1;
+        //----------playing---------
+        //private hasStarted = false;
+        this.isOnTurn = false;
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -57,7 +58,8 @@ var Game = /** @class */ (function () {
                 numOfPlayers: this.numOfPlayers,
                 pawns: savedPawns_1,
                 styles: savedPawnStyles_1,
-                rules: this.rules
+                rules: this.rules,
+                id: (0, canvas_js_1.getCookie)('id')
             });
             window.location.replace('/');
         }
@@ -114,7 +116,6 @@ var Game = /** @class */ (function () {
         return this.tiles;
     };
     Game.prototype.addTile = function (newTile) {
-        console.log('aspon spustil');
         this.tiles.push(newTile);
     };
     Game.prototype.getAuthor = function () {
@@ -194,6 +195,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPawnStyle = function () {
         return this.pawnStyle;
+    };
+    Game.prototype.setIsOnTurn = function (is) {
+        this.isOnTurn = is;
+    };
+    Game.prototype.getIsOnturn = function () {
+        return this.isOnTurn;
     };
     return Game;
 }());

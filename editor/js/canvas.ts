@@ -17,6 +17,7 @@ import { removeAllListeners } from "process";
 import { PawnStyle } from "./PawnStyle";
 import { Warning } from "./Warning";
 import { Button } from "bootstrap";
+import { loadTexts } from "./TextLoader";
 
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
@@ -24,10 +25,15 @@ const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 const canvas = document.createElement('canvas');
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
 editorSocket.on('connected',(msg)=>{
-  msg.tiles.forEach((tile:any) =>{
-    let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
   
-     addedTile.setId(tile.id)
+  let newIds:Map<number,number> = new Map()
+  let newId = 0
+  msg.tiles.forEach((tile:any) =>{
+    newId++;
+    let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
+    
+     addedTile.setId(newId)
+     newIds.set(tile.id,newId)
      addedTile.setStroke(tile.stroke)
      addedTile.setStrokeColor(tile.strokeColor)
      addedTile.setShape(tile.shape)
@@ -74,6 +80,7 @@ editorSocket.on('connected',(msg)=>{
     
     reload(editor,ctx)
   })
+  editor.setNextTileId(newId+1)
   let background = new Background()
 
   background.setColor(msg.background.color)
@@ -114,15 +121,14 @@ editorSocket.on('connected',(msg)=>{
  
   msg.pawns.forEach((pawn:any) => {
     i++;
-    let tile = editor.findTileById(pawn.tileId)!
-    console.log('nahral takyto pawn')
+    let tile = editor.findTileById(newIds.get(pawn.tileId)!)!
+  
    
      let p = new Pawn(pawn.player,tile)
      p.id = pawn.id
 
      editor.getGame().getPawns().push(p)
-     console.log(pawn)
-     console.log(p)
+    
      //tile.getPawns().push(p)
     
     
@@ -135,7 +141,7 @@ editorSocket.on('connected',(msg)=>{
 
 
   });
-  
+
 })
 
 editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
@@ -200,7 +206,7 @@ const params = new URLSearchParams(window.location.search);
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
-  console.log('vykonal move pawn pre pawn:' + msg.pawn)
+ 
  let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
   editor.setChoosenTile(undefined!)
 
@@ -267,6 +273,8 @@ else {
 
 
 editorSocket.on('turn',(msg:{player:string,token:string})=>{
+  console.log('recieved: turn')
+  console.log(editor.getGame().getIsOnturn())
   canvas.removeEventListener('click',pickTile)
   elementDeleter('onTurnPlace')
   spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
@@ -274,7 +282,8 @@ editorSocket.on('turn',(msg:{player:string,token:string})=>{
   
 })
 editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
-  console.log('aktivoval listener')
+  console.log('recieved: turn move')
+  editor.getGame().setIsOnTurn(true)
   canvas.addEventListener('click',pickTile)
   document.getElementById('Dice')?.addEventListener('click',function()
   { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
@@ -340,7 +349,7 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
     editor.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    console.log(editor)
+  
     document.getElementById('bindEvent')!.textContent ='Go forward: ' + nums +' times.'
   })
 })
@@ -353,7 +362,7 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     editor.setEvents('backward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    console.log(editor)
+  
     document.getElementById('bindEvent')!.textContent ='Go backward: ' + nums +' times.'
   })
 })
@@ -366,7 +375,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     editor.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    console.log(editor)
+  
     document.getElementById('bindEvent')!.textContent ='Skip: ' + nums +' times.'
   })
   
@@ -380,7 +389,7 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     editor.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    console.log(editor)
+   
     document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + nums +' times.'
   })
   
@@ -401,7 +410,7 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     editor.setEvents('stop',{num:parseInt(nums),value:parseInt(freeInput.value)})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    console.log(editor)
+   
     document.getElementById('bindEvent')!.textContent ='Thrown: ' + freeInput.value +' . Or wait ' + nums + ' turns';
   })
   
@@ -426,7 +435,7 @@ document.getElementById('generalInfoButton')!.addEventListener('click',function(
   mainMenu();})
 
 document.getElementById('answerButton')!.addEventListener('click',function(){evaluateQuestion();})
-document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:7})})
+document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
 document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation('questionOptions');})
@@ -435,6 +444,15 @@ document.getElementById('removeButtonInsert')!.addEventListener('click',function
 document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
 
+
+document.getElementById('loadCreatedGameModal')?.addEventListener('click',function(){
+  let val = (<HTMLInputElement>document.getElementById('gameNameInput'))!.value
+  removeAllButtons()
+  editorSocket.emit('load game',{id:getCookie('id'),name:val})
+ 
+  mainMenu()
+  
+})
 document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 document.getElementById('deletePawn')!.addEventListener('click',function(){pawnDeleteMenu()} );
@@ -716,6 +734,7 @@ function getCookie(name:string) {
   return cookie.get(name);
 }
 
+loadTexts()
 
 
 window.onload = function(){

@@ -4,7 +4,7 @@ import { Game } from './Game.js'
 
 import {editTiles} from './TileEditor.js'
 import { Pawn } from './Pawn.js';
-import { timeStamp } from 'console';
+
 
 class GameEditor{
     private game= new Game();
@@ -38,7 +38,7 @@ class GameEditor{
 
     initNewGame(){
         this.game = new Game()
-        console.log(this.getGame())
+        
     }
 
     initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
@@ -68,10 +68,9 @@ class GameEditor{
         newTile.setTileNumber(tileNumber)
         newTile.setFollowingTileNumber(tileNumber+1)
         
-        console.log('cislo dalsieho je :'+ this.game.getNextTileNumber())
+     
         newTile.setId(this.nextTileId)
-        console.log('pridany je ')
-        console.log(newTile)
+    
         return newTile
   }
     findTile(event:MouseEvent,edit:boolean){
@@ -150,7 +149,7 @@ class GameEditor{
         this.choosenTile = undefined
     }
     addToUndoLog(addition:Array<Tile>){
-        console.log('pridal do undoLogu')
+  
         this.undoLog.push(addition)
     }
     removeLastFromUndoLog(){
@@ -179,7 +178,7 @@ class GameEditor{
             if (tile.getTileNumber() === num){
                 res = true
             }
-            console.log('rovna sa '+tile.getTileNumber()+' : '+ (tile.getTileNumber() === num))
+        
         })
         return res
     }
@@ -197,9 +196,14 @@ class GameEditor{
   
     reactToTile(tile:Tile){
         const params = new URLSearchParams(window.location.search);
-       
+        if (this.game.getIsOnturn()){
+            console.log('emited react to tile')
+            console.log(this.game.getIsOnturn())
+            editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id')})
+            this.game.setIsOnTurn(false)
+        }
         
-        editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id')})
+        
     }
    
 

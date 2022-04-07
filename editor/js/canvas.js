@@ -15,6 +15,7 @@ var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
 var Warning_1 = require("./Warning");
+var TextLoader_1 = require("./TextLoader");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -25,9 +26,13 @@ exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
 editorSocket.on('connected', function (msg) {
+    var newIds = new Map();
+    var newId = 0;
     msg.tiles.forEach(function (tile) {
+        newId++;
         var addedTile = new Tile_js_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
-        addedTile.setId(tile.id);
+        addedTile.setId(newId);
+        newIds.set(tile.id, newId);
         addedTile.setStroke(tile.stroke);
         addedTile.setStrokeColor(tile.strokeColor);
         addedTile.setShape(tile.shape);
@@ -69,6 +74,7 @@ editorSocket.on('connected', function (msg) {
         editor.getGame().addTile(addedTile);
         reload(editor, ctx);
     });
+    editor.setNextTileId(newId + 1);
     var background = new Background_1.Background();
     background.setColor(msg.background.color);
     if (msg.background.image != 'none') {
@@ -96,13 +102,10 @@ editorSocket.on('connected', function (msg) {
     var i = 0;
     msg.pawns.forEach(function (pawn) {
         i++;
-        var tile = editor.findTileById(pawn.tileId);
-        console.log('nahral takyto pawn');
+        var tile = editor.findTileById(newIds.get(pawn.tileId));
         var p = new Pawn_1.Pawn(pawn.player, tile);
         p.id = pawn.id;
         editor.getGame().getPawns().push(p);
-        console.log(pawn);
-        console.log(p);
         //tile.getPawns().push(p)
     });
     msg.styles.forEach(function (style) {
@@ -162,7 +165,6 @@ var params = new URLSearchParams(window.location.search);
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
-    console.log('vykonal move pawn pre pawn:' + msg.pawn);
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
 });
@@ -211,13 +213,16 @@ else {
     });
 }
 editorSocket.on('turn', function (msg) {
+    console.log('recieved: turn');
+    console.log(editor.getGame().getIsOnturn());
     canvas.removeEventListener('click', TileEditor_js_1.pickTile);
     elementDeleter('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
 });
 editorSocket.on('turnMove', function (msg) {
     var _a;
-    console.log('aktivoval listener');
+    console.log('recieved: turn move');
+    editor.getGame().setIsOnTurn(true);
     canvas.addEventListener('click', TileEditor_js_1.pickTile);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         var pawn = editor.getChoosenTile().havePawnOnTile(msg.token);
@@ -263,6 +268,7 @@ editorSocket.on('reloaded waiting room', function (msg) {
     document.getElementById("ruleInput").value = editor.getGame().getRules();
 });
 function edit() {
+    var _a;
     mainMenu();
     document.getElementById('forwardButton').addEventListener('click', function () {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go ahead?');
@@ -271,7 +277,6 @@ function edit() {
             editor.setEvents('forward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            console.log(editor);
             document.getElementById('bindEvent').textContent = 'Go forward: ' + nums + ' times.';
         });
     });
@@ -283,7 +288,6 @@ function edit() {
             editor.setEvents('backward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            console.log(editor);
             document.getElementById('bindEvent').textContent = 'Go backward: ' + nums + ' times.';
         });
     });
@@ -295,7 +299,6 @@ function edit() {
             editor.setEvents('skip', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            console.log(editor);
             document.getElementById('bindEvent').textContent = 'Skip: ' + nums + ' times.';
         });
     });
@@ -307,7 +310,6 @@ function edit() {
             editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            console.log(editor);
             document.getElementById('bindEvent').textContent = 'Repeat turn: ' + nums + ' times.';
         });
     });
@@ -324,7 +326,6 @@ function edit() {
             editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            console.log(editor);
             document.getElementById('bindEvent').textContent = 'Thrown: ' + freeInput.value + ' . Or wait ' + nums + ' turns';
         });
     });
@@ -347,13 +348,19 @@ function edit() {
         mainMenu();
     });
     document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
-    document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 7 }); });
+    document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 0 }); });
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
     document.getElementById('createQuestionButtonModal').addEventListener('click', function () { (0, Questions_1.initCreation)('questionOptions'); });
     document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
     document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
+    (_a = document.getElementById('loadCreatedGameModal')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        var val = document.getElementById('gameNameInput').value;
+        (0, TileEditor_js_1.removeAllButtons)();
+        editorSocket.emit('load game', { id: getCookie('id'), name: val });
+        mainMenu();
+    });
     document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });
@@ -581,6 +588,7 @@ function getCookie(name) {
     return cookie.get(name);
 }
 exports.getCookie = getCookie;
+(0, TextLoader_1.loadTexts)();
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
