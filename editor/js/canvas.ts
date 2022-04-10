@@ -212,6 +212,16 @@ editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
 
 })
 
+editorSocket.on('show Dice value',(msg:{value:number})=>{
+  let image = new Image()
+  image.src = '../../src/Dice'+msg.value+'.png'
+  image.id = 'Dice'
+ 
+  image.onload = function(){
+      elementDeleter('dicePlace')
+      document.getElementById('dicePlace')?.append(image)
+  }
+})
 
 let isEditor = false;
 let zoz = window.location.href.split('/')
@@ -275,7 +285,7 @@ else {
 editorSocket.on('turn',(msg:{player:string,token:string})=>{
   console.log('recieved: turn')
   console.log(editor.getGame().getIsOnturn())
-  canvas.removeEventListener('click',pickTile)
+  //canvas.removeEventListener('click',pickTile)
   elementDeleter('onTurnPlace')
   spawnParagraph(document,'onTurnPlace','',"Player on turn: "+msg.player)
  
@@ -284,16 +294,21 @@ editorSocket.on('turn',(msg:{player:string,token:string})=>{
 editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
   console.log('recieved: turn move')
   editor.getGame().setIsOnTurn(true)
-  canvas.addEventListener('click',pickTile)
   document.getElementById('Dice')?.addEventListener('click',function()
-  { let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
-    if (editor.getChoosenTile()!=undefined && pawn!= undefined){
-    canvas.removeEventListener('click',pickTile)
-    throwDice(msg.player,pawn)}})
+  {// let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
+   // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
+   // canvas.removeEventListener('click',pickTile)
+    throwDice(msg.token)}
+  //}
+  )
   
 })
 
-
+editorSocket.on('canMovePawn',(msg:{token:string,value:number})=>{
+  console.log('canMovePawn emitol token:' + msg.token)
+  canvas.addEventListener('click',function(event:MouseEvent){pickTile(event,msg.token,msg.value)})
+  
+})
 
 
 // editorSocket.on('can throw',()=>{

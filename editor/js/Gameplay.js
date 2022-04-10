@@ -39,18 +39,19 @@ function initDice() {
     }
 }
 exports.initDice = initDice;
-function throwDice(player, pawn) {
+function throwDice(token) {
+    var params = new URLSearchParams(window.location.search);
     var t = 0;
     var times = 0;
     var n = 0;
     var interval = setInterval(function () {
         var _a, _b;
         if (times == 10) {
-            var params = new URLSearchParams(window.location.search);
+            var params_1 = new URLSearchParams(window.location.search);
             clearInterval(interval);
             console.log('player emitol takyto hod:');
-            console.log({ room: params.get('id'), player: player, value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), pawn: pawn.id });
-            canvas_1.editorSocket.emit('player thrown', { room: params.get('id'), player: player, value: n, tileId: (_b = canvas_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getId(), pawn: pawn.id });
+            console.log({ room: params_1.get('id'), value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId() });
+            canvas_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_b = canvas_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getId() });
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {
@@ -58,6 +59,7 @@ function throwDice(player, pawn) {
             n = Math.floor(Math.random() * 6) + 1;
             if (t != n) {
                 t = n;
+                canvas_1.editorSocket.emit('show Dice', { id: params.get('id'), value: t });
             }
             var image_1 = new Image();
             image_1.src = '../../src/Dice' + t + '.png';

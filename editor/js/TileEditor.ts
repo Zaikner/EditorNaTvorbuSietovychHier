@@ -12,7 +12,23 @@ import { Pawn } from './Pawn.js'
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event,true)   
 reload(editor,ctx)
 }
-let pickTile = function(event:MouseEvent) {editor.findTile(event,false)   
+let pickTile = function(event:MouseEvent,token:string,value:number) {editor.findTile(event,false)
+  console.log('aspon spustil pickTile')
+  if (editor.getChoosenTile()!=undefined){
+    let pawn:any = editor.getChoosenTile()!.havePawnOnTile(token)
+    console.log('aspon vybral')
+    if (pawn!= undefined){
+      //'TU RADSEJ EMITOVAT NA SERVER, NECH VSSETKYCH ODSTRANI'
+      //'AAAA NEZABUDNI NA LISTERNER'
+      //editor.getGame().movePawnById(pawn.id,value)
+      const params = new URLSearchParams(window.location.search);
+      editorSocket.emit('move pawns',{pawn:pawn.id,value:value,room:params.get('id')})
+      //(msg:{room:string,pawn:number,value:number})
+      console.log('pohol s panacikom')
+    }
+  }
+  
+ 
   reload(editor,ctx)
   }
 

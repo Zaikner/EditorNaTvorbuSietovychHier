@@ -206,10 +206,17 @@ var ServerSocket = /** @class */ (function () {
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
             });
-            socket.on('player thrown', function (msg) {
-                console.log('recieved player thrown' + msg.player);
-                console.log('emited movePawn');
+            socket.on('move pawns', function (msg) {
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
+            });
+            socket.on('player thrown', function (msg) {
+                console.log('recieved player thrown' + msg.token);
+                console.log('emited movePawn');
+                //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
+                socket.emit('canMovePawn', { value: msg.value, token: msg.token });
+            });
+            socket.on('show Dice', function (msg) {
+                socket.to(msg.id).emit('show Dice value', { value: msg.value });
             });
             socket.on('react to tile', function (msg) {
                 console.log('recieved react to tile id: ' + msg.id);

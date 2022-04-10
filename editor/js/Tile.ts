@@ -399,12 +399,17 @@ class Tile{
         this.pawns = this.pawns.filter((p) => {return p != pawn});
     }
     havePawnOnTile(player:string){
-        let ret = undefined
+        let ret:any = undefined
       
         this.pawns.forEach((pawn:Pawn)=>{
        
             if (pawn.player == player){
                 ret = pawn
+            }
+            else{
+                console.log(pawn)
+                console.log(player)
+                console.log(ret)
             }
          
         })

@@ -11,6 +11,18 @@ var Pawn = /** @class */ (function () {
         this.tileId = tile.getId();
         tile.getPawns().push(this);
     }
+    Pawn.prototype.canMove = function (numOfTiles) {
+        var ret = true;
+        var actuallTile = this.tile;
+        for (var i = 0; i < numOfTiles; i++) {
+            actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber());
+            if (actuallTile == undefined) {
+                ret = false;
+                break;
+            }
+        }
+        return ret;
+    };
     Pawn.prototype.move = function (numOfTiles) {
         var startTile = this.tile;
         var actuallTile = this.tile;
@@ -33,6 +45,7 @@ var Pawn = /** @class */ (function () {
                 startTile.setIsChoosen(false);
                 canvas_1.editor.setChoosenTile(undefined);
                 canvas_1.editor.reactToTile(actuallTile);
+                console.log(actuallTile);
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
             }, 550 * numOfTiles);
         }

@@ -351,6 +351,11 @@ var Tile = /** @class */ (function () {
             if (pawn.player == player) {
                 ret = pawn;
             }
+            else {
+                console.log(pawn);
+                console.log(player);
+                console.log(ret);
+            }
         });
         return ret;
     };

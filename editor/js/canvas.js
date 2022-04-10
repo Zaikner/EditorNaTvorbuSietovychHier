@@ -168,6 +168,16 @@ editorSocket.on('move Pawn', function (msg) {
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
 });
+editorSocket.on('show Dice value', function (msg) {
+    var image = new Image();
+    image.src = '../../src/Dice' + msg.value + '.png';
+    image.id = 'Dice';
+    image.onload = function () {
+        var _a;
+        elementDeleter('dicePlace');
+        (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image);
+    };
+});
 var isEditor = false;
 var zoz = window.location.href.split('/');
 if (zoz[zoz.length - 2] === 'editor') {
@@ -215,7 +225,7 @@ else {
 editorSocket.on('turn', function (msg) {
     console.log('recieved: turn');
     console.log(editor.getGame().getIsOnturn());
-    canvas.removeEventListener('click', TileEditor_js_1.pickTile);
+    //canvas.removeEventListener('click',pickTile)
     elementDeleter('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
 });
@@ -223,14 +233,17 @@ editorSocket.on('turnMove', function (msg) {
     var _a;
     console.log('recieved: turn move');
     editor.getGame().setIsOnTurn(true);
-    canvas.addEventListener('click', TileEditor_js_1.pickTile);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        var pawn = editor.getChoosenTile().havePawnOnTile(msg.token);
-        if (editor.getChoosenTile() != undefined && pawn != undefined) {
-            canvas.removeEventListener('click', TileEditor_js_1.pickTile);
-            (0, Gameplay_1.throwDice)(msg.player, pawn);
-        }
-    });
+        // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
+        // canvas.removeEventListener('click',pickTile)
+        (0, Gameplay_1.throwDice)(msg.token);
+    }
+    //}
+    );
+});
+editorSocket.on('canMovePawn', function (msg) {
+    console.log('canMovePawn emitol token:' + msg.token);
+    canvas.addEventListener('click', function (event) { (0, TileEditor_js_1.pickTile)(event, msg.token, msg.value); });
 });
 // editorSocket.on('can throw',()=>{
 //   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})

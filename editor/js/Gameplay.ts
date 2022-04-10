@@ -2,6 +2,7 @@ import { spawnParagraph } from "./Elements";
 import {canvas, doc,editor,editorSocket,elementDeleter} from './canvas'
 import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
+import { Socket } from "socket.io";
 
 
 const diceImages:Array<HTMLImageElement> = []
@@ -43,7 +44,8 @@ function initDice(){
         }
     }
 }
-function throwDice(player:string,pawn:Pawn){
+function throwDice(token:string){
+    const params = new URLSearchParams(window.location.search);
     let t = 0
     let times = 0
     let n  = 0
@@ -52,9 +54,9 @@ function throwDice(player:string,pawn:Pawn){
             const params = new URLSearchParams(window.location.search);
             clearInterval(interval)
             console.log('player emitol takyto hod:')
-            console.log({room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
+            console.log({room:params.get('id'),value:n,tileId:editor.getChoosenTile()?.getId()})
             
-            editorSocket.emit('player thrown',{room:params.get('id'),player:player,value:n,tileId:editor.getChoosenTile()?.getId(),pawn:pawn.id})
+            editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:editor.getChoosenTile()?.getId()})
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else{
@@ -63,6 +65,7 @@ function throwDice(player:string,pawn:Pawn){
             n  = Math.floor(Math.random()*6)+1
             if (t!=n){
                 t=n
+                editorSocket.emit('show Dice',{id:params.get('id'),value:t})
             }
             let image = new Image()
             image.src = '../../src/Dice'+t+'.png'

@@ -16,6 +16,22 @@ export class Pawn{
         this.tileId = tile.getId()
         tile.getPawns().push(this)     
     }
+    canMove(numOfTiles:number){
+        let ret = true
+        let actuallTile = this.tile;
+      
+
+        for (let i = 0;i < numOfTiles ; i++){
+            actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
+                
+                
+            if (actuallTile == undefined){
+                ret = false
+                break;
+            }
+        }
+        return ret
+    }
 
 
     move(numOfTiles:number){
@@ -32,7 +48,8 @@ export class Pawn{
              
                 actuallTile.removePawn(p)
                 actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
-             
+                
+
                 actuallTile.getPawns().push(p)
                
                 p.tileId = actuallTile.getId()
@@ -49,7 +66,7 @@ export class Pawn{
                 startTile.setIsChoosen(false)
                 editor.setChoosenTile(undefined!)
                 editor.reactToTile(actuallTile)
-           
+                console.log(actuallTile)
                 reload(editor,ctx)
           
             }, 550*numOfTiles)

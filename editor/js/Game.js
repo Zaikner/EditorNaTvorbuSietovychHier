@@ -86,7 +86,12 @@ var Game = /** @class */ (function () {
             if (p.id == id && !moved) {
                 console.log('pohol som idkcom' + id);
                 moved = true;
-                p.move(value);
+                if (p.canMove(value)) {
+                    p.move(value);
+                }
+                else {
+                    console.log('found pawn but cant move');
+                }
                 return p;
             }
         });

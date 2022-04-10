@@ -203,12 +203,21 @@ export class ServerSocket{
         
       
         )
-       
-      socket.on('player thrown',(msg:{room:string,player:string,value:number,tileId:number,pawn:number})=>{
-        console.log('recieved player thrown' +msg.player)
-        console.log('emited movePawn')
+      
+      socket.on('move pawns',(msg:{room:string,pawn:number,value:number})=>{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
+      })
+      socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number})=>{
+        console.log('recieved player thrown' +msg.token)
+        console.log('emited movePawn')
+        //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
+        socket.emit('canMovePawn',{value:msg.value,token:msg.token})
         
+      })
+      
+      socket.on('show Dice',(msg:{id:string,value:number})=>{
+        
+        socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
       socket.on('react to tile',(msg:{room:string,questionId:number,id:string})=>{
         console.log('recieved react to tile id: '+msg.id)

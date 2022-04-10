@@ -12,8 +12,22 @@ var moveEventHandler = function (event) {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 exports.moveEventHandler = moveEventHandler;
-var pickTile = function (event) {
+var pickTile = function (event, token, value) {
     canvas_js_1.editor.findTile(event, false);
+    console.log('aspon spustil pickTile');
+    if (canvas_js_1.editor.getChoosenTile() != undefined) {
+        var pawn = canvas_js_1.editor.getChoosenTile().havePawnOnTile(token);
+        console.log('aspon vybral');
+        if (pawn != undefined) {
+            //'TU RADSEJ EMITOVAT NA SERVER, NECH VSSETKYCH ODSTRANI'
+            //'AAAA NEZABUDNI NA LISTERNER'
+            //editor.getGame().movePawnById(pawn.id,value)
+            var params = new URLSearchParams(window.location.search);
+            canvas_js_1.editorSocket.emit('move pawns', { pawn: pawn.id, value: value, room: params.get('id') });
+            //(msg:{room:string,pawn:number,value:number})
+            console.log('pohol s panacikom');
+        }
+    }
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 exports.pickTile = pickTile;
