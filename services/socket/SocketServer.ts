@@ -16,7 +16,7 @@ import { Pawn } from "../db/RDG/Pawn";
 import { PawnStyles } from "../db/RDG/PawnStyle";
 import { QuestionWithAnswers } from "../db/RDG/QuestionsWithAnswers";
 import { text } from "body-parser";
-import { addOption } from "../../editor/js/Questions";
+import { addOption, askQuestion } from "../../editor/js/Questions";
 import { BlobOptions } from "buffer";
 import { Rules } from "../db/RDG/Rules";
 import { RulesFinder } from "../db/RDG/RulesFinder";
@@ -219,25 +219,47 @@ export class ServerSocket{
         
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
-      socket.on('react to tile',(msg:{room:string,questionId:number,id:string})=>{
+      socket.on('react to tile',async (msg:{room:string,questionId:number,id:string,returnValue:number,pawnId:number})=>{
+        //returnValue
         console.log('recieved react to tile id: '+msg.id)
+        console.log(msg)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
         
           this.io.in(msg.room).emit('ended turn')
-          console.log('pred zmenou turnu')
-          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-
-          r.nextTurn()
+          if (msg.questionId >= 0){
+            console.log('nasiel otazku')
+            r.setReturnValue(msg.returnValue)
+            r.setChoosedPawnId(msg.pawnId)
+            let questions = await QuestionWithAnswersFinder.getIntance().findById(msg.questionId)
+            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+            console.log(questions)
+    
+            questions?.forEach((question) => {
+              data.push({
+                questionId: question.getQuestionId(),
+                optionId: question.getOptionId(),
+                questionText: question.getQuestionText(),
+                optionText: question.getOptionText(),
+                author: question.getAuthor(),
+                isAnswer: question.getIsAnswer()})
+            })
+          
+            this.io.to(msg.room).emit('loadedAnswerQuestions',data)
+            socket.emit('canReactToAnswer')
+           
+          }
+          else{
+            r.nextTurn()
       
-          //console.log(r)
-          console.log('emited turn: ')
-          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-          this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-          console.log('emited turnMove:')
-          console.log({player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-          this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+            //console.log(r)
+       
+            this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+            this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
    
+          }
+
+    
         }
         else{
           console.log([r.getPlayerOnTurn().getAccount().getSocketId(),socket.id])
@@ -258,8 +280,31 @@ export class ServerSocket{
        
       })
        
+      socket.on('showAnswersToOthers',(msg:{room:string,wrong:Array<string>,right:Array<string>})=>{
+        socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
 
+      })
 
+      socket.on('wasRightAnswer',(msg:{is:boolean,room:string})=>{
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (!msg.is){
+          this.io.in(msg.room).emit('return Pawn to place',{pawnId:r.getChoosedPawnId(),value:r.getReturnValue()})
+          r.getPawnPositions().set(r.getChoosedPawnId(),r.getReturnValue())
+         }
+        else{
+       
+        }
+        r.nextTurn()
+      
+        //console.log(r)
+   
+        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+        this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+
+   
+        r.setReturnValue(-1)
+        r.setChoosedPawnId(-1)
+      })
       socket.on('join player to Room',(msg:{id:string,roomId:string})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
         if(acc === undefined){

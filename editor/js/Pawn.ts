@@ -65,8 +65,9 @@ export class Pawn{
                 editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id'),id:getCookie('id')})
                 startTile.setIsChoosen(false)
                 editor.setChoosenTile(undefined!)
-                editor.reactToTile(actuallTile)
+                editor.reactToTile(actuallTile,numOfTiles,p.id)
                 console.log(actuallTile)
+                console.log(editor)
                 reload(editor,ctx)
           
             }, 550*numOfTiles)

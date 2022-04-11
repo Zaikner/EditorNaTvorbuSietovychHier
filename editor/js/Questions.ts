@@ -4,7 +4,7 @@ import { QuestionOption } from '../../services/db/RDG/QuestionOption';
 import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
 
 
-import {doc, editor, editorSocket, elementDeleter} from './canvas'
+import {clickFunction, doc, editor, editorSocket, elementDeleter} from './canvas'
 import { spawnButton } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 
@@ -345,8 +345,13 @@ function askQuestion(data:any){
         })
         questions.get(elem.questionId)?.appendChild(opt)})
     givenOptions = i
+    $('#answerModal').modal('show')
     }
 function evaluateQuestion(){
+    document.getElementById('answerButtonRoom')!.removeEventListener('click',clickFunction)
+    const params = new URLSearchParams(window.location.search);
+    let right:Array<string> = []
+    let wrong:Array<string> = []
     for(let i = 1; i <= givenOptions; i++){
         let button = document.getElementById('givenOption'+i)
        
@@ -355,16 +360,38 @@ function evaluateQuestion(){
             button!.classList.remove('btn-light')
             button!.classList.add('btn-success')
             button!.classList.add('active')
-        
+            right.push(button!.id)
         }
         else {
             button!.classList.remove('btn-light')
             button!.classList.add('btn-danger')
             button!.classList.add('active')
+            wrong.push(button!.id)
         }
     }
+    editorSocket.emit('showAnswersToOthers',{room:params.get('id'),wrong:wrong,right:right})
     setTimeout(function(){
         $('#answerModal').modal('hide')
+        let answ = (wrong.length == 0)
+        editorSocket.emit('wasRightAnswer',{is:answ,room:params.get('id')})
     }, 5000)
 }
-export {addOption,createQuestion,showAllQuestions,askQuestion,evaluateQuestion,removeLastOption,initCreation,pickQuestion}
+function showResults(right:Array<string>,wrong:Array<string> ){
+    right.forEach((id:string)=>{
+        let button = document.getElementById(id)
+        button!.classList.remove('btn-light')
+        button!.classList.add('btn-success')
+        button!.classList.add('active')
+    })
+    wrong.forEach((id:string)=>{
+        let button = document.getElementById(id)
+        button!.classList.remove('btn-light')
+            button!.classList.add('btn-danger')
+            button!.classList.add('active')
+    })
+  
+    setTimeout(function(){
+        $('#answerModal').modal('hide')
+    }, 4000)
+}
+export {addOption,createQuestion,showAllQuestions,askQuestion,evaluateQuestion,removeLastOption,initCreation,pickQuestion,showResults}

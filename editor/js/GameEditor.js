@@ -167,7 +167,7 @@ var GameEditor = /** @class */ (function () {
         return res;
     };
     GameEditor.prototype.findTileById = function (id) {
-        var t = new Tile_js_1.Tile('', 0, 0, 0, 0, 0, 0, 0, '', 0);
+        var t = undefined;
         this.game.getTiles().forEach(function (tile) {
             if (tile.getId() == id) {
                 t = tile;
@@ -175,14 +175,67 @@ var GameEditor = /** @class */ (function () {
         });
         return t;
     };
-    GameEditor.prototype.reactToTile = function (tile) {
+    GameEditor.prototype.findTileByNextTileNumber = function (id) {
+        var t = undefined;
+        this.game.getTiles().forEach(function (tile) {
+            if (tile.getFollowingTileNumber() == id) {
+                t = tile;
+            }
+        });
+        return t;
+    };
+    GameEditor.prototype.reactToTile = function (tile, returnValue, pawnId) {
         var params = new URLSearchParams(window.location.search);
         if (this.game.getIsOnturn()) {
             console.log('emited react to tile');
             console.log(this.game.getIsOnturn());
-            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id') });
+            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id'), returnValue: returnValue, pawnId: pawnId });
             this.game.setIsOnTurn(false);
         }
+    };
+    GameEditor.prototype.findPawnById = function (id) {
+        var res = undefined;
+        this.getGame().getPawns().forEach(function (pawn) {
+            if (pawn.id == id) {
+                res = pawn;
+            }
+        });
+        return res;
+    };
+    GameEditor.prototype.movePawnBack = function (pawnId, value) {
+        var pawn = this.findPawnById(pawnId);
+        var tile = this.findTileById(pawn.tileId);
+        tile.removePawn(pawn);
+        for (var i = 0; i < value; i++) {
+            console.log('Previous tile with id: ' + tile.getFollowingTileNumber());
+            tile = this.findTileByNextTileNumber(tile.getTileNumber());
+            console.log(tile);
+        }
+        tile.getPawns().push(pawn);
+        pawn.tileId = tile.getId();
+        pawn.tile = tile;
+        (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+        // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
+        // console.log()
+        // let addTo:Tile =  this.findTileById(tileId);
+        // console.log(addTo)
+        // let pawn:Pawn;
+        // this.getGame().getTiles().forEach((tile:Tile)=>{
+        //     tile.getPawns().forEach((p:Pawn)=>{
+        //         if (p.id == pawnId){
+        //            pawn = p
+        //            p.tileId = tileId
+        //            p.tile = addTo
+        //            addTo.getPawns().push(p)
+        //            tile.removePawn(p)
+        //            console.log('tento pawn:')
+        //            console.log(pawn)
+        //            console.log('tento tile')
+        //            console.log(addTo)
+        //            reload(editor,ctx)
+        //         }
+        //     })
+        // })
     };
     GameEditor.prototype.setEvents = function (type, values) {
         this.skip = 0;

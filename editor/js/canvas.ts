@@ -12,7 +12,7 @@ import { Background } from "./Background";
 import { initGameInfo,initDice, changeWaitingRoom, throwDice } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
-import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion} from "./Questions";
+import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion, showResults} from "./Questions";
 import { removeAllListeners } from "process";
 import { PawnStyle } from "./PawnStyle";
 import { Warning } from "./Warning";
@@ -75,6 +75,7 @@ editorSocket.on('connected',(msg)=>{
       addedTile.setBackward(tile.backward)
       addedTile.setMustThrown(tile.mustThrown)
       addedTile.setTurnsToSetFree(tile.turnToSetFree)
+      addedTile.setQuestionId(tile.questionId)
    
     editor.getGame().addTile(addedTile)
     
@@ -211,6 +212,12 @@ editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   editor.setChoosenTile(undefined!)
 
 })
+editorSocket.on('return Pawn to place',(msg:{pawnId:number,tileId:number})=>{
+  editor.movePawnBack(msg.pawnId,msg.tileId)
+})
+editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{
+  showResults(msg.right,msg.wrong)
+})
 
 editorSocket.on('show Dice value',(msg:{value:number})=>{
   let image = new Image()
@@ -303,10 +310,11 @@ editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
   )
   
 })
-
+let canMovePawnFunc:(event: MouseEvent) => void;
 editorSocket.on('canMovePawn',(msg:{token:string,value:number})=>{
   console.log('canMovePawn emitol token:' + msg.token)
-  canvas.addEventListener('click',function(event:MouseEvent){pickTile(event,msg.token,msg.value)})
+   canMovePawnFunc = function(event:MouseEvent){pickTile(event,msg.token,msg.value)}
+  canvas.addEventListener('click',canMovePawnFunc)
   
 })
 
@@ -335,7 +343,13 @@ editorSocket.on('add chat message',(data:{name:string,msg:string})=>{
 editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)
                                            pickQuestion(data)})
 //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
-editorSocket.on('loadedAnswerQuestions',(data)=>{askQuestion(data)})
+editorSocket.on('loadedAnswerQuestions',(data)=>{
+  askQuestion(data)
+})
+let clickFunction = function(){evaluateQuestion();}
+editorSocket.on('canReactToAnswer',()=>{
+  document.getElementById('answerButtonRoom')!.addEventListener('click',clickFunction)
+})
 editorSocket.on('add Opt',(data:any) =>{
   addOption('editQuestion',data.text,data.isAnswer,data.id)
 })
@@ -449,7 +463,7 @@ document.getElementById('generalInfoButton')!.addEventListener('click',function(
   removeAllListenersAdded()
   mainMenu();})
 
-document.getElementById('answerButton')!.addEventListener('click',function(){evaluateQuestion();})
+
 document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
@@ -757,4 +771,4 @@ window.onload = function(){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
   }
 }
-export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize,getCookie};
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize,getCookie,canMovePawnFunc,clickFunction};

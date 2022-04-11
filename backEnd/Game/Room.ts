@@ -13,6 +13,9 @@ export class Room{
         private playerOnTurn:Player = undefined!
         private lastPlayerId:number = 0
         private gameData:any = undefined!;
+        private returnValue:number = -1;
+        private choosedPawnId:number = -1
+        private playersWhichEnded:Array<Player> = []
        
         private pawnPositions:Map<number,number> = new Map()
 
@@ -95,6 +98,12 @@ export class Room{
         public setPlayers(newPlayers:Array<Player>){
             this.players = newPlayers
         }
+        public getPlayersWhichEnded(){
+            return this.playersWhichEnded
+        }
+        public setPlayersWhichEnded(newPlayersWhichEnded:Array<Player>){
+            this.playersWhichEnded = newPlayersWhichEnded
+        }
 
         public getGameName() : string {
             return this.gameName
@@ -132,6 +141,18 @@ export class Room{
         }
         public setGameData(newData:any){
             this.gameData = newData!
+        }
+        public getReturnValue(){
+            return this.returnValue
+        }
+        public setReturnValue(newValue:any){
+            this.returnValue = newValue!
+        }
+        public getChoosedPawnId(){
+            return this.choosedPawnId
+        }
+        public setChoosedPawnId(newValue:any){
+            this.choosedPawnId = newValue!
         }
             
         

@@ -1,7 +1,7 @@
 "use strict";
 var _a, _b, _c, _d, _e, _f;
 exports.__esModule = true;
-exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.clickFunction = exports.canMovePawnFunc = exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
@@ -71,6 +71,7 @@ editorSocket.on('connected', function (msg) {
         addedTile.setBackward(tile.backward);
         addedTile.setMustThrown(tile.mustThrown);
         addedTile.setTurnsToSetFree(tile.turnToSetFree);
+        addedTile.setQuestionId(tile.questionId);
         editor.getGame().addTile(addedTile);
         reload(editor, ctx);
     });
@@ -168,6 +169,12 @@ editorSocket.on('move Pawn', function (msg) {
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
 });
+editorSocket.on('return Pawn to place', function (msg) {
+    editor.movePawnBack(msg.pawnId, msg.tileId);
+});
+editorSocket.on('loadAnswersToOthers', function (msg) {
+    (0, Questions_1.showResults)(msg.right, msg.wrong);
+});
 editorSocket.on('show Dice value', function (msg) {
     var image = new Image();
     image.src = '../../src/Dice' + msg.value + '.png';
@@ -241,9 +248,12 @@ editorSocket.on('turnMove', function (msg) {
     //}
     );
 });
+var canMovePawnFunc;
+exports.canMovePawnFunc = canMovePawnFunc;
 editorSocket.on('canMovePawn', function (msg) {
     console.log('canMovePawn emitol token:' + msg.token);
-    canvas.addEventListener('click', function (event) { (0, TileEditor_js_1.pickTile)(event, msg.token, msg.value); });
+    exports.canMovePawnFunc = canMovePawnFunc = function (event) { (0, TileEditor_js_1.pickTile)(event, msg.token, msg.value); };
+    canvas.addEventListener('click', canMovePawnFunc);
 });
 // editorSocket.on('can throw',()=>{
 //   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
@@ -269,7 +279,14 @@ editorSocket.on('loadedQuestions', function (data) {
     (0, Questions_1.pickQuestion)(data);
 });
 //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
-editorSocket.on('loadedAnswerQuestions', function (data) { (0, Questions_1.askQuestion)(data); });
+editorSocket.on('loadedAnswerQuestions', function (data) {
+    (0, Questions_1.askQuestion)(data);
+});
+var clickFunction = function () { (0, Questions_1.evaluateQuestion)(); };
+exports.clickFunction = clickFunction;
+editorSocket.on('canReactToAnswer', function () {
+    document.getElementById('answerButtonRoom').addEventListener('click', clickFunction);
+});
 editorSocket.on('add Opt', function (data) {
     (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
 });
@@ -360,7 +377,6 @@ function edit() {
         (0, TileEditor_js_1.removeAllListenersAdded)();
         mainMenu();
     });
-    document.getElementById('answerButton').addEventListener('click', function () { (0, Questions_1.evaluateQuestion)(); });
     document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 0 }); });
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });

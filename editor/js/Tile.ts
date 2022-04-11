@@ -417,6 +417,15 @@ class Tile{
         return ret
     }
     
+    findPreviousTile(){
+        let res:Array<Tile> = []
+        editor.getGame().getTiles().forEach((tile:Tile)=>{
+            if (tile.getFollowingTileNumber() == this.id){
+                res.push(tile)
+            }
+        })
+        return res
+    }
     public setStroke(newStroke:number){
         this.stroke = newStroke
     }

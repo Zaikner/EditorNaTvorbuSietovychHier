@@ -106,6 +106,31 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="answerModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <div class="container">  <h2 class="modal-title " id="modalHeader" style="text-align: center; position: sticky; color: white;">Answer Question!</h2></div>
+       
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody" style="overflow-y: auto;">
+        <div class="container"  >
+          <div class="list-group" style=" margin-bottom: 5%;" id='answerQuestion'>
+   
+          </div>
+   
+        </div>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <div class="container" style="text-align: center;"><button type="button" id="answerButtonRoom" class="btn btn-secondary" style="text-align: center;" onclick="$('#questionModal').modal('hide')">Answer!</button></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="WarningModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content" style="background-color: #292b2c">

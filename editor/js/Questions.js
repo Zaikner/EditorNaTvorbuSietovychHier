@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.pickQuestion = exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
+exports.showResults = exports.pickQuestion = exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
 var canvas_1 = require("./canvas");
 var num = 0;
 var newQuestions = [];
@@ -310,24 +310,52 @@ function askQuestion(data) {
         (_b = questions.get(elem.questionId)) === null || _b === void 0 ? void 0 : _b.appendChild(opt);
     });
     givenOptions = i;
+    $('#answerModal').modal('show');
 }
 exports.askQuestion = askQuestion;
 function evaluateQuestion() {
+    document.getElementById('answerButtonRoom').removeEventListener('click', canvas_1.clickFunction);
+    var params = new URLSearchParams(window.location.search);
+    var right = [];
+    var wrong = [];
     for (var i = 1; i <= givenOptions; i++) {
         var button = document.getElementById('givenOption' + i);
         if (((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'true' && (button === null || button === void 0 ? void 0 : button.classList.contains('active'))) || ((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'false' && !(button === null || button === void 0 ? void 0 : button.classList.contains('active')))) {
             button.classList.remove('btn-light');
             button.classList.add('btn-success');
             button.classList.add('active');
+            right.push(button.id);
         }
         else {
             button.classList.remove('btn-light');
             button.classList.add('btn-danger');
             button.classList.add('active');
+            wrong.push(button.id);
         }
     }
+    canvas_1.editorSocket.emit('showAnswersToOthers', { room: params.get('id'), wrong: wrong, right: right });
     setTimeout(function () {
         $('#answerModal').modal('hide');
+        var answ = (wrong.length == 0);
+        canvas_1.editorSocket.emit('wasRightAnswer', { is: answ, room: params.get('id') });
     }, 5000);
 }
 exports.evaluateQuestion = evaluateQuestion;
+function showResults(right, wrong) {
+    right.forEach(function (id) {
+        var button = document.getElementById(id);
+        button.classList.remove('btn-light');
+        button.classList.add('btn-success');
+        button.classList.add('active');
+    });
+    wrong.forEach(function (id) {
+        var button = document.getElementById(id);
+        button.classList.remove('btn-light');
+        button.classList.add('btn-danger');
+        button.classList.add('active');
+    });
+    setTimeout(function () {
+        $('#answerModal').modal('hide');
+    }, 4000);
+}
+exports.showResults = showResults;

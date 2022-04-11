@@ -359,6 +359,16 @@ var Tile = /** @class */ (function () {
         });
         return ret;
     };
+    Tile.prototype.findPreviousTile = function () {
+        var _this = this;
+        var res = [];
+        canvas_js_1.editor.getGame().getTiles().forEach(function (tile) {
+            if (tile.getFollowingTileNumber() == _this.id) {
+                res.push(tile);
+            }
+        });
+        return res;
+    };
     Tile.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
     };

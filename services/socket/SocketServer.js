@@ -218,26 +218,53 @@ var ServerSocket = /** @class */ (function () {
             socket.on('show Dice', function (msg) {
                 socket.to(msg.id).emit('show Dice value', { value: msg.value });
             });
-            socket.on('react to tile', function (msg) {
-                console.log('recieved react to tile id: ' + msg.id);
-                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                if (r.getPlayerOnTurn().getAccount().getSocketId() == socket.id) {
-                    _this.io["in"](msg.room).emit('ended turn');
-                    console.log('pred zmenou turnu');
-                    console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                    r.nextTurn();
-                    //console.log(r)
-                    console.log('emited turn: ');
-                    console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                    _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                    console.log('emited turnMove:');
-                    console.log({ player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                    _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                }
-                else {
-                    console.log([r.getPlayerOnTurn().getAccount().getSocketId(), socket.id]);
-                }
-            });
+            socket.on('react to tile', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var r, questions, data_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            //returnValue
+                            console.log('recieved react to tile id: ' + msg.id);
+                            console.log(msg);
+                            r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                            if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 4];
+                            this.io["in"](msg.room).emit('ended turn');
+                            if (!(msg.questionId >= 0)) return [3 /*break*/, 2];
+                            console.log('nasiel otazku');
+                            r.setReturnValue(msg.returnValue);
+                            r.setChoosedPawnId(msg.pawnId);
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findById(msg.questionId)];
+                        case 1:
+                            questions = _a.sent();
+                            data_1 = [];
+                            console.log(questions);
+                            questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
+                                data_1.push({
+                                    questionId: question.getQuestionId(),
+                                    optionId: question.getOptionId(),
+                                    questionText: question.getQuestionText(),
+                                    optionText: question.getOptionText(),
+                                    author: question.getAuthor(),
+                                    isAnswer: question.getIsAnswer()
+                                });
+                            });
+                            this.io.to(msg.room).emit('loadedAnswerQuestions', data_1);
+                            socket.emit('canReactToAnswer');
+                            return [3 /*break*/, 3];
+                        case 2:
+                            r.nextTurn();
+                            //console.log(r)
+                            this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                            this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                            _a.label = 3;
+                        case 3: return [3 /*break*/, 5];
+                        case 4:
+                            console.log([r.getPlayerOnTurn().getAccount().getSocketId(), socket.id]);
+                            _a.label = 5;
+                        case 5: return [2 /*return*/];
+                    }
+                });
+            }); });
             socket.on('change Pawn position', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
@@ -246,6 +273,24 @@ var ServerSocket = /** @class */ (function () {
                 else {
                     //console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
                 }
+            });
+            socket.on('showAnswersToOthers', function (msg) {
+                socket.to(msg.room).emit('loadAnswersToOthers', { wrong: msg.wrong, right: msg.right });
+            });
+            socket.on('wasRightAnswer', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (!msg.is) {
+                    _this.io["in"](msg.room).emit('return Pawn to place', { pawnId: r.getChoosedPawnId(), tileId: r.getReturnValue() });
+                    r.getPawnPositions().set(r.getChoosedPawnId(), r.getReturnValue());
+                }
+                else {
+                }
+                r.nextTurn();
+                //console.log(r)
+                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                r.setReturnValue(-1);
+                r.setChoosedPawnId(-1);
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);

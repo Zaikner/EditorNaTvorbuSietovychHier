@@ -1,5 +1,5 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket} from './canvas.js'
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket, canMovePawnFunc} from './canvas.js'
 
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
@@ -23,6 +23,7 @@ let pickTile = function(event:MouseEvent,token:string,value:number) {editor.find
       //editor.getGame().movePawnById(pawn.id,value)
       const params = new URLSearchParams(window.location.search);
       editorSocket.emit('move pawns',{pawn:pawn.id,value:value,room:params.get('id')})
+      canvas.removeEventListener('click',canMovePawnFunc)
       //(msg:{room:string,pawn:number,value:number})
       console.log('pohol s panacikom')
     }

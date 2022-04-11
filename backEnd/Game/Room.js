@@ -15,6 +15,8 @@ var Room = /** @class */ (function () {
         this.playerOnTurn = undefined;
         this.lastPlayerId = 0;
         this.gameData = undefined;
+        this.returnValue = -1;
+        this.choosedPawnId = -1;
         this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
@@ -114,6 +116,18 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.setGameData = function (newData) {
         this.gameData = newData;
+    };
+    Room.prototype.getReturnValue = function () {
+        return this.returnValue;
+    };
+    Room.prototype.setReturnValue = function (newValue) {
+        this.returnValue = newValue;
+    };
+    Room.prototype.getChoosedPawnId = function () {
+        return this.choosedPawnId;
+    };
+    Room.prototype.setChoosedPawnId = function (newValue) {
+        this.choosedPawnId = newValue;
     };
     return Room;
 }());

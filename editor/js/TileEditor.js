@@ -24,6 +24,7 @@ var pickTile = function (event, token, value) {
             //editor.getGame().movePawnById(pawn.id,value)
             var params = new URLSearchParams(window.location.search);
             canvas_js_1.editorSocket.emit('move pawns', { pawn: pawn.id, value: value, room: params.get('id') });
+            canvas_js_1.canvas.removeEventListener('click', canvas_js_1.canMovePawnFunc);
             //(msg:{room:string,pawn:number,value:number})
             console.log('pohol s panacikom');
         }

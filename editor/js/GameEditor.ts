@@ -1,4 +1,4 @@
-import {canvas,ctx, calibreEventCoords, editorSocket, getCookie} from './canvas.js'
+import {canvas,ctx, calibreEventCoords, editorSocket, getCookie, editor, reload} from './canvas.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 
@@ -183,7 +183,7 @@ class GameEditor{
         return res
     }
     findTileById(id:number):Tile{
-        let t:Tile = new Tile('',0,0,0,0,0,0,0,'',0)
+        let t:Tile = undefined!
         this.game.getTiles().forEach((tile:Tile)=>{
             if (tile.getId() == id){
                 t = tile
@@ -193,19 +193,79 @@ class GameEditor{
         })
         return t
     }
+    findTileByNextTileNumber(id:number):Tile{
+        let t:Tile = undefined!
+        this.game.getTiles().forEach((tile:Tile)=>{
+            if (tile.getFollowingTileNumber() == id){
+                t = tile
+              
+            }
+      
+        })
+        return t
+    }
+
+
   
-    reactToTile(tile:Tile){
+    reactToTile(tile:Tile,returnValue:number,pawnId:number){
         const params = new URLSearchParams(window.location.search);
         if (this.game.getIsOnturn()){
             console.log('emited react to tile')
             console.log(this.game.getIsOnturn())
-            editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id')})
+            editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id'),returnValue:returnValue,pawnId:pawnId})
             this.game.setIsOnTurn(false)
         }
         
         
     }
-   
+    findPawnById(id:number){
+        let res:Pawn = undefined!;
+        this.getGame().getPawns().forEach((pawn:Pawn)=>{
+            if (pawn.id == id){
+                res = pawn
+            }
+        })
+        return res
+    }
+    movePawnBack(pawnId:number,value:number){
+       
+        let pawn = this.findPawnById(pawnId)
+        let tile = this.findTileById(pawn.tileId)
+        tile.removePawn(pawn)
+        for (let i = 0;i < value;i++){
+            console.log('Previous tile with id: '+tile.getFollowingTileNumber())
+            tile = this.findTileByNextTileNumber(tile.getTileNumber())
+            
+            console.log(tile)
+        }
+        tile.getPawns().push(pawn)
+        pawn.tileId = tile.getId()
+        pawn.tile = tile
+        reload(editor,ctx)
+        // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
+        // console.log()
+        // let addTo:Tile =  this.findTileById(tileId);
+        // console.log(addTo)
+        // let pawn:Pawn;
+        // this.getGame().getTiles().forEach((tile:Tile)=>{
+        //     tile.getPawns().forEach((p:Pawn)=>{
+        //         if (p.id == pawnId){
+        //            pawn = p
+        //            p.tileId = tileId
+        //            p.tile = addTo
+        //            addTo.getPawns().push(p)
+        //            tile.removePawn(p)
+        //            console.log('tento pawn:')
+        //            console.log(pawn)
+        //            console.log('tento tile')
+        //            console.log(addTo)
+        //            reload(editor,ctx)
+        //         }
+        //     })
+            
+        // })
+       
+    }
 
     setEvents(type:string,values:{num:number,value:number}){
         this.skip = 0
