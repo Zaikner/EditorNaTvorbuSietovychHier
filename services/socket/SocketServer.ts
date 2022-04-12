@@ -250,12 +250,13 @@ export class ServerSocket{
            
           }
           else{
-            r.nextTurn()
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+            // r.nextTurn()
       
-            //console.log(r)
+            // //console.log(r)
        
-            this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-            this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+            // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+            // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
    
           }
 
@@ -284,9 +285,49 @@ export class ServerSocket{
         socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
 
       })
+      socket.on('evaluated end',(msg:{is:boolean,room:string,token:string})=>{
+        console.log('odchyil evaluetedEnd')
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        let player = r.findPlayerByToken(msg.token)
+
+        if(msg.is == true &&  !r.getPlayersWhichEnded().includes(player)){
+          
+          r.getPlayersWhichEnded().push(player)
+          let place = r.getPlayersWhichEnded().length
+          r
+          console.log(r.getPlayersWhichEnded())
+          console.log(msg.is,msg.token,place)
+          player.setPlace(place)
+          console.log('prisiel aspon po emit')
+          this.io.in(msg.room).emit('player ended',{player:player.getAccount().getName(),place:place})
+        }
+        
+        if(r.gameEnded()){
+          this.io.in(msg.room).emit('game has ended',{leaderboards:[]})
+          r.getPlayers().forEach((player:any)=>{
+            let acc = player.getAccount()
+            acc.setScore(acc.getScore()+r.getMaxPlayers()-player.getPlace()+1)
+            player.getAccount().save()
+          })
+        }
+        else{
+
+          r.nextTurn()
+      
+          //console.log(r)
+     
+          this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+          this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+          
+          r.setReturnValue(-1)
+          r.setChoosedPawnId(-1)
+        }
+      
+      })
 
       socket.on('wasRightAnswer',(msg:{is:boolean,room:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+
         if (!msg.is){
           this.io.in(msg.room).emit('return Pawn to place',{pawnId:r.getChoosedPawnId(),value:r.getReturnValue()})
           r.getPawnPositions().set(r.getChoosedPawnId(),r.getReturnValue())
@@ -294,16 +335,16 @@ export class ServerSocket{
         else{
        
         }
-        r.nextTurn()
+      
       
         //console.log(r)
-   
-        this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-        this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+        socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+        // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+        // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
 
    
-        r.setReturnValue(-1)
-        r.setChoosedPawnId(-1)
+        // r.setReturnValue(-1)
+        // r.setChoosedPawnId(-1)
       })
       socket.on('join player to Room',(msg:{id:string,roomId:string})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
@@ -461,9 +502,9 @@ export class ServerSocket{
         socket.join(msg.roomName)
       })
       socket.on('reload waiting room',(msg:{room:string})=>{
-        let names:Array<{name:string,avatar:string}>= []
+        let names:Array<{name:string,avatar:string,place:number}>= []
         GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach((player:any)=>{
-          names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar()})
+          names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar(),place:player.getPlace()})
         }
         )
         console.log('emitol reload waiting')

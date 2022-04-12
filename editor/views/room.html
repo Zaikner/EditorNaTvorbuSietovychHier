@@ -141,7 +141,7 @@
       </div>
       <div class="modal-body" id="warningModalBody">
       </div>
-      <div class="modal-footer" id="modalFooter">
+      <div class="modal-footer" id="modalFooter"  >
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <button type="button" class="btn btn-secondary" id="backToWaitingRoom" onclick="$('#WarningModal').modal('hide');$('#waitingModal').modal('show')">Waiting Room!</button>
         <button type="button" class="btn btn-secondary" id= "confirmStart" onclick="$('#WarningModal').modal('hide')">Start the game!</button>
@@ -149,6 +149,25 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="InGameModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Warning!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="InGameModalBody">
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary"  onclick="$('#WarningModal').modal('hide');$('#InGameModal').modal('hide')">OK!</button>
+       
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="modal fade" id="waitingModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -185,7 +204,34 @@
   </div>
 </div>
         
-
+<div class="modal fade" id="endModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader">Game has ended!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody" style="text-align:center;">
+        <div  style="text-align:center; margin: 3%;">
+          <h5>Leaderboards:</h5>
+          <div class="container"  id='endContainer'>
+        
+          </div>
+        </div>
+       
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <div class="container" style="text-align: center;">
+        
+          <button type="button" class="btn btn-secondary" style="text-align: center; " id="leaveEndRoom"  onclick=" $('#endModal').modal('hide')">Leave Game!</button>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

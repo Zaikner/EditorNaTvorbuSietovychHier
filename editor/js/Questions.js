@@ -162,7 +162,7 @@ function showAllQuestions(data) {
             quest.type = 'button';
             quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-info");
             quest.style.textAlign = 'center';
-            quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
+            quest.textContent = elem.questionText;
             quest.onclick = function () {
                 $('#editModal').modal('show');
                 $('#questionModal').modal('hide');
@@ -201,12 +201,13 @@ function pickQuestion(data) {
             quest.type = 'button';
             quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-info");
             quest.style.textAlign = 'center';
-            quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
+            quest.textContent = elem.questionText;
             quest.onclick = function () {
                 $('#pickQuestionModal').modal('hide');
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
-                document.getElementById('bindQuestion').textContent = 'Choosen Question Id: ' + (elem.questionId);
+                document.getElementById('pickedQuestionParagraph').textContent = 'Picked Question: ' + elem.questionText;
+                document.getElementById('bindQuestion').textContent = 'Pick Question!';
             };
             list.appendChild(quest);
             (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
@@ -288,7 +289,7 @@ function askQuestion(data) {
             quest.type = 'button';
             quest.classList.add("list-group-item", "list-group-item-action", "active", 'btn-info');
             quest.style.textAlign = 'center';
-            quest.textContent = 'Question ID ' + elem.questionId + ' : ' + elem.questionText;
+            quest.textContent = elem.questionText;
             list.appendChild(quest);
             (_a = document.getElementById('answerQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }

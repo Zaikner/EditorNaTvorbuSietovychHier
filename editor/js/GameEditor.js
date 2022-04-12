@@ -202,6 +202,18 @@ var GameEditor = /** @class */ (function () {
         });
         return res;
     };
+    GameEditor.prototype.playerEnded = function (token) {
+        var ret = true;
+        this.getGame().getTiles().forEach(function (tile) {
+            if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)) {
+                ret = false;
+                console.log(tile);
+                console.log(tile.getIsEndingFor().includes(token));
+                console.log(!tile.isSuccessfullyEnding(token));
+            }
+        });
+        return ret;
+    };
     GameEditor.prototype.movePawnBack = function (pawnId, value) {
         var pawn = this.findPawnById(pawnId);
         var tile = this.findTileById(pawn.tileId);

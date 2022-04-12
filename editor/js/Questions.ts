@@ -185,7 +185,7 @@ function showAllQuestions(data:any){
             quest.type = 'button';
             quest.classList.add("list-group-item","list-group-item-action","active","btn-info")
             quest.style.textAlign =  'center';
-            quest.textContent = 'Question ID '+ elem.questionId +' : ' +elem.questionText
+            quest.textContent = elem.questionText
             quest.onclick =function(){ $('#editModal').modal('show')
                                      $('#questionModal').modal('hide')
                                      let allQuests:any = []
@@ -225,12 +225,13 @@ function pickQuestion(data:any){
             quest.type = 'button';
             quest.classList.add("list-group-item","list-group-item-action","active","btn-info")
             quest.style.textAlign =  'center';
-            quest.textContent = 'Question ID '+ elem.questionId +' : ' +elem.questionText
+            quest.textContent = elem.questionText
             quest.onclick =function(){ 
                                      $('#pickQuestionModal').modal('hide')
                                      editor.setQuestionId(elem.questionId)
                                      console.log('Question id je teraz:'+editor.getQuestionId());
-                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Choosen Question Id: '+(elem.questionId)
+                                     document.getElementById('pickedQuestionParagraph')!.textContent = 'Picked Question: ' + elem.questionText;
+                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Pick Question!'
                                      }
             list.appendChild(quest)
 
@@ -322,7 +323,8 @@ function askQuestion(data:any){
             quest.type = 'button';
             quest.classList.add("list-group-item","list-group-item-action","active",'btn-info')
             quest.style.textAlign =  'center';
-            quest.textContent = 'Question ID '+ elem.questionId +' : ' +elem.questionText
+            quest.textContent = elem.questionText
+            
 
             list.appendChild(quest)
 

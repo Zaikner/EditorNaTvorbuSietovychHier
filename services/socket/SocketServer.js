@@ -252,10 +252,7 @@ var ServerSocket = /** @class */ (function () {
                             socket.emit('canReactToAnswer');
                             return [3 /*break*/, 3];
                         case 2:
-                            r.nextTurn();
-                            //console.log(r)
-                            this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                            this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                            socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                             _a.label = 3;
                         case 3: return [3 /*break*/, 5];
                         case 4:
@@ -277,20 +274,51 @@ var ServerSocket = /** @class */ (function () {
             socket.on('showAnswersToOthers', function (msg) {
                 socket.to(msg.room).emit('loadAnswersToOthers', { wrong: msg.wrong, right: msg.right });
             });
+            socket.on('evaluated end', function (msg) {
+                console.log('odchyil evaluetedEnd');
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                var player = r.findPlayerByToken(msg.token);
+                if (msg.is == true && !r.getPlayersWhichEnded().includes(player)) {
+                    r.getPlayersWhichEnded().push(player);
+                    var place = r.getPlayersWhichEnded().length;
+                    r;
+                    console.log(r.getPlayersWhichEnded());
+                    console.log(msg.is, msg.token, place);
+                    player.setPlace(place);
+                    console.log('prisiel aspon po emit');
+                    _this.io["in"](msg.room).emit('player ended', { player: player.getAccount().getName(), place: place });
+                }
+                if (r.gameEnded()) {
+                    _this.io["in"](msg.room).emit('game has ended', { leaderboards: [] });
+                    r.getPlayers().forEach(function (player) {
+                        var acc = player.getAccount();
+                        acc.setScore(acc.getScore() + r.getMaxPlayers() - player.getPlace() + 1);
+                        player.getAccount().save();
+                    });
+                }
+                else {
+                    r.nextTurn();
+                    //console.log(r)
+                    _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                    _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                    r.setReturnValue(-1);
+                    r.setChoosedPawnId(-1);
+                }
+            });
             socket.on('wasRightAnswer', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (!msg.is) {
-                    _this.io["in"](msg.room).emit('return Pawn to place', { pawnId: r.getChoosedPawnId(), tileId: r.getReturnValue() });
+                    _this.io["in"](msg.room).emit('return Pawn to place', { pawnId: r.getChoosedPawnId(), value: r.getReturnValue() });
                     r.getPawnPositions().set(r.getChoosedPawnId(), r.getReturnValue());
                 }
                 else {
                 }
-                r.nextTurn();
                 //console.log(r)
-                _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
-                r.setReturnValue(-1);
-                r.setChoosedPawnId(-1);
+                socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                // r.setReturnValue(-1)
+                // r.setChoosedPawnId(-1)
             });
             socket.on('join player to Room', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);
@@ -473,7 +501,7 @@ var ServerSocket = /** @class */ (function () {
             socket.on('reload waiting room', function (msg) {
                 var names = [];
                 GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach(function (player) {
-                    names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar() });
+                    names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar(), place: player.getPlace() });
                 });
                 console.log('emitol reload waiting');
                 _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });

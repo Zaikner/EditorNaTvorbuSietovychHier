@@ -12,20 +12,17 @@ style.
   justify-content: center;
   /* background-color: #292b2c; */
   overflow: auto;
-  background-color: #7ed6df;
-  background-image: linear-gradient(315deg, #7ed6df 0%, #e84393 100%);
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
   bottom-padding:1px;
   }
 title Game Lobby
 nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;')
   .container-fluid
   form(action='/' method='get')
-    button.btn.btn-info.py-2(type='submit' style=' width:200px; margin-right: 10px;background-color: #1fd1f9;\
-    background-image: linear-gradient(315deg, #1fd1f9 0%, #b621fe 74%);\
-    ') Main Menu
+    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;') Main Menu
   form(action='/account' method='get')
-    button.btn.btn-light.py-2(type='submit' style=' width:200px; margin-right: 10px;background-color: #7f53ac;\
-    background-image: linear-gradient(315deg, #7f53ac 0%, #647dee 74%);') Account
+    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;') Account
 .d-flex.align-items-center.justify-content-center
   .container-fluid
     .row.d-flex.align-items-center.justify-content-center
@@ -57,9 +54,8 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                           button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-danger Join
                
               hr
-            div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 20vh;  border-radius: 25px;')
-              p(style='font-size: 20px; font-family: sans-serif;') HighScore
-              hr
+           
+                      
             br
             br
             br
@@ -78,15 +74,14 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                         | 
                         button(type = 'submit' name='name' value = game).btn.btn-danger Detail         
               hr
-            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 40vh;  border-radius: 25px;')
-              .form-group
-                label(for='chat' style='font-size: 20px; font-family: sans-serif;')
-                  strong Player chat
-                textarea#chat.form-control(rows='15' style='resize: none; overflow-y: scroll; max-height: 20vh;' readonly='')
-                
-                textarea#answer.form-control.form.inline(rows='1' style='resize: none; width: 50%' placeholder='Write there' inline="true")
-                button(type = 'submit' id='chatButton').btn.btn-danger.form.inline Send!   
-                br
+            div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
+            
+              strong HighScore
+              ul.list-group(style='overflow-y: scroll; max-height: 34vh; margin-top:2%; ')
+                 each score in scores
+                    form()
+                      strong 
+                        li.list-group-item()= score[0]+'. Place '+ score[1] + ' Score: ' + score[2]+ ' points.'
 #loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
   .modal-dialog
     .modal-content

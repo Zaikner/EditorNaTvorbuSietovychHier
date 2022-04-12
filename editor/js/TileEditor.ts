@@ -22,8 +22,19 @@ let pickTile = function(event:MouseEvent,token:string,value:number) {editor.find
       //'AAAA NEZABUDNI NA LISTERNER'
       //editor.getGame().movePawnById(pawn.id,value)
       const params = new URLSearchParams(window.location.search);
-      editorSocket.emit('move pawns',{pawn:pawn.id,value:value,room:params.get('id')})
-      canvas.removeEventListener('click',canMovePawnFunc)
+      if (pawn.canMove(value))
+      {
+        console.log('can move, teda pohol')
+        
+        editorSocket.emit('move pawns',{pawn:pawn.id,value:value,room:params.get('id')})
+        canvas.removeEventListener('click',canMovePawnFunc)
+      }
+      else{
+        console.log('nepohol, teda odnuluje')
+        editor.getChoosenTile()?.setIsChoosen(false)
+        editor.setChoosenTile(undefined!)
+      }
+    
       //(msg:{room:string,pawn:number,value:number})
       console.log('pohol s panacikom')
     }
@@ -176,6 +187,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     
 
     })
+    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph','Picked Question: None')
     spawnParagraph(document,'tileEditingPlace','','Does event occur when moving to this tile ??')
     let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
 
@@ -190,6 +202,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
        
         $('#EventModal').modal('show');
       }
+    
       // if (!questionChecker.checked){
       //   Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
       // }
@@ -200,6 +213,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
       //$('#EventModal').modal('show');
       
     })
+    spawnParagraph(document,'tileEditingPlace','pickedEventParagraph','Picked Event: None')
 }
 
 function insertTilesMenu():void{
@@ -260,9 +274,9 @@ function insertTilesMenu():void{
     spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],'Edit button!',update)   
 
     if ( editor.getChoosenTile()!= undefined){
-      editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor())
-      editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor())
-      editor.setEnabledForPlayers(editor.getChoosenTile()!.getCanOccupy())
+      editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor().slice())
+      editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor().slice())
+      editor.setEnabledForPlayers(editor.getChoosenTile()!.getCanOccupy().slice())
      
     }
   
@@ -333,7 +347,7 @@ function insertTilesMenu():void{
   }
 
   let  insert = function(event:MouseEvent){
-  
+    editor.setChoosenTile( undefined!)
     let coords = calibreEventCoords(event)
     let canSpawn = true
     if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
@@ -380,13 +394,13 @@ function insertTilesMenu():void{
     else{
       addedTile = editor.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),0,'',shapeMenu!.value,insertImage,pattImage)
     }
-    addedTile.setIsStartingFor(editor.getStartForPlayers())
-    addedTile.setIsEndingFor(editor.getEndForPlayers())
-    addedTile.setCanOccupy(editor.getEnabledForPlayers())
+    addedTile.setIsStartingFor(editor.getStartForPlayers().slice())
+    addedTile.setIsEndingFor(editor.getEndForPlayers().slice())
+    addedTile.setCanOccupy(editor.getEnabledForPlayers().slice())
     addedTile.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
-    addedTile.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
+    addedTile.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().slice())
 
     if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
       addedTile.setSkip(editor.getSkip())
@@ -490,14 +504,15 @@ function insertTilesMenu():void{
       
     // })
     
-    editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers())
-    editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers())
+    editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers().slice())
+    editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers().slice())
+    
     editor.getChoosenTile()!.setCanOccupy(editor.getEnabledForPlayers())
     editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     editor.getChoosenTile()!.setPatternFile(pattImage)
    
-    editor.getChoosenTile()!.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile())
+    editor.getChoosenTile()!.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().slice())
   
     if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
      

@@ -78,8 +78,10 @@ exports.throwDice = throwDice;
 function changeWaitingRoom(accs) {
     var div = document.getElementById('waitingContainer');
     var divPlaying = document.getElementById('playingContainer');
+    var divending = document.getElementById('endContainer');
     (0, canvas_1.elementDeleter)('waitingContainer');
     (0, canvas_1.elementDeleter)('playingContainer');
+    (0, canvas_1.elementDeleter)('endContainer');
     var i = 0;
     var _loop_3 = function () {
         var quest = document.createElement('button');
@@ -88,9 +90,21 @@ function changeWaitingRoom(accs) {
         quest.style.textAlign = 'center';
         quest.textContent = accs[i].name;
         div.appendChild(quest);
+        var place = document.createElement('place');
+        if (accs[i].place > 0) {
+            if (accs[i].place == 1) {
+                quest.textContent = 'Winner !! ' + quest.textContent;
+            }
+            else {
+                quest.textContent = accs[i].place.toString() + '. Place ' + quest.textContent;
+            }
+        }
         var questClone = quest.cloneNode();
-        questClone.textContent = accs[i].name;
+        questClone.textContent = quest.textContent;
+        var questClone1 = quest.cloneNode();
+        questClone1.textContent = quest.textContent;
         divPlaying.appendChild(questClone);
+        divending.appendChild(questClone1);
         var image = document.createElement("IMG");
         image.src = accs[i].avatar;
         image.style.width = '50px';
@@ -99,7 +113,19 @@ function changeWaitingRoom(accs) {
         image.onload = function () {
             quest.appendChild(image);
             questClone.appendChild(image.cloneNode());
+            questClone1.appendChild(image.cloneNode());
         };
+        //if(accs[i].place != 0){
+        // let place = document.createElement('place')
+        // if (accs[i].place == 1){
+        //     place.textContent = 'Winner !!'
+        // }
+        // else{
+        //     place.textContent = accs[i].place.toString()+'. Place'
+        // }
+        // quest.appendChild(place)
+        // questClone.appendChild(place.cloneNode())
+        //}
         i++;
     };
     while (i < accs.length) {

@@ -227,6 +227,20 @@ class GameEditor{
         })
         return res
     }
+ 
+    playerEnded(token:string){
+        let ret = true
+        this.getGame().getTiles().forEach((tile:Tile)=>{
+            if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)){
+                ret =  false
+                console.log(tile)
+                console.log(tile.getIsEndingFor().includes(token))
+                console.log(!tile.isSuccessfullyEnding(token))
+            }
+          
+        })
+        return ret
+    }
     movePawnBack(pawnId:number,value:number){
        
         let pawn = this.findPawnById(pawnId)

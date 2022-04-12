@@ -124,6 +124,7 @@ var AccountManager = /** @class */ (function () {
         var newAcc = new Account_js_1.Account(acc.getName(), acc.getPassword());
         newAcc.setAvatar(acc.getAvatar());
         newAcc.setClientId(this.createNewClientId());
+        newAcc.setScore(acc.getScore());
         this.loggedAccounts.push(newAcc);
         return newAcc;
     };

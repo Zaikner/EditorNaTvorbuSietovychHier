@@ -426,6 +426,19 @@ class Tile{
         })
         return res
     }
+    isSuccessfullyEnding(token:string){
+        let ret = false
+        if (!this.isEndingFor.includes(token)){
+            return true
+        }
+        this.pawns.forEach((pawn:Pawn)=>{
+            if (this.isEndingFor.includes(token) && pawn.player == token){
+                ret = true
+            }
+        })
+
+        return ret
+    }
     public setStroke(newStroke:number){
         this.stroke = newStroke
     }
@@ -550,6 +563,8 @@ class Tile{
         return this.belongTo
     }
     public setIsEndingFor(newPlayers:Array<string>){
+        console.log('menim pre tile')
+        console.log(this)
         this.isEndingFor = newPlayers
     }
     public getIsStartingFor(){

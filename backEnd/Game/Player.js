@@ -5,6 +5,7 @@ var Player = /** @class */ (function () {
     function Player(account, token) {
         this.id = 0;
         this.token = '';
+        this.place = 0;
         //this.id = id;
         this.account = account;
     }
@@ -14,6 +15,12 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.setId = function (newId) {
         this.id = newId;
+    };
+    Player.prototype.getPlace = function () {
+        return this.place;
+    };
+    Player.prototype.setPlace = function (newPlace) {
+        this.place = newPlace;
     };
     Player.prototype.getAccount = function () {
         return this.account;

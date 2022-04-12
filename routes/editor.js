@@ -74,7 +74,11 @@ router.route("/register")
 {   
     let registred = await AccountManager.register(request.body.name,request.body.password,request.body.confirm)
     if (registred){
-        res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!',action : '/editor/register'})
+        let registred = await AccountManager.authenticate(request.body.name,request.body.password)
+        res.cookie('id',registred[1].getClientId())
+        res.cookie('mode','account')
+        res.redirect('/editor/setId?id='+registred[1].getClientId())
+        //res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!',action : '/editor/register'})
     }
     else{
         if (request.body.confirm!= request.body.password){

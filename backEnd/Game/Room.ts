@@ -16,6 +16,7 @@ export class Room{
         private returnValue:number = -1;
         private choosedPawnId:number = -1
         private playersWhichEnded:Array<Player> = []
+
        
         private pawnPositions:Map<number,number> = new Map()
 
@@ -61,18 +62,43 @@ export class Room{
 
         public nextTurn()
         {
+            if (!this.gameEnded()){
+               
+                if (this.lastPlayerId+1  == this.players.length){
+                    this.lastPlayerId = 0
+                }
+                else{
+                    this.lastPlayerId++;
+                }
+                this.playerOnTurn = this.players[this.lastPlayerId]
 
-            if (this.lastPlayerId+1  == this.players.length){
-                this.lastPlayerId = 0
+                if (!this.gameEnded() && this.playerOnTurn.getPlace()!=0){
+                    this.nextTurn()
+                }
             }
-            else{
-                this.lastPlayerId++;
-            }
-            this.playerOnTurn = this.players[this.lastPlayerId]
+          
+    
         }
         //constructor(){}
-
-
+        
+        gameEnded(){
+            let ret = true
+            this.players.forEach((player:Player)=>{
+                if (player.getPlace()==0){
+                    ret = false
+                }
+            })
+            return ret
+        }
+        findPlayerByToken(token:string){
+            let ret = undefined
+            this.players.forEach((player:Player)=>{
+                if (player.getToken() == token){
+                    ret = player
+                }
+            })
+            return ret
+        }
         public getId() : number {
             return this.id
         }

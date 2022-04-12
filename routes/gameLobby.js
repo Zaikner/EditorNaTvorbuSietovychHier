@@ -4,6 +4,7 @@ const path = require('path');
 const AccountManager = require('../backEnd/Accounts/AccountManager.js');
 const GameManager = require('../backEnd/Game/GameManager.js');
 const { Player } = require('../backEnd/Game/Player.js');
+const { AccountFinder } = require('../services/db/RDG/AccountFinder.js');
 const { Account_db } = require('../services/db/RDG/Account_db.js');
 const { GameFinder } = require('../services/db/RDG/GameFinder_db.js');
 const { Game_db } = require('../services/db/RDG/Game_db.js');
@@ -28,8 +29,14 @@ router
         function(){
             room.join(new Player(acc))
         }])
+    let scores =await AccountFinder.getIntance().findAllByOrderedScore()
+    let sendScores = []
+    for (let i = 1 ; i<= scores.length;i++){
+        sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
+    }
     console.log(rooms)
-    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms});
+    console.log(sendScores)
+    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores});
 });
 
 

@@ -11,6 +11,12 @@ var Warning = /** @class */ (function () {
         var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'warningModalBody', '', txt);
         $('#WarningModal').modal('toggle');
     };
+    Warning.showInGame = function (txt) {
+        (0, canvas_1.elementDeleter)('InGameModalBody');
+        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'InGameModalBody', '', txt);
+        $('#InGameModal').modal('toggle');
+        console.log('ukazal InGameModal');
+    };
     return Warning;
 }());
 exports.Warning = Warning;

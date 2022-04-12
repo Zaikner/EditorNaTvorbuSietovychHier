@@ -4,6 +4,7 @@ export class Player{
         private id:number = 0;
         private account:Account;
         private token:string = '';
+        private place:number = 0;
 
         constructor(account:Account,token:string){
             //this.id = id;
@@ -19,6 +20,12 @@ export class Player{
         }
         public setId(newId:number){
             this.id = newId
+        }
+        public getPlace() : number {
+            return this.place
+        }
+        public setPlace(newPlace:number){
+            this.place = newPlace
         }
 
         public getAccount() : Account {

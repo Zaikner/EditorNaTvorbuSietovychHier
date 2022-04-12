@@ -49,5 +49,24 @@ export class AccountFinder{
           console.log("Connection failed")
         } 
       }
+      public async findAllByOrderedScore(){
+        let client = DbConnect.get()
+        try {
+            const query = {
+                name: 'select-account-name-password',
+                text: 'SELECT * FROM "bachelorsThesis"."Account" ORDER BY score DESC;',
+                values: [],
+              }
+            var results = await  client.query(query)
+            var ret:Array<Account_db> = []
+            results.rows.forEach((row:any) => {
+                ret.push(Account_db.load(row))
+            });
+            return ret
+        }
+        catch(err){
+          console.log("Connection failed")
+        } 
+      }
        
 }

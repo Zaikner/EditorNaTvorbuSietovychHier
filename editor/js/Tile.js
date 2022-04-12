@@ -369,6 +369,19 @@ var Tile = /** @class */ (function () {
         });
         return res;
     };
+    Tile.prototype.isSuccessfullyEnding = function (token) {
+        var _this = this;
+        var ret = false;
+        if (!this.isEndingFor.includes(token)) {
+            return true;
+        }
+        this.pawns.forEach(function (pawn) {
+            if (_this.isEndingFor.includes(token) && pawn.player == token) {
+                ret = true;
+            }
+        });
+        return ret;
+    };
     Tile.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
     };
@@ -490,6 +503,8 @@ var Tile = /** @class */ (function () {
         return this.belongTo;
     };
     Tile.prototype.setIsEndingFor = function (newPlayers) {
+        console.log('menim pre tile');
+        console.log(this);
         this.isEndingFor = newPlayers;
     };
     Tile.prototype.getIsStartingFor = function () {

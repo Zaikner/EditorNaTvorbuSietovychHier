@@ -1,3 +1,5 @@
+import { Account_db } from "../../services/db/RDG/Account_db";
+
 export class Account{
     private name:string
     private password:string
@@ -5,12 +7,27 @@ export class Account{
     private clientId:string = ''
     private isGuest:boolean = false;
     private socketId:string = ''
+    private score:number = 0
 
     constructor(name:string,password:string){
         this.name = name
         this.password = password
     }
-      
+    save(){
+        let newAcc = new Account_db()
+        newAcc.setAvatar(this.avatar)
+        newAcc.setPassword(this.password)
+        newAcc.setScore(this.score)
+        newAcc.setName(this.name)
+        newAcc.update()
+
+    }
+    public getScore() : number {
+        return this.score
+    }
+    public setScore(newScore:number){
+        this.score  = newScore
+    }
     public getName() : string {
         return this.name
     }

@@ -84,23 +84,45 @@ function throwDice(token:string){
 }
 
 function changeWaitingRoom(accs:any){
+
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
     let divPlaying = <HTMLDivElement>document.getElementById('playingContainer')
+    let divending = <HTMLDivElement>document.getElementById('endContainer')
     elementDeleter('waitingContainer')
     elementDeleter('playingContainer')
+    elementDeleter('endContainer')
     let i = 0
   
     while (i < accs.length){
-    
+        
         let quest = document.createElement('button')
         quest.type = 'button';
         quest.classList.add("list-group-item","list-group-item-action","active","btn-danger")
         quest.style.textAlign =  'center';
         quest.textContent =accs[i].name
         div.appendChild(quest)
+
+        let place = document.createElement('place')
+        if (accs[i].place > 0){
+            if (accs[i].place == 1){
+                quest.textContent = 'Winner !! ' +  quest.textContent
+            }
+            else{
+                quest.textContent = accs[i].place.toString()+'. Place ' +  quest.textContent
+            }
+        }
+     
+   
+
         let questClone = quest.cloneNode()
-        questClone.textContent =accs[i].name
+        questClone.textContent =quest.textContent
+
+        let questClone1 = quest.cloneNode()
+        questClone1.textContent =quest.textContent
+
         divPlaying.appendChild(questClone)
+        divending.appendChild(questClone1)
+      
 
         let image:HTMLImageElement =<HTMLImageElement> document.createElement("IMG");
         image.src =accs[i].avatar
@@ -110,8 +132,21 @@ function changeWaitingRoom(accs:any){
         image.onload = function(){
             quest.appendChild(image)
             questClone.appendChild(image.cloneNode())
+            questClone1.appendChild(image.cloneNode())
 
         }
+        //if(accs[i].place != 0){
+            // let place = document.createElement('place')
+            // if (accs[i].place == 1){
+            //     place.textContent = 'Winner !!'
+            // }
+            // else{
+            //     place.textContent = accs[i].place.toString()+'. Place'
+            // }
+            // quest.appendChild(place)
+            // questClone.appendChild(place.cloneNode())
+        //}
+       
         i++;
     }
 

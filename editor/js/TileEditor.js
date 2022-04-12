@@ -13,6 +13,7 @@ var moveEventHandler = function (event) {
 };
 exports.moveEventHandler = moveEventHandler;
 var pickTile = function (event, token, value) {
+    var _a;
     canvas_js_1.editor.findTile(event, false);
     console.log('aspon spustil pickTile');
     if (canvas_js_1.editor.getChoosenTile() != undefined) {
@@ -23,8 +24,16 @@ var pickTile = function (event, token, value) {
             //'AAAA NEZABUDNI NA LISTERNER'
             //editor.getGame().movePawnById(pawn.id,value)
             var params = new URLSearchParams(window.location.search);
-            canvas_js_1.editorSocket.emit('move pawns', { pawn: pawn.id, value: value, room: params.get('id') });
-            canvas_js_1.canvas.removeEventListener('click', canvas_js_1.canMovePawnFunc);
+            if (pawn.canMove(value)) {
+                console.log('can move, teda pohol');
+                canvas_js_1.editorSocket.emit('move pawns', { pawn: pawn.id, value: value, room: params.get('id') });
+                canvas_js_1.canvas.removeEventListener('click', canvas_js_1.canMovePawnFunc);
+            }
+            else {
+                console.log('nepohol, teda odnuluje');
+                (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
+                canvas_js_1.editor.setChoosenTile(undefined);
+            }
             //(msg:{room:string,pawn:number,value:number})
             console.log('pohol s panacikom');
         }
@@ -136,6 +145,7 @@ function spawnElements() {
             $('#pickQuestionModal').modal('show');
         }
     });
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedQuestionParagraph', 'Picked Question: None');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Does event occur when moving to this tile ??');
     var eventChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eventChecker', false, ['no', 'yes']);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick event');
@@ -155,6 +165,7 @@ function spawnElements() {
         // }
         //$('#EventModal').modal('show');
     });
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedEventParagraph', 'Picked Event: None');
 }
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
@@ -209,9 +220,9 @@ function editTiles() {
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveEditingTiles);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
     if (canvas_js_1.editor.getChoosenTile() != undefined) {
-        canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor());
-        canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor());
-        canvas_js_1.editor.setEnabledForPlayers(canvas_js_1.editor.getChoosenTile().getCanOccupy());
+        canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor().slice());
+        canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor().slice());
+        canvas_js_1.editor.setEnabledForPlayers(canvas_js_1.editor.getChoosenTile().getCanOccupy().slice());
     }
     spawnElements();
     setValues(undefined, true);
@@ -276,6 +287,7 @@ function undoTileInsert() {
 }
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
+    canvas_js_1.editor.setChoosenTile(undefined);
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
     var canSpawn = true;
     if (document.getElementById('tileFollowingSetter').value.length > 0) {
@@ -318,12 +330,12 @@ var spawnTile = function (coords) {
     else {
         addedTile = canvas_js_1.editor.initTile(true, coords, colorPicker.value, parseInt(sizeOfTileSlider.value), 0, '', shapeMenu.value, insertImage, pattImage);
     }
-    addedTile.setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
-    addedTile.setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
-    addedTile.setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
+    addedTile.setIsStartingFor(canvas_js_1.editor.getStartForPlayers().slice());
+    addedTile.setIsEndingFor(canvas_js_1.editor.getEndForPlayers().slice());
+    addedTile.setCanOccupy(canvas_js_1.editor.getEnabledForPlayers().slice());
     addedTile.setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     addedTile.setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
-    addedTile.setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
+    addedTile.setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile().slice());
     if (document.getElementById('eventChecker').checked) {
         addedTile.setSkip(canvas_js_1.editor.getSkip());
         addedTile.setRepeat(canvas_js_1.editor.getRepeat());
@@ -412,13 +424,13 @@ var update = function () {
     //     console.log(editor.getStartForPlayers())
     //   }
     // })
-    canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers());
-    canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers());
+    canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers().slice());
+    canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers().slice());
     canvas_js_1.editor.getChoosenTile().setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
     canvas_js_1.editor.getChoosenTile().setToogleNumber(canvas_js_1.doc.getElementById('toogleNumberingChecker').checked);
     canvas_js_1.editor.getChoosenTile().setNumberingColor(canvas_js_1.doc.getElementById('numberingColorPicker').value);
     canvas_js_1.editor.getChoosenTile().setPatternFile(pattImage);
-    canvas_js_1.editor.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile());
+    canvas_js_1.editor.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile().slice());
     if (document.getElementById('eventChecker').checked) {
         canvas_js_1.editor.getChoosenTile().setSkip(canvas_js_1.editor.getSkip());
         canvas_js_1.editor.getChoosenTile().setRepeat(canvas_js_1.editor.getRepeat());

@@ -62,6 +62,7 @@ export class AccountManager{
         let newAcc = new Account(acc.getName(),acc.getPassword())
         newAcc.setAvatar(acc.getAvatar())
         newAcc.setClientId(this.createNewClientId())
+        newAcc.setScore(acc.getScore())
         this.loggedAccounts.push(newAcc)
         return newAcc
     }

@@ -16,6 +16,7 @@ function spawnColorPicker(doc:HTMLDocument,parent:string,id:string){
 function spawnParagraph(doc:HTMLDocument,parent:string,id:string,textCont:string){
     let text = doc.createElement('p')
     text.textContent = textCont
+    text.id = id
     doc.getElementById(parent)!.appendChild(text);
     text.style.color ='#FFFFFF'
     return text
@@ -163,9 +164,11 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array
           else if(type == 'end'){
             if (editor.getEndForPlayers().includes(types[i])){
               editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != types[i]}));
+              console.log(editor.getEndForPlayers())
             }
             else{
               editor.getEndForPlayers().push(types[i])
+              console.log(editor.getEndForPlayers())
             }
           }
           else if (type == 'enabled'){

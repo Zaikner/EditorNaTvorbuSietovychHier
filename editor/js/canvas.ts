@@ -13,11 +13,12 @@ import { initGameInfo,initDice, changeWaitingRoom, throwDice } from "./Gameplay"
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion, showResults} from "./Questions";
-import { removeAllListeners } from "process";
+
 import { PawnStyle } from "./PawnStyle";
 import { Warning } from "./Warning";
-import { Button } from "bootstrap";
+
 import { loadTexts } from "./TextLoader";
+
 
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
@@ -219,6 +220,21 @@ editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<stri
   showResults(msg.right,msg.wrong)
 })
 
+editorSocket.on('evaluate End',(msg:{token:string})=>{
+  console.log('emitol evalued end')
+  let is = editor.playerEnded(msg.token)
+  if (is){
+    console.log('TENTO SKONCIL')
+    console.log('player')
+   
+  }
+  editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
+})
+
+editorSocket.on('game has ended',(msg:{leaderboards:any})=>{
+  $('#endModal').modal('show');
+})
+
 editorSocket.on('show Dice value',(msg:{value:number})=>{
   let image = new Image()
   image.src = '../../src/Dice'+msg.value+'.png'
@@ -250,7 +266,7 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else {
   
-  
+  document.getElementById('leaveEndRoom')!.addEventListener('click',function(){window.location.replace('/gamelobby')})
   
   if (params.get('id') != null){
     editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
@@ -267,7 +283,11 @@ else {
     window.location.replace('/gameLobby')
   })
   document.getElementById('startGameRoom')?.addEventListener('click',function(){
+   
+ 
     Warning.show('Are you sure to start the Game ? After start no one will be able to join!')
+   
+   
   })
   document.getElementById("confirmStart")?.addEventListener('click',function(){
     editorSocket.emit('game has started',{room:params.get('id')})
@@ -313,8 +333,24 @@ editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
 let canMovePawnFunc:(event: MouseEvent) => void;
 editorSocket.on('canMovePawn',(msg:{token:string,value:number})=>{
   console.log('canMovePawn emitol token:' + msg.token)
-   canMovePawnFunc = function(event:MouseEvent){pickTile(event,msg.token,msg.value)}
-  canvas.addEventListener('click',canMovePawnFunc)
+  let can = false
+  editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+    if (pawn.player == msg.token){
+      if (pawn.canMove(msg.value)){
+        can = true
+      }
+    }
+  })
+  if (can){
+    canMovePawnFunc = function(event:MouseEvent){pickTile(event,msg.token,msg.value)}
+    canvas.addEventListener('click',canMovePawnFunc)
+  }
+  else{
+    Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
+    
+    editorSocket.emit('evaluated end',{is:false,room:params.get('id')})
+  }
+  
   
 })
 
@@ -358,6 +394,12 @@ editorSocket.on('reloaded waiting room',(msg)=>{
   changeWaitingRoom(msg.names)
  
 })
+
+editorSocket.on('player ended',(msg:{player:string,place:number})=>{
+  editorSocket.emit('reload waiting room',{room:params.get('id')})
+  Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.')
+  console.log('zapol')
+})
 document.getElementById("showRulesButton")?.addEventListener('click',function(){
  
   $('#rulesModal').modal('show');
@@ -378,8 +420,8 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
     editor.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-  
-    document.getElementById('bindEvent')!.textContent ='Go forward: ' + nums +' times.'
+    document.getElementById('bindEvent')!.textContent = 'Pick event!'
+    document.getElementById('pickedEventParagraph')!.textContent =' Picked Event: Go forward: ' + nums +' times.'
   })
 })
 document.getElementById('backwardButton')!.addEventListener('click',function(){
@@ -392,7 +434,9 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
   
-    document.getElementById('bindEvent')!.textContent ='Go backward: ' + nums +' times.'
+    
+    document.getElementById('bindEvent')!.textContent = 'Pick event!'
+    document.getElementById('pickedEventParagraph')!.textContent =' Picked Event: Go backward: ' + nums +' times.'
   })
 })
 document.getElementById('skipButton')!.addEventListener('click',function(){
@@ -404,8 +448,9 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     editor.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-  
-    document.getElementById('bindEvent')!.textContent ='Skip: ' + nums +' times.'
+    document.getElementById('bindEvent')!.textContent = 'Pick event!'
+    document.getElementById('pickedEventParagraph')!.textContent =' Picked Event:'+ 'Skip: ' + nums +' times.'
+   
   })
   
 })
@@ -418,8 +463,9 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     editor.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-   
-    document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + nums +' times.'
+    document.getElementById('bindEvent')!.textContent = 'Pick event!'
+    document.getElementById('pickedEventParagraph')!.textContent =' Picked Event:'+ 'Repeat turn: ' + nums +' times.'
+    
   })
   
 });
@@ -440,7 +486,9 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
    
-    document.getElementById('bindEvent')!.textContent ='Thrown: ' + freeInput.value +' . Or wait ' + nums + ' turns';
+    
+    document.getElementById('bindEvent')!.textContent = 'Pick event!'
+    document.getElementById('pickedEventParagraph')!.textContent =' Picked Event:'+ 'Thrown: ' + freeInput.value +' . Or wait ' + nums + ' turns';
   })
   
 });
@@ -472,6 +520,7 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
+
 
 
 document.getElementById('loadCreatedGameModal')?.addEventListener('click',function(){

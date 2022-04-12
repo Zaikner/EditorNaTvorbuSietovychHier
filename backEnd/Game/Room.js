@@ -17,6 +17,7 @@ var Room = /** @class */ (function () {
         this.gameData = undefined;
         this.returnValue = -1;
         this.choosedPawnId = -1;
+        this.playersWhichEnded = [];
         this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
@@ -48,15 +49,38 @@ var Room = /** @class */ (function () {
     Room.prototype.broadcast = function (msg) {
     };
     Room.prototype.nextTurn = function () {
-        if (this.lastPlayerId + 1 == this.players.length) {
-            this.lastPlayerId = 0;
+        if (!this.gameEnded()) {
+            if (this.lastPlayerId + 1 == this.players.length) {
+                this.lastPlayerId = 0;
+            }
+            else {
+                this.lastPlayerId++;
+            }
+            this.playerOnTurn = this.players[this.lastPlayerId];
+            if (!this.gameEnded() && this.playerOnTurn.getPlace() != 0) {
+                this.nextTurn();
+            }
         }
-        else {
-            this.lastPlayerId++;
-        }
-        this.playerOnTurn = this.players[this.lastPlayerId];
     };
     //constructor(){}
+    Room.prototype.gameEnded = function () {
+        var ret = true;
+        this.players.forEach(function (player) {
+            if (player.getPlace() == 0) {
+                ret = false;
+            }
+        });
+        return ret;
+    };
+    Room.prototype.findPlayerByToken = function (token) {
+        var ret = undefined;
+        this.players.forEach(function (player) {
+            if (player.getToken() == token) {
+                ret = player;
+            }
+        });
+        return ret;
+    };
     Room.prototype.getId = function () {
         return this.id;
     };
@@ -80,6 +104,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.setPlayers = function (newPlayers) {
         this.players = newPlayers;
+    };
+    Room.prototype.getPlayersWhichEnded = function () {
+        return this.playersWhichEnded;
+    };
+    Room.prototype.setPlayersWhichEnded = function (newPlayersWhichEnded) {
+        this.playersWhichEnded = newPlayersWhichEnded;
     };
     Room.prototype.getGameName = function () {
         return this.gameName;
