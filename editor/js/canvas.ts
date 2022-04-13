@@ -146,6 +146,34 @@ editorSocket.on('connected',(msg)=>{
 
 })
 
+editorSocket.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
+    editor.getGame().setIsOnTurn(true)
+    let ret = editor.getGame().howManyCanMove(msg.pawnId,msg.value)
+    Warning.showInGame('Event occured: Go forward!')
+    editorSocket.emit('move pawns',{pawn:msg.pawnId,value:ret,room:params.get('id')})
+})
+
+editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
+  console.log('recieved react to event: backward')
+  editor.getGame().setIsOnTurn(true)
+  let ret = editor.getGame().howManyCanMoveBack(msg.pawnId,msg.value)
+  Warning.showInGame('Event occured: Go backward!')
+ 
+  editorSocket.emit('move pawns back',{pawn:msg.pawnId,value:ret,room:params.get('id')})
+})
+
+editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
+  Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
+})
+editorSocket.on('react to event:must Thrown',(msg:{token:string,value:number,turnsLeft:number})=>{
+  Warning.showInGame('Event occured: Player '+ msg.token +' ' +'must wait '+msg.turnsLeft+'! turns or throw ' + msg.value +' to set pawn free ')
+})
+editorSocket.on('return pawns to starting tile',(msg:{ids:Array<number>})=>{
+  msg.ids.forEach((id:number)=>{
+    editor.findPawnById(id).returnToStart()
+  })
+  reload(editor,ctx)
+})
 editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
   
  
@@ -208,13 +236,22 @@ const params = new URLSearchParams(window.location.search);
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
+  console.log('recieved move Pawn')
  
  let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
   editor.setChoosenTile(undefined!)
 
 })
+editorSocket.on('move Pawn back',(msg:{pawn:number,value:number})=>{
+  //msg.pawn.move(msg.value)
+  console.log('recieved move Pawn back')
+ 
+ let pawn:any = (editor.movePawnBack(msg.pawn,msg.value,true))!
+  editor.setChoosenTile(undefined!)
+
+})
 editorSocket.on('return Pawn to place',(msg:{pawnId:number,tileId:number})=>{
-  editor.movePawnBack(msg.pawnId,msg.tileId)
+  editor.movePawnBack(msg.pawnId,msg.tileId,false)
 })
 editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{
   showResults(msg.right,msg.wrong)

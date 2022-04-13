@@ -5,6 +5,10 @@ export class Player{
         private account:Account;
         private token:string = '';
         private place:number = 0;
+        private skip:number = 0;
+        private repeat:number = 0;
+        private mustThrown:number = 0;
+        private turnsToSetFree:number = 0;
 
         constructor(account:Account,token:string){
             //this.id = id;
@@ -41,6 +45,33 @@ export class Player{
         }
         public setToken(token:string){
             this.token  = token
+        }
+
+
+        public getSkip(){
+            return this.skip
+        }
+        public setSkip(newSkip:number){
+            this.skip = newSkip
+        }
+        public getRepeat(){
+            return this.repeat
+        }
+        public setRepeat(newRepeat:number){
+            this.repeat = newRepeat
+        }
+     
+        public getMustThrown(){
+            return this.mustThrown
+        }
+        public setMustThrown(newThrown:number){
+            this.mustThrown = newThrown
+        }
+        public getTurnsToSetFree(){
+            return this.turnsToSetFree
+        }
+        public setTurnsToSetFree(newTurns:number){
+            this.turnsToSetFree = newTurns
         }
      
     }

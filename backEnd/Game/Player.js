@@ -6,6 +6,10 @@ var Player = /** @class */ (function () {
         this.id = 0;
         this.token = '';
         this.place = 0;
+        this.skip = 0;
+        this.repeat = 0;
+        this.mustThrown = 0;
+        this.turnsToSetFree = 0;
         //this.id = id;
         this.account = account;
     }
@@ -33,6 +37,30 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.setToken = function (token) {
         this.token = token;
+    };
+    Player.prototype.getSkip = function () {
+        return this.skip;
+    };
+    Player.prototype.setSkip = function (newSkip) {
+        this.skip = newSkip;
+    };
+    Player.prototype.getRepeat = function () {
+        return this.repeat;
+    };
+    Player.prototype.setRepeat = function (newRepeat) {
+        this.repeat = newRepeat;
+    };
+    Player.prototype.getMustThrown = function () {
+        return this.mustThrown;
+    };
+    Player.prototype.setMustThrown = function (newThrown) {
+        this.mustThrown = newThrown;
+    };
+    Player.prototype.getTurnsToSetFree = function () {
+        return this.turnsToSetFree;
+    };
+    Player.prototype.setTurnsToSetFree = function (newTurns) {
+        this.turnsToSetFree = newTurns;
     };
     return Player;
 }());

@@ -55,7 +55,7 @@ var TextsFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-allTexts',
-                            text: 'SELECT * FROM "bachelorsThesis"."Texts";',
+                            text: 'SELECT * FROM "bachelorsThesis"."Texts" ORDER BY id ASC ',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];

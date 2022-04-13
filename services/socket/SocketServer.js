@@ -209,11 +209,32 @@ var ServerSocket = /** @class */ (function () {
             socket.on('move pawns', function (msg) {
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
             });
+            socket.on('move pawns back', function (msg) {
+                _this.io["in"](msg.room).emit('move Pawn back', { pawn: msg.pawn, value: msg.value });
+            });
             socket.on('player thrown', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r.getPlayerOnTurn().getMustThrown() != 0) {
+                    if (r.getPlayerOnTurn().getMustThrown() != msg.value) {
+                        socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                        r.getPlayerOnTurn().setTurnsToSetFree(r.getPlayerOnTurn().getTurnsToSetFree() - 1);
+                        socket.emit('react to event:must Thrown', { token: r.getPlayerOnTurn().getAccount().getName(), value: r.getPlayerOnTurn().getMustThrown(), turnsLeft: r.getPlayerOnTurn().getTurnsToSetFree() });
+                        if (r.getPlayerOnTurn().getTurnsToSetFree() == 0) {
+                            r.getPlayerOnTurn().setMustThrown(0);
+                        }
+                    }
+                    else {
+                        r.getPlayerOnTurn().setMustThrown(0);
+                        r.getPlayerOnTurn().setTurnsToSetFree(0);
+                        socket.emit('canMovePawn', { value: msg.value, token: msg.token });
+                    }
+                }
+                else {
+                    socket.emit('canMovePawn', { value: msg.value, token: msg.token });
+                }
                 console.log('recieved player thrown' + msg.token);
                 console.log('emited movePawn');
                 //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
-                socket.emit('canMovePawn', { value: msg.value, token: msg.token });
             });
             socket.on('show Dice', function (msg) {
                 socket.to(msg.id).emit('show Dice value', { value: msg.value });
@@ -228,6 +249,7 @@ var ServerSocket = /** @class */ (function () {
                             console.log(msg);
                             r = GameManager.getActiveRooms().get(parseInt(msg.room));
                             if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 4];
+                            this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
                             if (!(msg.questionId >= 0)) return [3 /*break*/, 2];
                             console.log('nasiel otazku');
@@ -252,7 +274,32 @@ var ServerSocket = /** @class */ (function () {
                             socket.emit('canReactToAnswer');
                             return [3 /*break*/, 3];
                         case 2:
-                            socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                            if (msg.skip > 0) {
+                                r.getPlayerOnTurn().setSkip(msg.skip);
+                                socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                            }
+                            else if (msg.repeat > 0) {
+                                r.getPlayerOnTurn().setRepeat(msg.repeat);
+                                socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                            }
+                            else if (msg.forward > 0) {
+                                socket.emit('react to event: forward', { value: msg.forward, pawnId: msg.pawnId });
+                            }
+                            else if (msg.backward > 0) {
+                                socket.emit('react to event: backward', { value: msg.backward, pawnId: msg.pawnId });
+                            }
+                            else if (msg.mustThrown > 0) {
+                                r.getPlayerOnTurn().setMustThrown(msg.mustThrown);
+                                r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree);
+                                socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                            }
+                            else {
+                                socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                                // r.nextTurn()
+                                // //console.log(r)
+                                // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                                // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                            }
                             _a.label = 3;
                         case 3: return [3 /*break*/, 5];
                         case 4:
@@ -295,9 +342,30 @@ var ServerSocket = /** @class */ (function () {
                         acc.setScore(acc.getScore() + r.getMaxPlayers() - player.getPlace() + 1);
                         player.getAccount().save();
                     });
+                    //dorobit
+                    //GameManager.getActiveRooms().delete(r.getId())
                 }
                 else {
+                    var stop_1 = true;
                     r.nextTurn();
+                    if (r.getPlayerOnTurn().getSkip() != 0) {
+                        //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                        _this.io["in"](msg.room).emit('react to event: skip', { token: r.getPlayerOnTurn().getAccount().getName(), left: r.getPlayerOnTurn().getSkip() - 1 });
+                        stop_1 = false;
+                    }
+                    while (!stop_1) {
+                        console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName());
+                        console.log('skipped:' + r.getPlayerOnTurn().getSkip());
+                        if (r.getPlayerOnTurn().getSkip() == 0) {
+                            stop_1 = true;
+                        }
+                        else {
+                            r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip() - 1);
+                            r.nextTurn();
+                            //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
+                        }
+                    }
+                    console.log('ide:' + r.getPlayerOnTurn().getAccount().getName());
                     //console.log(r)
                     _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                     _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });

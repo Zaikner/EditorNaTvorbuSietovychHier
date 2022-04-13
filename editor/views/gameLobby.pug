@@ -16,13 +16,13 @@ style.
   background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
   bottom-padding:1px;
   }
-title Game Lobby
+title=text[1]
 nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;')
   .container-fluid
   form(action='/' method='get')
-    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;') Main Menu
+    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;')=text[11]
   form(action='/account' method='get')
-    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;') Account
+    button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;')=text[2]
 .d-flex.align-items-center.justify-content-center
   .container-fluid
     .row.d-flex.align-items-center.justify-content-center
@@ -31,19 +31,19 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
         .row(style='height:100vh; width: 100%;  bottom-padding:1px')
           .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%; bottom-padding:1px;')
             div(style='margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 40vh;  border-radius: 25px;')
-              p(style='font-size: 20px; font-family: sans-serif;') Choose room
+              p(style='font-size: 20px; font-family: sans-serif;')=text[3]
               hr
               form
                 p(style='font-size: 20px;') Choose room with number:
                 input#roomIdSelecter(type='number')
-                button(type='submit') Join
+                button(type='submit')=text[8]
               form
-                p(style='font-size: 20px;') Create new room
+                p(style='font-size: 20px;')=text[4]
                 button(type='button' id='create') Create
             div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
               // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
               label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
-                strong Active rooms
+                strong=text[5]
               ul.list-group(style='overflow-y: scroll; max-height: 20vh')
                  each room in rooms
                     form(action='/room?game:'+room[2] method='get' name='name' value = room[0])
@@ -51,7 +51,7 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                         li.list-group-item(name='room' value = room[2])= room[1]
                           |
                           input(type='hidden' name='id' value=room[0])
-                          button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-danger Join
+                          button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-dark=text[8]
                
               hr
            
@@ -62,7 +62,7 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
             br
           .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
             div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
-              p(style='font-size: 20px; font-family: sans-serif;')  Created games overview
+              p(style='font-size: 20px; font-family: sans-serif;')=text[7]
               hr
               p Tu niekde bude checkbox alebo dropdown filter
               br
@@ -72,11 +72,11 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                     form(action='/showGame' method='get' name='name' value = game)
                       li.list-group-item(name='name' value = game)= game
                         | 
-                        button(type = 'submit' name='name' value = game).btn.btn-danger Detail         
+                        button(type = 'submit' name='name' value = game).btn.btn-dark=text[9]       
               hr
             div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
             
-              strong HighScore
+              strong=text[6]
               ul.list-group(style='overflow-y: scroll; max-height: 34vh; margin-top:2%; ')
                  each score in scores
                     form()
@@ -95,7 +95,7 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
               form(action='/createRoom/name/'+game method='get' name='name' value = game)
                 li.list-group-item(name='name' value = game)= game
                   | 
-                  button(type = 'submit' name='name' value = game).btn.btn-danger Detail         
+                  button(type = 'submit' name='name' value = game).btn.btn-dark=text[9]         
         hr
         form.text-center(action='/gameLobby' method='get' style='width: 100%;')
           button.btn.btn-primary(type='button' id='leave') Leave

@@ -50,15 +50,22 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.nextTurn = function () {
         if (!this.gameEnded()) {
-            if (this.lastPlayerId + 1 == this.players.length) {
-                this.lastPlayerId = 0;
+            if (this.playerOnTurn.getRepeat() != 0) {
+                this.playerOnTurn.setRepeat((this.playerOnTurn.getRepeat() - 1));
+                console.log('zopakoval');
+                console.log(this.playerOnTurn.getRepeat());
             }
             else {
-                this.lastPlayerId++;
-            }
-            this.playerOnTurn = this.players[this.lastPlayerId];
-            if (!this.gameEnded() && this.playerOnTurn.getPlace() != 0) {
-                this.nextTurn();
+                if (this.lastPlayerId + 1 == this.players.length) {
+                    this.lastPlayerId = 0;
+                }
+                else {
+                    this.lastPlayerId++;
+                }
+                this.playerOnTurn = this.players[this.lastPlayerId];
+                if (!this.gameEnded() && this.playerOnTurn.getPlace() != 0) {
+                    this.nextTurn();
+                }
             }
         }
     };

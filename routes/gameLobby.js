@@ -8,6 +8,7 @@ const { AccountFinder } = require('../services/db/RDG/AccountFinder.js');
 const { Account_db } = require('../services/db/RDG/Account_db.js');
 const { GameFinder } = require('../services/db/RDG/GameFinder_db.js');
 const { Game_db } = require('../services/db/RDG/Game_db.js');
+const { TextsFinder } = require('../services/db/RDG/TextFinder.js');
 
 let router = express.Router()
 
@@ -17,6 +18,16 @@ router
 {   
 
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+    
+    
+    console.log(text)
     if(acc === undefined){
       return
     }
@@ -36,7 +47,7 @@ router
     }
     console.log(rooms)
     console.log(sendScores)
-    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores});
+    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text});
 });
 
 

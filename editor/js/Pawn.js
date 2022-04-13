@@ -9,6 +9,7 @@ var Pawn = /** @class */ (function () {
         this.player = player;
         this.tile = tile;
         this.tileId = tile.getId();
+        this.startingTileId = tile.getId();
         tile.getPawns().push(this);
     }
     Pawn.prototype.canMove = function (numOfTiles) {
@@ -44,12 +45,22 @@ var Pawn = /** @class */ (function () {
                 canvas_1.editorSocket.emit('change Pawn position', { pawnId: p.id, tileId: p.tileId, room: params.get('id'), id: (0, canvas_1.getCookie)('id') });
                 startTile.setIsChoosen(false);
                 canvas_1.editor.setChoosenTile(undefined);
-                canvas_1.editor.reactToTile(actuallTile, numOfTiles, p.id);
+                canvas_1.editor.reactToTile(actuallTile, numOfTiles, p);
                 console.log(actuallTile);
                 console.log(canvas_1.editor);
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
             }, 550 * numOfTiles);
         }
+        console.log('vykonal move pawn');
+        console.log(canvas_1.editor.getGame().getIsOnturn());
+        console.log(numOfTiles);
+    };
+    Pawn.prototype.returnToStart = function () {
+        this.tile.removePawn(this);
+        this.tileId = this.startingTileId;
+        this.tile = canvas_1.editor.findTileById(this.tileId);
+        this.tile.getPawns().push(this);
+        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
     };
     Pawn.prototype.JSONfyPawn = function () {
         return { player: this.player,

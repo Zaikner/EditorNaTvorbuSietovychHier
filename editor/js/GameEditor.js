@@ -184,12 +184,34 @@ var GameEditor = /** @class */ (function () {
         });
         return t;
     };
-    GameEditor.prototype.reactToTile = function (tile, returnValue, pawnId) {
+    GameEditor.prototype.reactToTile = function (tile, returnValue, pawn) {
         var params = new URLSearchParams(window.location.search);
         if (this.game.getIsOnturn()) {
             console.log('emited react to tile');
             console.log(this.game.getIsOnturn());
-            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'), questionId: tile.getQuestionId(), id: (0, canvas_js_1.getCookie)('id'), returnValue: returnValue, pawnId: pawnId });
+            var canRemovePawnIds_1 = [];
+            this.game.getPlayerTokens().forEach(function (token) {
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player) {
+                    tile.getPawns().forEach(function (p) {
+                        if (p.player == token) {
+                            canRemovePawnIds_1.push(p.id);
+                        }
+                    });
+                }
+            });
+            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
+                questionId: tile.getQuestionId(),
+                id: (0, canvas_js_1.getCookie)('id'),
+                returnValue: returnValue,
+                pawnId: pawn.id,
+                forward: tile.getForward(),
+                backward: tile.getBackward(),
+                skip: tile.getSkip(),
+                repeat: tile.getRepeat(),
+                mustThrown: tile.getMustThrown(),
+                turnsToSetFree: tile.getTurnsToSetFree(),
+                canRemovePawnIds: canRemovePawnIds_1
+            });
             this.game.setIsOnTurn(false);
         }
     };
@@ -214,7 +236,7 @@ var GameEditor = /** @class */ (function () {
         });
         return ret;
     };
-    GameEditor.prototype.movePawnBack = function (pawnId, value) {
+    GameEditor.prototype.movePawnBack = function (pawnId, value, react) {
         var pawn = this.findPawnById(pawnId);
         var tile = this.findTileById(pawn.tileId);
         tile.removePawn(pawn);
@@ -227,6 +249,9 @@ var GameEditor = /** @class */ (function () {
         pawn.tileId = tile.getId();
         pawn.tile = tile;
         (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+        if (react) {
+            this.reactToTile(tile, value, pawn);
+        }
         // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
         // console.log()
         // let addTo:Tile =  this.findTileById(tileId);

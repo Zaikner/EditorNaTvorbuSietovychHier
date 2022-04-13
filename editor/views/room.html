@@ -167,6 +167,24 @@
   </div>
 </div>
 </div>
+<div class="modal fade" id="EventReactModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Event has occured!</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="EventReactBody">
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary"  onclick="$('#WarningModal').modal('hide');$('#EventReactModal').modal('hide')">OK!</button>
+       
+    </div>
+  </div>
+</div>
+</div>
 
 <div class="modal fade" id="waitingModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">

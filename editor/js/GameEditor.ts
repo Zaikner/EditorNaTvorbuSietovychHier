@@ -4,6 +4,7 @@ import { Game } from './Game.js'
 
 import {editTiles} from './TileEditor.js'
 import { Pawn } from './Pawn.js';
+import { totalmem } from 'os';
 
 
 class GameEditor{
@@ -207,12 +208,35 @@ class GameEditor{
 
 
   
-    reactToTile(tile:Tile,returnValue:number,pawnId:number){
+    reactToTile(tile:Tile,returnValue:number,pawn:Pawn){
         const params = new URLSearchParams(window.location.search);
+        
         if (this.game.getIsOnturn()){
             console.log('emited react to tile')
             console.log(this.game.getIsOnturn())
-            editorSocket.emit('react to tile',{room:params.get('id'),questionId:tile.getQuestionId(),id:getCookie('id'),returnValue:returnValue,pawnId:pawnId})
+            let canRemovePawnIds:Array<number> = []
+            this.game.getPlayerTokens().forEach((token:string)=>{
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player){
+                    tile.getPawns().forEach((p:Pawn)=>{
+                        if (p.player == token){
+                            canRemovePawnIds.push(p.id)
+                        }
+                    })
+                }
+            })
+            editorSocket.emit('react to tile',{room:params.get('id'),
+                                            questionId:tile.getQuestionId(),
+                                            id:getCookie('id'),
+                                            returnValue:returnValue,
+                                            pawnId:pawn.id,
+                                            forward:tile.getForward(),
+                                            backward:tile.getBackward(),
+                                            skip:tile.getSkip(),
+                                            repeat:tile.getRepeat(),
+                                            mustThrown:tile.getMustThrown(),
+                                            turnsToSetFree:tile.getTurnsToSetFree(),
+                                            canRemovePawnIds:canRemovePawnIds
+                                        })
             this.game.setIsOnTurn(false)
         }
         
@@ -241,8 +265,9 @@ class GameEditor{
         })
         return ret
     }
-    movePawnBack(pawnId:number,value:number){
+    movePawnBack(pawnId:number,value:number,react:boolean){
        
+        
         let pawn = this.findPawnById(pawnId)
         let tile = this.findTileById(pawn.tileId)
         tile.removePawn(pawn)
@@ -256,6 +281,10 @@ class GameEditor{
         pawn.tileId = tile.getId()
         pawn.tile = tile
         reload(editor,ctx)
+
+        if (react){
+            this.reactToTile(tile,value,pawn)
+        }
         // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
         // console.log()
         // let addTo:Tile =  this.findTileById(tileId);

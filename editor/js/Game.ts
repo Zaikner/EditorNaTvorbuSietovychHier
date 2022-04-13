@@ -1,7 +1,7 @@
 import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
-import { editorSocket, getCookie} from './canvas.js';
+import { editor, editorSocket, getCookie} from './canvas.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
@@ -104,6 +104,42 @@ class Game{
                 return p
             }
         })}
+    howManyCanMove(id:number,value:number){
+        let pawn = editor.findPawnById(id)
+      
+        while (!pawn.canMove(value)){
+          value--;
+        }
+        return value
+    }
+    howManyCanMoveBack(id:number,value:number){
+        let pawn = editor.findPawnById(id)
+
+        let originalTile = editor.findTileById(pawn.tileId)
+        let tileId = originalTile.getTileNumber()
+        let ret = 0
+        while (value > 0){
+            let tileId = originalTile.getTileNumber()
+            for (let i = 0;i < value;i++){
+                
+                let tile = editor.findTileByNextTileNumber(tileId)
+                if (tile != undefined)
+                {
+                    tileId = tile.getTileNumber()
+                    if (i+1 == value){
+                        ret = value
+                    }
+                }
+               
+        
+              
+            }
+            value--;
+        }
+        
+        return ret
+    }
+
 
         
     removeTile(tile:Tile){

@@ -207,11 +207,37 @@ export class ServerSocket{
       socket.on('move pawns',(msg:{room:string,pawn:number,value:number})=>{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
       })
+      socket.on('move pawns back',(msg:{room:string,pawn:number,value:number})=>{
+        this.io.in(msg.room).emit('move Pawn back',{pawn:msg.pawn,value:msg.value})
+      })
+
+    
       socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number})=>{
+        let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r.getPlayerOnTurn().getMustThrown()!=0){
+          if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+            r.getPlayerOnTurn().setTurnsToSetFree( r.getPlayerOnTurn().getTurnsToSetFree()-1)
+            
+            socket.emit('react to event:must Thrown',{token: r.getPlayerOnTurn().getAccount().getName(),value:r.getPlayerOnTurn().getMustThrown(),turnsLeft:r.getPlayerOnTurn().getTurnsToSetFree()})
+            if ( r.getPlayerOnTurn().getTurnsToSetFree() == 0){
+              r.getPlayerOnTurn().setMustThrown(0)
+            }
+            
+          }
+          else{
+            r.getPlayerOnTurn().setMustThrown(0)
+            r.getPlayerOnTurn().setTurnsToSetFree(0)
+            socket.emit('canMovePawn',{value:msg.value,token:msg.token})
+          }
+        }
+        else{
+          socket.emit('canMovePawn',{value:msg.value,token:msg.token})
+        }
         console.log('recieved player thrown' +msg.token)
         console.log('emited movePawn')
         //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
-        socket.emit('canMovePawn',{value:msg.value,token:msg.token})
+        
         
       })
       
@@ -219,20 +245,20 @@ export class ServerSocket{
         
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
-      socket.on('react to tile',async (msg:{room:string,questionId:number,id:string,returnValue:number,pawnId:number})=>{
+      socket.on('react to tile',async (msg:{room:string,questionId:number,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,turnsToSetFree:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
         //returnValue
         console.log('recieved react to tile id: '+msg.id)
         console.log(msg)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
-        
+          this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
           if (msg.questionId >= 0){
             console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
             let questions = await QuestionWithAnswersFinder.getIntance().findById(msg.questionId)
-            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean;}[] = []
             console.log(questions)
     
             questions?.forEach((question) => {
@@ -244,10 +270,31 @@ export class ServerSocket{
                 author: question.getAuthor(),
                 isAnswer: question.getIsAnswer()})
             })
-          
+            
             this.io.to(msg.room).emit('loadedAnswerQuestions',data)
             socket.emit('canReactToAnswer')
            
+          }
+          else if(msg.skip > 0){
+            r.getPlayerOnTurn().setSkip(msg.skip)
+            
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+          }
+          else if(msg.repeat > 0){
+            r.getPlayerOnTurn().setRepeat(msg.repeat)
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+          }
+          
+          else if(msg.forward > 0){
+            socket.emit('react to event: forward',{value:msg.forward,pawnId:msg.pawnId})
+          }
+          else if(msg.backward > 0){
+            socket.emit('react to event: backward',{value:msg.backward,pawnId:msg.pawnId})  
+          }
+          else if(msg.mustThrown > 0){
+            r.getPlayerOnTurn().setMustThrown(msg.mustThrown)
+            r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree)
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
           else{
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
@@ -309,11 +356,32 @@ export class ServerSocket{
             acc.setScore(acc.getScore()+r.getMaxPlayers()-player.getPlace()+1)
             player.getAccount().save()
           })
+          //dorobit
+          //GameManager.getActiveRooms().delete(r.getId())
         }
         else{
-
+          let stop = true
           r.nextTurn()
-      
+          if (r.getPlayerOnTurn().getSkip() !=0){
+            //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+            this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getAccount().getName(),left:r.getPlayerOnTurn().getSkip()-1})
+            stop = false
+          }
+          while(!stop){
+            console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+            console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+            
+            
+            if (r.getPlayerOnTurn().getSkip() ==0){
+                 stop = true
+            }
+            else{
+              r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+              r.nextTurn()
+              //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
+            }
+          }
+          console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
           //console.log(r)
      
           this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})

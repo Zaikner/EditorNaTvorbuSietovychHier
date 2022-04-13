@@ -96,6 +96,33 @@ var Game = /** @class */ (function () {
             }
         });
     };
+    Game.prototype.howManyCanMove = function (id, value) {
+        var pawn = canvas_js_1.editor.findPawnById(id);
+        while (!pawn.canMove(value)) {
+            value--;
+        }
+        return value;
+    };
+    Game.prototype.howManyCanMoveBack = function (id, value) {
+        var pawn = canvas_js_1.editor.findPawnById(id);
+        var originalTile = canvas_js_1.editor.findTileById(pawn.tileId);
+        var tileId = originalTile.getTileNumber();
+        var ret = 0;
+        while (value > 0) {
+            var tileId_1 = originalTile.getTileNumber();
+            for (var i = 0; i < value; i++) {
+                var tile = canvas_js_1.editor.findTileByNextTileNumber(tileId_1);
+                if (tile != undefined) {
+                    tileId_1 = tile.getTileNumber();
+                    if (i + 1 == value) {
+                        ret = value;
+                    }
+                }
+            }
+            value--;
+        }
+        return ret;
+    };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
     };

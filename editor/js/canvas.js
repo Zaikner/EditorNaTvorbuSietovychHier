@@ -115,6 +115,31 @@ editorSocket.on('connected', function (msg) {
         editor.getGame().getPawnStyle().set(style.player, p);
     });
 });
+editorSocket.on('react to event: forward', function (msg) {
+    editor.getGame().setIsOnTurn(true);
+    var ret = editor.getGame().howManyCanMove(msg.pawnId, msg.value);
+    Warning_1.Warning.showInGame('Event occured: Go forward!');
+    editorSocket.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id') });
+});
+editorSocket.on('react to event: backward', function (msg) {
+    console.log('recieved react to event: backward');
+    editor.getGame().setIsOnTurn(true);
+    var ret = editor.getGame().howManyCanMoveBack(msg.pawnId, msg.value);
+    Warning_1.Warning.showInGame('Event occured: Go backward!');
+    editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
+});
+editorSocket.on('react to event: skip', function (msg) {
+    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
+});
+editorSocket.on('react to event:must Thrown', function (msg) {
+    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'must wait ' + msg.turnsLeft + '! turns or throw ' + msg.value + ' to set pawn free ');
+});
+editorSocket.on('return pawns to starting tile', function (msg) {
+    msg.ids.forEach(function (id) {
+        editor.findPawnById(id).returnToStart();
+    });
+    reload(editor, ctx);
+});
 editorSocket.on('join Room', function (msg) {
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
     if (!msg.started) {
@@ -166,11 +191,18 @@ var params = new URLSearchParams(window.location.search);
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
+    console.log('recieved move Pawn');
     var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
     editor.setChoosenTile(undefined);
 });
+editorSocket.on('move Pawn back', function (msg) {
+    //msg.pawn.move(msg.value)
+    console.log('recieved move Pawn back');
+    var pawn = (editor.movePawnBack(msg.pawn, msg.value, true));
+    editor.setChoosenTile(undefined);
+});
 editorSocket.on('return Pawn to place', function (msg) {
-    editor.movePawnBack(msg.pawnId, msg.tileId);
+    editor.movePawnBack(msg.pawnId, msg.tileId, false);
 });
 editorSocket.on('loadAnswersToOthers', function (msg) {
     (0, Questions_1.showResults)(msg.right, msg.wrong);
