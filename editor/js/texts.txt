@@ -1,3 +1,0 @@
-1;Editor;Editor;
-2;GameLobby;Herné Lobby;
-3;Account;Účet;

@@ -44,6 +44,17 @@ var Background_db = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Background_db.prototype.upsert = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'upsert-background',
+            text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3) ON CONFLICT("gameName") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameName" = EXCLUDED."gameName";',
+            values: [this.image, this.color, this.gameName]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Background_db.load = function (data) {
         var ret = new Background_db();
         ret.setId(data.id);

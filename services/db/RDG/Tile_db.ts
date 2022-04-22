@@ -36,6 +36,7 @@ export class Tile_db{
     private backward = 0;
     private mustThrown = 0;
     private turnToSetFree = 0;
+    private nextTilesIds:Array<string> = []
 
     public setStroke(newStroke:number){
         this.stroke = newStroke
@@ -221,6 +222,12 @@ export class Tile_db{
     public getCantBeEliminatedOnTile():Array<string>{
         return this.cantBeEliminatedOnTile
     }
+    public setNextTilesIds(newIds:Array<string>){
+        this.nextTilesIds= newIds
+    }
+    public getNextTilesIds(){
+        return this.nextTilesIds
+    }
     public getSkip(){
         return this.skip
     }
@@ -264,13 +271,15 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36);',
-                values: [this.id,this.type,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.isOccupied,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEnding,this.isEndingFor,this.isStarting,this.isStartingFor,this.belongTo,this.canOccupy,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37);',
+                values: [this.id,this.type,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.isOccupied,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEnding,this.isEndingFor,this.isStarting,this.isStartingFor,this.belongTo,this.canOccupy,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds],
               }
               client
               .query(query)
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
+
+    
 
     public static load(data:any){
         let ret = new Tile_db()
@@ -310,6 +319,7 @@ export class Tile_db{
         ret.setBackward(data.backward)
         ret.setMustThrown(data.mustThrown)
         ret.setTurnsToSetFree(data.turnToSetFree)
+        ret.setNextTilesIds(data.nextTilesIds)
         return ret
         }
 }

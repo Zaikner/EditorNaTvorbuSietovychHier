@@ -14,6 +14,9 @@ import { RulesFinder } from '../../services/db/RDG/RulesFinder.js';
 import { Room } from './Room.js';
 import { Player } from './Player.js';
 import { ServerSocket } from '../../services/socket/SocketServer.js';
+import { Account } from '../Accounts/Account.js';
+import { BackgroundComponent_db } from '../../services/db/RDG/BackgroundComponent_db.js';
+import { BackgroundComponentFinder } from '../../services/db/RDG/BackgroundComponentFinder.js';
 //const Room = require('./Room.js')
 
 
@@ -28,8 +31,9 @@ class GameManager{
             let pawns = await PawnFinder.getIntance().findByName(name)
             let styles = await PawnStyleFinder.getIntance().findByName(name)
             let rules = await RulesFinder.getIntance().findByName(name)
+            let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
             
-       return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText()}
+       return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText(),components:backgroundComponents}
     }
     
     public static async loadTexts(){
@@ -77,8 +81,15 @@ class GameManager{
             })
         })
     }
-    static findPlayerBySocketId(socketId:string){
-        
+    static getActivePlayers(acc:Account){
+        let ret:Array<Array<any>> = []
+        let rooms = Array.from(this.activeRooms.values())
+        for (let i = 0; i < rooms.length;i++){
+            rooms[i].getPlayers().forEach((player:Player)=>{
+                ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ rooms[i].join(new Player(acc,''))}])
+            })
+        }
+        return ret
     }
   
     public static getActiveRooms(){

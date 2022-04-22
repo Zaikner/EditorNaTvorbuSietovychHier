@@ -36,14 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.TileFinder = void 0;
+exports.BackgroundComponentFinder = void 0;
 var DbConnect_1 = require("../DbConnect");
-var Tile_db_1 = require("./Tile_db");
-var TileFinder = /** @class */ (function () {
-    function TileFinder() {
+var BackgroundComponent_db_1 = require("./BackgroundComponent_db");
+var BackgroundComponentFinder = /** @class */ (function () {
+    function BackgroundComponentFinder() {
     }
-    TileFinder.getIntance = function () { return this.INSTANCE; };
-    TileFinder.prototype.findByName = function (name) {
+    BackgroundComponentFinder.getIntance = function () { return this.INSTANCE; };
+    BackgroundComponentFinder.prototype.findByName = function (name) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -54,8 +54,8 @@ var TileFinder = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 4, , 5]);
                         query = {
-                            name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
+                            name: 'select-backgroundComponent',
+                            text: 'SELECT * FROM "bachelorsThesis"."Background_component" WHERE "gameName"=$1;',
                             values: [name]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -63,8 +63,7 @@ var TileFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                console.log('precital');
-                                ret.push(Tile_db_1.Tile_db.load(row));
+                                ret.push(BackgroundComponent_db_1.BackgroundComponent_db.load(row));
                             })];
                     case 3:
                         _a.sent();
@@ -78,7 +77,41 @@ var TileFinder = /** @class */ (function () {
             });
         });
     };
-    TileFinder.INSTANCE = new TileFinder();
-    return TileFinder;
+    BackgroundComponentFinder.prototype.deleteByGameName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, query, results, ret, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        client = DbConnect_1.DbConnect.get();
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        query = {
+                            name: 'delete-backgroundComponent',
+                            text: 'DELETE FROM "bachelorsThesis"."Background_component" WHERE "gameName"=$1;',
+                            values: [name]
+                        };
+                        return [4 /*yield*/, client.query(query)];
+                    case 2:
+                        results = _a.sent();
+                        ret = [];
+                        return [4 /*yield*/, results.rows.forEach(function (row) {
+                                ret.push(BackgroundComponent_db_1.BackgroundComponent_db.load(row));
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, ret];
+                    case 4:
+                        err_2 = _a.sent();
+                        console.log("Connection failed components");
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BackgroundComponentFinder.INSTANCE = new BackgroundComponentFinder();
+    return BackgroundComponentFinder;
 }());
-exports.TileFinder = TileFinder;
+exports.BackgroundComponentFinder = BackgroundComponentFinder;

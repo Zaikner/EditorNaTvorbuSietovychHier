@@ -32,6 +32,7 @@ var Tile = /** @class */ (function () {
         this.backward = 0;
         this.mustThrown = 0;
         this.turnToSetFree = 0;
+        this.nextTilesIds = new Map();
         this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -340,6 +341,7 @@ var Tile = /** @class */ (function () {
             backward: this.backward,
             mustThrown: this.mustThrown,
             turnToSetFree: this.turnToSetFree,
+            nextTilesIds: this.mapNextTiles(),
             id: this.id };
     };
     Tile.prototype.removePawn = function (pawn) {
@@ -379,6 +381,15 @@ var Tile = /** @class */ (function () {
             if (_this.isEndingFor.includes(token) && pawn.player == token) {
                 ret = true;
             }
+        });
+        return ret;
+    };
+    Tile.prototype.mapNextTiles = function () {
+        var ret = [];
+        Array.from(this.nextTilesIds.entries()).forEach(function (_a) {
+            var key = _a[0], value = _a[1];
+            ret.push(key);
+            ret.push(value.toString());
         });
         return ret;
     };
@@ -599,6 +610,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.setTurnsToSetFree = function (newTurns) {
         this.turnToSetFree = newTurns;
+    };
+    Tile.prototype.setNextTilesIds = function (newIds) {
+        this.nextTilesIds = newIds;
+    };
+    Tile.prototype.getNextTilesIds = function () {
+        return this.nextTilesIds;
     };
     return Tile;
 }());

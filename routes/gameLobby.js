@@ -45,9 +45,10 @@ router
     for (let i = 1 ; i<= scores.length;i++){
         sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
     }
+    let players = GameManager.getActivePlayers(acc)
     console.log(rooms)
     console.log(sendScores)
-    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text});
+    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
 });
 
 

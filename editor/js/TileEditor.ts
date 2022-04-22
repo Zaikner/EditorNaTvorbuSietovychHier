@@ -8,10 +8,16 @@ import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
 import { deletePawn, insertPawn } from './PawnEditor.js'
 import { Pawn } from './Pawn.js'
+import { spawn } from 'child_process'
+import { removeAllComponentListeners } from './BackgroundEditor.js'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event,true)   
 reload(editor,ctx)
 }
+let onlyMoveHandler = function(event:MouseEvent) {editor.findTile(event,false)
+  console.log('zavolal only move')   
+  reload(editor,ctx)
+  }
 let pickTile = function(event:MouseEvent,token:string,value:number) {editor.findTile(event,false)
   console.log('aspon spustil pickTile')
   if (editor.getChoosenTile()!=undefined){
@@ -160,9 +166,16 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     let tileNumberSetter = spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
     tileNumberSetter.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'','Which number follows ?! (Insert a number into textfield)')
-    spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
+    spawnParagraph(doc,"tileEditingPlace",'','For each player set next tile!')
+    spawnButton(doc,"tileEditingPlace",'setNextTileButton',['btn','btn-secondary'],'Set next tile!',function(){
+      
+      $('#nextTileModal').modal('show');
+      generateNextTiles()
+      
+    })
+    //spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
 
+    
 
     
     spawnParagraph(document,'tileEditingPlace','','Is pawn elemination on this tile allowed ?')
@@ -217,7 +230,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
 }
 
 function insertTilesMenu():void{
-  
+  //unchooseEverything()
   doc.getElementById("canvasPlace")!.style.cursor = 'default'
   removeAllListenersAdded()
   editor.makeAllTilesNotChoosen()
@@ -258,13 +271,15 @@ function insertTilesMenu():void{
   function saveInsertingTiles(){
     removeAllButtons()
     removeAllListenersAdded()
-    editor.makeAllTilesNotChoosen()
+    unchooseEverything()
     reload(editor,ctx)
     mainMenu();
   }
 
   function editTiles():void{
+    console.log('zavolal update')
     editor.nullEditor()
+    
     
     removeAllListenersAdded()
     canvas.addEventListener('click',moveEventHandler)
@@ -297,13 +312,14 @@ function insertTilesMenu():void{
   
   function moveTiles(){
     //canvas.removeEventListener('click',moveEventHandler)
+    removeAllListenersAdded()
     endDrawingPath()
     doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     editor.makeAllTilesNotChoosen()
     reload(editor,ctx)
     editor.setIsMoving(true)
     removeAllButtons()
-    canvas.addEventListener('click',moveEventHandler)
+    canvas.addEventListener('click',onlyMoveHandler)
     canvas.addEventListener('mousemove',moveTile)
     canvas.addEventListener('mousedown',moveTile)
   }
@@ -325,6 +341,7 @@ function insertTilesMenu():void{
 
   }
   function removeAllListenersAdded(){
+    removeAllComponentListeners()
     canvas.removeEventListener('mousemove',moveTile)
     canvas.removeEventListener('mousedown',moveTile)
     canvas.removeEventListener('mousedown', insert)
@@ -333,11 +350,19 @@ function insertTilesMenu():void{
     canvas.removeEventListener('click',insertPawn)
     canvas.removeEventListener('click',deletePawn)
     canvas.removeEventListener('click',copyTile)
+    canvas.removeEventListener('click',onlyMoveHandler)
+
+  
     endDrawingPath()
 
     document.getElementById('wholeBody')!.style.cursor = 'default'
     canvas.style.cursor = 'default'
     document.getElementById('optionPlace')!.style.cursor = 'default'
+    reload(editor,ctx)
+  }
+  function unchooseEverything(){
+    editor.makeAllTilesNotChoosen()
+    editor.getGame().getBackground().makeAllComponentsNotChoosen()
     reload(editor,ctx)
   }
 
@@ -350,12 +375,12 @@ function insertTilesMenu():void{
     editor.setChoosenTile( undefined!)
     let coords = calibreEventCoords(event)
     let canSpawn = true
-    if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
-      if (!editor.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
-        canSpawn = false
-        Warning.show("Following tile with that number doesn't exist")
-      }
-    }
+    // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
+    //   if (!editor.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
+    //     canSpawn = false
+    //     Warning.show("Following tile with that number doesn't exist")
+    //   }
+    // }
     if (canSpawn){
       var addedTile = spawnTile(coords)
       editor.addToUndoLog([addedTile])
@@ -432,9 +457,9 @@ function insertTilesMenu():void{
       }
        
     }
-    if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
-      addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
-    }
+    // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
+    //   addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
+    // }
     
     if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
       addedTile.setQuestionId(editor.getQuestionId())
@@ -442,12 +467,15 @@ function insertTilesMenu():void{
     else{
       addedTile.setQuestionId(-1)
     }
+
+    addedTile.setNextTilesIds(returnNextTileMap())
     reload(editor,ctx)
     console.log(addedTile)
     console.log(editor)
     return addedTile    
   }
   let update = function(){
+    console.log('zavolal update')
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -503,7 +531,8 @@ function insertTilesMenu():void{
      
       
     // })
-    
+    console.log(editor.getChoosenTile()!)
+    console.log(editor.getStartForPlayers().slice())
     editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers().slice())
     editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers().slice())
     
@@ -578,7 +607,7 @@ function insertTilesMenu():void{
       let toogleNumberingChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('toogleNumberingChecker')!
       
       let tileNumberSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileNumberSetter')!
-      let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
+      //let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
       //let choosenTile = editor.getChoosenTile()
       
 
@@ -591,12 +620,12 @@ function insertTilesMenu():void{
       outlineChecker.checked = tile!.getStroke()>0
       if (copyNumber){
         tileNumberSetter.value = tile!.getTileNumber().toString()
-        tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
+        //tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
       }
       else{
         console.log('nastavil spravne')
         tileNumberSetter.value = ''
-        tileFollowingSetter.value = ''
+        //tileFollowingSetter.value = ''
       }
       
       
@@ -732,10 +761,47 @@ function insertTilesMenu():void{
    
     
   }
- 
+  function generateNextTiles(){
+    elementDeleter('nextTileModalBody')
+    editor.getGame().getPlayerTokens().forEach((token:string)=>{
+        console.log('pridal'+token)
+        let div = document.createElement('div')
+        div.id = 'div' + token
+        div.style.width = '100%'
 
+        
+
+        let input = document.createElement('input')
+        input.type = 'number'
+        input.id ='nextTile'+token
+        input.value = editor.getGame().getNextTilesIds().get(token)!.toString()
+        input.onchange = function(){
+            editor.getGame().getNextTilesIds().set(token,parseInt(input.value))
+        }
+
+       
+        document.getElementById('nextTileModalBody')!.appendChild(div)
+
+        spawnParagraph(document,'div' + token,'','Next tile for player '+token+' is: ')
+        div.appendChild(input)
+  })}
+
+  function returnNextTileMap(){
+    let ret = new Map()
+    Array.from(editor.getGame().getNextTilesIds().entries()).forEach(([key,value])=>{
+      ret.set(key,value)
+      editor.getGame().getNextTilesIds().set(key,value+1)
+    })
+    return ret
+  }
+  function updateNextTileIds(){
+    Array.from(editor.getGame().getNextTilesIds().keys()).forEach((token:string)=>{
+      
+      editor.getGame().getNextTilesIds().set(token,parseInt((<HTMLInputElement>document.getElementById('nextTile'+token)).value))
+    })
+  }
   
-  export{insertTilesMenu,moveEventHandler,pickTile,editTiles,deleteTiles,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
+  export{insertTilesMenu,moveEventHandler,pickTile,editTiles,deleteTiles,unchooseEverything,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
 
 
   

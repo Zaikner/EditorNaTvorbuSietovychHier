@@ -1,17 +1,23 @@
 "use strict";
 exports.__esModule = true;
-exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.deleteTiles = exports.editTiles = exports.pickTile = exports.moveEventHandler = exports.insertTilesMenu = void 0;
+exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.unchooseEverything = exports.deleteTiles = exports.editTiles = exports.pickTile = exports.moveEventHandler = exports.insertTilesMenu = void 0;
 var canvas_js_1 = require("./canvas.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
 var Warning_js_1 = require("./Warning.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
+var BackgroundEditor_js_1 = require("./BackgroundEditor.js");
 var moveEventHandler = function (event) {
     canvas_js_1.editor.findTile(event, true);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
 exports.moveEventHandler = moveEventHandler;
+var onlyMoveHandler = function (event) {
+    canvas_js_1.editor.findTile(event, false);
+    console.log('zavolal only move');
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+};
 var pickTile = function (event, token, value) {
     var _a;
     canvas_js_1.editor.findTile(event, false);
@@ -127,8 +133,12 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose tile number! (Insert a number into textfield)');
     var tileNumberSetter = (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
     tileNumberSetter.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which number follows ?! (Insert a number into textfield)');
-    (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileFollowingSetter');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For each player set next tile!');
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', ['btn', 'btn-secondary'], 'Set next tile!', function () {
+        $('#nextTileModal').modal('show');
+        generateNextTiles();
+    });
+    //spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Is pawn elemination on this tile allowed ?');
     (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eleminationChecker', false, ['no', 'yes']);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Which players can't be eliminated on this tile?");
@@ -169,6 +179,7 @@ function spawnElements() {
 }
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
+    //unchooseEverything()
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'default';
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
@@ -206,12 +217,13 @@ function copyTileStyle() {
 function saveInsertingTiles() {
     removeAllButtons();
     removeAllListenersAdded();
-    canvas_js_1.editor.makeAllTilesNotChoosen();
+    unchooseEverything();
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
 exports.saveInsertingTiles = saveInsertingTiles;
 function editTiles() {
+    console.log('zavolal update');
     canvas_js_1.editor.nullEditor();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
@@ -238,13 +250,14 @@ function saveEditingTiles() {
 }
 function moveTiles() {
     //canvas.removeEventListener('click',moveEventHandler)
+    removeAllListenersAdded();
     (0, PathEditor_js_1.endDrawingPath)();
     canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
     canvas_js_1.editor.makeAllTilesNotChoosen();
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.editor.setIsMoving(true);
     removeAllButtons();
-    canvas_js_1.canvas.addEventListener('click', moveEventHandler);
+    canvas_js_1.canvas.addEventListener('click', onlyMoveHandler);
     canvas_js_1.canvas.addEventListener('mousemove', moveTile);
     canvas_js_1.canvas.addEventListener('mousedown', moveTile);
 }
@@ -266,6 +279,7 @@ function removeAllButtons() {
 }
 exports.removeAllButtons = removeAllButtons;
 function removeAllListenersAdded() {
+    (0, BackgroundEditor_js_1.removeAllComponentListeners)();
     canvas_js_1.canvas.removeEventListener('mousemove', moveTile);
     canvas_js_1.canvas.removeEventListener('mousedown', moveTile);
     canvas_js_1.canvas.removeEventListener('mousedown', insert);
@@ -274,6 +288,7 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.insertPawn);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.deletePawn);
     canvas_js_1.canvas.removeEventListener('click', copyTile);
+    canvas_js_1.canvas.removeEventListener('click', onlyMoveHandler);
     (0, PathEditor_js_1.endDrawingPath)();
     document.getElementById('wholeBody').style.cursor = 'default';
     canvas_js_1.canvas.style.cursor = 'default';
@@ -281,6 +296,12 @@ function removeAllListenersAdded() {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
+function unchooseEverything() {
+    canvas_js_1.editor.makeAllTilesNotChoosen();
+    canvas_js_1.editor.getGame().getBackground().makeAllComponentsNotChoosen();
+    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+}
+exports.unchooseEverything = unchooseEverything;
 function undoTileInsert() {
     canvas_js_1.editor.removeLastFromUndoLog();
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
@@ -290,12 +311,12 @@ var insert = function (event) {
     canvas_js_1.editor.setChoosenTile(undefined);
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
     var canSpawn = true;
-    if (document.getElementById('tileFollowingSetter').value.length > 0) {
-        if (!canvas_js_1.editor.tileWithNumberExists(parseInt(document.getElementById('tileFollowingSetter').value))) {
-            canSpawn = false;
-            Warning_js_1.Warning.show("Following tile with that number doesn't exist");
-        }
-    }
+    // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
+    //   if (!editor.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
+    //     canSpawn = false
+    //     Warning.show("Following tile with that number doesn't exist")
+    //   }
+    // }
     if (canSpawn) {
         var addedTile = spawnTile(coords);
         canvas_js_1.editor.addToUndoLog([addedTile]);
@@ -360,15 +381,16 @@ var spawnTile = function (coords) {
             tileWithSameNumber[0].setTileNumber(canvas_js_1.editor.nextTileNumber());
         }
     }
-    if (document.getElementById('tileFollowingSetter').value.length > 0) {
-        addedTile.setFollowingTileNumber(parseInt(document.getElementById('tileFollowingSetter').value));
-    }
+    // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
+    //   addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
+    // }
     if (document.getElementById('askQuestionChecker').checked) {
         addedTile.setQuestionId(canvas_js_1.editor.getQuestionId());
     }
     else {
         addedTile.setQuestionId(-1);
     }
+    addedTile.setNextTilesIds(returnNextTileMap());
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     console.log(addedTile);
     console.log(canvas_js_1.editor);
@@ -377,6 +399,7 @@ var spawnTile = function (coords) {
 exports.spawnTile = spawnTile;
 var update = function () {
     var _a, _b, _c, _d, _e;
+    console.log('zavolal update');
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -424,6 +447,8 @@ var update = function () {
     //     console.log(editor.getStartForPlayers())
     //   }
     // })
+    console.log(canvas_js_1.editor.getChoosenTile());
+    console.log(canvas_js_1.editor.getStartForPlayers().slice());
     canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers().slice());
     canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers().slice());
     canvas_js_1.editor.getChoosenTile().setCanOccupy(canvas_js_1.editor.getEnabledForPlayers());
@@ -487,7 +512,7 @@ var setValues = function (tile, copyNumber) {
         var patternChecker = canvas_js_1.doc.getElementById('patternChecker');
         var toogleNumberingChecker = canvas_js_1.doc.getElementById('toogleNumberingChecker');
         var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
-        var tileFollowingSetter = canvas_js_1.doc.getElementById('tileFollowingSetter');
+        //let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
         //let choosenTile = editor.getChoosenTile()
         colorPicker.value = tile.getColor();
         numberingColor.value = tile.getNumberingColor();
@@ -497,12 +522,12 @@ var setValues = function (tile, copyNumber) {
         outlineChecker.checked = tile.getStroke() > 0;
         if (copyNumber) {
             tileNumberSetter.value = tile.getTileNumber().toString();
-            tileFollowingSetter.value = tile.getFollowingTileNumber().toString();
+            //tileFollowingSetter.value = tile!.getFollowingTileNumber().toString()
         }
         else {
             console.log('nastavil spravne');
             tileNumberSetter.value = '';
-            tileFollowingSetter.value = '';
+            //tileFollowingSetter.value = ''
         }
         if (tile.getQuestionId() != -1) {
             document.getElementById('askQuestionChecker').checked = true;
@@ -610,3 +635,36 @@ function showActualState() {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.showActualState = showActualState;
+function generateNextTiles() {
+    (0, canvas_js_1.elementDeleter)('nextTileModalBody');
+    canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (token) {
+        console.log('pridal' + token);
+        var div = document.createElement('div');
+        div.id = 'div' + token;
+        div.style.width = '100%';
+        var input = document.createElement('input');
+        input.type = 'number';
+        input.id = 'nextTile' + token;
+        input.value = canvas_js_1.editor.getGame().getNextTilesIds().get(token).toString();
+        input.onchange = function () {
+            canvas_js_1.editor.getGame().getNextTilesIds().set(token, parseInt(input.value));
+        };
+        document.getElementById('nextTileModalBody').appendChild(div);
+        (0, Elements_js_1.spawnParagraph)(document, 'div' + token, '', 'Next tile for player ' + token + ' is: ');
+        div.appendChild(input);
+    });
+}
+function returnNextTileMap() {
+    var ret = new Map();
+    Array.from(canvas_js_1.editor.getGame().getNextTilesIds().entries()).forEach(function (_a) {
+        var key = _a[0], value = _a[1];
+        ret.set(key, value);
+        canvas_js_1.editor.getGame().getNextTilesIds().set(key, value + 1);
+    });
+    return ret;
+}
+function updateNextTileIds() {
+    Array.from(canvas_js_1.editor.getGame().getNextTilesIds().keys()).forEach(function (token) {
+        canvas_js_1.editor.getGame().getNextTilesIds().set(token, parseInt(document.getElementById('nextTile' + token).value));
+    });
+}

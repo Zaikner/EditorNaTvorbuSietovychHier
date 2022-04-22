@@ -31,5 +31,28 @@ export class PawnStyleFinder{
           console.log("Connection failed")
         } 
       }
+  public async deleteByName(name:string){
+        let client = DbConnect.get()
+        try {
+            const query = {
+                name: 'select-pawn-style',
+                text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
+                values: [name],
+              }
+            var results = await  client.query(query)
+            var ret:Array<PawnStyles> = []
+          
+            await results.rows.forEach((row:any) => {
+            
+                ret.push(PawnStyles.load(row))
+            });
+           
+            return ret
+    
+        }
+        catch(err){
+          console.log("Connection failed Styles")
+        } 
+      }
        
 }

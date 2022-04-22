@@ -8,6 +8,7 @@ var Game_db = /** @class */ (function () {
         this.name = '';
         this.author = '';
         this.numOfPlayers = 0;
+        this.nextTilesIds = [];
     }
     Game_db.prototype.getId = function () {
         return this.id;
@@ -33,12 +34,29 @@ var Game_db = /** @class */ (function () {
     Game_db.prototype.setAuthor = function (newAuthor) {
         this.author = newAuthor;
     };
+    Game_db.prototype.setNextTilesIds = function (newIds) {
+        this.nextTilesIds = newIds;
+    };
+    Game_db.prototype.getNextTilesIds = function () {
+        return this.nextTilesIds;
+    };
     Game_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers") VALUES($1,$2,$3);',
-            values: [this.name, this.author, this.numOfPlayers]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4);',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
+    Game_db.prototype.upsert = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'upsert-game',
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds";',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds]
         };
         client
             .query(query)
@@ -50,6 +68,7 @@ var Game_db = /** @class */ (function () {
         ret.setName(data.name);
         ret.setAuthor(data.author);
         ret.setNumOfPlayers(data.numOfPlayers);
+        ret.setNextTilesIds(data.nextTilesIds);
         return ret;
     };
     return Game_db;

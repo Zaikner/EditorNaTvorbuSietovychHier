@@ -40,6 +40,7 @@ class Tile{
     private backward = 0;
     private mustThrown = 0;
     private turnToSetFree = 0;
+    private nextTilesIds:Map<string,number> = new Map()
 
     constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
         this.type = type;
@@ -392,6 +393,7 @@ class Tile{
                 backward:this.backward,
                 mustThrown:this.mustThrown,
                 turnToSetFree:this.turnToSetFree,
+                nextTilesIds:this.mapNextTiles(),
                 id:this.id}
             
     }
@@ -438,6 +440,13 @@ class Tile{
         })
 
         return ret
+    }
+    mapNextTiles(){
+        let ret:Array<string> = []
+        Array.from(this.nextTilesIds.entries()).forEach(([key,value])=>{ret.push(key)
+                                                                        ret.push(value.toString())})
+        return ret
+        
     }
     public setStroke(newStroke:number){
         this.stroke = newStroke
@@ -658,6 +667,12 @@ class Tile{
     }
     public setTurnsToSetFree(newTurns:number){
         this.turnToSetFree = newTurns
+    }
+    public setNextTilesIds(newIds:Map<string,number>){
+        this.nextTilesIds = newIds
+    }
+    public getNextTilesIds(){
+        return this.nextTilesIds
     }
 }
 

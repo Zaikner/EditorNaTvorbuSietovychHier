@@ -23,6 +23,13 @@ import { RulesFinder } from "../db/RDG/RulesFinder";
 import { access } from "fs";
 import { editor } from "../../editor/js/canvas";
 import { Account } from "../../backEnd/Accounts/Account";
+import { TextsFinder } from "../db/RDG/TextFinder";
+import { Texts } from "../db/RDG/Texts";
+import { BackgroundComponent } from "../../editor/js/BackgroundComponent";
+import { BackgroundComponent_db } from "../db/RDG/BackgroundComponent_db";
+import { BackgroundComponentFinder } from "../db/RDG/BackgroundComponentFinder";
+import { PawnFinder } from "../db/RDG/PawnFinder";
+import { PawnStyleFinder } from "../db/RDG/PawnStyleFinder";
 
 
 const Player = require( "../../backEnd/Game/Player")
@@ -73,15 +80,41 @@ export class ServerSocket{
                 GameManager.findRoomBySocketId(socket.id)
             });
         socket.on('saveGame',async (data:any) => {
+          
+          console.log('saved game:')
+          console.log(data)
           let acc = AccountManager.getAccountByClientId(data.id)
-     
+          let existingGames = await GameFinder.getIntance().findByName(data.name)
+          if (existingGames!.length > 0){
+            if (existingGames![0].getAuthor()!= acc.getName()){
+              socket.emit('not author')
+              console.log('not author')
+              return
+            }
+            else{
+              console.log('found game but authot')
+              console.log ( existingGames![0])
+              console.log(acc.getName())
+            }
+           
+          }
+          else{
+            console.log('neexistuje taka hra')
+            console.log(existingGames)
+          }
         let last = await TileFinder.getIntance().findLast()
         let lastId = last?.getId()
       
+        await TileFinder.getIntance().deleteByName(data.name)
+        await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
+        await PawnFinder.getIntance().deleteByName(data.name)
+        await PawnStyleFinder.getIntance().deleteByName(data.name)
+
         let g = new Game_db()
         g.setAuthor(acc.getName())
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
+        g.setNextTilesIds(data.nextTilesIds)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
           t.setId(tile.id+lastId)
@@ -113,7 +146,7 @@ export class ServerSocket{
           t.setGameName(data.name)
           t.setQuestionId(tile.questionId)
           t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
-         
+          t.setNextTilesIds(tile.nextTilesIds)
           t.setSkip(tile.skip)
           t.setRepeat(tile.repeat)
           t.setForward(tile.forward)
@@ -122,14 +155,37 @@ export class ServerSocket{
           t.setTurnsToSetFree(tile.turnToSetFree)
           t.insert()
         })
-        g.insert()
+        g.upsert()
       
 
         let b = new Background_db()
         b.setGameName(data.name)
         b.setColor(data.background.color)
         b.setImage(data.background.backgroundImage)
-        b.insert()
+        data.background.components.forEach((comp:any)=>{
+          let c = new BackgroundComponent_db()
+          c.setGameName(data.name)
+          c.setImage(comp.image)
+          c.setColor(comp.color)
+          c.setType(comp.type)
+          c.setCenterX(comp.centerX)
+          c.setCenterY(comp.centerY)
+          c.setX1(comp.x1)
+          c.setX2(comp.x2)
+          c.setY1(comp.y1)
+          c.setY2(comp.y2)
+          c.setRadius(comp.radius)
+        
+          c.setStroke(comp.stroke)
+          c.setStrokeColor(comp.strokeColor)
+        
+          c.setImageWidth(comp.imageWidth)
+          c.setImageHeight(comp.imageHeigth)
+          c.insert()
+          console.log(c)
+
+        })
+        b.upsert()
 
 
         data.pawns.forEach((pawn:any)=>{
@@ -155,6 +211,7 @@ export class ServerSocket{
         rule.upsert()
 
         this.io.emit('chat message');
+        socket.emit('game saved')
       });
 
       socket.on('set Socket',(msg:{id:string,room:string})=>
@@ -566,6 +623,18 @@ export class ServerSocket{
         socket.emit('loadedAnswerQuestions',data)
       })
 
+      socket.on('get texts',async (msg:{language:string})=>{
+        let texts:Array<string> = []
+        if (msg.language == 'SK'){
+          texts = (await TextsFinder.getIntance().findAll())!.map((txt:Texts)=>txt.getSK())
+        }
+        else{
+          texts = (await TextsFinder.getIntance().findAll())!.map((txt:Texts)=>txt.getEN())
+        }
+
+
+        socket.emit('got texts',{text:texts})
+      })
       socket.on('join Room',(msg:{roomName:string})=>{
         socket.join(msg.roomName)
       })

@@ -52,8 +52,19 @@ nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;
                           |
                           input(type='hidden' name='id' value=room[0])
                           button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-dark=text[8]
-               
-              hr
+            div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
+              // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
+              label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                strong='Active players'
+              ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+                 each player in players
+                    form(action='/room?game:'+player[1] method='get' name='name' value =player[2])
+                      strong 
+                        li.list-group-item(name='room' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
+                          |
+                          input(type='hidden' name='id' value=player[2])
+                          button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
+           
            
                       
             br

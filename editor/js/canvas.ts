@@ -1,8 +1,8 @@
 
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile } from "./TileEditor.js";
-import { editBackground } from "./BackgroundEditor";
+import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything } from "./TileEditor.js";
+import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 import { io } from "socket.io-client";
 import { spawnButton, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
@@ -16,8 +16,8 @@ import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuest
 
 import { PawnStyle } from "./PawnStyle";
 import { Warning } from "./Warning";
+import { BackgroundComponent } from "./BackgroundComponent";
 
-import { loadTexts } from "./TextLoader";
 
 
 const editor = new GameEditor()
@@ -77,6 +77,12 @@ editorSocket.on('connected',(msg)=>{
       addedTile.setMustThrown(tile.mustThrown)
       addedTile.setTurnsToSetFree(tile.turnToSetFree)
       addedTile.setQuestionId(tile.questionId)
+      let t = tile.nextTilesIds;
+      let add:Map<string,number> = new Map()
+      for (let i = 0; i*2 < t.length;i++){
+        add.set(t[2*i],t[2*i+1])
+      }
+      addedTile.setNextTilesIds(add)
    
     editor.getGame().addTile(addedTile)
     
@@ -100,7 +106,36 @@ editorSocket.on('connected',(msg)=>{
       
     background.setBackgroundImage(backImage)
   }
- 
+  msg.components.forEach((component:any)=>{
+    
+    let newComponent = new BackgroundComponent()
+    if(component.image != 'none' || component.image != undefined){
+      let image = new Image()
+      image.src = component.image
+      image.onload = function(){
+       newComponent.setImage(image)
+       background.getComponents().push(newComponent)
+       reload(editor,ctx)
+      }
+     }
+
+    newComponent.setType(component.type)
+    newComponent.setColor(component.color)
+    newComponent.setImage(component.image)
+    newComponent.setImageHeight(component.imageHeigth)
+    newComponent.setImageWidth(component.imageWidth)
+    newComponent.setCenterX(component.centerX)
+    newComponent.setCenterY(component.centerY)
+    newComponent.setRadius(component.radius)
+    newComponent.setStroke(component.stroke)
+    newComponent.setStrokeColor(component.strokeColor)
+    newComponent.setX1(component.x1)
+    newComponent.setY1(component.y1)
+    newComponent.setX2(component.x2)
+    newComponent.setY2(component.y2)
+
+    
+  })
     
   editor.getGame().setBackground(background)
   //editor.getGame().setBackground(msg.background)
@@ -110,10 +145,17 @@ editorSocket.on('connected',(msg)=>{
   editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
  
   editor.getGame().setRules(msg.rules)
+
+  let gameNextTiles = msg.game.nextTilesIds;
+  let add:Map<string,number> = new Map()
+  for (let i = 0; i*2 < gameNextTiles.length;i++){
+    add.set(gameNextTiles[2*i],gameNextTiles[2*i+1])
+  }
+  editor.getGame().setNextTilesIds(add)
   
   
   let tokens:Array<string> = []
-  for (let i = 1; i <= 6; i++){
+  for (let i = 1; i <= editor.getGame().getnumOfPlayers(); i++){
     tokens.push('Player '+i)
   }
   editor.getGame().setPlayerTokens(tokens)
@@ -143,7 +185,8 @@ editorSocket.on('connected',(msg)=>{
 
 
   });
-
+  console.log('loaded game:')
+  console.log(editor)
 })
 
 editorSocket.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
@@ -162,6 +205,13 @@ editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
   editorSocket.emit('move pawns back',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
+editorSocket.on('not author',()=>{
+  Warning.show('You can not create game with this name. Game with this name already exists, and you are not author of it.')
+  console.log ('not author')
+})
+editorSocket.on('game saved',()=>{
+  window.location.replace('/')
+})
 editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
   Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
 })
@@ -303,9 +353,10 @@ if (zoz[zoz.length-2] === 'editor'){
 }
 else {
   
-  document.getElementById('leaveEndRoom')!.addEventListener('click',function(){window.location.replace('/gamelobby')})
+  //
   
   if (params.get('id') != null){
+    document.getElementById('leaveEndRoom')!.addEventListener('click',function(){window.location.replace('/gamelobby')})
     editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
     editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name'),room:params.get('id')})
     initDice()
@@ -449,7 +500,9 @@ document.getElementById("showRulesButton")?.addEventListener('click',function(){
 function edit(){
   mainMenu();
 
-
+// document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
+//   updateNextTileIds()
+// })
 document.getElementById('forwardButton')!.addEventListener('click',function(){
   spawnParagraph(document,'askTheQuestionEventEdit','','How many tiles should pawn go ahead?')
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],'Confirm!',function(){
@@ -531,10 +584,18 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
 });
 
   //$('#rulesModal').modal('show');
-document.getElementById('editBackground')!.addEventListener('click',function(){editBackground();} );
-document.getElementById('insertTiles')!.addEventListener('click',function(){insertTilesMenu();} );
-document.getElementById('moveTiles')!.addEventListener('click',function(){moveTiles();} );
-document.getElementById('editTiles')!.addEventListener('click',function(){editTiles();} );
+document.getElementById('editBackground')!.addEventListener('click',function(){
+  unchooseEverything()
+  editBackground();} );
+document.getElementById('insertTiles')!.addEventListener('click',function(){
+  unchooseEverything()
+  insertTilesMenu();} );
+document.getElementById('moveTiles')!.addEventListener('click',function(){
+  unchooseEverything()
+  moveTiles();} );
+document.getElementById('editTiles')!.addEventListener('click',function(){
+  unchooseEverything()
+  editTiles();} );
 document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
 document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
@@ -547,8 +608,11 @@ document.getElementById('generalInfoButton')!.addEventListener('click',function(
   removeAllButtons()
   removeAllListenersAdded()
   mainMenu();})
-
-
+document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
+document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
+document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
+document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
+  
 document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
@@ -568,15 +632,15 @@ document.getElementById('loadCreatedGameModal')?.addEventListener('click',functi
   mainMenu()
   
 })
-document.getElementById('insertPawn')!.addEventListener('click',function(){pawnInsertMenu()} );
+
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
-document.getElementById('deletePawn')!.addEventListener('click',function(){pawnDeleteMenu()} );
+
 document.getElementById("resetQuestionID")!.addEventListener('click',function(){
   editor.setQuestionId(-1);
   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Not picked!'
  
 })
-}
+ }
 
 var doc = document;
 
@@ -590,6 +654,7 @@ let started:Boolean = false;
 
 
 function mainMenu(){ 
+  
  started = false
 
 
@@ -617,12 +682,13 @@ numOfPlayersSlider.onclick =function(){
   let playerTokens = editor.getGame().getPlayerTokens()
   if (number < playerTokens.length){
   
-    for (let i = 0; i < playerTokens.length - number;i++){
+    for (let i = number; i <= 6;i++){
       playerTokens.pop()
-      editor.getGame().getPawnStyle().delete('Player '+(playerTokens.length+1))
+      editor.getGame().getPawnStyle().delete('Player '+i)
+      editor.getGame().getNextTilesIds().delete('Player '+i)
       let rem:Array<Pawn> = []
       editor.getGame().getPawns().forEach((pawn:Pawn)=>{
-        if (pawn.player == ('Player '+(playerTokens.length+1))){
+        if (pawn.player == ('Player '+i)){
           rem.push(pawn)
         }
       })
@@ -633,16 +699,21 @@ numOfPlayersSlider.onclick =function(){
     }
   }
   if (number > playerTokens.length){
-    for (let i = 0; i < number - playerTokens.length;i++){
-      playerTokens.push('Player '+ (playerTokens.length+1))
-      
-      editor.getGame().getPawnStyle().set('Player '+(playerTokens.length),new PawnStyle('Player '+(playerTokens.length),'#000000','type1'))
+    for (let i = 1; i <= number;i++){
+      if (!playerTokens.includes('Player '+i)){
+        playerTokens.push('Player '+ (playerTokens.length+1))
+        editor.getGame().getNextTilesIds().set('Player '+i,editor.getGame().getTiles().length+1)
+        editor.getGame().getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
+       
+      }
      
       //editor.getGame().getPawnStyle().Player
     }
   }
   
   editor.getGame().setPlayerTokens(playerTokens)
+  console.log(playerTokens)
+  console.log(editor.getGame().getNextTilesIds())
   reload(editor,ctx)
 }
 document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
@@ -754,10 +825,10 @@ function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
    context.canvas.height = window.innerHeight;
    if(!isEditor){
     if(editor.getGame().getInitSizeX() == 0){
-      editor.getGame().setInitSizeX(window.innerWidth/ 3 * 2-30)
+      editor.getGame().setInitSizeX(canvas.width)
      }
      if(editor.getGame().getInitSizeY() == 0){
-      editor.getGame().setInitSizeY(window.innerHeight)
+      editor.getGame().setInitSizeY(canvas.height)
      }
      editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
    
@@ -849,12 +920,20 @@ function getCookie(name:string) {
   return cookie.get(name);
 }
 
-loadTexts()
+
 
 
 window.onload = function(){
   if(params.get('id') != null){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
   }
+  editorSocket.emit('get texts',{language:getCookie('language')})
 }
-export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize,getCookie,canMovePawnFunc,clickFunction};
+let texts:Array<string> = []
+editorSocket.on('got texts',(msg:{text:Array<string>})=>{
+  texts = msg.text
+  console.log(texts)
+})
+
+setInterval(function(){resize(editor,ctx)},500)
+export{mainMenu,doc,elementDeleter,clear,canvas,ctx,calibreEventCoords,editor,reload,editorSocket,resize,getCookie,canMovePawnFunc,clickFunction,texts};

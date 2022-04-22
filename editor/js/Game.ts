@@ -29,10 +29,13 @@ class Game{
     //----------playing---------
     //private hasStarted = false;
     private isOnTurn = false
+    private nextTilesIds:Map<string,number> = new Map()
     
 
 
-    constructor(){}
+    constructor(){
+
+    }
 
     saveGame(){
         if (this.name.length == 0){
@@ -51,20 +54,22 @@ class Game{
             Array.from(this.pawnStyle.values()).forEach((pawnStyle:PawnStyle)=>{
                 savedPawnStyles.push(pawnStyle.JSONfyStyle())
             })
+            
+
+
             editorSocket.emit('saveGame',{name:this.name,
                                           author:this.author,
-                                          background:{
-                                                    backgroundImage:this.background.getBackgroundImage() === undefined?'none':getDataUrlFromImage(this.background.getBackgroundImage()),
-                                                    color:this.background.getColor()
-                                          },
+                                          background:this.background.save(),
+                                          
                                           tiles:savedTiles,
                                           numOfPlayers:this.numOfPlayers,
                                           pawns:savedPawns,
                                           styles:savedPawnStyles,
                                           rules:this.rules,
-                                          id:getCookie('id')
+                                          id:getCookie('id'),
+                                          nextTilesIds:this.mapNextTiles()
                                         })
-            window.location.replace('/')
+           
         }
         
        
@@ -140,7 +145,13 @@ class Game{
         return ret
     }
 
-
+    mapNextTiles(){
+        let ret:Array<string> = []
+        Array.from(this.nextTilesIds.entries()).forEach(([key,value])=>{ret.push(key)
+                                                                        ret.push(value.toString())})
+        return ret
+        
+    }
         
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
@@ -257,6 +268,12 @@ class Game{
     }
     getIsOnturn(){
         return this.isOnTurn
+    }
+    public setNextTilesIds(newIds:Map<string,number>){
+        this.nextTilesIds = newIds
+    }
+    public getNextTilesIds(){
+        return this.nextTilesIds
     }
     // getHasStarted(){
     //     return  this.hasStarted

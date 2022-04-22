@@ -35,7 +35,11 @@ var GameEditor = /** @class */ (function () {
         this.pattern = undefined;
     };
     GameEditor.prototype.initNewGame = function () {
+        var _this = this;
         this.game = new Game_js_1.Game();
+        this.game.getPlayerTokens().forEach(function (token) {
+            _this.game.getNextTilesIds().set(token, _this.getNextTileId() + 1);
+        });
     };
     GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background, pattern) {
         var tileNumber = this.nextTileNumber();
@@ -63,10 +67,12 @@ var GameEditor = /** @class */ (function () {
         return newTile;
     };
     GameEditor.prototype.findTile = function (event, edit) {
+        console.log('zavolal find tile');
         var coords = (0, canvas_js_1.calibreEventCoords)(event);
         var tiles = this.game.getTiles();
         for (var i = tiles.length - 1; i >= 0; i--) {
             if (tiles[i].isPointedAt(coords.x, coords.y)) {
+                console.log('nasiel');
                 if (tiles[i] == this.choosenTile) {
                     tiles[i].setIsChoosen(false);
                     this.choosenTile = undefined;

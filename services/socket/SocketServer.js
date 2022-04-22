@@ -40,6 +40,7 @@ exports.ServerSocket = void 0;
 var Game_db_1 = require("../db/RDG/Game_db");
 var Tile_db_1 = require("../db/RDG/Tile_db");
 var Background_db_1 = require("../db/RDG/Background_db");
+var GameFinder_db_1 = require("../db/RDG/GameFinder_db");
 var TileFinder_1 = require("../db/RDG/TileFinder");
 var Question_1 = require("../db/RDG/Question");
 var QuestionOption_1 = require("../db/RDG/QuestionOption");
@@ -48,6 +49,11 @@ var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder")
 var Pawn_1 = require("../db/RDG/Pawn");
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
+var TextFinder_1 = require("../db/RDG/TextFinder");
+var BackgroundComponent_db_1 = require("../db/RDG/BackgroundComponent_db");
+var BackgroundComponentFinder_1 = require("../db/RDG/BackgroundComponentFinder");
+var PawnFinder_1 = require("../db/RDG/PawnFinder");
+var PawnStyleFinder_1 = require("../db/RDG/PawnStyleFinder");
 var Player = require("../../backEnd/Game/Player");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
@@ -91,19 +97,53 @@ var ServerSocket = /** @class */ (function () {
                 GameManager.findRoomBySocketId(socket.id);
             });
             socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, last, lastId, g, b, rule;
+                var acc, existingGames, last, lastId, g, b, rule;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            console.log('saved game:');
+                            console.log(data);
                             acc = AccountManager.getAccountByClientId(data.id);
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(data.name)];
                         case 1:
+                            existingGames = _a.sent();
+                            if (existingGames.length > 0) {
+                                if (existingGames[0].getAuthor() != acc.getName()) {
+                                    socket.emit('not author');
+                                    console.log('not author');
+                                    return [2 /*return*/];
+                                }
+                                else {
+                                    console.log('found game but authot');
+                                    console.log(existingGames[0]);
+                                    console.log(acc.getName());
+                                }
+                            }
+                            else {
+                                console.log('neexistuje taka hra');
+                                console.log(existingGames);
+                            }
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
+                        case 2:
                             last = _a.sent();
                             lastId = last === null || last === void 0 ? void 0 : last.getId();
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByName(data.name)];
+                        case 3:
+                            _a.sent();
+                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)];
+                        case 4:
+                            _a.sent();
+                            return [4 /*yield*/, PawnFinder_1.PawnFinder.getIntance().deleteByName(data.name)];
+                        case 5:
+                            _a.sent();
+                            return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteByName(data.name)];
+                        case 6:
+                            _a.sent();
                             g = new Game_db_1.Game_db();
                             g.setAuthor(acc.getName());
                             g.setName(data.name);
                             g.setNumOfPlayers(data.numOfPlayers);
+                            g.setNextTilesIds(data.nextTilesIds);
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);
@@ -135,6 +175,7 @@ var ServerSocket = /** @class */ (function () {
                                 t.setGameName(data.name);
                                 t.setQuestionId(tile.questionId);
                                 t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
+                                t.setNextTilesIds(tile.nextTilesIds);
                                 t.setSkip(tile.skip);
                                 t.setRepeat(tile.repeat);
                                 t.setForward(tile.forward);
@@ -143,12 +184,32 @@ var ServerSocket = /** @class */ (function () {
                                 t.setTurnsToSetFree(tile.turnToSetFree);
                                 t.insert();
                             });
-                            g.insert();
+                            g.upsert();
                             b = new Background_db_1.Background_db();
                             b.setGameName(data.name);
                             b.setColor(data.background.color);
                             b.setImage(data.background.backgroundImage);
-                            b.insert();
+                            data.background.components.forEach(function (comp) {
+                                var c = new BackgroundComponent_db_1.BackgroundComponent_db();
+                                c.setGameName(data.name);
+                                c.setImage(comp.image);
+                                c.setColor(comp.color);
+                                c.setType(comp.type);
+                                c.setCenterX(comp.centerX);
+                                c.setCenterY(comp.centerY);
+                                c.setX1(comp.x1);
+                                c.setX2(comp.x2);
+                                c.setY1(comp.y1);
+                                c.setY2(comp.y2);
+                                c.setRadius(comp.radius);
+                                c.setStroke(comp.stroke);
+                                c.setStrokeColor(comp.strokeColor);
+                                c.setImageWidth(comp.imageWidth);
+                                c.setImageHeight(comp.imageHeigth);
+                                c.insert();
+                                console.log(c);
+                            });
+                            b.upsert();
                             data.pawns.forEach(function (pawn) {
                                 var p = new Pawn_1.Pawn();
                                 // p.setColor(pawn.color)
@@ -171,6 +232,7 @@ var ServerSocket = /** @class */ (function () {
                             rule.setText(data.rules);
                             rule.upsert();
                             this.io.emit('chat message');
+                            socket.emit('game saved');
                             return [2 /*return*/];
                     }
                 });
@@ -559,6 +621,27 @@ var ServerSocket = /** @class */ (function () {
                                 });
                             });
                             socket.emit('loadedAnswerQuestions', data);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+            socket.on('get texts', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var texts;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            texts = [];
+                            if (!(msg.language == 'SK')) return [3 /*break*/, 2];
+                            return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
+                        case 1:
+                            texts = (_a.sent()).map(function (txt) { return txt.getSK(); });
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
+                        case 3:
+                            texts = (_a.sent()).map(function (txt) { return txt.getEN(); });
+                            _a.label = 4;
+                        case 4:
+                            socket.emit('got texts', { text: texts });
                             return [2 /*return*/];
                     }
                 });

@@ -32,5 +32,29 @@ export class PawnFinder{
           console.log("Connection failed")
         } 
       }
+      public async deleteByName(name:string){
+        let client = DbConnect.get()
+        try {
+            const query = {
+                name: 'delete-pawn-by-name',
+                text: 'DELETE FROM "bachelorsThesis"."Pawn" where id in (SELECT p.id FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1)',
+                values: [name],
+               
+              }
+            var results = await  client.query(query)
+            var ret:Array<Pawn> = []
+          
+            await results.rows.forEach((row:any) => {
+               
+                ret.push(Pawn.load(row))
+            });
+           
+            return ret
+    
+        }
+        catch(err){
+          console.log("Connection failed Pawn")
+        } 
+      }
        
 }

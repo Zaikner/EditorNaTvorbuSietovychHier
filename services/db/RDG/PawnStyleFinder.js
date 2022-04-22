@@ -77,6 +77,40 @@ var PawnStyleFinder = /** @class */ (function () {
             });
         });
     };
+    PawnStyleFinder.prototype.deleteByName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, query, results, ret, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        client = DbConnect_1.DbConnect.get();
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        query = {
+                            name: 'select-pawn-style',
+                            text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
+                            values: [name]
+                        };
+                        return [4 /*yield*/, client.query(query)];
+                    case 2:
+                        results = _a.sent();
+                        ret = [];
+                        return [4 /*yield*/, results.rows.forEach(function (row) {
+                                ret.push(PawnStyle_1.PawnStyles.load(row));
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, ret];
+                    case 4:
+                        err_2 = _a.sent();
+                        console.log("Connection failed Styles");
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
     PawnStyleFinder.INSTANCE = new PawnStyleFinder();
     return PawnStyleFinder;
 }());

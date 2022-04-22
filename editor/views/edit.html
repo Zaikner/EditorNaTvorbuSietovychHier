@@ -32,24 +32,28 @@
         onclick="$('#questionModal').modal('hide')"
       </li> -->
       <button type="button" class="btn btn-secondary py-2" id="questionManager" style=" width:500px; margin-right: 10px; white-space: nowrap; text-align: center;"  onclick="$('#questionModal').modal('show')">Question manager</button>
-       <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
-          <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Pawn Editing options
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><button type="button" class="btn btn-secondary dropdown-item" id="insertPawn" >Insert Pawns</button></li>
-            <li><button type="button" class="btn btn-secondary dropdown-item" id="editPawn" >Edit Pawns</button></li>
-            <!-- <li><button type="button" class="btn btn-secondary dropdown-item" id="movePawn" >Move Pawns</button></li> -->
-            <li> <button type="button" class="btn btn-secondary dropdown-item" id="deletePawn">Delete Pawns</button></li>
-         
-          </ul>
-        </li>
+      <button type="button" class="btn btn-secondary py-2" id="editPawn" style=" width:500px; margin-right: 10px; white-space: nowrap; text-align: center;">Pawn manager</button>
+     
+      <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
+        <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Edit Background
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+          <li> <button type="button" class="btn btn-secondary dropdown-item" style="width: 200px;" id="editBackground" >Edit Background</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="addComponent" >Add background component</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="moveComponent" >Move background component</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="editComponent" >Edit background component</button></li>
+          <li><button type="button" class="btn btn-secondary dropdown-item" id="deleteComponent" >Delete background component</button></li>
+     
+       
+        </ul>
+      </li>
         <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
           <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Tile Editing options
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><button type="button" class="btn btn-secondary dropdown-item" id="editBackground" >Edit Background</button></li>
+            <li></li>
             <li><button type="button" class="btn btn-secondary dropdown-item" id="insertTiles" >Insert Tiles</button></li>
             <li><button type="button" class="btn btn-secondary dropdown-item" id="editTiles" >Edit Tiles</button></li>
             <li><button type="button" class="btn btn-secondary dropdown-item" id="moveTiles" >Move Tiles</button></li>
@@ -58,7 +62,7 @@
           </ul>
         </li>
 
-        <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="generalInfoButton" style=" width:200px; margin-right: 10px;" >General info</button>
+        <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="generalInfoButton" style=" width:300px; margin-right: 10px;" >General info</button>
       
       <form action="/" method="get">
         <button type="submit" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2" id="mainMenuButton" style=" width:200px; margin-right: 10px;">Main Menu</button>
@@ -173,6 +177,28 @@
       <div class="modal-footer" id="editEventFooter">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <button type="button" class="btn btn-secondary" onclick="$('#loadGameModal').modal('hide')">Leave!</button>
+        <!-- <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="nextTileModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #292b2c">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHeader" style="color: white;">Set next tile for each modal</h5>
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body" id="nextTileModalBody" style="text-align: center;">
+         
+         <input id="gameNameInput" type="text" style="text-align:center" placeholder="Enter the game name!"></input>
+         <button type="button" class="btn btn-secondary" id='loadCreatedGameModal' onclick="$('#loadGameModal').modal('hide')">Load!</button>
+      
+      </div>
+      <div class="modal-footer" id="nextTileModalFooter">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-secondary" id="nextTileButtonSet" onclick="$('#nextTileModal').modal('hide')">Set!</button>
         <!-- <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button> -->
       </div>
     </div>
@@ -440,7 +466,7 @@ editorSocket.emit('editor',{jo:'co'})
 </script> -->
     
   
-  <script>localStorage.clear()
+  <script>//localStorage.clear()
  
   </script>
   </body>

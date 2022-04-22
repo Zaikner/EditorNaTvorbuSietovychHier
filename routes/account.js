@@ -7,12 +7,21 @@ const FileReader = require('filereader');
 const reader = new FileReader();
 const utilities = require('./../editor/js/utilityFunctions.js');
 const { AccountFinder } = require('../services/db/RDG/AccountFinder.js');
+const { TextsFinder } = require('../services/db/RDG/TextFinder.js');
 router
 .route("/")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
   
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
+
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
 
     if (request.cookies.id != undefined && acc != undefined){
      
@@ -29,7 +38,7 @@ router
                 f = acc.getAvatar()
                 //console.log(f)
             }
-            res.render('account.pug',{root:'./editor/views',file:f});
+            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore()});
         }
         
         

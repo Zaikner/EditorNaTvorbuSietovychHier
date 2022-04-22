@@ -43,6 +43,19 @@ export class Background_db{
               .then((res:any) => console.log(res.rows))
               .catch((e:Error) => console.error(e.stack))}
     
+    public upsert(){
+        let client = DbConnect.get()
+            const query = {
+                name: 'upsert-background',
+                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3) ON CONFLICT("gameName") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameName" = EXCLUDED."gameName";',
+                values: [this.image,this.color,this.gameName],
+              }
+              client
+              .query(query)
+              .then((res:any) => console.log(res.rows))
+              .catch((e:Error) => console.error(e.stack))}
+ 
+    
     public static load(data:any){
             let ret = new Background_db()
             ret.setId(data.id)

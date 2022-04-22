@@ -62,4 +62,28 @@ export class TileFinder{
               console.log("Connection failed")
             } 
           }    
+
+  public async deleteByName(name:string){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'delete-gameTiles',
+                    text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameName"=$1;',
+                    values: [name],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Tile_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                    console.log('precital')
+                    ret.push(Tile_db.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }
 }

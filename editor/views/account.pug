@@ -18,20 +18,25 @@ head
         #atributes
           .container-fluid
             .row
-              p.col-6.fs-5(style='font-size:150%') Name: 
+              p.col-6.fs-5(style='font-size:150%')=text[12]+':' 
           .container-fluid
             .row
-              p.col-6.fs-5(style='font-size:150%') Password: 
+              p.col-6.fs-5(style='font-size:150%')=text[13]+':' 
               .col-6.fs-5
                 form(action='/account/change/password', method='get')
                   button.btn.btn-primary(type='submit') Change!
           .container-fluid
             .row
-              p.col-6.fs-5(style='font-size:150%') Avatar
+              p.col-6.fs-5(style='font-size:150%')=text[14]+':' 
               .col-6.fs-5
                 form(action='/account/change/avatar', method='get')
                   button.btn.btn-primary(type='submit') Change!
-        h5 Statistics
+          .container-fluid
+            .row
+               p.col-6.fs-5(style='font-size:150%')='Score'+':' 
+               .col-6.fs-5
+                form(action='/account/change/password', method='get')
+                  button.btn.btn-primary()=score
       #modalFooter.modal-footer
         form.text-center(action='/logout', method='get', style='width: 100%;')
           button.btn.btn-primary(type='submit') Log out!

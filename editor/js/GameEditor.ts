@@ -5,6 +5,7 @@ import { Game } from './Game.js'
 import {editTiles} from './TileEditor.js'
 import { Pawn } from './Pawn.js';
 import { totalmem } from 'os';
+import { timeStamp } from 'console';
 
 
 class GameEditor{
@@ -18,6 +19,7 @@ class GameEditor{
     private endForPlayers:Array<string> = []
     private enabledForPlayers:Array<string> = []
     private cantBeEliminatedOnTile:Array<string> = []
+
     private nextTileId = 0;
     private questionId = -1;
     private skip = 0;
@@ -28,6 +30,8 @@ class GameEditor{
     private turnToSetFree = 0;
     constructor(){
         this.initNewGame()
+      
+      
     }
     nullEditor(){
         this.startForPlayers = []
@@ -40,7 +44,10 @@ class GameEditor{
     initNewGame(){
         this.game = new Game()
         
-    }
+        this.game.getPlayerTokens().forEach((token:string)=>{
+            this.game.getNextTilesIds().set(token,this.getNextTileId()+1)
+        })
+    }   
 
     initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
         let tileNumber = this.nextTileNumber()
@@ -75,13 +82,13 @@ class GameEditor{
         return newTile
   }
     findTile(event:MouseEvent,edit:boolean){
-        
+        console.log('zavolal find tile')
         let coords = calibreEventCoords(event)
         let tiles = this.game.getTiles()
         
         for (let i = tiles.length-1; i >= 0;i--){
             if (tiles[i].isPointedAt(coords.x,coords.y)){
-                
+                console.log('nasiel')
                 if (tiles[i] == this.choosenTile){
                     tiles[i].setIsChoosen(false)               
                     this.choosenTile = undefined
@@ -171,6 +178,7 @@ class GameEditor{
                 }
             })
         }
+    
         return i
     }
     tileWithNumberExists(num:number){
@@ -437,6 +445,7 @@ class GameEditor{
     public setTurnsToSetFree(newTurns:number){
         this.turnToSetFree = newTurns
     }
+    
     
 }
 

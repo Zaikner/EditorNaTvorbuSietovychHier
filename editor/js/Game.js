@@ -4,7 +4,6 @@ exports.Game = void 0;
 var Path_js_1 = require("./Path.js");
 var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
-var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
@@ -30,6 +29,7 @@ var Game = /** @class */ (function () {
         //----------playing---------
         //private hasStarted = false;
         this.isOnTurn = false;
+        this.nextTilesIds = new Map();
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -50,18 +50,15 @@ var Game = /** @class */ (function () {
             });
             canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
                 author: this.author,
-                background: {
-                    backgroundImage: this.background.getBackgroundImage() === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.background.getBackgroundImage()),
-                    color: this.background.getColor()
-                },
+                background: this.background.save(),
                 tiles: savedTiles_1,
                 numOfPlayers: this.numOfPlayers,
                 pawns: savedPawns_1,
                 styles: savedPawnStyles_1,
                 rules: this.rules,
-                id: (0, canvas_js_1.getCookie)('id')
+                id: (0, canvas_js_1.getCookie)('id'),
+                nextTilesIds: this.mapNextTiles()
             });
-            window.location.replace('/');
         }
     };
     Game.prototype.insertPawns = function (player, tile) {
@@ -121,6 +118,15 @@ var Game = /** @class */ (function () {
             }
             value--;
         }
+        return ret;
+    };
+    Game.prototype.mapNextTiles = function () {
+        var ret = [];
+        Array.from(this.nextTilesIds.entries()).forEach(function (_a) {
+            var key = _a[0], value = _a[1];
+            ret.push(key);
+            ret.push(value.toString());
+        });
         return ret;
     };
     Game.prototype.removeTile = function (tile) {
@@ -233,6 +239,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getIsOnturn = function () {
         return this.isOnTurn;
+    };
+    Game.prototype.setNextTilesIds = function (newIds) {
+        this.nextTilesIds = newIds;
+    };
+    Game.prototype.getNextTilesIds = function () {
+        return this.nextTilesIds;
     };
     return Game;
 }());

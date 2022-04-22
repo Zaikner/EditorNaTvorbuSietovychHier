@@ -29,8 +29,8 @@ var Rules = /** @class */ (function () {
     Rules.prototype.upsert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
-            name: 'insert-rules',
-            text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameName") VALUES($1,$2);',
+            name: 'upsert-rules',
+            text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameName") VALUES($1,$2) ON CONFLICT("gameName") DO UPDATE SET text = EXCLUDED.text,"gameName"=EXCLUDED."gameName";',
             values: [this.text, this.gameName]
         };
         client

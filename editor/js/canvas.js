@@ -1,7 +1,7 @@
 "use strict";
 var _a, _b, _c, _d, _e, _f;
 exports.__esModule = true;
-exports.clickFunction = exports.canMovePawnFunc = exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.texts = exports.clickFunction = exports.canMovePawnFunc = exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
@@ -15,7 +15,7 @@ var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
 var Warning_1 = require("./Warning");
-var TextLoader_1 = require("./TextLoader");
+var BackgroundComponent_1 = require("./BackgroundComponent");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
@@ -72,6 +72,12 @@ editorSocket.on('connected', function (msg) {
         addedTile.setMustThrown(tile.mustThrown);
         addedTile.setTurnsToSetFree(tile.turnToSetFree);
         addedTile.setQuestionId(tile.questionId);
+        var t = tile.nextTilesIds;
+        var add = new Map();
+        for (var i_1 = 0; i_1 * 2 < t.length; i_1++) {
+            add.set(t[2 * i_1], t[2 * i_1 + 1]);
+        }
+        addedTile.setNextTilesIds(add);
         editor.getGame().addTile(addedTile);
         reload(editor, ctx);
     });
@@ -88,15 +94,47 @@ editorSocket.on('connected', function (msg) {
         };
         background.setBackgroundImage(backImage_1);
     }
+    msg.components.forEach(function (component) {
+        var newComponent = new BackgroundComponent_1.BackgroundComponent();
+        if (component.image != 'none' || component.image != undefined) {
+            var image_3 = new Image();
+            image_3.src = component.image;
+            image_3.onload = function () {
+                newComponent.setImage(image_3);
+                background.getComponents().push(newComponent);
+                reload(editor, ctx);
+            };
+        }
+        newComponent.setType(component.type);
+        newComponent.setColor(component.color);
+        newComponent.setImage(component.image);
+        newComponent.setImageHeight(component.imageHeigth);
+        newComponent.setImageWidth(component.imageWidth);
+        newComponent.setCenterX(component.centerX);
+        newComponent.setCenterY(component.centerY);
+        newComponent.setRadius(component.radius);
+        newComponent.setStroke(component.stroke);
+        newComponent.setStrokeColor(component.strokeColor);
+        newComponent.setX1(component.x1);
+        newComponent.setY1(component.y1);
+        newComponent.setX2(component.x2);
+        newComponent.setY2(component.y2);
+    });
     editor.getGame().setBackground(background);
     //editor.getGame().setBackground(msg.background)
     editor.getGame().setAuthor(msg.game.author);
     editor.getGame().setName(msg.game.name);
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
     editor.getGame().setRules(msg.rules);
+    var gameNextTiles = msg.game.nextTilesIds;
+    var add = new Map();
+    for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
+        add.set(gameNextTiles[2 * i_2], gameNextTiles[2 * i_2 + 1]);
+    }
+    editor.getGame().setNextTilesIds(add);
     var tokens = [];
-    for (var i_1 = 1; i_1 <= 6; i_1++) {
-        tokens.push('Player ' + i_1);
+    for (var i_3 = 1; i_3 <= editor.getGame().getnumOfPlayers(); i_3++) {
+        tokens.push('Player ' + i_3);
     }
     editor.getGame().setPlayerTokens(tokens);
     (0, Gameplay_1.initGameInfo)(msg.game.name);
@@ -114,6 +152,8 @@ editorSocket.on('connected', function (msg) {
         //p.setImage(image)
         editor.getGame().getPawnStyle().set(style.player, p);
     });
+    console.log('loaded game:');
+    console.log(editor);
 });
 editorSocket.on('react to event: forward', function (msg) {
     editor.getGame().setIsOnTurn(true);
@@ -127,6 +167,13 @@ editorSocket.on('react to event: backward', function (msg) {
     var ret = editor.getGame().howManyCanMoveBack(msg.pawnId, msg.value);
     Warning_1.Warning.showInGame('Event occured: Go backward!');
     editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
+});
+editorSocket.on('not author', function () {
+    Warning_1.Warning.show('You can not create game with this name. Game with this name already exists, and you are not author of it.');
+    console.log('not author');
+});
+editorSocket.on('game saved', function () {
+    window.location.replace('/');
 });
 editorSocket.on('react to event: skip', function (msg) {
     Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
@@ -246,8 +293,9 @@ if (zoz[zoz.length - 2] === 'editor') {
     //editor.getGame().setInitSizeY(window.innerHeight)
 }
 else {
-    document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
+    //
     if (params.get('id') != null) {
+        document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
         editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
         editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
         (0, Gameplay_1.initDice)();
@@ -362,8 +410,11 @@ editorSocket.on('player ended', function (msg) {
     document.getElementById("ruleInput").value = editor.getGame().getRules();
 });
 function edit() {
-    var _a;
+    var _a, _b, _c, _d, _e;
     mainMenu();
+    // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
+    //   updateNextTileIds()
+    // })
     document.getElementById('forwardButton').addEventListener('click', function () {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go ahead?');
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
@@ -429,10 +480,22 @@ function edit() {
         });
     });
     //$('#rulesModal').modal('show');
-    document.getElementById('editBackground').addEventListener('click', function () { (0, BackgroundEditor_1.editBackground)(); });
-    document.getElementById('insertTiles').addEventListener('click', function () { (0, TileEditor_js_1.insertTilesMenu)(); });
-    document.getElementById('moveTiles').addEventListener('click', function () { (0, TileEditor_js_1.moveTiles)(); });
-    document.getElementById('editTiles').addEventListener('click', function () { (0, TileEditor_js_1.editTiles)(); });
+    document.getElementById('editBackground').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
+        (0, BackgroundEditor_1.editBackground)();
+    });
+    document.getElementById('insertTiles').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
+        (0, TileEditor_js_1.insertTilesMenu)();
+    });
+    document.getElementById('moveTiles').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
+        (0, TileEditor_js_1.moveTiles)();
+    });
+    document.getElementById('editTiles').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
+        (0, TileEditor_js_1.editTiles)();
+    });
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
     document.getElementById('questionManager').addEventListener('click', function () {
         elementDeleter('listContainer');
@@ -446,6 +509,10 @@ function edit() {
         (0, TileEditor_js_1.removeAllListenersAdded)();
         mainMenu();
     });
+    (_a = document.getElementById('addComponent')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { (0, BackgroundEditor_1.addComponentMenu)(); });
+    (_b = document.getElementById('editComponent')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () { (0, BackgroundEditor_1.editComponentMenu)(); });
+    (_c = document.getElementById('moveComponent')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () { (0, BackgroundEditor_1.moveComponentMenu)(); });
+    (_d = document.getElementById('deleteComponent')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () { (0, BackgroundEditor_1.deleteComponentMenu)(); });
     document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 0 }); });
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
@@ -453,15 +520,13 @@ function edit() {
     document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
     document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
-    (_a = document.getElementById('loadCreatedGameModal')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+    (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
         editorSocket.emit('load game', { id: getCookie('id'), name: val });
         mainMenu();
     });
-    document.getElementById('insertPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnInsertMenu)(); });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
-    document.getElementById('deletePawn').addEventListener('click', function () { (0, PawnEditor_1.pawnDeleteMenu)(); });
     document.getElementById("resetQuestionID").addEventListener('click', function () {
         editor.setQuestionId(-1);
         document.getElementById('bindQuestion').textContent = 'Not picked!';
@@ -495,10 +560,11 @@ function mainMenu() {
         if (number < playerTokens.length) {
             var _loop_1 = function (i) {
                 playerTokens.pop();
-                editor.getGame().getPawnStyle()["delete"]('Player ' + (playerTokens.length + 1));
+                editor.getGame().getPawnStyle()["delete"]('Player ' + i);
+                editor.getGame().getNextTilesIds()["delete"]('Player ' + i);
                 var rem = [];
                 editor.getGame().getPawns().forEach(function (pawn) {
-                    if (pawn.player == ('Player ' + (playerTokens.length + 1))) {
+                    if (pawn.player == ('Player ' + i)) {
                         rem.push(pawn);
                     }
                 });
@@ -507,18 +573,23 @@ function mainMenu() {
                     pawn.tile.removePawn(pawn);
                 });
             };
-            for (var i = 0; i < playerTokens.length - number; i++) {
+            for (var i = number; i <= 6; i++) {
                 _loop_1(i);
             }
         }
         if (number > playerTokens.length) {
-            for (var i = 0; i < number - playerTokens.length; i++) {
-                playerTokens.push('Player ' + (playerTokens.length + 1));
-                editor.getGame().getPawnStyle().set('Player ' + (playerTokens.length), new PawnStyle_1.PawnStyle('Player ' + (playerTokens.length), '#000000', 'type1'));
+            for (var i = 1; i <= number; i++) {
+                if (!playerTokens.includes('Player ' + i)) {
+                    playerTokens.push('Player ' + (playerTokens.length + 1));
+                    editor.getGame().getNextTilesIds().set('Player ' + i, editor.getGame().getTiles().length + 1);
+                    editor.getGame().getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
+                }
                 //editor.getGame().getPawnStyle().Player
             }
         }
         editor.getGame().setPlayerTokens(playerTokens);
+        console.log(playerTokens);
+        console.log(editor.getGame().getNextTilesIds());
         reload(editor, ctx);
     };
     document.getElementById("numOfPlayersPlace").appendChild(numOfPlayersSlider);
@@ -608,10 +679,10 @@ function resize(editor, context) {
     context.canvas.height = window.innerHeight;
     if (!isEditor) {
         if (editor.getGame().getInitSizeX() == 0) {
-            editor.getGame().setInitSizeX(window.innerWidth / 3 * 2 - 30);
+            editor.getGame().setInitSizeX(canvas.width);
         }
         if (editor.getGame().getInitSizeY() == 0) {
-            editor.getGame().setInitSizeY(window.innerHeight);
+            editor.getGame().setInitSizeY(canvas.height);
         }
         editor.getGame().setScaleX((window.innerWidth / 3 * 2 - 30) / editor.getGame().getInitSizeX());
         editor.getGame().setScaleY(window.innerHeight / editor.getGame().getInitSizeY());
@@ -686,9 +757,16 @@ function getCookie(name) {
     return cookie.get(name);
 }
 exports.getCookie = getCookie;
-(0, TextLoader_1.loadTexts)();
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
     }
+    editorSocket.emit('get texts', { language: getCookie('language') });
 };
+var texts = [];
+exports.texts = texts;
+editorSocket.on('got texts', function (msg) {
+    exports.texts = texts = msg.text;
+    console.log(texts);
+});
+setInterval(function () { resize(editor, ctx); }, 500);
