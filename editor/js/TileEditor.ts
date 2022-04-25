@@ -1,5 +1,5 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket, canMovePawnFunc} from './canvas.js'
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket, canMovePawnFunc, texts} from './canvas.js'
 
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
@@ -10,6 +10,7 @@ import { deletePawn, insertPawn } from './PawnEditor.js'
 import { Pawn } from './Pawn.js'
 import { spawn } from 'child_process'
 import { removeAllComponentListeners } from './BackgroundEditor.js'
+import { text } from 'body-parser'
 
 let moveEventHandler = function(event:MouseEvent) {editor.findTile(event,true)   
 reload(editor,ctx)
@@ -59,12 +60,12 @@ let copyTile = function(event:MouseEvent) {
   editor.getChoosenTile()?.setIsChoosen(false)
   editor.setChoosenTile(undefined!)   
 
-  spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
-    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],'Stop inserting!',insertTilesMenu)   
+  spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
+    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[121],insertTilesMenu)   
   
 
-    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile!',undoTileInsert)
-    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],'Copy Tile Style!',copyTileStyle)
+    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],texts[122],undoTileInsert)
+    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],texts[123],copyTileStyle)
   
     reload(editor,ctx)
     canvas.addEventListener('mousedown', insert);
@@ -78,39 +79,39 @@ function spawnElements(){
     //$('#exampleModal').modal('toggle')
 
     spawnCanvas(doc,'tileEditingPlace','changeCanvas')
-    spawnParagraph(doc,"tileEditingPlace",'','Choose color of tile:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[124])
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
     colorPicker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'','Tile size:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[125])
     let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider','20','50','1','30')
     sizeOfTileSlider.onchange = showActualState
    
-    spawnParagraph(doc,"tileEditingPlace",'','Tile have outline? (checkbox)')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[126])
     let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,['no','yes'])
     outlineChecker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'','Choose color of outline:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[127])
     let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker')
     outlineColorPicker.onchange = showActualState
     
 
-    spawnParagraph(doc,"tileEditingPlace",'','Outline size:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[128])
     
     let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider','1','10','1','3')
     sizeOfOutlineSlider.onchange = showActualState
     
-    spawnParagraph(doc,"tileEditingPlace",'','Choose shape:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[129])
     let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',["btn","btn-dark"],['circle','square'])
     shapeMenu.onchange= showActualState
     
 
     
-    spawnParagraph(doc,"tileEditingPlace",'','Tile have pattern from images? (checkbox)')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[130])
     let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,['no','yes'])
     patternChecker.onchange = showActualState
 
-  spawnImageInput(doc,"tileEditingPlace",'tilePattern','Choose a Pattern!',function(){
+  spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],function(){
   
     if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
       editor.setPattern(new Image())
@@ -125,13 +126,13 @@ function spawnElements(){
     }
   })
   
-  spawnParagraph(doc,"tileEditingPlace",'','Choose background image:')
+  spawnParagraph(doc,"tileEditingPlace",'',texts[132])
 
-    spawnParagraph(doc,"tileEditingPlace",'','Tile have background image? (checkbox)')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[133])
     let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,['no','yes'])
     backgroundChecker.onchange = showActualState
   
-    spawnImageInput(doc,"tileEditingPlace",'tileImage','Choose an Image!',function(){
+    spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],function(){
   
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
         editor.setImage(new Image())
@@ -146,28 +147,28 @@ function spawnElements(){
       }
     })
 
-spawnParagraph(doc,"tileEditingPlace",'','For whom is this starting tile? (choose players)')
+spawnParagraph(doc,"tileEditingPlace",'',texts[135])
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'start')
 
-spawnParagraph(doc,"tileEditingPlace",'','For whom is this finishing tile? (choose players)')
+spawnParagraph(doc,"tileEditingPlace",'',texts[136])
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'end')
 
 spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)')
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
 
-    spawnParagraph(doc,"tileEditingPlace",'','Toogle tile numbering ingame? (checkbox)')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[137])
     spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,['no','yes'])
    
-    spawnParagraph(doc,"tileEditingPlace",'','Choose color of numbering:')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[138])
     let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
     numberingColorPicker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'','Choose tile number! (Insert a number into textfield)')
+    spawnParagraph(doc,"tileEditingPlace",'',texts[139])
     let tileNumberSetter = spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
     tileNumberSetter.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'','For each player set next tile!')
-    spawnButton(doc,"tileEditingPlace",'setNextTileButton',['btn','btn-secondary'],'Set next tile!',function(){
+    spawnParagraph(doc,"tileEditingPlace",'',texts[140])
+    spawnButton(doc,"tileEditingPlace",'setNextTileButton',['btn','btn-secondary'],texts[141],function(){
       
       $('#nextTileModal').modal('show');
       generateNextTiles()
@@ -178,17 +179,17 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     
 
     
-    spawnParagraph(document,'tileEditingPlace','','Is pawn elemination on this tile allowed ?')
+    spawnParagraph(document,'tileEditingPlace','',texts[142])
     spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,['no','yes'])
 
-    spawnParagraph(document,'tileEditingPlace','',"Which players can't be eliminated on this tile?")
+    spawnParagraph(document,'tileEditingPlace','',texts[143])
     spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
 
-    spawnParagraph(document,'tileEditingPlace','','Ask question on this tile?')
+    spawnParagraph(document,'tileEditingPlace','',texts[144])
     let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,['no','yes'])
 
-    spawnParagraph(document,'tileEditingPlace','','Pick question')
-    spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],'Not picked!',function(){
+    spawnParagraph(document,'tileEditingPlace','',texts[72])
+    spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
       
       if (!questionChecker.checked){
         Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
@@ -200,14 +201,14 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     
 
     })
-    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph','Picked Question: None')
-    spawnParagraph(document,'tileEditingPlace','','Does event occur when moving to this tile ??')
+    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145])
+    spawnParagraph(document,'tileEditingPlace','',texts[146])
     let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
 
     
 
-    spawnParagraph(document,'tileEditingPlace','','Pick event')
-    spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],'Not picked!',function(){
+    spawnParagraph(document,'tileEditingPlace','',texts[98])
+    spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],texts[114],function(){
       if (!eventChecker.checked){
         Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
       }
@@ -237,9 +238,9 @@ function insertTilesMenu():void{
   reload(editor,ctx)
   removeAllButtons()  
   canvas.addEventListener('click',moveEventHandler)
-    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
-    spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],'Draw Path!!',editTrack)
-    spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],'Insert by one!',startInsertingByOne)
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
+    spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],texts[26],editTrack)
+    spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],texts[27],startInsertingByOne)
     
 }
   function startInsertingByOne(){
@@ -249,12 +250,12 @@ function insertTilesMenu():void{
     removeAllListenersAdded()
     
     canvas.addEventListener('mousedown', insert);
-    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
-    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],'Stop inserting!',insertTilesMenu)   
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
+    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[28],insertTilesMenu)   
     spawnElements()
 
-    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile!',undoTileInsert)
-    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],'Copy Tile Style!',copyTileStyle)
+    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],texts[122],undoTileInsert)
+    spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],texts[123],copyTileStyle)
     showActualState()
   }
 
@@ -262,7 +263,7 @@ function insertTilesMenu():void{
     editor.nullEditor()
     removeAllButtons()
     removeAllListenersAdded()
-    spawnParagraph(document,'tileEditingPlace','',"Click on Tile to copy it's style")
+    spawnParagraph(document,'tileEditingPlace','',texts[147])
     document.getElementById('wholeBody')!.style.cursor = 'pointer'
     //canvas.style.cursor = 'pointer'
     //document.getElementById('optionPlace')!.style.cursor = 'pointer'
@@ -285,8 +286,8 @@ function insertTilesMenu():void{
     canvas.addEventListener('click',moveEventHandler)
     removeAllButtons()
     editor.setIsMoving(false)
-    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveEditingTiles)
-    spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],'Edit button!',update)   
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
+    spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],texts[64],update)   
 
     if ( editor.getChoosenTile()!= undefined){
       editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor().slice())
@@ -327,7 +328,7 @@ function insertTilesMenu():void{
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllListenersAdded()
     removeAllButtons()
-    spawnButton(doc,"buttonPlace",'End',["btn","btn-dark"],'End deleting!',saveInsertingTiles) 
+    spawnButton(doc,"buttonPlace",'End',["btn","btn-dark"],texts[90],saveInsertingTiles) 
    
     canvas.addEventListener('click',deleteHandler)
   }
@@ -632,7 +633,7 @@ function insertTilesMenu():void{
 
       if (tile.getQuestionId()!=-1){
         (<HTMLInputElement>document.getElementById('askQuestionChecker')).checked = true;
-        (doc.getElementById("askQuestionCheckerShower"))!.textContent = 'yes'
+        (doc.getElementById("askQuestionCheckerShower"))!.textContent = texts[93]
         
         document.getElementById('bindQuestion')!.textContent = 'Choosen Question Id: '+tile.getQuestionId()
        
@@ -640,37 +641,38 @@ function insertTilesMenu():void{
       }
       if (tile.getSkip()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
-        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes'
-        document.getElementById('bindEvent')!.textContent ='Skip: ' + tile.getSkip() +' times.'
+        (doc.getElementById('eventCheckerShower'))!.textContent = texts[93]
+        document.getElementById('bindEvent')!.textContent =texts[105] + tile.getSkip() +texts[100]
         
       }
       if (tile.getRepeat()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
-        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
-        document.getElementById('bindEvent')!.textContent ='Repeat turn: ' + tile.getRepeat() +' times.'
+        (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
+        document.getElementById('bindEvent')!.textContent =texts[108] + tile.getRepeat() +texts[100]
         
       }
       if (tile.getForward()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
-        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
-        document.getElementById('bindEvent')!.textContent ='Go forward: ' + tile.getForward() +' times.'
+        (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
+        document.getElementById('bindEvent')!.textContent =texts[99] + tile.getForward() +texts[100]
       }
       if (tile.getBackward()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
-        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
-        document.getElementById('bindEvent')!.textContent ='Go backward: ' + tile.getBackward() +' times.'
+        (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
+        document.getElementById('bindEvent')!.textContent =texts[103] + tile.getBackward() +texts[10]
       }
       if (tile.getMustThrown()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
-        (doc.getElementById('eventCheckerShower'))!.textContent = 'yes';
-        document.getElementById('bindEvent')!.textContent ='Thrown: ' + tile.getMustThrown() +' . Or wait ' +tile.getTurnsToSetFree()+ ' turns';
+        (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
+        texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
+        document.getElementById('bindEvent')!.textContent =texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
       }
 
       if (outlineChecker.checked){
-        doc.getElementById("outlineCheckerShower")!.textContent = 'yes'
+        doc.getElementById("outlineCheckerShower")!.textContent = texts[93];
       }
       else{
-        doc.getElementById("outlineCheckerShower")!.textContent = 'no'
+        doc.getElementById("outlineCheckerShower")!.textContent = texts[92];
       }
 
       shapeMenu.value = tile!.getShape()
@@ -678,29 +680,29 @@ function insertTilesMenu():void{
       backgroundChecker.checked = (tile.getBackgroundFile() != undefined)
 
       if (backgroundChecker.checked){
-        doc.getElementById("backgroundCheckerShower")!.textContent = 'yes'
+        doc.getElementById("backgroundCheckerShower")!.textContent = texts[93]
         
       }
       else{
-        doc.getElementById("backgroundCheckerShower")!.textContent = 'no'
+        doc.getElementById("backgroundCheckerShower")!.textContent = texts[92]
       }
 
       patternChecker.checked = (tile.getPatternFile() != undefined)
       //console.log(doc.getElementById("patternCheckerShower")!)
       if (patternChecker.checked){
-        doc.getElementById("patternCheckerShower")!.textContent = 'yes'
+        doc.getElementById("patternCheckerShower")!.textContent = texts[92]
         
       }
       else{
-        doc.getElementById("patternCheckerShower")!.textContent = 'no'
+        doc.getElementById("patternCheckerShower")!.textContent = texts[93]
       }
       toogleNumberingChecker.checked = tile.getToggleNumber()!
       if (toogleNumberingChecker.checked){
-        doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'yes'
+        doc.getElementById("toogleNumberingCheckerShower")!.textContent = texts[92]
         
       }
       else{
-        doc.getElementById("toogleNumberingCheckerShower")!.textContent = 'no'
+        doc.getElementById("toogleNumberingCheckerShower")!.textContent = texts[93]
       }
     }
 
@@ -782,7 +784,7 @@ function insertTilesMenu():void{
        
         document.getElementById('nextTileModalBody')!.appendChild(div)
 
-        spawnParagraph(document,'div' + token,'','Next tile for player '+token+' is: ')
+        spawnParagraph(document,'div' + token,'',texts[148]+token+texts[149])
         div.appendChild(input)
   })}
 

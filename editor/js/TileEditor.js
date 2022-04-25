@@ -56,10 +56,10 @@ var copyTile = function (event) {
     showActualState();
     (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
     canvas_js_1.editor.setChoosenTile(undefined);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], 'Copy Tile Style!', copyTileStyle);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], canvas_js_1.texts[79], saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], canvas_js_1.texts[121], insertTilesMenu);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], canvas_js_1.texts[122], undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], canvas_js_1.texts[123], copyTileStyle);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.canvas.addEventListener('mousedown', insert);
 };
@@ -70,28 +70,28 @@ var deleteHandler = function (event) {
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
     (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of tile:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[124]);
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
     colorPicker.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile size:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[125]);
     var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', '20', '50', '1', '30');
     sizeOfTileSlider.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have outline? (checkbox)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[126]);
     var outlineChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'outlineChecker', false, ['no', 'yes']);
     outlineChecker.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of outline:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[127]);
     var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker');
     outlineColorPicker.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Outline size:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[128]);
     var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', '1', '10', '1', '3');
     sizeOfOutlineSlider.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose shape:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[129]);
     var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ["btn", "btn-dark"], ['circle', 'square']);
     shapeMenu.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have pattern from images? (checkbox)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[130]);
     var patternChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'patternChecker', false, ['no', 'yes']);
     patternChecker.onchange = showActualState;
-    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', 'Choose a Pattern!', function () {
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', canvas_js_1.texts[131], function () {
         if (canvas_js_1.doc.getElementById('tilePattern').files.length > 0) {
             canvas_js_1.editor.setPattern(new Image());
             canvas_js_1.editor.getPattern().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tilePattern').files[0]);
@@ -103,11 +103,11 @@ function spawnElements() {
             canvas_js_1.editor.setPattern(undefined);
         }
     });
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose background image:');
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Tile have background image? (checkbox)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[132]);
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[133]);
     var backgroundChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'backgroundChecker', false, ['no', 'yes']);
     backgroundChecker.onchange = showActualState;
-    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', 'Choose an Image!', function () {
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', canvas_js_1.texts[134], function () {
         if (canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
             canvas_js_1.editor.setImage(new Image());
             canvas_js_1.editor.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
@@ -119,34 +119,34 @@ function spawnElements() {
             canvas_js_1.editor.setImage(undefined);
         }
     });
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For whom is this starting tile? (choose players)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[135]);
     (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'start');
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For whom is this finishing tile? (choose players)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[136]);
     (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'end');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Which player can visit this tile? (choose players)');
     (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'enabled');
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Toogle tile numbering ingame? (checkbox)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[137]);
     (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'toogleNumberingChecker', false, ['no', 'yes']);
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose color of numbering:');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[138]);
     var numberingColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker');
     numberingColorPicker.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'Choose tile number! (Insert a number into textfield)');
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[139]);
     var tileNumberSetter = (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
     tileNumberSetter.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', 'For each player set next tile!');
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', ['btn', 'btn-secondary'], 'Set next tile!', function () {
+    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', canvas_js_1.texts[140]);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', ['btn', 'btn-secondary'], canvas_js_1.texts[141], function () {
         $('#nextTileModal').modal('show');
         generateNextTiles();
     });
     //spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Is pawn elemination on this tile allowed ?');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[142]);
     (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eleminationChecker', false, ['no', 'yes']);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Which players can't be eliminated on this tile?");
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[143]);
     (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', canvas_js_1.editor.getGame().getPlayerTokens(), 'immune');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Ask question on this tile?');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[144]);
     var questionChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'askQuestionChecker', false, ['no', 'yes']);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick question');
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindQuestion', ['btn', 'btn-secondary'], 'Not picked!', function () {
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[72]);
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindQuestion', ['btn', 'btn-secondary'], canvas_js_1.texts[114], function () {
         if (!questionChecker.checked) {
             Warning_js_1.Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.');
         }
@@ -155,11 +155,11 @@ function spawnElements() {
             $('#pickQuestionModal').modal('show');
         }
     });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedQuestionParagraph', 'Picked Question: None');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Does event occur when moving to this tile ??');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedQuestionParagraph', canvas_js_1.texts[145]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[146]);
     var eventChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eventChecker', false, ['no', 'yes']);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Pick event');
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], 'Not picked!', function () {
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[98]);
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], canvas_js_1.texts[114], function () {
         if (!eventChecker.checked) {
             Warning_js_1.Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.');
         }
@@ -186,9 +186,9 @@ function insertTilesMenu() {
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'drawPath', ["btn", "btn-dark"], 'Draw Path!!', PathEditor_js_1.editTrack);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'startInsertingButton', ["btn", "btn-dark"], 'Insert by one!', startInsertingByOne);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], canvas_js_1.texts[79], saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'drawPath', ["btn", "btn-dark"], canvas_js_1.texts[26], PathEditor_js_1.editTrack);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'startInsertingButton', ["btn", "btn-dark"], canvas_js_1.texts[27], startInsertingByOne);
 }
 exports.insertTilesMenu = insertTilesMenu;
 function startInsertingByOne() {
@@ -197,18 +197,18 @@ function startInsertingByOne() {
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('mousedown', insert);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveInsertingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], 'Stop inserting!', insertTilesMenu);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], canvas_js_1.texts[79], saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], canvas_js_1.texts[28], insertTilesMenu);
     spawnElements();
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile!', undoTileInsert);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], 'Copy Tile Style!', copyTileStyle);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], canvas_js_1.texts[122], undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], canvas_js_1.texts[123], copyTileStyle);
     showActualState();
 }
 function copyTileStyle() {
     canvas_js_1.editor.nullEditor();
     removeAllButtons();
     removeAllListenersAdded();
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Click on Tile to copy it's style");
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[147]);
     document.getElementById('wholeBody').style.cursor = 'pointer';
     //canvas.style.cursor = 'pointer'
     //document.getElementById('optionPlace')!.style.cursor = 'pointer'
@@ -229,8 +229,8 @@ function editTiles() {
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     removeAllButtons();
     canvas_js_1.editor.setIsMoving(false);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', saveEditingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], 'Edit button!', update);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], canvas_js_1.texts[79], saveEditingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Update', ["btn", "btn-dark"], canvas_js_1.texts[64], update);
     if (canvas_js_1.editor.getChoosenTile() != undefined) {
         canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor().slice());
         canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor().slice());
@@ -266,7 +266,7 @@ function deleteTiles() {
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllListenersAdded();
     removeAllButtons();
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'End', ["btn", "btn-dark"], 'End deleting!', saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'End', ["btn", "btn-dark"], canvas_js_1.texts[90], saveInsertingTiles);
     canvas_js_1.canvas.addEventListener('click', deleteHandler);
 }
 exports.deleteTiles = deleteTiles;
@@ -531,62 +531,63 @@ var setValues = function (tile, copyNumber) {
         }
         if (tile.getQuestionId() != -1) {
             document.getElementById('askQuestionChecker').checked = true;
-            (canvas_js_1.doc.getElementById("askQuestionCheckerShower")).textContent = 'yes';
+            (canvas_js_1.doc.getElementById("askQuestionCheckerShower")).textContent = canvas_js_1.texts[93];
             document.getElementById('bindQuestion').textContent = 'Choosen Question Id: ' + tile.getQuestionId();
         }
         if (tile.getSkip() != 0) {
             document.getElementById('eventChecker').checked = true;
-            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
-            document.getElementById('bindEvent').textContent = 'Skip: ' + tile.getSkip() + ' times.';
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = canvas_js_1.texts[93];
+            document.getElementById('bindEvent').textContent = canvas_js_1.texts[105] + tile.getSkip() + canvas_js_1.texts[100];
         }
         if (tile.getRepeat() != 0) {
             document.getElementById('eventChecker').checked = true;
-            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
-            document.getElementById('bindEvent').textContent = 'Repeat turn: ' + tile.getRepeat() + ' times.';
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = canvas_js_1.texts[93];
+            document.getElementById('bindEvent').textContent = canvas_js_1.texts[108] + tile.getRepeat() + canvas_js_1.texts[100];
         }
         if (tile.getForward() != 0) {
             document.getElementById('eventChecker').checked = true;
-            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
-            document.getElementById('bindEvent').textContent = 'Go forward: ' + tile.getForward() + ' times.';
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = canvas_js_1.texts[93];
+            document.getElementById('bindEvent').textContent = canvas_js_1.texts[99] + tile.getForward() + canvas_js_1.texts[100];
         }
         if (tile.getBackward() != 0) {
             document.getElementById('eventChecker').checked = true;
-            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
-            document.getElementById('bindEvent').textContent = 'Go backward: ' + tile.getBackward() + ' times.';
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = canvas_js_1.texts[93];
+            document.getElementById('bindEvent').textContent = canvas_js_1.texts[103] + tile.getBackward() + canvas_js_1.texts[10];
         }
         if (tile.getMustThrown() != 0) {
             document.getElementById('eventChecker').checked = true;
-            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = 'yes';
-            document.getElementById('bindEvent').textContent = 'Thrown: ' + tile.getMustThrown() + ' . Or wait ' + tile.getTurnsToSetFree() + ' turns';
+            (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = canvas_js_1.texts[93];
+            canvas_js_1.texts[110] + tile.getMustThrown() + canvas_js_1.texts[111] + tile.getTurnsToSetFree() + canvas_js_1.texts[100];
+            document.getElementById('bindEvent').textContent = canvas_js_1.texts[110] + tile.getMustThrown() + canvas_js_1.texts[111] + tile.getTurnsToSetFree() + canvas_js_1.texts[100];
         }
         if (outlineChecker.checked) {
-            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = canvas_js_1.texts[93];
         }
         else {
-            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = canvas_js_1.texts[92];
         }
         shapeMenu.value = tile.getShape();
         backgroundChecker.checked = (tile.getBackgroundFile() != undefined);
         if (backgroundChecker.checked) {
-            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = canvas_js_1.texts[93];
         }
         else {
-            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("backgroundCheckerShower").textContent = canvas_js_1.texts[92];
         }
         patternChecker.checked = (tile.getPatternFile() != undefined);
         //console.log(doc.getElementById("patternCheckerShower")!)
         if (patternChecker.checked) {
-            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = canvas_js_1.texts[92];
         }
         else {
-            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("patternCheckerShower").textContent = canvas_js_1.texts[93];
         }
         toogleNumberingChecker.checked = tile.getToggleNumber();
         if (toogleNumberingChecker.checked) {
-            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = canvas_js_1.texts[92];
         }
         else {
-            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = canvas_js_1.texts[93];
         }
     }
     //startingFor = doc.getElementById('')
@@ -650,7 +651,7 @@ function generateNextTiles() {
             canvas_js_1.editor.getGame().getNextTilesIds().set(token, parseInt(input.value));
         };
         document.getElementById('nextTileModalBody').appendChild(div);
-        (0, Elements_js_1.spawnParagraph)(document, 'div' + token, '', 'Next tile for player ' + token + ' is: ');
+        (0, Elements_js_1.spawnParagraph)(document, 'div' + token, '', canvas_js_1.texts[148] + token + canvas_js_1.texts[149]);
         div.appendChild(input);
     });
 }
