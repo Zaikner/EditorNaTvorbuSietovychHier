@@ -44,8 +44,15 @@ export class ServerSocket{
         this.io.on('connection', (socket:any) => {
             socket.emit('pipi')
             
-            socket.on('load game',async (msg:{id:string,name:string,room:string}) => {
-               
+            socket.on('load game',async (msg:{id:string,name:string,room:string,response:boolean}) => {
+
+                    if (msg.response){
+                        let game = await GameFinder.getIntance().findByName(msg.name)
+                        if (game!.length == 0){
+                          socket.emit('wrong game name')
+                          return
+                        }
+                    }
                     let acc = AccountManager.getAccountByClientId(msg.id)
                     acc.setSocketId(socket.id)
                     // let game = await GameFinder.getIntance().findByName(msg.name)

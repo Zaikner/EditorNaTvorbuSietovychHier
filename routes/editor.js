@@ -2,15 +2,22 @@ const express = require('express');
 const path = require('path');
 const SocketServer = require('../services/socket/SocketServer.js')
 const AccountManager = require('../backEnd/Accounts/AccountManager.js')
-
+const { TextsFinder } = require('../services/db/RDG/TextFinder.js');
 let router = express.Router()
 
 router
 .route("/")
-.get((request,res) =>
+.get( async(request,res) =>
 {   
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
 
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
     if (request.cookies.id != undefined && acc != undefined){
         if (acc.getIsGuest() === true){
             
@@ -21,7 +28,7 @@ router
             console.log('editor redirectuje')
             let acc = AccountManager.getAccountByClientId(request.cookies.id)
            
-            res.sendFile('edit.html',{root:'./editor/views'});
+            res.render('edit',{root:'./editor/views',text:text});
           
             // console.log(SocketServer.getIo().to(acc.getSocketId()))
             // console.log(SocketServer.getIo().to(acc.getSocketId()).emit('connected'))

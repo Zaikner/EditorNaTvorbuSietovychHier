@@ -1,4 +1,4 @@
-import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
+import { calibreEventCoords, canvas, ctx, doc, editor, reload, texts } from "./canvas"
 import { spawnButton, spawnCanvas, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { Tile } from "./Tile"
@@ -17,7 +17,7 @@ function pawnInsertMenu(){
     // spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
     // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
-    spawnParagraph(doc,'tileEditingPlace','','To which player it belong?')
+    spawnParagraph(doc,'tileEditingPlace','',texts[73])
     spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
     canvas.addEventListener('click',insertPawn)
 }
@@ -78,24 +78,24 @@ function pawnEditMenu(){
     removeAllListenersAdded()
     removeAllButtons()
 
-    spawnParagraph(doc,'tileEditingPlace','','Select player:')
+    spawnParagraph(doc,'tileEditingPlace','',texts[74])
     let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
     playerPicker.onchange = function(){
         drawActualPawnLook(playerPicker.value)
     }
     spawnCanvas(doc,'tileEditingPlace','pawnStyle')
-    spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
+    spawnParagraph(doc,'tileEditingPlace','',texts[75])
     let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
     colorPicker.onchange = function(){
         editor.getGame().getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
         drawActualPawnLook(playerPicker.value)
     }
-    spawnParagraph(doc,'tileEditingPlace','','Choose pawn type!')
-    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],'Choose type!',function(){$('#pawnModal').modal('show')
+    spawnParagraph(doc,'tileEditingPlace','',texts[76])
+    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],texts[77],function(){$('#pawnModal').modal('show')
      drawStyles(colorPicker.value)})
 
-    spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
-    spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
+    spawnParagraph(doc,'tileEditingPlace','',texts[78])
+    spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[63],function(){})
 
     for (let i = 1; i <= 7; i++){
         let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
@@ -115,7 +115,7 @@ function pawnEditMenu(){
 function pawnDeleteMenu(){
     removeAllListenersAdded()
     removeAllButtons()
-    spawnParagraph(doc,'tileEditingPlace','','To which player it belong?')
+    spawnParagraph(doc,'tileEditingPlace','',texts[73])
     spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
     canvas.addEventListener('click',deletePawn)
 

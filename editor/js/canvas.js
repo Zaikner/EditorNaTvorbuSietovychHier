@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f;
+var _a;
 exports.__esModule = true;
 exports.texts = exports.clickFunction = exports.canMovePawnFunc = exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var Tile_js_1 = require("./Tile.js");
@@ -16,10 +16,13 @@ var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
 var Warning_1 = require("./Warning");
 var BackgroundComponent_1 = require("./BackgroundComponent");
+var texts = [];
+exports.texts = texts;
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
+editorSocket.emit('get texts', { language: getCookie('language') });
 //socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');
 exports.canvas = canvas;
@@ -278,56 +281,64 @@ editorSocket.on('show Dice value', function (msg) {
 });
 var isEditor = false;
 var zoz = window.location.href.split('/');
-if (zoz[zoz.length - 2] === 'editor') {
-    edit();
-    var butt = (0, Elements_1.spawnButton)(document, 'rulesButtons', "questionRuleButton", ["btn", "btn-secondary"], "Edit Changes!", function () {
-        $('#rulesModal').modal('hide');
-    });
-    butt.onclick = function () {
-        editor.getGame().setRules(document.getElementById("ruleInput").value);
-    };
-    //document.getElementById('rulesButtons')!
-    // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
-    isEditor = true;
-    //editor.getGame().setInitSizeX(window.innerWidth)
-    //editor.getGame().setInitSizeY(window.innerHeight)
-}
-else {
-    //
-    if (params.get('id') != null) {
-        document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
-        editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
-        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
-        (0, Gameplay_1.initDice)();
+editorSocket.on('got texts', function (msg) {
+    var _a, _b, _c, _d, _e;
+    exports.texts = texts = msg.text;
+    console.log(texts);
+    if (zoz[zoz.length - 2] === 'editor') {
+        edit();
+        var butt = (0, Elements_1.spawnButton)(document, 'rulesButtons', "questionRuleButton", ["btn", "btn-secondary"], texts[35], function () {
+            $('#rulesModal').modal('hide');
+        });
+        butt.onclick = function () {
+            editor.getGame().setRules(document.getElementById("ruleInput").value);
+        };
+        //document.getElementById('rulesButtons')!
+        // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
+        isEditor = true;
+        //editor.getGame().setInitSizeX(window.innerWidth)
+        //editor.getGame().setInitSizeY(window.innerHeight)
     }
     else {
-        editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+        //
+        if (params.get('id') != null) {
+            document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
+            editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
+            editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
+            (0, Gameplay_1.initDice)();
+        }
+        else {
+            editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
+        }
+        reload(editor, ctx);
+        (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+            window.location.replace('/gameLobby');
+        });
+        (_b = document.getElementById('startGameRoom')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+            Warning_1.Warning.show('Are you sure to start the Game ? After start no one will be able to join!');
+        });
+        (_c = document.getElementById("confirmStart")) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
+            editorSocket.emit('game has started', { room: params.get('id') });
+        });
+        (_d = document.getElementById('messageSubmitButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
+            editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
+            document.getElementById('messagePlace').value = '';
+        });
+        (_e = document.getElementById('messagePlayingSubmitButton')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
+            editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlayingPlace').value });
+            document.getElementById('messagePlayingPlace').value = '';
+        });
     }
-    reload(editor, ctx);
-    (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        window.location.replace('/gameLobby');
-    });
-    (_b = document.getElementById('startGameRoom')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
-        Warning_1.Warning.show('Are you sure to start the Game ? After start no one will be able to join!');
-    });
-    (_c = document.getElementById("confirmStart")) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
-        editorSocket.emit('game has started', { room: params.get('id') });
-    });
-    (_d = document.getElementById('messageSubmitButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
-        editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
-        document.getElementById('messagePlace').value = '';
-    });
-    (_e = document.getElementById('messagePlayingSubmitButton')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
-        editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlayingPlace').value });
-        document.getElementById('messagePlayingPlace').value = '';
-    });
-}
+});
+editorSocket.on('wrong game name', function () {
+    Warning_1.Warning.show('Game with this name does not exist');
+});
 editorSocket.on('turn', function (msg) {
     console.log('recieved: turn');
     console.log(editor.getGame().getIsOnturn());
     //canvas.removeEventListener('click',pickTile)
     elementDeleter('onTurnPlace');
-    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', "Player on turn: " + msg.player);
+    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player);
 });
 editorSocket.on('turnMove', function (msg) {
     var _a;
@@ -405,7 +416,7 @@ editorSocket.on('player ended', function (msg) {
     Warning_1.Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.');
     console.log('zapol');
 });
-(_f = document.getElementById("showRulesButton")) === null || _f === void 0 ? void 0 : _f.addEventListener('click', function () {
+(_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
     $('#rulesModal').modal('show');
     document.getElementById("ruleInput").value = editor.getGame().getRules();
 });
@@ -416,67 +427,67 @@ function edit() {
     //   updateNextTileIds()
     // })
     document.getElementById('forwardButton').addEventListener('click', function () {
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go ahead?');
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[97]);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('forward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = 'Pick event!';
-            document.getElementById('pickedEventParagraph').textContent = ' Picked Event: Go forward: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = texts[98];
+            document.getElementById('pickedEventParagraph').textContent = texts[99] + ' ' + nums + ' ' + texts[100];
         });
     });
     document.getElementById('backwardButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many tiles should pawn go backwards?');
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[102]);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('backward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = 'Pick event!';
-            document.getElementById('pickedEventParagraph').textContent = ' Picked Event: Go backward: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = texts[98];
+            document.getElementById('pickedEventParagraph').textContent = texts[103] + ' ' + nums + ' ' + texts[100];
         });
     });
     document.getElementById('skipButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many turns should player skip?');
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[104]);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('skip', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = 'Pick event!';
-            document.getElementById('pickedEventParagraph').textContent = ' Picked Event:' + 'Skip: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = texts[98];
+            document.getElementById('pickedEventParagraph').textContent = texts[105] + ' ' + nums + ' ' + texts[100];
         });
     });
     document.getElementById('repeatButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many times can player repeat his turn?');
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[106]);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = 'Pick event!';
-            document.getElementById('pickedEventParagraph').textContent = ' Picked Event:' + 'Repeat turn: ' + nums + ' times.';
+            document.getElementById('bindEvent').textContent = texts[98];
+            document.getElementById('pickedEventParagraph').textContent = texts[107] + ' ' + nums + ' ' + texts[100];
         });
     });
     document.getElementById('stopButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'How many turns should player skip his turn if value was not thrown');
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[108]);
         var freeInput = (0, Elements_1.spawnNumberInput)(document, 'askTheQuestionEventEdit', 'freeInput');
         freeInput.max = '6';
         freeInput.min = '1';
-        freeInput.placeholder = 'Enter the number!';
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', 'Which value can set pawn free');
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], 'Confirm!', function () {
+        freeInput.placeholder = texts[55];
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[109]);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = 'Pick event!';
-            document.getElementById('pickedEventParagraph').textContent = ' Picked Event:' + 'Thrown: ' + freeInput.value + ' . Or wait ' + nums + ' turns';
+            document.getElementById('bindEvent').textContent = texts[98];
+            document.getElementById('pickedEventParagraph').textContent = texts[110] + freeInput.value + texts[111] + nums + texts[100];
         });
     });
     //$('#rulesModal').modal('show');
@@ -523,13 +534,13 @@ function edit() {
     (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
-        editorSocket.emit('load game', { id: getCookie('id'), name: val });
+        editorSocket.emit('load game', { id: getCookie('id'), name: val, response: true });
         mainMenu();
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById("resetQuestionID").addEventListener('click', function () {
         editor.setQuestionId(-1);
-        document.getElementById('bindQuestion').textContent = 'Not picked!';
+        document.getElementById('bindQuestion').textContent = texts[114];
     });
 }
 var doc = document;
@@ -549,7 +560,7 @@ function mainMenu() {
     numShower.id = 'numShower';
     numShower.textContent = editor.getGame().getnumOfPlayers().toString();
     var text = document.createElement('p');
-    text.textContent = 'Počet hráčov:';
+    text.textContent = texts[22];
     document.getElementById("numOfPlayersPlace").appendChild(text);
     document.getElementById("numOfPlayersPlace").appendChild(numShower);
     numOfPlayersSlider.onclick = function () {
@@ -597,7 +608,7 @@ function mainMenu() {
     gameName.id = 'gameName';
     gameName.value = editor.getGame().getName();
     text = document.createElement('p');
-    text.textContent = 'Názov hry:';
+    text.textContent = texts[23];
     document.getElementById("gameNamePlace").appendChild(text);
     gameName.oninput = function () {
         editor.getGame().setName(gameName.value);
@@ -609,7 +620,7 @@ function mainMenu() {
     text.textContent = 'Typ hry:';
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
-    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Set number of pawns per starting tile');
+    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', texts[112]);
     var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '0', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
     slid.onchange = function () {
         var max = parseInt(slid.value);
@@ -662,7 +673,7 @@ function mainMenu() {
         editor.getGame().setNumberOfStartingPawns(max);
         reload(editor, ctx);
     };
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], 'Save game to database!', function () {
+    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], texts[113], function () {
         editor.getGame().saveGame();
         //window.location.replace('/')
     });
@@ -761,12 +772,5 @@ window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
     }
-    editorSocket.emit('get texts', { language: getCookie('language') });
 };
-var texts = [];
-exports.texts = texts;
-editorSocket.on('got texts', function (msg) {
-    exports.texts = texts = msg.text;
-    console.log(texts);
-});
 setInterval(function () { resize(editor, ctx); }, 500);

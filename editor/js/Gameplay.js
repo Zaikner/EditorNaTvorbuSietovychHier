@@ -16,7 +16,7 @@ for (var i = 1; i <= 6; i++) {
     _loop_1(i);
 }
 function initGameInfo(name) {
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', 'Game: ' + name);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', canvas_1.texts[118] + name);
 }
 exports.initGameInfo = initGameInfo;
 function initDice() {
@@ -93,10 +93,10 @@ function changeWaitingRoom(accs) {
         var place = document.createElement('place');
         if (accs[i].place > 0) {
             if (accs[i].place == 1) {
-                quest.textContent = 'Winner !! ' + quest.textContent;
+                quest.textContent = canvas_1.texts[116] + quest.textContent;
             }
             else {
-                quest.textContent = accs[i].place.toString() + '. Place ' + quest.textContent;
+                quest.textContent = accs[i].place.toString() + canvas_1.texts[117] + quest.textContent;
             }
         }
         var questClone = quest.cloneNode();

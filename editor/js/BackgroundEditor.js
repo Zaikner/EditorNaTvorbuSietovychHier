@@ -12,16 +12,16 @@ function editBackground() {
     backgroundChecker.type = 'checkbox';
     backgroundChecker.id = 'backgroundChecker';
     var text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Is background an Image? (checkbox)';
+    text.textContent = canvas_js_1.texts[91];
     var hasBackgroundImageShower = canvas_js_1.doc.createElement('paragraph');
     hasBackgroundImageShower.id = 'hasBackgroundImageShower';
-    hasBackgroundImageShower.textContent = 'no';
+    hasBackgroundImageShower.textContent = canvas_js_1.texts[92];
     backgroundChecker.oninput = function () {
         if (backgroundChecker.checked) {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'yes';
+            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = canvas_js_1.texts[93];
         }
         else {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = 'no';
+            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = canvas_js_1.texts[92];
         }
     };
     canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
@@ -31,7 +31,7 @@ function editBackground() {
     backgroundImage.id = 'backgroundImage';
     backgroundImage.type = 'file';
     backgroundImage.accept = ".jpg, .jpeg, .png";
-    backgroundImage.textContent = 'Choose an Image!';
+    backgroundImage.textContent = canvas_js_1.texts[86];
     backgroundImage.oninput = function () {
         if (backgroundImage.files.length > 0) {
             background = new Image();
@@ -44,7 +44,7 @@ function editBackground() {
     canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(backgroundImage);
     var buttonSubmit = canvas_js_1.doc.createElement('button');
     buttonSubmit.id = 'changeBackground';
-    buttonSubmit.textContent = 'Change!';
+    buttonSubmit.textContent = canvas_js_1.texts[35];
     buttonSubmit.classList.add("btn");
     buttonSubmit.classList.add("btn-dark");
     canvas_js_1.doc.getElementById("buttonPlace").appendChild(buttonSubmit);
@@ -60,7 +60,7 @@ function editBackground() {
     });
     var buttonDelete = canvas_js_1.doc.createElement('button');
     buttonDelete.id = 'deleteBackground';
-    buttonDelete.textContent = 'Delete Background!';
+    buttonDelete.textContent = canvas_js_1.texts[94];
     buttonDelete.classList.add("btn");
     buttonDelete.classList.add("btn-dark");
     canvas_js_1.doc.getElementById("buttonPlace").appendChild(buttonDelete);
@@ -72,7 +72,7 @@ function editBackground() {
     colorPicker.type = 'color';
     colorPicker.id = 'colorPicker';
     text = canvas_js_1.doc.createElement('p');
-    text.textContent = 'Choose color of background:';
+    text.textContent = canvas_js_1.texts[95];
     canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
     canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(colorPicker);
 }
@@ -103,33 +103,33 @@ function moveComponents() {
 function spawnComponentElements(edit) {
     (0, TileEditor_js_1.removeAllButtons)();
     if (edit) {
-        (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], 'Edit button!', function () {
+        (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], canvas_js_1.texts[64], function () {
             updateComponent();
             (0, TileEditor_js_1.unchooseEverything)();
             (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
         });
     }
-    (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], 'Save!', function () {
+    (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], canvas_js_1.texts[79], function () {
         (0, TileEditor_js_1.removeAllButtons)();
         (0, TileEditor_js_1.removeAllListenersAdded)();
         (0, canvas_js_1.mainMenu)();
     });
-    (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], 'Undo last component added!', function () {
+    (0, Elements_js_1.spawnButton)(document, 'buttonPlace', '', ['btn', 'btn-secondary'], canvas_js_1.texts[80], function () {
         canvas_js_1.editor.getGame().getBackground().deleteFromUndoLog();
         (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Component size:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[81]);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentSizeSlider', '30', '300', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Component color:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[82]);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentColorPicker');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Outline size');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[83]);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentOutlineSlider', '0', '20', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Component putline color:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[84]);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentOutlineColorPicker');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Component type:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[85]);
     (0, Elements_js_1.spawnSelectMenu)(document, 'tileEditingPlace', 'componentTypeMenu', ['btn', 'btn-secondary'], ['circle', 'square', 'image']);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Choose image:');
-    (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'componentImage', 'Choose image!', function () {
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[86]);
+    (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'componentImage', canvas_js_1.texts[86], function () {
         if (document.getElementById('componentImage').files.length > 0) {
             canvas_js_1.editor.getGame().getBackground().setNextComponentImage(new Image());
             canvas_js_1.editor.getGame().getBackground().getNextComponentImage().src = URL.createObjectURL(document.getElementById('componentImage').files[0]);
@@ -141,9 +141,9 @@ function spawnComponentElements(edit) {
             canvas_js_1.editor.getGame().getBackground().setNextComponentImage(undefined);
         }
     });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Image width:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[87]);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentWidthSlider', '1', '500', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', 'Image height:');
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[88]);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentHeightSlider', '1', '500', '10', '100');
 }
 var editComponent = function () {
@@ -200,7 +200,7 @@ exports.addComponentMenu = addComponentMenu;
 function moveComponentMenu() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'End moving!', function () { (0, TileEditor_js_1.saveInsertingTiles)(); });
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], canvas_js_1.texts[89], function () { (0, TileEditor_js_1.saveInsertingTiles)(); });
     moveComponents();
 }
 exports.moveComponentMenu = moveComponentMenu;
@@ -218,7 +218,7 @@ function deleteComponentMenu() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
     canvas_js_1.canvas.addEventListener('click', deleteComponent);
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'End deleting!', function () { (0, TileEditor_js_1.saveInsertingTiles)(); });
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], canvas_js_1.texts[90], function () { (0, TileEditor_js_1.saveInsertingTiles)(); });
 }
 exports.deleteComponentMenu = deleteComponentMenu;
 function removeAllComponentListeners() {

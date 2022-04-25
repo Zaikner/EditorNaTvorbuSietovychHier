@@ -66,24 +66,34 @@ var ServerSocket = /** @class */ (function () {
         this.io.on('connection', function (socket) {
             socket.emit('pipi');
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, emit, r_1;
+                var game, acc, emit, r_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            if (!msg.response) return [3 /*break*/, 2];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
+                        case 1:
+                            game = _a.sent();
+                            if (game.length == 0) {
+                                socket.emit('wrong game name');
+                                return [2 /*return*/];
+                            }
+                            _a.label = 2;
+                        case 2:
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(socket.id);
-                            if (!(msg.room != undefined)) return [3 /*break*/, 1];
+                            if (!(msg.room != undefined)) return [3 /*break*/, 3];
                             r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
                             emit = r_1.getGameData();
                             emit.pawns.forEach(function (pawn) {
                                 pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
                             });
-                            return [3 /*break*/, 3];
-                        case 1: return [4 /*yield*/, GameManager.loadGame(msg.name)];
-                        case 2:
+                            return [3 /*break*/, 5];
+                        case 3: return [4 /*yield*/, GameManager.loadGame(msg.name)];
+                        case 4:
                             emit = _a.sent();
-                            _a.label = 3;
-                        case 3:
+                            _a.label = 5;
+                        case 5:
                             this.emitToSpecificSocket(socket.id, 'connected', emit);
                             return [2 /*return*/];
                     }

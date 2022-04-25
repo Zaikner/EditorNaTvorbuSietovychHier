@@ -1,4 +1,4 @@
-import {doc,ctx, editor,reload, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
+import {doc,ctx, editor,reload,texts, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
 import { spawnButton, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu, spawnSliderWithValueShower } from './Elements.js'
 import {removeAllButtons,removeAllListenersAdded, saveInsertingTiles, unchooseEverything} from './TileEditor.js'
 
@@ -12,18 +12,18 @@ function editBackground(){
     backgroundChecker.id = 'backgroundChecker';
 
     let text = doc.createElement('p')
-    text.textContent = 'Is background an Image? (checkbox)'
+    text.textContent = texts[91]
 
     let hasBackgroundImageShower = doc.createElement('paragraph');
     hasBackgroundImageShower.id = 'hasBackgroundImageShower'
-    hasBackgroundImageShower.textContent = 'no'
+    hasBackgroundImageShower.textContent = texts[92]
 
     backgroundChecker.oninput =function(){
       if (backgroundChecker.checked){
-        doc.getElementById("hasBackgroundImageShower")!.textContent = 'yes'
+        doc.getElementById("hasBackgroundImageShower")!.textContent = texts[93]
       }
       else{
-        doc.getElementById("hasBackgroundImageShower")!.textContent = 'no'
+        doc.getElementById("hasBackgroundImageShower")!.textContent = texts[92]
       }
 
     }
@@ -37,7 +37,7 @@ function editBackground(){
   backgroundImage.id = 'backgroundImage'
   backgroundImage.type = 'file'
   backgroundImage.accept = ".jpg, .jpeg, .png"
-  backgroundImage.textContent = 'Choose an Image!'
+  backgroundImage.textContent = texts[86]
   backgroundImage.oninput = function(){
     
     if (backgroundImage.files!.length > 0){
@@ -53,7 +53,7 @@ function editBackground(){
 
   let buttonSubmit:HTMLButtonElement = doc.createElement('button')
   buttonSubmit.id = 'changeBackground'
-  buttonSubmit.textContent = 'Change!'
+  buttonSubmit.textContent = texts[35]
   buttonSubmit.classList.add("btn")
   buttonSubmit.classList.add("btn-dark")
 
@@ -71,7 +71,7 @@ function editBackground(){
 
   let buttonDelete:HTMLButtonElement = doc.createElement('button')
   buttonDelete.id = 'deleteBackground'
-  buttonDelete.textContent = 'Delete Background!'
+  buttonDelete.textContent = texts[94]
   buttonDelete.classList.add("btn")
   buttonDelete.classList.add("btn-dark")
 
@@ -86,7 +86,7 @@ function editBackground(){
   colorPicker.id = 'colorPicker';
   
  text = doc.createElement('p')
-  text.textContent = 'Choose color of background:'
+  text.textContent = texts[95]
   doc.getElementById("tileEditingPlace")!.appendChild(text);
 
   doc.getElementById("tileEditingPlace")!.appendChild( colorPicker);
@@ -120,39 +120,39 @@ function spawnComponentElements(edit:boolean){
   
   removeAllButtons()
   if (edit){
-    spawnButton(document,'buttonPlace','',['btn','btn-secondary'],'Edit button!',function(){
+    spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[64],function(){
       updateComponent()
       unchooseEverything()
       reload(editor,ctx)
     })
   }
-  spawnButton(document,'buttonPlace','',['btn','btn-secondary'],'Save!',function(){
+  spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[79],function(){
     removeAllButtons()
     removeAllListenersAdded()
     mainMenu()})
-  spawnButton(document,'buttonPlace','',['btn','btn-secondary'],'Undo last component added!',function(){
+  spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[80],function(){
     editor.getGame().getBackground().deleteFromUndoLog()
     reload(editor,ctx)
   })
 
 
-  spawnParagraph(document,'tileEditingPlace','','Component size:')
+  spawnParagraph(document,'tileEditingPlace','',texts[81])
   spawnSliderWithValueShower(document,'tileEditingPlace','componentSizeSlider','30','300','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','','Component color:')
+  spawnParagraph(document,'tileEditingPlace','',texts[82])
   spawnColorPicker(document,'tileEditingPlace','componentColorPicker')
 
-  spawnParagraph(document,'tileEditingPlace','','Outline size')
+  spawnParagraph(document,'tileEditingPlace','',texts[83])
   spawnSliderWithValueShower(document,'tileEditingPlace','componentOutlineSlider','0','20','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','','Component putline color:')
+  spawnParagraph(document,'tileEditingPlace','',texts[84])
   spawnColorPicker(document,'tileEditingPlace','componentOutlineColorPicker')
 
-  spawnParagraph(document,'tileEditingPlace','','Component type:')
+  spawnParagraph(document,'tileEditingPlace','',texts[85])
   spawnSelectMenu(document,'tileEditingPlace','componentTypeMenu',['btn','btn-secondary'],['circle','square','image'])
 
-  spawnParagraph(document,'tileEditingPlace','','Choose image:')
-  spawnImageInput(document,'tileEditingPlace','componentImage','Choose image!',function(){
+  spawnParagraph(document,'tileEditingPlace','',texts[86])
+  spawnImageInput(document,'tileEditingPlace','componentImage',texts[86],function(){
 
     if ((<HTMLInputElement>document.getElementById('componentImage')!).files!.length > 0){
       editor.getGame().getBackground().setNextComponentImage(new Image())
@@ -167,10 +167,10 @@ function spawnComponentElements(edit:boolean){
     }
   })
 
-  spawnParagraph(document,'tileEditingPlace','','Image width:')
+  spawnParagraph(document,'tileEditingPlace','',texts[87])
   spawnSliderWithValueShower(document,'tileEditingPlace','componentWidthSlider','1','500','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','','Image height:')
+  spawnParagraph(document,'tileEditingPlace','',texts[88])
   spawnSliderWithValueShower(document,'tileEditingPlace','componentHeightSlider','1','500','10','100')
 
 }
@@ -238,7 +238,7 @@ function moveComponentMenu(){
   removeAllButtons()
   removeAllListenersAdded()
  
-  spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'End moving!',function(){saveInsertingTiles()})
+  spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[89],function(){saveInsertingTiles()})
   moveComponents()
 }
 function editComponentMenu(){
@@ -255,7 +255,7 @@ function deleteComponentMenu(){
   removeAllButtons()
   removeAllListenersAdded()
   canvas.addEventListener('click',deleteComponent)
-  spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'End deleting!',function(){saveInsertingTiles()})
+  spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[90],function(){saveInsertingTiles()})
 }
 
 function removeAllComponentListeners(){

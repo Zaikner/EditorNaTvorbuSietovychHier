@@ -10,12 +10,12 @@ function editTrack() {
     canvas_js_1.editor.nullEditor();
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'start', ["btn", "btn-dark"], 'Start Inserting!', startDrawingPath);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'spawn', ["btn", "btn-dark"], 'Spawn Tiles!', spawnTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'end', ["btn", "btn-dark"], 'End Inserting!', endDrawingPath);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'start', ["btn", "btn-dark"], canvas_js_1.texts[119], startDrawingPath);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'spawn', ["btn", "btn-dark"], canvas_js_1.texts[120], spawnTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'end', ["btn", "btn-dark"], canvas_js_1.texts[121], endDrawingPath);
     (0, TileEditor_js_1.spawnElements)();
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], 'Undo last Tile/s added!', TileEditor_js_1.undoTileInsert);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], 'Save!', TileEditor_js_1.saveInsertingTiles);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], canvas_js_1.texts[122], TileEditor_js_1.undoTileInsert);
+    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], canvas_js_1.texts[79], TileEditor_js_1.saveInsertingTiles);
     (0, TileEditor_js_1.showActualState)();
 }
 exports.editTrack = editTrack;

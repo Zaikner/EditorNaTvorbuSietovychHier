@@ -23,7 +23,7 @@ function initCreation(parent) {
     text.style.marginLeft = '15px';
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = 'Question:';
+    label.textContent = canvas_1.texts[66];
     div.appendChild(label);
     div.appendChild(text);
     div.style.marginBottom = '5px';
@@ -55,13 +55,13 @@ function addOption(parent, txt, is, id) {
     text.value = txt;
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = 'Option' + num + ': ';
+    label.textContent = canvas_1.texts[66];
     div.appendChild(check);
     div.appendChild(label);
     div.appendChild(text);
     if (txt != '') {
         var editButton = document.createElement('button');
-        editButton.textContent = 'Edit!';
+        editButton.textContent = canvas_1.texts[64];
         editButton.classList.add('btn');
         editButton.classList.add('btn-secondary');
         editButton.addEventListener('click', function () {
@@ -70,7 +70,7 @@ function addOption(parent, txt, is, id) {
         });
         div.appendChild(editButton);
         var deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete!';
+        deleteButton.textContent = canvas_1.texts[70];
         deleteButton.classList.add('btn');
         deleteButton.classList.add('btn-secondary');
         deleteButton.addEventListener('click', function () {
@@ -89,7 +89,7 @@ function addOption(parent, txt, is, id) {
         console.log('new quest su:');
         console.log(newQuestions);
         var deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete!';
+        deleteButton.textContent = canvas_1.texts[70];
         deleteButton.type = 'button';
         deleteButton.classList.add('btn');
         deleteButton.classList.add('btn-secondary');
@@ -206,8 +206,8 @@ function pickQuestion(data) {
                 $('#pickQuestionModal').modal('hide');
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
-                document.getElementById('pickedQuestionParagraph').textContent = 'Picked Question: ' + elem.questionText;
-                document.getElementById('bindQuestion').textContent = 'Pick Question!';
+                document.getElementById('pickedQuestionParagraph').textContent = canvas_1.texts[71] + elem.questionText;
+                document.getElementById('bindQuestion').textContent = canvas_1.texts[72];
             };
             list.appendChild(quest);
             (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
@@ -243,18 +243,18 @@ function editQuestionMenu(id, txt, elem) {
     text.style.marginLeft = '15px';
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = 'Question:';
+    label.textContent = canvas_1.texts[66];
     var editButton = document.createElement('button');
-    editButton.textContent = 'Edit!';
+    editButton.textContent = canvas_1.texts[64];
     editButton.type = 'button';
     editButton.classList.add('btn');
     editButton.classList.add('btn-secondary');
     editButton.addEventListener('click', function () {
         editQuestion(id, text);
     });
-    div.appendChild(editButton);
     div.appendChild(label);
     div.appendChild(text);
+    div.appendChild(editButton);
     div.style.marginBottom = '5px';
     (_a = document.getElementById('editQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
     elem.forEach(function (e) {

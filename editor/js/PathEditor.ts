@@ -1,4 +1,4 @@
-import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
+import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload, texts} from './canvas.js'
 
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
@@ -10,12 +10,12 @@ function editTrack(){
   editor.nullEditor()
   removeAllButtons()
   removeAllListenersAdded()
-    spawnButton(doc,"buttonPlace",'start',["btn","btn-dark"],'Start Inserting!',startDrawingPath) 
-    spawnButton(doc,"buttonPlace",'spawn',["btn","btn-dark"],'Spawn Tiles!',spawnTiles)
-    spawnButton(doc,"buttonPlace",'end',["btn","btn-dark"],'End Inserting!',endDrawingPath)   
+    spawnButton(doc,"buttonPlace",'start',["btn","btn-dark"],texts[119],startDrawingPath) 
+    spawnButton(doc,"buttonPlace",'spawn',["btn","btn-dark"],texts[120],spawnTiles)
+    spawnButton(doc,"buttonPlace",'end',["btn","btn-dark"],texts[121],endDrawingPath)   
     spawnElements()
-    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],'Undo last Tile/s added!',undoTileInsert) 
-    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],'Save!',saveInsertingTiles)
+    spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],texts[122],undoTileInsert) 
+    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
     showActualState()
   }
 

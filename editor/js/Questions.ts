@@ -4,7 +4,7 @@ import { QuestionOption } from '../../services/db/RDG/QuestionOption';
 import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
 
 
-import {clickFunction, doc, editor, editorSocket, elementDeleter} from './canvas'
+import {clickFunction, doc, editor, editorSocket, elementDeleter,texts} from './canvas'
 import { spawnButton } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 
@@ -32,7 +32,7 @@ function initCreation(parent:string){
 
     let label = doc.createElement('label')
     label.style.color='white'
-    label.textContent = 'Question:'
+    label.textContent = texts[66] 
     
     
     div.appendChild(label)
@@ -68,7 +68,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
 
      let label = doc.createElement('label')
      label.style.color='white'
-     label.textContent = 'Option'+num+': '
+     label.textContent = texts[66] 
      
     
      div.appendChild(check)
@@ -77,7 +77,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
 
      if(txt != ''){
         let editButton = document.createElement('button')
-        editButton.textContent = 'Edit!'
+        editButton.textContent = texts[64]
         editButton.classList.add('btn')
         editButton.classList.add('btn-secondary')
       
@@ -89,7 +89,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
        
 
         let deleteButton = document.createElement('button')
-        deleteButton.textContent = 'Delete!'
+        deleteButton.textContent = texts[70]
         deleteButton.classList.add('btn')
         deleteButton.classList.add('btn-secondary')
         deleteButton.addEventListener('click',function(){
@@ -110,7 +110,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
         console.log('new quest su:')
         console.log(newQuestions)
         let deleteButton = document.createElement('button')
-        deleteButton.textContent = 'Delete!'
+        deleteButton.textContent = texts[70]
         deleteButton.type = 'button'
         deleteButton.classList.add('btn')
         deleteButton.classList.add('btn-secondary')
@@ -230,8 +230,8 @@ function pickQuestion(data:any){
                                      $('#pickQuestionModal').modal('hide')
                                      editor.setQuestionId(elem.questionId)
                                      console.log('Question id je teraz:'+editor.getQuestionId());
-                                     document.getElementById('pickedQuestionParagraph')!.textContent = 'Picked Question: ' + elem.questionText;
-                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = 'Pick Question!'
+                                     document.getElementById('pickedQuestionParagraph')!.textContent = texts[71] + elem.questionText;
+                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
             list.appendChild(quest)
 
@@ -271,21 +271,22 @@ function editQuestionMenu(id:number,txt:string,elem:any){
 
     let label = doc.createElement('label')
     label.style.color='white'
-    label.textContent = 'Question:'
+    label.textContent = texts[66]
 
     let editButton = document.createElement('button')
-    editButton.textContent = 'Edit!'
+    editButton.textContent = texts[64]
     editButton.type = 'button'
     editButton.classList.add('btn')
     editButton.classList.add('btn-secondary')
     editButton.addEventListener('click',function(){
         editQuestion(id,text)
     })
-    div.appendChild(editButton)
+    
     
     
     div.appendChild(label)
     div.appendChild(text)
+    div.appendChild(editButton)
     div.style.marginBottom = '5px'
     document.getElementById('editQuestion')?.appendChild(div)
 

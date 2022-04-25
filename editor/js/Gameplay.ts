@@ -1,5 +1,5 @@
 import { spawnParagraph } from "./Elements";
-import {canvas, doc,editor,editorSocket,elementDeleter} from './canvas'
+import {canvas, doc,editor,editorSocket,elementDeleter, texts} from './canvas'
 import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
 import { Socket } from "socket.io";
@@ -19,7 +19,7 @@ for (let i = 1; i <=6; i++){
     }
 }
 function initGameInfo(name:string){
-    spawnParagraph(doc,"tileEditingPlace",'','Game: '+name)
+    spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name)
 }
 
 
@@ -105,10 +105,10 @@ function changeWaitingRoom(accs:any){
         let place = document.createElement('place')
         if (accs[i].place > 0){
             if (accs[i].place == 1){
-                quest.textContent = 'Winner !! ' +  quest.textContent
+                quest.textContent = texts[116] +  quest.textContent
             }
             else{
-                quest.textContent = accs[i].place.toString()+'. Place ' +  quest.textContent
+                quest.textContent = accs[i].place.toString()+texts[117] +  quest.textContent
             }
         }
      

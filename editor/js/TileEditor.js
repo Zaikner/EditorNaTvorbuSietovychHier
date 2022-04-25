@@ -180,7 +180,7 @@ function spawnElements() {
 exports.spawnElements = spawnElements;
 function insertTilesMenu() {
     //unchooseEverything()
-    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'default';
+    //doc.getElementById("canvasPlace")!.style.cursor = 'default'
     removeAllListenersAdded();
     canvas_js_1.editor.makeAllTilesNotChoosen();
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
@@ -193,7 +193,7 @@ function insertTilesMenu() {
 exports.insertTilesMenu = insertTilesMenu;
 function startInsertingByOne() {
     canvas_js_1.editor.nullEditor();
-    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('mousedown', insert);
@@ -210,8 +210,8 @@ function copyTileStyle() {
     removeAllListenersAdded();
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', "Click on Tile to copy it's style");
     document.getElementById('wholeBody').style.cursor = 'pointer';
-    canvas_js_1.canvas.style.cursor = 'pointer';
-    document.getElementById('optionPlace').style.cursor = 'pointer';
+    //canvas.style.cursor = 'pointer'
+    //document.getElementById('optionPlace')!.style.cursor = 'pointer'
     canvas_js_1.canvas.addEventListener('click', copyTile);
 }
 function saveInsertingTiles() {
@@ -252,7 +252,7 @@ function moveTiles() {
     //canvas.removeEventListener('click',moveEventHandler)
     removeAllListenersAdded();
     (0, PathEditor_js_1.endDrawingPath)();
-    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     canvas_js_1.editor.makeAllTilesNotChoosen();
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     canvas_js_1.editor.setIsMoving(true);
@@ -263,7 +263,7 @@ function moveTiles() {
 }
 exports.moveTiles = moveTiles;
 function deleteTiles() {
-    canvas_js_1.doc.getElementById("canvasPlace").style.cursor = 'grabbing';
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllListenersAdded();
     removeAllButtons();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'End', ["btn", "btn-dark"], 'End deleting!', saveInsertingTiles);
@@ -290,9 +290,9 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('click', copyTile);
     canvas_js_1.canvas.removeEventListener('click', onlyMoveHandler);
     (0, PathEditor_js_1.endDrawingPath)();
-    document.getElementById('wholeBody').style.cursor = 'default';
+    //document.getElementById('wholeBody')!.style.cursor = 'default'
     canvas_js_1.canvas.style.cursor = 'default';
-    document.getElementById('optionPlace').style.cursor = 'default';
+    //document.getElementById('optionPlace')!.style.cursor = 'default'
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
@@ -641,7 +641,7 @@ function generateNextTiles() {
         console.log('pridal' + token);
         var div = document.createElement('div');
         div.id = 'div' + token;
-        div.style.width = '100%';
+        //div.style.width = '100%'
         var input = document.createElement('input');
         input.type = 'number';
         input.id = 'nextTile' + token;

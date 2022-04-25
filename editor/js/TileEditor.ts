@@ -231,7 +231,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
 
 function insertTilesMenu():void{
   //unchooseEverything()
-  doc.getElementById("canvasPlace")!.style.cursor = 'default'
+  //doc.getElementById("canvasPlace")!.style.cursor = 'default'
   removeAllListenersAdded()
   editor.makeAllTilesNotChoosen()
   reload(editor,ctx)
@@ -244,7 +244,7 @@ function insertTilesMenu():void{
 }
   function startInsertingByOne(){
     editor.nullEditor()
-    doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons()
     removeAllListenersAdded()
     
@@ -264,8 +264,8 @@ function insertTilesMenu():void{
     removeAllListenersAdded()
     spawnParagraph(document,'tileEditingPlace','',"Click on Tile to copy it's style")
     document.getElementById('wholeBody')!.style.cursor = 'pointer'
-    canvas.style.cursor = 'pointer'
-    document.getElementById('optionPlace')!.style.cursor = 'pointer'
+    //canvas.style.cursor = 'pointer'
+    //document.getElementById('optionPlace')!.style.cursor = 'pointer'
     canvas.addEventListener('click',copyTile)
   }
   function saveInsertingTiles(){
@@ -314,7 +314,7 @@ function insertTilesMenu():void{
     //canvas.removeEventListener('click',moveEventHandler)
     removeAllListenersAdded()
     endDrawingPath()
-    doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     editor.makeAllTilesNotChoosen()
     reload(editor,ctx)
     editor.setIsMoving(true)
@@ -324,7 +324,7 @@ function insertTilesMenu():void{
     canvas.addEventListener('mousedown',moveTile)
   }
   function deleteTiles(){
-    doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
+    //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllListenersAdded()
     removeAllButtons()
     spawnButton(doc,"buttonPlace",'End',["btn","btn-dark"],'End deleting!',saveInsertingTiles) 
@@ -355,9 +355,9 @@ function insertTilesMenu():void{
   
     endDrawingPath()
 
-    document.getElementById('wholeBody')!.style.cursor = 'default'
+    //document.getElementById('wholeBody')!.style.cursor = 'default'
     canvas.style.cursor = 'default'
-    document.getElementById('optionPlace')!.style.cursor = 'default'
+    //document.getElementById('optionPlace')!.style.cursor = 'default'
     reload(editor,ctx)
   }
   function unchooseEverything(){
@@ -767,7 +767,7 @@ function insertTilesMenu():void{
         console.log('pridal'+token)
         let div = document.createElement('div')
         div.id = 'div' + token
-        div.style.width = '100%'
+        //div.style.width = '100%'
 
         
 
