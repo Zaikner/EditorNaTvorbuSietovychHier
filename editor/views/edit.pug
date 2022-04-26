@@ -9,28 +9,15 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   .container-fluid
     .navbar-header
       a.navbar-brand(href='#')=text[0]
-  button#loadGameButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;' onclick="$('#loadGameModal').modal('show')")=text[15]
-  button#showRulesButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;')=text[16]
-  // <button type="button" name="mainMenu" value="mainMenu" class="btn btn-secondary py-2"  id="insertEvent" onclick="$('#EventModal').modal('show')"  style=" width:200px; margin-right: 10px;" >Event manager</button>
-  //
-    <li class="nav-item dropdown btn btn-secondary py-0" style="margin-right: 10px;">
-    <a class="nav-link dropdown-toggle btn btn-secondary" href="#" id="optionScroll" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Quizz Questions
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-    <li><button type="button" class="btn btn-secondary dropdown-item" id="manageQuestions" >Manage Questions</button></li>
-    <li><button type="button" class="btn btn-secondary dropdown-item" id="viewQuestions" >View all created question</button></li>
-    <li><button type="button" class="btn btn-secondary dropdown-item" id="editQuestions" >Insert and edit Question</button></li>
-    </ul>
-    onclick="$('#questionModal').modal('hide')"
-    </li>
-  button#questionManager.btn.btn-secondary.py-2(type='button' style=' width:500px; margin-right: 10px; white-space: nowrap; text-align: center;' onclick="$('#questionModal').modal('show')")=text[17]
-  button#editPawn.btn.btn-secondary.py-2(type='button' style=' width:500px; margin-right: 10px; white-space: nowrap; text-align: center;')=text[18]
+  button#loadGameButton.btn.btn-secondary.py-2.navbarButton(type='button' onclick="$('#loadGameModal').modal('show')")=text[15]
+  button#showRulesButton.btn.btn-secondary.py-2.navbarButton(type='button' )=text[16]
+  button#questionManager.btn.btn-secondary.py-2.navbarButton(type='button' onclick="$('#questionModal').modal('show')")=text[17]
+  button#editPawn.btn.btn-secondary.py-2.navbarButton(type='button')=text[18]
   li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
     a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[36]
     ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
       li
-        button#editBackground.btn.btn-secondary.dropdown-item(type='button' style='width: 200px;')=text[37]
+        button#editBackground.btn.btn-secondary.dropdown-item(type='button')=text[37]
       li
         button#addComponent.btn.btn-secondary.dropdown-item(type='button')=text[38]
       li
@@ -51,14 +38,14 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
         button#moveTiles.btn.btn-secondary.dropdown-item(type='button')=text[44]
       li
         button#deleteTiles.btn.btn-secondary.dropdown-item(type='button')=text[45]
-  button#generalInfoButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:300px; margin-right: 10px;')=text[46]
+  button#generalInfoButton.btn.btn-secondary.py-2.navbarButton(type='button')=text[46]
   form(action='/' method='get')
-    button#mainMenuButton.btn.btn-secondary.py-2(type='submit' name='mainMenu' value='mainMenu' style=' width:200px; margin-right: 10px;')=text[11]
-    // <button  type="submit" name="editor" value="editor">Editor</button>
+    button#mainMenuButton.btn.btn-secondary.py-2.navbarButton(type='submit')=text[11]
+    
 .container-fluid
-  .row(style='background-color: #292b2c')
+  .row.darkColor
     #canvasPlace.col-8
-    #optionPlace.col-4(style='background-color: #292b2c')
+    #optionPlace.col-4.darkColor
       .row
         #buttonPlace.col-12
       .row
@@ -69,22 +56,22 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
         #dicePlace.col-12
         #WarningModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
-            .modal-content(style='background-color: #292b2c')
+            .modal-content(style='background-color: #292b2c;')
               .modal-header
                 h5#modalHeader.modal-title(style='color: white;')=text[47]
                 button.close(type='button' data-dismiss='modal')
               #warningModalBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           
                 button.btn.btn-secondary(type='button' onclick=" $('#WarningModal').modal('hide')") Ok!
         #EventModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
-            .modal-content(style='background-color: #292b2c')
+            .modal-content(style='background-color: #292b2c;')
               .modal-header
                 h5#modalHeader.modal-title(style='color: white;')=text[48]
                 button.close(type='button' data-dismiss='modal')
-              #eventModalBody.modal-body(style='text-align: center;')
-                h6#modalHeader.modal-title(style='color: white;')=text[49]
+              #eventModalBody.modal-body.alignCenter
+                h6#modalHeader.modal-title.whiteColor=text[49]
                 div(style='width:100%; margin: 20px;')
                   button#forwardButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')")=text[50]
                 div(style='width:100%; margin: 20px;')
@@ -104,9 +91,9 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               .modal-header
                 h5#modalHeader.modal-title(style='color: white;')=text[48]
                 button.close(type='button' data-dismiss='modal')
-              #eventEditorModalBody.modal-body(style='text-align: center;')
-                input#howManytimes(type='number' style='text-align:center' placeholder=text[55])
-                #askTheQuestionEventEdit(style='text-align:center')
+              #eventEditorModalBody.modal-body.alignCenter
+                input#howManytimes.alignCenter(type='number' placeholder=text[55])
+                #askTheQuestionEventEdit.alignCenter
               #editEventFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#EventModal').modal('show');$('#editEventModal').modal('hide')")=text[33]
@@ -117,9 +104,9 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               .modal-header
                 h5#modalHeader.modal-title(style='color: white;')=text[31]
                 button.close(type='button' data-dismiss='modal')
-              #eventEditorModalBody.modal-body(style='text-align: center;')
-                input#gameNameInput(type='text' style='text-align:center' placeholder=text[31])
-                button#loadCreatedGameModal.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[32]
+              #loadGameModalBody.modal-body.alignCenter
+                //- input#gameNameInput.alignCenter(type='text' placeholder=text[31])
+                //- button#loadCreatedGameModal.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[32]
               #editEventFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[33]
@@ -130,8 +117,8 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               .modal-header
                 h5#modalHeader.modal-title(style='color: white;')=text[56]
                 button.close(type='button' data-dismiss='modal')
-              #nextTileModalBody.modal-body(style='text-align: center;')
-                input#gameNameInput(type='text' style='text-align:center' placeholder='Enter the game name!')
+              #nextTileModalBody.modal-body.alignCenter
+                input#gameNameInput.alignCenter(type='text' placeholder='Enter the game name!')
                 button#loadCreatedGameModal.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[32]
               #nextTileModalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -142,148 +129,137 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
             .modal-content(style='background-color: #292b2c')
               .modal-header
                 .container
-                  h2#modalHeader.modal-title(style='text-align: center; position: sticky; color: white;')=text[17]
+                  h2#modalHeader.modal-title.alignCenter.whiteColor(style='position: sticky;')=text[17]
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body(style='overflow-y: auto; height:70vh')
                 #listContainer.container
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                .container(style='text-align: center;')
-                  button#setAnswerButton.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#questionModal').modal('hide');$('#answerModal').modal('show')") Ok!
-                  button#createQuestionButtonModal.btn.btn-secondary(type='button' style='text-align: center; ' onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')")=text[58]
+                .container.alignCenter
+                  button#setAnswerButton.btn.btn-secondary.alignCenter(type='button' style='margin-right: 1%;' onclick="$('#questionModal').modal('hide'); $('#answerModal').modal('hide');") Ok!
+                  button#createQuestionButtonModal.btn.btn-secondary.alignCenter(type='button' onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')")=text[58]
         #pickQuestionModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog.modal-xl
             .modal-content(style='background-color: #292b2c')
               .modal-header
                 .container
-                  h2#modalHeader.modal-title(style='text-align: center; position: sticky; color: white;')=text[17]
+                  h2#modalHeader.modal-title.alignCenter.whiteColor(style='position: sticky;')=text[17]
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body(style='overflow-y: auto; height:70vh')
                 #listPickerContainer.container
               #modalFooter.modal-footer
-                .container(style='text-align: center;')
-                  button.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
-                  button#resetQuestionID.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
+                .container.alignCenter
+                  button.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
+                  button#resetQuestionID.btn.btn-secondary.alignCenter(type='button' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #answerModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c')
               .modal-header
                 .container
-                  h2#modalHeader.modal-title(style='text-align: center; position: sticky; color: white;')=text[60]
+                  h2#modalHeader.modal-title.alignCenter.whiteColor(style='position: sticky;')=text[60]
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body(style='overflow-y: auto;')
                 .container
                   #answerQuestion.list-group(style=' margin-bottom: 5%;')
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                .container(style='text-align: center;')
-                  button#answerButton.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#questionModal').modal('hide')")=text[60]
+                .container.alignCenter
+                  button#answerButton.btn.btn-secondary.whiteColor(type='button' onclick="$('#questionModal').modal('hide')")=text[60]
         #pawnModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
-            .modal-content(style='background-color: #292b2c')
+            .modal-content.darkColor(style = 'background-color: #292b2c;')
               .modal-header
                 .container
-                  h2#modalHeader.modal-title(style='text-align: center; position: sticky; color: white;')=text[61]
+                  h2#modalHeader.modal-title.alignCenter.whiteColor(style=' position: sticky;')=text[61]
                 button.close(type='button' data-dismiss='modal')
-              #modalBody.modal-body(style='overflow-y: auto; height:70vh; text-align: center;')
-                .container(style='text-align: center;')
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn1(style='width: 200px; height: 200px; margin: 0 auto; border: 20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'1'
+              #modalBody.modal-body.alignCenter(style='overflow-y: auto; height:70vh;')
+                .container.alignCenter
+                  .list-group.alignCenter
+                    canvas#canvasPawn1.pawnType
+                    p.whiteColor=text[62]+'1'
                     button#pawnType1.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn2(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'2'
+                  .list-group.alignCenter
+                    canvas#canvasPawn2.pawnType
+                    p.whiteColor=text[62]+'2'
                     button#pawnType2.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn3(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'3'
+                  .list-group.alignCenter
+                    canvas#canvasPawn3.pawnType
+                    p.whiteColor=text[62]+'3'
                     button#pawnType3.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn4(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'4'
+                  .list-group.alignCenter
+                    canvas#canvasPawn4.pawnType
+                    p.whiteColor=text[62]+'4'
                     button#pawnType4.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn5(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'5'
+                  .list-group.alignCenter
+                    canvas#canvasPawn5.pawnType
+                    p.whiteColor=text[62]+'5'
                     button#pawnType5.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn6(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'6'
+                  .list-group.alignCenter
+                    canvas#canvasPawn6.pawnType
+                    p.whiteColor=text[62]+'6'
                     button#pawnType6.btn.btn-secondary(style='margin: 1%;')=text[63]
-                  .list-group(style='text-align: center;')
-                    canvas#canvasPawn7(style='width: 200px; height: 200px; margin: 0 auto; border:20px solid; border-radius: 50%; border-color: white; text-align: center;')
-                    p(style='color: white;')=text[62]+'7'
+                  .list-groupa.alignCenter
+                    canvas#canvasPawn7.pawnType
+                    p.whiteColor=text[62]+'7'
                     button#pawnType7.btn.btn-secondary(style='margin: 1%;')=text[63]
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                .container(style='text-align: center;')
-                  button#answerButton.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#pawnModal').modal('hide')")=text[64]
+                .container.alignCenter
+                  button#answerButton.btn.btn-secondary.alignCenter(type='button' onclick="$('#pawnModal').modal('hide')")=text[64]
         #createModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
-            .modal-content(style='background-color: #292b2c')
+            .modal-content.darkColor(style='background-color: #292b2c;')
               .modal-header
-                h5#modalHeader.modal-title(style='color: white;')=text[58]
+                h5#modalHeader.modal-title.whiteColor=text[58]
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body
                 strong
-                  p(style='color: white;')=text[65]
+                  p.whiteColor=text[65]
                 form#questionForm.form-inline(style=' width: 50vh;')
                   #questionOptions
                     #questionDiv.form-group(style='margin-bottom:5px')
-                      label(for='question' style='margin-left: 15px; color: white;')=text[66] 
+                      label.whiteColor(for='question' style='margin-left: 15px;')=text[66] 
                       input#question.form-control(type='text' style='width: 35vh' name='question')
-                    //
-                      <div class="form-group" style="margin-bottom:5px">
-                      <input type="checkbox" id="check1" style="width: 20px;" height="20px" class="form-control" name ='check1'>
-                      <label for="ans1" style="color: white;">Option1:   </label>
-                      <input type="text" id="ans1" class="form-control"  style="width: 35vh;" name ='ans1' required>
-                      </div>
-                      <div class="form-group"  style="margin-bottom:5px; width: 50vh;">
-                      <input type="checkbox" id="check2" style="width: 20px;" height="20px" class="form-control" name ='check2' >
-                      <label for="ans2" style="color: white;">Option2:   </label>
-                      <input type="text" id="ans2" class="form-control" style="width: 35vh;"  name ='ans2' required>
-                      </div>
-                  // <div class="container" id = 'containerAdd' style="text-align: center;"></div>
-                  #containerAdd.container(style='text-align: center;')
+             
+                  #containerAdd.container.alignCenter
                     button#addButtonInsert.btn.btn-secondary(type='button')=text[67]
-                    button#removeButtonInsert.btn.btn-secondary(type='button')=text[68]
+                    //- button#removeButtonInsert.btn.btn-secondary(type='button')=text[68]
                   |  --&gt;
-                  .container(style='text-align: center;')
-                    button#questionSubmitButton.btn.btn-secondary(type='button' onclick="$('#createModal').modal('hide');$('#questionModal').modal('show');") Create!
+                  .container.alignCenter
+                    button#questionSubmitButton.btn.btn-secondary(type='button' onclick="$('#createModal').modal('hide');")=text[151]
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #editModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog(style=' width: 100vh;')
-            .modal-content(style='background-color: #292b2c; width: 100vh; ')
+            .modal-content.darkColor(style='width: 100vh; background-color: #292b2c;')
               .modal-header
-                h5#modalHeader.modal-title(style='color: white;')=text[69]
+                h5#modalHeader.modal-title.whiteColor=text[69]
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body
                 strong
-                  p(style='color: white;')=text[65]
+                  p.whiteColor=text[65]
                 form#questionForm.form-inline(style=' width: 100vh;')
                   #editQuestion
-                  // <div class="container" id = 'containerAdd' style="text-align: center;"></div>
-                  #containerAdd.container(style='text-align: center;')
+    
+                  #containerAdd.container.alignCenter
                     button#addButtonEdit.btn.btn-secondary(type='button')=text[67]
-                    button#removeButtonEdit.btn.btn-secondary(type='button')=text[68]
+                    //- button#removeButtonEdit.btn.btn-secondary(type='button')=text[68]
                   |  --&gt;
-                  .container(style='text-align: center;')
-                    button#questionEditButton.btn.btn-secondary(type='button' onclick="$('#editModal').modal('hide');$('#questionModal').modal('show')") Edit!
+                  .container.alignCenter
+                    button#questionEditButton.btn.btn-secondary(type='button' onclick="$('#editModal').modal('hide');$('#questionModal').modal('show')")=text[64]
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #rulesModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog(style=' width: 100vh; height: 100vh;')
-            .modal-content(style='background-color: #292b2c; width: 100vh; ')
+            .modal-content.darkColor(style='width: 100vh; background-color: #292b2c;')
               .modal-header
-                .container(style='text-align: center;')
-                  h5#modalHeader.modal-title(style='color: white; text-align: center;')=text[16]
+                .container.alignCenter
+                  h5#modalHeader.modal-title.whiteColor.alignCenter=text[16]
               #modalBody.modal-body
                 textarea#ruleInput(style='width: 100%; height: 50vh;')
-                #rulesButtons.container(style='text-align: center;')
-                  button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');") Ok!
+                #rulesButtons.container.alignCenter
+                  button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');" style='margin-right: 1%') Ok!
             // <div class="container" id = 'containerAdd' style="text-align: center;"></div>
           #modalFooter.modal-footer
             // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -11,12 +11,16 @@ function spawnColorPicker(doc, parent, id) {
     return colorPicker;
 }
 exports.spawnColorPicker = spawnColorPicker;
-function spawnParagraph(doc, parent, id, textCont) {
+function spawnParagraph(doc, parent, id, textCont, margin) {
     var text = doc.createElement('p');
     text.textContent = textCont;
     text.id = id;
     doc.getElementById(parent).appendChild(text);
     text.style.color = '#FFFFFF';
+    text.style.textAlign = 'left';
+    if (margin) {
+        text.style.marginTop = "15%";
+    }
     return text;
 }
 exports.spawnParagraph = spawnParagraph;

@@ -50,13 +50,28 @@ router
 
 
 router.route("/login")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
-    
-    res.render('login',{root:'./editor/views',text:"",action:'/account/login'})
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
+    res.render('login',{root:'./editor/views',text:"",action:'/account/login',texts:text})
 })
 .post(async(request,res) =>
 {   
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
@@ -71,11 +86,11 @@ router.route("/login")
     }
     else if (isLoged){
       
-        res.render('login',{root:'./editor/views',text:'This account is already logged in!',action:'/account/login'})
+        res.render('login',{root:'./editor/views',text:text[163],action:'/account/login'})
     }
     else{
       
-        res.render('login',{root:'./editor/views',text:'Wrong credentials!',action:'/account/login'})
+        res.render('login',{root:'./editor/views',text:text[164],action:'/account/login'})
     }
 
 });
@@ -83,6 +98,7 @@ router
 .route("/change/avatar")
 .get((request,res) =>
 {   
+
   
     res.sendFile('changeAvatar.html',{root:'./editor/views'});
     
@@ -128,20 +144,28 @@ router
 })
 .post(async(request,res) =>
 {   
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     if (acc != undefined){
         if (request.body.oldPassword === AccountManager.decode(acc.getPassword())){
             if (request.body.confirm!= request.body.password){
-                res.render('changePassword',{root:'./editor/views',text:'Confirmation and password are not same!'})
+                res.render('changePassword',{root:'./editor/views',text:texts[165]})
             }
             else{
                 
                 AccountManager.changePassword(acc.getName(),request.body.password)
-                res.render('changePassword',{root:'./editor/views',text:'Password changed!'})
+                res.render('changePassword',{root:'./editor/views',text:text[166]})
             }
         }
         else{
-            res.render('changePassword',{root:'./editor/views',text:'Wrong old password!'})
+            res.render('changePassword',{root:'./editor/views',text:text[167]})
         }
         
     }

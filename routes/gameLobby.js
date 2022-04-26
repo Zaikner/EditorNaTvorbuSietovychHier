@@ -53,13 +53,26 @@ router
 
 
 router.route("/login")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
-    
-    res.render('login',{root:'./editor/views',text:"",action:'/gameLobby/login'})
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+    res.render('login',{root:'./editor/views',text:"",action:'/gameLobby/login',texts:text})
 })
 .post(async(request,res) =>
-{   
+{    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
@@ -73,29 +86,29 @@ router.route("/login")
     }
     else if (isLoged){
         
-        res.render('login',{root:'./editor/views',text:'This account is already logged in!',action:'/gameLobby/login'})
+        res.render('login',{root:'./editor/views',text:'This account is already logged in!',action:'/gameLobby/login',texts:text})
     }
     else{
-        res.render('login',{root:'./editor/views',text:'Wrong credentials!',action:'/gameLobby/login'})
+        res.render('login',{root:'./editor/views',text:'Wrong credentials!',action:'/gameLobby/login',texts:text})
     }
 
 });
 router.route("/register")
 .get((request,res) =>
 {   
-    res.render('register',{root:'./editor/views',action : '/gameLobby/register'});
+    res.render('register',{root:'./editor/views',action : '/gameLobby/register',texts:text});
 })
 .post(async(request,res) =>
 {   
     let registred = await AccountManager.register(request.body.name,request.body.password,request.body.confirm)
     if (registred){
-        res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!',action : '/gameLobby/register'})
+        res.render('register',{root:'./editor/views',text:'Registration completed! You can log in!',action : '/gameLobby/register',texts:text})
     }
     else{
         if (request.body.confirm!= request.body.password){
-            res.render('register',{root:'./editor/views',text:'Confirmation and password are not same!',action : '/gameLobby/register'})
+            res.render('register',{root:'./editor/views',text:'Confirmation and password are not same!',action : '/gameLobby/register',texts:text})
         }
-        res.render('register',{root:'./editor/views',text:'That name is already used!',action : '/gameLobby/register'})
+        res.render('register',{root:'./editor/views',text:'That name is already used!',action : '/gameLobby/register',texts:text})
     }
 
 });

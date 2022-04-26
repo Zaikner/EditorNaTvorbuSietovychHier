@@ -32,7 +32,53 @@ canvas{
   height: 90vh;
   overflow-y: scroll;
 } 
-
+.darkColor{
+ background-color: #292b2c;
+}
+.whiteColor{
+  color: white;
+ }
+.navbarButton{
+  width:200px;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+.alignCenter{
+  text-align: center;
+}
+.pawnType{
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  border: 20px solid;
+  border-radius: 50%; 
+  border-color: white; 
+  text-align: center;
+}
+.accountParagraph{
+  font-size:150%
+}
+.maxWidth{
+  width: 100%;
+}
+.gamelobby{
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #292b2c; */
+  overflow: auto;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  /* bottom-padding:1px; */
+  }
+.gamelobby-div{
+  margin: 5% ;  
+  background-color: white;
+  overflow: hidden; 
+  width: 100%;
+  height: 35vh;  
+  border-radius: 25px;
+}
 
 #numOfPlayersPlace,#gameNamePlace,#gameTypePlace,#tileEditingPlace{
   /* background-color:pink; */

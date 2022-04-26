@@ -11,18 +11,18 @@ head
   .modal-dialog
     .modal-content
       .modal-header
-        h5#modalHeader.modal-title Register new Account!
+        h5#modalHeader.modal-title=texts[168]
         button.close(type='button' data-dismiss='modal')
       #modalBody.modal-body
         p <strong> #{text}<strong>
       #modalFooter.modal-footer
         form.text-center(action=action method='post' style='width: 100%;')
-          input#nameInput.form-control(name='name' type='text' placeholder='Name' minlength='5' required='')
-          input#passwordInput.form-control(name='password' type='password' placeholder='Password' minlength='5' required='')
-          input#passwordConfirmInput.form-control(name='confirm' type='password' placeholder='Confirm your password' minlength='5' required='')
-          button.btn.btn-primary(type='submit' name='editor' value='editor') Register
+          input#nameInput.form-control(name='name' type='text' placeholder=texts[12] minlength='5' required='')
+          input#passwordInput.form-control(name='password' type='password' placeholder=texts[13] minlength='5' required='')
+          input#passwordConfirmInput.form-control(name='confirm' type='password' placeholder=texts[170] minlength='5' required='')
+          button.btn.btn-primary(type='submit' name='editor' value='editor')=texts[169]
         form.text-center(action='/editor/login' method='get' style='width: 100%;')
-          button.btn.btn-primary(type='submit') Leave
+          button.btn.btn-primary(type='submit')=texts[158]
 script.
   $(window).on('load', function() {
   $('#registerModal').modal('show');

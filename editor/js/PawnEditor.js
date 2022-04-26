@@ -14,7 +14,7 @@ function pawnInsertMenu() {
     // spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
     // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[73]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[73], true);
     (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', [], canvas_1.editor.getGame().getPlayerTokens());
     canvas_1.canvas.addEventListener('click', insertPawn);
 }
@@ -74,25 +74,25 @@ exports.deletePawn = deletePawn;
 function pawnEditMenu() {
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[74]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[74], true);
     var playerPicker = (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', [], canvas_1.editor.getGame().getPlayerTokens());
     playerPicker.onchange = function () {
         drawActualPawnLook(playerPicker.value);
     };
     (0, Elements_1.spawnCanvas)(canvas_1.doc, 'tileEditingPlace', 'pawnStyle');
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[75]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[75], true);
     var colorPicker = (0, Elements_1.spawnColorPicker)(canvas_1.doc, 'tileEditingPlace', 'pawnColorPicker');
     colorPicker.onchange = function () {
         var _a;
         (_a = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _a === void 0 ? void 0 : _a.setColor(colorPicker.value);
         drawActualPawnLook(playerPicker.value);
     };
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[76]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[76], true);
     (0, Elements_1.spawnButton)(canvas_1.doc, 'tileEditingPlace', 'chooseType', ['btn', 'btn-secondary'], canvas_1.texts[77], function () {
         $('#pawnModal').modal('show');
         drawStyles(colorPicker.value);
     });
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[78]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[78], true);
     (0, Elements_1.spawnImageInput)(canvas_1.doc, 'tileEditingPlace', 'imagePicker', canvas_1.texts[63], function () { });
     var _loop_1 = function (i) {
         var button = document.getElementById('pawnType' + i);
@@ -114,7 +114,7 @@ exports.pawnEditMenu = pawnEditMenu;
 function pawnDeleteMenu() {
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[73]);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', canvas_1.texts[73], true);
     (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', [], canvas_1.editor.getGame().getPlayerTokens());
     canvas_1.canvas.addEventListener('click', deletePawn);
 }

@@ -23,6 +23,7 @@ exports.editor = editor;
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
 editorSocket.emit('get texts', { language: getCookie('language') });
+editorSocket.emit('loadGameNames');
 //socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');
 exports.canvas = canvas;
@@ -338,7 +339,7 @@ editorSocket.on('turn', function (msg) {
     console.log(editor.getGame().getIsOnturn());
     //canvas.removeEventListener('click',pickTile)
     elementDeleter('onTurnPlace');
-    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player);
+    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, true);
 });
 editorSocket.on('turnMove', function (msg) {
     var _a;
@@ -427,7 +428,7 @@ function edit() {
     //   updateNextTileIds()
     // })
     document.getElementById('forwardButton').addEventListener('click', function () {
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[97]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[97], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('forward', { num: parseInt(nums), value: 0 });
@@ -439,7 +440,7 @@ function edit() {
     });
     document.getElementById('backwardButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[102]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[102], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('backward', { num: parseInt(nums), value: 0 });
@@ -451,7 +452,7 @@ function edit() {
     });
     document.getElementById('skipButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[104]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[104], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('skip', { num: parseInt(nums), value: 0 });
@@ -463,7 +464,7 @@ function edit() {
     });
     document.getElementById('repeatButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[106]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[106], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
@@ -475,12 +476,12 @@ function edit() {
     });
     document.getElementById('stopButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[108]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[108], true);
         var freeInput = (0, Elements_1.spawnNumberInput)(document, 'askTheQuestionEventEdit', 'freeInput');
         freeInput.max = '6';
         freeInput.min = '1';
         freeInput.placeholder = texts[55];
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[109]);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[109], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
@@ -524,12 +525,14 @@ function edit() {
     (_b = document.getElementById('editComponent')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () { (0, BackgroundEditor_1.editComponentMenu)(); });
     (_c = document.getElementById('moveComponent')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () { (0, BackgroundEditor_1.moveComponentMenu)(); });
     (_d = document.getElementById('deleteComponent')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () { (0, BackgroundEditor_1.deleteComponentMenu)(); });
-    document.getElementById('setAnswerButton').addEventListener('click', function () { editorSocket.emit('answerQuestion', { id: 0 }); });
+    //document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
-    document.getElementById('createQuestionButtonModal').addEventListener('click', function () { (0, Questions_1.initCreation)('questionOptions'); });
-    document.getElementById('removeButtonInsert').addEventListener('click', function () { (0, Questions_1.removeLastOption)('questionOptions'); });
-    document.getElementById('removeButtonEdit').addEventListener('click', function () { (0, Questions_1.removeLastOption)('editQuestion'); });
+    document.getElementById('createQuestionButtonModal').addEventListener('click', function () {
+        (0, Questions_1.initCreation)('questionOptions');
+    });
+    //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
+    //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
     (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
@@ -620,7 +623,7 @@ function mainMenu() {
     text.textContent = 'Typ hry:';
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
-    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', texts[112]);
+    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', texts[112], true);
     var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '0', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
     slid.onchange = function () {
         var max = parseInt(slid.value);
@@ -768,6 +771,45 @@ function getCookie(name) {
     return cookie.get(name);
 }
 exports.getCookie = getCookie;
+editorSocket.on('loadedGameNames', function (msg) {
+    console.log('socket odchytil loadedGameNames');
+    loadGameNames(msg.names);
+});
+function loadGameNames(names) {
+    var root = document.getElementById('loadGameModalBody');
+    names.forEach(function (name) {
+        var div = document.createElement('div');
+        div.style.textAlign = 'left';
+        var hr = document.createElement('hr');
+        hr.style.margin = '5%';
+        hr.style.backgroundColor = 'white';
+        div.appendChild(hr);
+        var p = document.createElement('paragraph');
+        p.style.color = 'white';
+        p.style.fontSize = '20px';
+        p.style.marginLeft = '100px';
+        p.textContent = name;
+        p.addEventListener('mouseEnter', function () {
+            p.style.cursor = 'pointer';
+        });
+        p.addEventListener('mouseLeave', function () {
+            p.style.cursor = 'default';
+        });
+        p.style.fontWeight = 'bold';
+        p.onclick = function () {
+            (0, TileEditor_js_1.removeAllButtons)();
+            editorSocket.emit('load game', { id: getCookie('id'), name: name, response: true });
+            $('#loadGameModal').modal('hide');
+            mainMenu();
+        };
+        // let button = document.createElement('button')
+        // button.textContent = 'Choose!'
+        // button.classList.add('btn','btn-secondary')
+        div.append(p);
+        // div.append(button)
+        root.appendChild(div);
+    });
+}
 window.onload = function () {
     if (params.get('id') != null) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });

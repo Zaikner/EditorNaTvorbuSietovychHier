@@ -8,12 +8,12 @@ var Warning = /** @class */ (function () {
     }
     Warning.show = function (txt) {
         (0, canvas_1.elementDeleter)('warningModalBody');
-        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'warningModalBody', '', txt);
+        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'warningModalBody', '', txt, false);
         $('#WarningModal').modal('toggle');
     };
     Warning.showInGame = function (txt) {
         (0, canvas_1.elementDeleter)('InGameModalBody');
-        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'InGameModalBody', '', txt);
+        var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'InGameModalBody', '', txt, false);
         $('#InGameModal').modal('toggle');
         console.log('ukazal InGameModal');
     };

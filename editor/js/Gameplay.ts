@@ -19,7 +19,7 @@ for (let i = 1; i <=6; i++){
     }
 }
 function initGameInfo(name:string){
-    spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name)
+    spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name,true)
 }
 
 

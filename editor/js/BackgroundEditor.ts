@@ -136,22 +136,22 @@ function spawnComponentElements(edit:boolean){
   })
 
 
-  spawnParagraph(document,'tileEditingPlace','',texts[81])
+  spawnParagraph(document,'tileEditingPlace','',texts[81],true)
   spawnSliderWithValueShower(document,'tileEditingPlace','componentSizeSlider','30','300','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','',texts[82])
+  spawnParagraph(document,'tileEditingPlace','',texts[82],true)
   spawnColorPicker(document,'tileEditingPlace','componentColorPicker')
 
-  spawnParagraph(document,'tileEditingPlace','',texts[83])
+  spawnParagraph(document,'tileEditingPlace','',texts[83],true)
   spawnSliderWithValueShower(document,'tileEditingPlace','componentOutlineSlider','0','20','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','',texts[84])
+  spawnParagraph(document,'tileEditingPlace','',texts[84],true)
   spawnColorPicker(document,'tileEditingPlace','componentOutlineColorPicker')
 
-  spawnParagraph(document,'tileEditingPlace','',texts[85])
+  spawnParagraph(document,'tileEditingPlace','',texts[85],true)
   spawnSelectMenu(document,'tileEditingPlace','componentTypeMenu',['btn','btn-secondary'],['circle','square','image'])
 
-  spawnParagraph(document,'tileEditingPlace','',texts[86])
+  spawnParagraph(document,'tileEditingPlace','',texts[86],true)
   spawnImageInput(document,'tileEditingPlace','componentImage',texts[86],function(){
 
     if ((<HTMLInputElement>document.getElementById('componentImage')!).files!.length > 0){
@@ -167,10 +167,10 @@ function spawnComponentElements(edit:boolean){
     }
   })
 
-  spawnParagraph(document,'tileEditingPlace','',texts[87])
+  spawnParagraph(document,'tileEditingPlace','',texts[87],true)
   spawnSliderWithValueShower(document,'tileEditingPlace','componentWidthSlider','1','500','10','100')
 
-  spawnParagraph(document,'tileEditingPlace','',texts[88])
+  spawnParagraph(document,'tileEditingPlace','',texts[88],true)
   spawnSliderWithValueShower(document,'tileEditingPlace','componentHeightSlider','1','500','10','100')
 
 }

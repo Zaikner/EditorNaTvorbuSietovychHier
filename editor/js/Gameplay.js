@@ -16,7 +16,7 @@ for (var i = 1; i <= 6; i++) {
     _loop_1(i);
 }
 function initGameInfo(name) {
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', canvas_1.texts[118] + name);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', canvas_1.texts[118] + name, true);
 }
 exports.initGameInfo = initGameInfo;
 function initDice() {

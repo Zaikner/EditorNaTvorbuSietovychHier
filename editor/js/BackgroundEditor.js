@@ -118,17 +118,17 @@ function spawnComponentElements(edit) {
         canvas_js_1.editor.getGame().getBackground().deleteFromUndoLog();
         (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[81]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[81], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentSizeSlider', '30', '300', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[82]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[82], true);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentColorPicker');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[83]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[83], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentOutlineSlider', '0', '20', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[84]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[84], true);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentOutlineColorPicker');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[85]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[85], true);
     (0, Elements_js_1.spawnSelectMenu)(document, 'tileEditingPlace', 'componentTypeMenu', ['btn', 'btn-secondary'], ['circle', 'square', 'image']);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[86]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[86], true);
     (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'componentImage', canvas_js_1.texts[86], function () {
         if (document.getElementById('componentImage').files.length > 0) {
             canvas_js_1.editor.getGame().getBackground().setNextComponentImage(new Image());
@@ -141,9 +141,9 @@ function spawnComponentElements(edit) {
             canvas_js_1.editor.getGame().getBackground().setNextComponentImage(undefined);
         }
     });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[87]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[87], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentWidthSlider', '1', '500', '10', '100');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[88]);
+    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', canvas_js_1.texts[88], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentHeightSlider', '1', '500', '10', '100');
 }
 var editComponent = function () {

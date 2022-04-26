@@ -44,12 +44,29 @@ router
 });
 
 router.route("/login")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
-    res.render('login',{root:'./editor/views',text:"",action:'/editor/login'})
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
+    res.render('login',{root:'./editor/views',text:"",action:'/editor/login',texts:text})
 })
 .post(async(request,res) =>
 {   
+
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
@@ -64,21 +81,38 @@ router.route("/login")
     }
     else if (isLoged){
         
-        res.render('login',{root:'./editor/views',text:'This account is already logged in!',action:'/editor/login'})
+        res.render('login',{root:'./editor/views',text:text[163], texts:text,action:'/editor/login'})
     }
     else{
-        res.render('login',{root:'./editor/views',text:'Wrong credentials!',action:'/editor/login'})
+        res.render('login',{root:'./editor/views',text:text[164],texts:text,action:'/editor/login'})
     }
 
 });
 
 router.route("/register")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
-    res.render('register',{root:'./editor/views',action : '/editor/register'});
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
+    res.render('register',{root:'./editor/views',action : '/editor/register',texts:text});
 })
 .post(async(request,res) =>
 {   
+
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+
     let registred = await AccountManager.register(request.body.name,request.body.password,request.body.confirm)
     if (registred){
         let registred = await AccountManager.authenticate(request.body.name,request.body.password)
@@ -89,9 +123,10 @@ router.route("/register")
     }
     else{
         if (request.body.confirm!= request.body.password){
-            res.render('register',{root:'./editor/views',text:'Confirmation and password are not same!',action : '/editor/register'})
+            res.render('register',{root:'./editor/views',text:text[171],action : '/editor/register',texts:text})
+            return
         }
-        res.render('register',{root:'./editor/views',text:'That name is already used!',action : '/editor/register'})
+        res.render('register',{root:'./editor/views',text:text[172],action : '/editor/register',texts:text})
     }
 
 });

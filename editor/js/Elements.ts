@@ -13,12 +13,16 @@ function spawnColorPicker(doc:HTMLDocument,parent:string,id:string){
     return colorPicker
 }
 
-function spawnParagraph(doc:HTMLDocument,parent:string,id:string,textCont:string){
+function spawnParagraph(doc:HTMLDocument,parent:string,id:string,textCont:string,margin:boolean){
     let text = doc.createElement('p')
     text.textContent = textCont
     text.id = id
     doc.getElementById(parent)!.appendChild(text);
     text.style.color ='#FFFFFF'
+    text.style.textAlign = 'left'
+    if (margin){
+      text.style.marginTop = "15%"
+    }
     return text
 }
 

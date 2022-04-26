@@ -80,10 +80,11 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
         editButton.textContent = texts[64]
         editButton.classList.add('btn')
         editButton.classList.add('btn-secondary')
+        editButton.type = 'button'
       
         editButton.addEventListener('click',function(){
             editOption(id,check,text)
-            //$('#editModal').modal('show')
+            $('#editModal').modal('show')
         })
         div.appendChild(editButton)
        
@@ -169,6 +170,7 @@ function createQuestion(id:number){
     console.log('vklada otazky')
     console.log(data)
     editorSocket.emit('newQuestion',data)
+    
 }
 
 function showAllQuestions(data:any){

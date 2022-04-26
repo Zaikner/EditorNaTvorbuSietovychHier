@@ -64,9 +64,10 @@ function addOption(parent, txt, is, id) {
         editButton.textContent = canvas_1.texts[64];
         editButton.classList.add('btn');
         editButton.classList.add('btn-secondary');
+        editButton.type = 'button';
         editButton.addEventListener('click', function () {
             editOption(id, check, text);
-            //$('#editModal').modal('show')
+            $('#editModal').modal('show');
         });
         div.appendChild(editButton);
         var deleteButton = document.createElement('button');

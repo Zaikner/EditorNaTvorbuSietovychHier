@@ -1,5 +1,5 @@
 
-import { Server as ioServer, Socket } from "socket.io";
+import { Namespace, Server as ioServer, Socket } from "socket.io";
 
 import { Game_db } from "../db/RDG/Game_db";
 import { Tile_db } from "../db/RDG/Tile_db";
@@ -538,7 +538,7 @@ export class ServerSocket{
           console.log(option)
           option.insert()
         })
-
+        
         //console.log(await QuestionWithAnswersFinder.getIntance().findAll())
       })
       socket.on('editOption', async(data:{isAnswer:boolean,text:string,id:string})=>{
@@ -653,6 +653,10 @@ export class ServerSocket{
         )
         console.log('emitol reload waiting')
         this.io.in(msg.room).emit('reloaded waiting room',{names:names})
+      })
+      socket.on('loadGameNames',async()=>{
+        let names = (await GameFinder.getIntance().findAll())!.map((game) => game.getName())
+        socket.emit('loadedGameNames',{names:names})
       })
 
    

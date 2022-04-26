@@ -23,6 +23,7 @@ let texts:Array<string> = []
 const editor = new GameEditor()
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 editorSocket.emit('get texts',{language:getCookie('language')})
+editorSocket.emit('loadGameNames')
 
 //socket.emit('chat message', 'hi');
 const canvas = document.createElement('canvas');
@@ -414,7 +415,7 @@ editorSocket.on('turn',(msg:{player:string,token:string})=>{
   console.log(editor.getGame().getIsOnturn())
   //canvas.removeEventListener('click',pickTile)
   elementDeleter('onTurnPlace')
-  spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player)
+  spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player,true)
  
   
 })
@@ -516,7 +517,7 @@ function edit(){
 //   updateNextTileIds()
 // })
 document.getElementById('forwardButton')!.addEventListener('click',function(){
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[97])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[97],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('forward',{num:parseInt(nums),value:0})
@@ -529,7 +530,7 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
 document.getElementById('backwardButton')!.addEventListener('click',function(){
   
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[102])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[102],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('backward',{num:parseInt(nums),value:0})
@@ -544,7 +545,7 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
 document.getElementById('skipButton')!.addEventListener('click',function(){
 
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[104])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[104],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('skip',{num:parseInt(nums),value:0})
@@ -558,7 +559,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
 document.getElementById('repeatButton')!.addEventListener('click',function(){
  
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[106])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[106],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('repeat',{num:parseInt(nums),value:0})
@@ -573,13 +574,13 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
 document.getElementById('stopButton')!.addEventListener('click',function(){
  
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[108])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[108],true)
   
   let freeInput = spawnNumberInput(document,'askTheQuestionEventEdit','freeInput')!
   freeInput.max = '6'
   freeInput.min = '1'
   freeInput.placeholder = texts[55]
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[109])
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[109],true)
   
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
@@ -624,13 +625,14 @@ document.getElementById('editComponent')?.addEventListener('click',function(){ed
 document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
 document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
   
-document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
+//document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
-document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation('questionOptions');})
+document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation('questionOptions');
+                                                                                                      })
 
-document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
-document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
+//document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
+//document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
 
 
@@ -749,7 +751,7 @@ text.textContent = 'Typ hry:'
 document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
-spawnParagraph(document,'tileEditingPlace','',texts[112])
+spawnParagraph(document,'tileEditingPlace','',texts[112],true)
 let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider','0','4','1',editor.getGame().getNumberOfStartingPawns().toString())
 slid.onchange = function(){
   let max = parseInt(slid!.value)
@@ -932,11 +934,64 @@ function getCookie(name:string) {
 }
 
 
+editorSocket.on('loadedGameNames',(msg:{names:Array<string>})=>{
+  console.log('socket odchytil loadedGameNames')
+  loadGameNames(msg.names)
+})
+
+
+function loadGameNames(names:Array<string>){
+  let root = document.getElementById('loadGameModalBody')!
+
+  names.forEach((name:string)=>{
+    let div = document.createElement('div')
+    div.style.textAlign = 'left'
+    let hr = document.createElement('hr')
+      hr.style.margin = '5%'
+      hr.style.backgroundColor = 'white'
+      div.appendChild(hr)
+
+    let p = document.createElement('paragraph')
+    p.style.color = 'white'
+    p.style.fontSize = '20px'
+    p.style.marginLeft = '100px'
+    p.textContent = name
+    p.addEventListener('mouseEnter',function(){
+      p.style.cursor = 'pointer'
+    })
+    p.addEventListener('mouseLeave',function(){
+      p.style.cursor = 'default'
+    })
+    p.style.fontWeight = 'bold'
+    
+    p.onclick = function(){
+      removeAllButtons()
+      editorSocket.emit('load game',{id:getCookie('id'),name:name,response:true})
+      $('#loadGameModal').modal('hide')
+      mainMenu()
+    }
+  
+    // let button = document.createElement('button')
+    // button.textContent = 'Choose!'
+    // button.classList.add('btn','btn-secondary')
+
+    
+
+
+
+    div.append(p)
+    // div.append(button)
+    root.appendChild(div)
+  })
+
+
+}
 
 
 window.onload = function(){
   if(params.get('id') != null){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
+   
   }
  
 }

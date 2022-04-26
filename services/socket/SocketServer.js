@@ -667,6 +667,18 @@ var ServerSocket = /** @class */ (function () {
                 console.log('emitol reload waiting');
                 _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });
             });
+            socket.on('loadGameNames', function () { return __awaiter(_this, void 0, void 0, function () {
+                var names;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findAll()];
+                        case 1:
+                            names = (_a.sent()).map(function (game) { return game.getName(); });
+                            socket.emit('loadedGameNames', { names: names });
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
         });
     };
     ServerSocket.getIo = function () {

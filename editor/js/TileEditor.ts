@@ -79,35 +79,35 @@ function spawnElements(){
     //$('#exampleModal').modal('toggle')
 
     spawnCanvas(doc,'tileEditingPlace','changeCanvas')
-    spawnParagraph(doc,"tileEditingPlace",'',texts[124])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[124],true)
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
     colorPicker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[125])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
     let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider','20','50','1','30')
     sizeOfTileSlider.onchange = showActualState
    
-    spawnParagraph(doc,"tileEditingPlace",'',texts[126])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
     let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,['no','yes'])
     outlineChecker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[127])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
     let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker')
     outlineColorPicker.onchange = showActualState
     
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[128])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[128],true)
     
     let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider','1','10','1','3')
     sizeOfOutlineSlider.onchange = showActualState
     
-    spawnParagraph(doc,"tileEditingPlace",'',texts[129])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
     let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',["btn","btn-dark"],['circle','square'])
     shapeMenu.onchange= showActualState
     
 
     
-    spawnParagraph(doc,"tileEditingPlace",'',texts[130])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[130],true)
     let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,['no','yes'])
     patternChecker.onchange = showActualState
 
@@ -126,9 +126,9 @@ function spawnElements(){
     }
   })
   
-  spawnParagraph(doc,"tileEditingPlace",'',texts[132])
+  spawnParagraph(doc,"tileEditingPlace",'',texts[132],true)
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[133])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[133],true)
     let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,['no','yes'])
     backgroundChecker.onchange = showActualState
   
@@ -147,48 +147,48 @@ function spawnElements(){
       }
     })
 
-spawnParagraph(doc,"tileEditingPlace",'',texts[135])
+spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'start')
 
-spawnParagraph(doc,"tileEditingPlace",'',texts[136])
+spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'end')
 
-spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)')
+spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[137])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
     spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,['no','yes'])
    
-    spawnParagraph(doc,"tileEditingPlace",'',texts[138])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[138],true)
     let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
     numberingColorPicker.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[139])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[139],true)
     let tileNumberSetter = spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
     tileNumberSetter.onchange = showActualState
 
-    spawnParagraph(doc,"tileEditingPlace",'',texts[140])
+    spawnParagraph(doc,"tileEditingPlace",'',texts[140],true)
     spawnButton(doc,"tileEditingPlace",'setNextTileButton',['btn','btn-secondary'],texts[141],function(){
       
       $('#nextTileModal').modal('show');
       generateNextTiles()
       
     })
-    //spawnNumberInput(doc,"tileEditingPlace",'tileFollowingSetter')
-
     
 
     
-    spawnParagraph(document,'tileEditingPlace','',texts[142])
+
+    
+    spawnParagraph(document,'tileEditingPlace','',texts[142],true)
     spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,['no','yes'])
 
-    spawnParagraph(document,'tileEditingPlace','',texts[143])
+    spawnParagraph(document,'tileEditingPlace','',texts[143],true)
     spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
 
-    spawnParagraph(document,'tileEditingPlace','',texts[144])
+    spawnParagraph(document,'tileEditingPlace','',texts[144],true)
     let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,['no','yes'])
 
-    spawnParagraph(document,'tileEditingPlace','',texts[72])
+    spawnParagraph(document,'tileEditingPlace','',texts[72],true)
     spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
       
       if (!questionChecker.checked){
@@ -201,13 +201,13 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     
 
     })
-    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145])
-    spawnParagraph(document,'tileEditingPlace','',texts[146])
+    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145],true)
+    spawnParagraph(document,'tileEditingPlace','',texts[146],true)
     let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
 
     
 
-    spawnParagraph(document,'tileEditingPlace','',texts[98])
+    spawnParagraph(document,'tileEditingPlace','',texts[98],true)
     spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],texts[114],function(){
       if (!eventChecker.checked){
         Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
@@ -227,7 +227,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
       //$('#EventModal').modal('show');
       
     })
-    spawnParagraph(document,'tileEditingPlace','pickedEventParagraph','Picked Event: None')
+    spawnParagraph(document,'tileEditingPlace','pickedEventParagraph','Picked Event: None',true)
 }
 
 function insertTilesMenu():void{
@@ -263,7 +263,7 @@ function insertTilesMenu():void{
     editor.nullEditor()
     removeAllButtons()
     removeAllListenersAdded()
-    spawnParagraph(document,'tileEditingPlace','',texts[147])
+    spawnParagraph(document,'tileEditingPlace','',texts[147],true)
     document.getElementById('wholeBody')!.style.cursor = 'pointer'
     //canvas.style.cursor = 'pointer'
     //document.getElementById('optionPlace')!.style.cursor = 'pointer'
@@ -784,7 +784,7 @@ function insertTilesMenu():void{
        
         document.getElementById('nextTileModalBody')!.appendChild(div)
 
-        spawnParagraph(document,'div' + token,'',texts[148]+token+texts[149])
+        spawnParagraph(document,'div' + token,'',texts[148]+token+texts[149],true)
         div.appendChild(input)
   })}
 
