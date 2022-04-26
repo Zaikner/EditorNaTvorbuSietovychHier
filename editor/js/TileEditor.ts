@@ -88,7 +88,7 @@ function spawnElements(){
     sizeOfTileSlider.onchange = showActualState
    
     spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
-    let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,['no','yes'])
+    let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,[texts[92],texts[93]])
     outlineChecker.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
@@ -108,7 +108,7 @@ function spawnElements(){
 
     
     spawnParagraph(doc,"tileEditingPlace",'',texts[130],true)
-    let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,['no','yes'])
+    let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,[texts[92],texts[93]])
     patternChecker.onchange = showActualState
 
   spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],function(){
@@ -126,10 +126,10 @@ function spawnElements(){
     }
   })
   
-  spawnParagraph(doc,"tileEditingPlace",'',texts[132],true)
+  
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[133],true)
-    let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,['no','yes'])
+    let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,[texts[92],texts[93]])
     backgroundChecker.onchange = showActualState
   
     spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],function(){
@@ -157,7 +157,7 @@ spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (cho
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
-    spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,['no','yes'])
+    spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
    
     spawnParagraph(doc,"tileEditingPlace",'',texts[138],true)
     let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
@@ -180,13 +180,13 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
 
     
     spawnParagraph(document,'tileEditingPlace','',texts[142],true)
-    spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,['no','yes'])
+    spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,[texts[92],texts[93]])
 
     spawnParagraph(document,'tileEditingPlace','',texts[143],true)
     spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
 
     spawnParagraph(document,'tileEditingPlace','',texts[144],true)
-    let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,['no','yes'])
+    let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
 
     spawnParagraph(document,'tileEditingPlace','',texts[72],true)
     spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
@@ -203,7 +203,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     })
     spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145],true)
     spawnParagraph(document,'tileEditingPlace','',texts[146],true)
-    let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,['no','yes'])
+    let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,[texts[92],texts[93]])
 
     
 
@@ -292,7 +292,7 @@ function insertTilesMenu():void{
     if ( editor.getChoosenTile()!= undefined){
       editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor().slice())
       editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor().slice())
-      editor.setEnabledForPlayers(editor.getChoosenTile()!.getCanOccupy().slice())
+     
      
     }
   
@@ -422,7 +422,7 @@ function insertTilesMenu():void{
     }
     addedTile.setIsStartingFor(editor.getStartForPlayers().slice())
     addedTile.setIsEndingFor(editor.getEndForPlayers().slice())
-    addedTile.setCanOccupy(editor.getEnabledForPlayers().slice())
+
     addedTile.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
@@ -504,40 +504,13 @@ function insertTilesMenu():void{
         editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
       }
     })
-    // let set:Set<string> = new Set()
-    
-    // editor.getGame().getPawns().forEach((pawn:Pawn)=>{
-    //   set.add(pawn.player)
-    // })
-    // editor.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
-    //   set.delete(player)
-    // })
 
-    // set.forEach((player:string)=>{
-    //   for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
-    //     editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
-    //   }
-    // })
-    // editor.getStartForPlayers().forEach((player:string)=>{
-    //   if( !editor.getChoosenTile()!.getIsStartingFor().includes(player)){
-    //     for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
-    //       editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
-    //     }
-    //   }
-    //   else{
-    //     console.log(player + ' sa nachadza v ')
-    //     console.log(editor.getChoosenTile()!.getIsStartingFor())
-    //     console.log(editor.getStartForPlayers())
-    //   }
-     
-      
-    // })
     console.log(editor.getChoosenTile()!)
     console.log(editor.getStartForPlayers().slice())
     editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers().slice())
     editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers().slice())
     
-    editor.getChoosenTile()!.setCanOccupy(editor.getEnabledForPlayers())
+    
     editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     editor.getChoosenTile()!.setPatternFile(pattImage)
@@ -583,7 +556,7 @@ function insertTilesMenu():void{
       else{
         editor.getChoosenTile()?.setQuestionId(-1)
       }
-    
+    console.log(editor.getChoosenTile())
     reload(editor,ctx)
   }
   let setValues = function(tile:Tile,copyNumber:boolean){

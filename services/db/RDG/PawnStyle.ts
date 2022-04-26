@@ -7,7 +7,8 @@ export class PawnStyles{
     image:string = ''
     gameName:string = ''
     type:string = ''
-   
+  
+
     constructor(){
     }
 
@@ -47,6 +48,7 @@ export class PawnStyles{
     public getType(){
         return this.type
     }
+ 
     
     public insert(){
         let client = DbConnect.get()

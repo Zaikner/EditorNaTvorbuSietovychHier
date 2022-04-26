@@ -59,12 +59,8 @@ editorSocket.on('connected', function (msg) {
         }
         //addedTile.setBackgroundFile(tile.backgroundFile)
         //addedTile.setPatternFile(tile.patternFile)
-        addedTile.setIsEnding(tile.isEnding);
         addedTile.setIsEndingFor(tile.isEndingFor);
-        addedTile.setIsStarting(tile.isStarting);
         addedTile.setIsStartingFor(tile.isStartingFor);
-        addedTile.setBelongTo(tile.belongTo);
-        addedTile.setCanOccupy(tile.canOccupy);
         addedTile.setToogleNumber(tile.toggleNumber);
         addedTile.setNumberingColor(tile.numberingColor);
         addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);

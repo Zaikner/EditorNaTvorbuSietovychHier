@@ -28,10 +28,10 @@ title=text[1]
                 form
                   p(style='font-size: 20px;')=text[156]
                   input#roomIdSelecter(type='number')
-                  button(type='submit')=text[8]
+                  button.btn.btn-dark(type='submit')=text[8]
                 form
                   p(style='font-size: 20px;')=text[4]
-                  button(type='button' id='create')=text[151]
+                  button.btn.btn-dark(type='button' id='create')=text[151]
               div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
                 // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
@@ -63,6 +63,18 @@ title=text[1]
               br
               br
               br
+              div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
+                // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
+                label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                  strong='Active players'
+                ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+                  each player in players
+                      form(action='/room?game:'+player[1] method='get' name='name' value =player[2])
+                        strong 
+                          li.list-group-item(name='room' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
+                            |
+                            input(type='hidden' name='id' value=player[2])
+                            button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
             .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
               div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
                 p(style='font-size: 20px; font-family: sans-serif;')=text[7]
@@ -106,6 +118,8 @@ title=text[1]
             div
             // <div class="col-1"></div>
           div
+footer 
+  p Gamelobby
 script.
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})

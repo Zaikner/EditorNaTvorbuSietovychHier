@@ -5,7 +5,6 @@ var DbConnect_1 = require("../DbConnect");
 var Tile_db = /** @class */ (function () {
     function Tile_db() {
         this.id = 0;
-        this.type = '';
         this.centerX = 0;
         this.centerY = 0;
         this.x1 = 0;
@@ -13,7 +12,6 @@ var Tile_db = /** @class */ (function () {
         this.y1 = 0;
         this.y2 = 0;
         this.radius = 0;
-        this.isOccupied = false;
         this.color = "";
         this.stroke = 0;
         this.strokeColor = '';
@@ -22,12 +20,8 @@ var Tile_db = /** @class */ (function () {
         this.backgroundFile = '';
         this.patternFile = '';
         this.tileNumber = 0;
-        this.isEnding = false;
         this.isEndingFor = [];
-        this.isStarting = false;
         this.isStartingFor = [];
-        this.belongTo = '';
-        this.canOccupy = [];
         this.toggleNumber = true;
         this.numberingColor = 'white';
         this.numberOfFollowingTile = 0;
@@ -65,12 +59,6 @@ var Tile_db = /** @class */ (function () {
     };
     Tile_db.prototype.getIsChoosen = function () {
         return this.isChoosen;
-    };
-    Tile_db.prototype.setType = function (newType) {
-        this.type = newType;
-    };
-    Tile_db.prototype.getType = function () {
-        return this.type;
     };
     Tile_db.prototype.setX1 = function (newX1) {
         this.x1 = newX1;
@@ -114,12 +102,6 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.getRadius = function () {
         return this.radius;
     };
-    Tile_db.prototype.setIsOccupied = function (newIsOccupied) {
-        this.isOccupied = newIsOccupied;
-    };
-    Tile_db.prototype.getIsOccupied = function () {
-        return this.isOccupied;
-    };
     Tile_db.prototype.setColor = function (newColor) {
         this.color = newColor;
     };
@@ -138,24 +120,6 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.setPatternFile = function (newFile) {
         this.patternFile = newFile;
     };
-    Tile_db.prototype.setIsEnding = function (is) {
-        this.isEnding = is;
-    };
-    Tile_db.prototype.getIsEnding = function () {
-        return this.isEnding;
-    };
-    Tile_db.prototype.setIsStarting = function (is) {
-        this.isStarting = is;
-    };
-    Tile_db.prototype.getIsStarting = function () {
-        return this.isStarting;
-    };
-    Tile_db.prototype.setBelongTo = function (newOwner) {
-        this.belongTo = newOwner;
-    };
-    Tile_db.prototype.getBelongTo = function () {
-        return this.belongTo;
-    };
     Tile_db.prototype.setIsEndingFor = function (newPlayers) {
         this.isEndingFor = newPlayers;
     };
@@ -167,12 +131,6 @@ var Tile_db = /** @class */ (function () {
     };
     Tile_db.prototype.getIsEndingFor = function () {
         return this.isEndingFor;
-    };
-    Tile_db.prototype.setCanOccupy = function (newPlayers) {
-        this.canOccupy = newPlayers;
-    };
-    Tile_db.prototype.getCanOccupy = function () {
-        return this.canOccupy;
     };
     Tile_db.prototype.setToogleNumber = function (is) {
         this.toggleNumber = is;
@@ -270,8 +228,8 @@ var Tile_db = /** @class */ (function () {
         console.log(this);
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37);',
-            values: [this.id, this.type, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.isOccupied, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.patternFile, this.tileNumber, this.isEnding, this.isEndingFor, this.isStarting, this.isStartingFor, this.belongTo, this.canOccupy, this.toggleNumber, this.numberingColor, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds]
+            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.patternFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberingColor, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds]
         };
         client
             .query(query)
@@ -280,7 +238,6 @@ var Tile_db = /** @class */ (function () {
     Tile_db.load = function (data) {
         var ret = new Tile_db();
         ret.setId(data.id);
-        ret.setType(data.type);
         ret.setCenterX(data.centerX);
         ret.setCenterY(data.centerY);
         ret.setX1(data.x1);
@@ -288,7 +245,6 @@ var Tile_db = /** @class */ (function () {
         ret.setY1(data.y1);
         ret.setY2(data.y2);
         ret.setRadius(data.radius);
-        ret.setIsOccupied(data.isOccupied);
         ret.setColor(data.color);
         ret.setStroke(data.stroke);
         ret.setStrokeColor(data.strokeColor);
@@ -297,12 +253,8 @@ var Tile_db = /** @class */ (function () {
         ret.setBackgroundFile(data.backgroundFile);
         ret.setPatternFile(data.patternFile);
         ret.setTileNumber(data.tileNumber);
-        ret.setIsEnding(data.isEnding);
         ret.setIsEndingFor(data.isEndingFor);
-        ret.setIsStarting(data.isStarting);
         ret.setIsStartingFor(data.isStartingFor);
-        ret.setBelongTo(data.belongTo);
-        ret.setCanOccupy(data.canOccupy);
         ret.setToogleNumber(data.toggleNumber);
         ret.setNumberingColor(data.numberingColor);
         ret.setFollowingTileNumber(data.numberOfFollowingTile);

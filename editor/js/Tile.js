@@ -7,7 +7,6 @@ var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Tile = /** @class */ (function () {
     function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
         this.id = 0;
-        this.isOccupied = false;
         this.color = "";
         this.stroke = 0;
         this.strokeColor = '';
@@ -15,12 +14,8 @@ var Tile = /** @class */ (function () {
         this.isChoosen = false;
         this.backgroundFile = undefined;
         this.patternFile = undefined;
-        this.isEnding = false;
         this.isEndingFor = [];
-        this.isStarting = false;
         this.isStartingFor = [];
-        this.belongTo = '';
-        this.canOccupy = [];
         this.cantBeEliminatedOnTile = [];
         this.toggleNumber = true;
         this.numberingColor = '#000000';
@@ -216,10 +211,56 @@ var Tile = /** @class */ (function () {
                         diffY = -20;
                     }
                     if (_this.pawns.length == 1) {
-                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        if ((style === null || style === void 0 ? void 0 : style.getImage()) != undefined) {
+                            (0, PawnEditor_js_1.drawPawnImage)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style === null || style === void 0 ? void 0 : style.getImage());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type1') {
+                            (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type2') {
+                            (0, PawnEditor_js_1.drawPawnType2)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type3') {
+                            (0, PawnEditor_js_1.drawPawnType3)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type4') {
+                            (0, PawnEditor_js_1.drawPawnType4)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type5') {
+                            (0, PawnEditor_js_1.drawPawnType5)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type6') {
+                            (0, PawnEditor_js_1.drawPawnType6)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type7') {
+                            (0, PawnEditor_js_1.drawPawnType7)(ctx, _this.getCenterX(), _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / 2 * _this.radius / 50, 100, 100, style.getColor());
+                        }
                     }
                     else {
-                        (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        if ((style === null || style === void 0 ? void 0 : style.getImage()) != undefined) {
+                            (0, PawnEditor_js_1.drawPawnImage)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getImage());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type1') {
+                            (0, PawnEditor_js_1.drawPawnType1)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type2') {
+                            (0, PawnEditor_js_1.drawPawnType2)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type3') {
+                            (0, PawnEditor_js_1.drawPawnType3)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type4') {
+                            (0, PawnEditor_js_1.drawPawnType4)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type5') {
+                            (0, PawnEditor_js_1.drawPawnType5)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type6') {
+                            (0, PawnEditor_js_1.drawPawnType6)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
+                        else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type7') {
+                            (0, PawnEditor_js_1.drawPawnType7)(ctx, _this.getCenterX() - _this.radius + 20 * _this.radius / 50 + drawn * 10 * _this.radius / 50 + diff, _this.getCenterY() - 20 * _this.radius / 50 + diffY * _this.radius / 50, 6 * _this.radius / 50 + 2 * 9 / _this.pawns.length * _this.radius / 50, 100, 100, style.getColor());
+                        }
                     }
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*15,this.getCenterY()-10-10,4*this.radius/30,100,100,style!.getColor())
                     drawn++;
@@ -229,70 +270,6 @@ var Tile = /** @class */ (function () {
         });
         ctx.resetTransform();
         ctx.restore();
-        //     this.pawns.forEach((pawn) => {
-        //         console.log('kresli babku')
-        //         console.log(this)
-        //         console.log(pawn)
-        //         let style = editor.getGame().getPawnStyle().get(pawn.player)
-        //         console.log(style)
-        //         if (this.getPawns().length == 1){
-        //             if (style!.getType() == 'type1'){
-        //                 drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-10,10*this.radius/30,100,100,style!.getColor())
-        //                 console.log('kresli ja neviem kde je problem')
-        //             }
-        //             else{
-        //                 console.log('zly typ')
-        //             }
-        //         }
-        //         else if (this.getPawns().length == 2){
-        //             if (drawn == 0){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
-        //                     console.log('kresli ja neviem kde je problem')
-        //                     drawn++
-        //                 }
-        //             }
-        //             else if (drawn == 1){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-10,8*this.radius/30,100,100,style!.getColor())
-        //                     console.log('kresli ja neviem kde je problem')
-        //                     drawn++
-        //                 }
-        //             }
-        //         }
-        //         else if (this.getPawns().length > 2){
-        //             if (drawn == 0){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-        //                     drawn++
-        //                 }
-        //             }
-        //             else if (drawn == 1){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()-15*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-        //                     drawn++
-        //                 }
-        //             }
-        //             else if (drawn == 2){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()-this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-        //                     drawn++
-        //                 }
-        //             }
-        //             else if (drawn == 3){
-        //                 if (style!.getType() == 'type1'){
-        //                     drawPawnType1( ctx,this.getCenterX()+this.radius/2,this.getCenterY()+10*this.radius/30,4*this.radius/30,100,100,style!.getColor())
-        //                     drawn++
-        //                 }
-        //             }
-        //         }
-        //         else{
-        //             console.log('pocty su zle')
-        //             console.log(this.pawns)
-        //         }
-        //     })
-        //    console.log('spusitl draw pawns')
-        //    console.log(this.pawns)
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {
@@ -316,7 +293,6 @@ var Tile = /** @class */ (function () {
             y1: this.y1,
             y2: this.y2,
             radius: this.radius,
-            isOccupied: this.isOccupied,
             color: this.color,
             stroke: this.stroke,
             strokeColor: this.strokeColor,
@@ -324,12 +300,8 @@ var Tile = /** @class */ (function () {
             backgroundFile: this.backgroundFile === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.backgroundFile),
             patternFile: this.patternFile === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.patternFile),
             tileNumber: this.tileNumber,
-            isEnding: this.isEnding,
             isEndingFor: this.isEndingFor,
-            isStarting: this.isStarting,
             isStartingFor: this.isStartingFor,
-            belongTo: this.belongTo,
-            canOccupy: this.canOccupy,
             toggleNumber: this.toggleNumber,
             numberingColor: this.numberingColor,
             numberOfFollowingTile: this.numberOfFollowingTile,
@@ -471,12 +443,6 @@ var Tile = /** @class */ (function () {
     Tile.prototype.getId = function () {
         return this.id;
     };
-    Tile.prototype.setIsOccupied = function (newIsOccupied) {
-        this.isOccupied = newIsOccupied;
-    };
-    Tile.prototype.getIsOccupied = function () {
-        return this.isOccupied;
-    };
     Tile.prototype.setColor = function (newColor) {
         this.color = newColor;
     };
@@ -495,27 +461,7 @@ var Tile = /** @class */ (function () {
     Tile.prototype.setPatternFile = function (newFile) {
         this.patternFile = newFile;
     };
-    Tile.prototype.setIsEnding = function (is) {
-        this.isEnding = is;
-    };
-    Tile.prototype.getIsEnding = function () {
-        return this.isEnding;
-    };
-    Tile.prototype.setIsStarting = function (is) {
-        this.isStarting = is;
-    };
-    Tile.prototype.getIsStarting = function () {
-        return this.isStarting;
-    };
-    Tile.prototype.setBelongTo = function (newOwner) {
-        this.belongTo = newOwner;
-    };
-    Tile.prototype.getBelongTo = function () {
-        return this.belongTo;
-    };
     Tile.prototype.setIsEndingFor = function (newPlayers) {
-        console.log('menim pre tile');
-        console.log(this);
         this.isEndingFor = newPlayers;
     };
     Tile.prototype.getIsStartingFor = function () {
@@ -526,12 +472,6 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getIsEndingFor = function () {
         return this.isEndingFor;
-    };
-    Tile.prototype.setCanOccupy = function (newPlayers) {
-        this.canOccupy = newPlayers;
-    };
-    Tile.prototype.getCanOccupy = function () {
-        return this.canOccupy;
     };
     Tile.prototype.setToogleNumber = function (is) {
         this.toggleNumber = is;

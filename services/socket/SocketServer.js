@@ -157,7 +157,6 @@ var ServerSocket = /** @class */ (function () {
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);
-                                t.setType(tile.type);
                                 t.setCenterX(tile.centerX);
                                 t.setCenterY(tile.centerY);
                                 t.setX1(tile.x1);
@@ -165,7 +164,6 @@ var ServerSocket = /** @class */ (function () {
                                 t.setY1(tile.y1);
                                 t.setY2(tile.y2);
                                 t.setRadius(tile.radius);
-                                t.setIsOccupied(tile.isOccupied);
                                 t.setColor(tile.color);
                                 t.setStroke(tile.stroke);
                                 t.setStrokeColor(tile.strokeColor);
@@ -173,12 +171,8 @@ var ServerSocket = /** @class */ (function () {
                                 t.setBackgroundFile(tile.backgroundFile);
                                 t.setPatternFile(tile.patternFile);
                                 t.setTileNumber(tile.tileNumber);
-                                t.setIsEnding(tile.isEnding);
                                 t.setIsEndingFor(tile.isEndingFor);
-                                t.setIsStarting(tile.isStarting);
                                 t.setIsStartingFor(tile.isStartingFor);
-                                t.setBelongTo(tile.belongTo);
-                                t.setCanOccupy(tile.canOccupy);
                                 t.setToogleNumber(tile.toggleNumber);
                                 t.setNumberingColor(tile.numberingColor);
                                 t.setFollowingTileNumber(tile.numberOfFollowingTile);

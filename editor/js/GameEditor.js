@@ -105,7 +105,7 @@ var GameEditor = /** @class */ (function () {
         }
     };
     GameEditor.prototype.updateChoosenTile = function (color, size, hasStroke, stroke, strokeColor, shape, image) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         (_a = this.choosenTile) === null || _a === void 0 ? void 0 : _a.setColor(color);
         // this.choosenTile?.setCenterX(centerX)
         // this.choosenTile?.setCenterY(centerY)
@@ -123,6 +123,11 @@ var GameEditor = /** @class */ (function () {
         else {
             (_g = this.choosenTile) === null || _g === void 0 ? void 0 : _g.setStroke(0);
         }
+        (_h = this.choosenTile) === null || _h === void 0 ? void 0 : _h.setX1(this.choosenTile.getCenterX() - size);
+        (_j = this.choosenTile) === null || _j === void 0 ? void 0 : _j.setX2(this.choosenTile.getCenterX() + size);
+        (_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.setY1(this.choosenTile.getCenterY() - size);
+        (_l = this.choosenTile) === null || _l === void 0 ? void 0 : _l.setY2(this.choosenTile.getCenterY() + size);
+        this.choosenTile;
     };
     GameEditor.prototype.moveTile = function (event) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;

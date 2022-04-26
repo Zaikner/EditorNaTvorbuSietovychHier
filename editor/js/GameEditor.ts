@@ -141,6 +141,12 @@ class GameEditor{
         else{
             this.choosenTile?.setStroke(0)
         }
+        this.choosenTile?.setX1(this.choosenTile.getCenterX()-size)
+        this.choosenTile?.setX2(this.choosenTile.getCenterX()+size)
+        this.choosenTile?.setY1(this.choosenTile.getCenterY()-size)
+        this.choosenTile?.setY2(this.choosenTile.getCenterY()+size)
+        
+        this.choosenTile
     }
     moveTile(event:MouseEvent){
         let coords = calibreEventCoords(event)

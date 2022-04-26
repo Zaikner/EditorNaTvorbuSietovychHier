@@ -3,6 +3,7 @@ export class PawnStyle{
     private color:string = '';
     private type:string = ''
     private image:HTMLImageElement = undefined!;
+ 
 
 
     constructor(player:string,color:string,type:string){
@@ -41,4 +42,5 @@ export class PawnStyle{
     public getImage(){
         return this.image
     }
+
 }

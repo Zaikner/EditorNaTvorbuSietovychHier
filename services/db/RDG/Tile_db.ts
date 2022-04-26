@@ -1,7 +1,6 @@
 import { DbConnect } from "../DbConnect";
 export class Tile_db{
     private id:number= 0;
-    private type:string = '';
     private centerX:number = 0;
     private centerY:number = 0;
     private x1:number = 0;
@@ -9,7 +8,6 @@ export class Tile_db{
     private y1:number = 0;
     private y2:number = 0;
     private radius:number = 0;
-    private isOccupied:boolean = false;
     private color:string = "";
     private stroke:number = 0;
     private strokeColor:string ='';
@@ -18,12 +16,8 @@ export class Tile_db{
     private backgroundFile?:string = '';
     private patternFile?:string = '';
     private tileNumber:number = 0;
-    private isEnding:boolean = false;
     private isEndingFor:Array<String>=[]
-    private isStarting:boolean = false;
     private isStartingFor:Array<String>=[]
-    private belongTo:string = '';
-    private canOccupy:Array<String> = []
     private toggleNumber:boolean = true;
     private numberingColor:string = 'white'
     private numberOfFollowingTile:number = 0
@@ -63,12 +57,7 @@ export class Tile_db{
     public getIsChoosen(){
         return this.isChoosen
     }
-    public setType(newType:string){
-        this.type = newType
-    }
-    public getType(){
-        return this.type
-    }
+
     public setX1(newX1:number){
         this.x1 = newX1
     }
@@ -112,12 +101,7 @@ export class Tile_db{
     public getRadius(){
         return this.radius
     }
-    public setIsOccupied(newIsOccupied:boolean){
-        this.isOccupied = newIsOccupied
-    }
-    public getIsOccupied(){
-        return this.isOccupied
-    }
+
     public setColor(newColor:string){
         this.color = newColor
     }
@@ -137,24 +121,7 @@ export class Tile_db{
          this.patternFile = newFile
     }
     
-    public setIsEnding(is : boolean) {
-        this.isEnding = is;
-    }
-    public getIsEnding(){
-        return this.isEnding
-    }
-    public setIsStarting(is : boolean) {
-        this.isStarting = is;
-    }
-    public getIsStarting(){
-        return this.isStarting
-    }
-    public setBelongTo(newOwner : string) {
-        this.belongTo = newOwner;
-    }
-    public getBelongTo(){
-        return this.belongTo
-    }
+
     public setIsEndingFor(newPlayers:Array<string>){
         this.isEndingFor = newPlayers
     }
@@ -166,12 +133,6 @@ export class Tile_db{
     }
     public getIsEndingFor(){
         return this.isEndingFor
-    }
-    public setCanOccupy(newPlayers:Array<string>){
-        this.canOccupy = newPlayers
-    }
-    public getCanOccupy(){
-        return this.canOccupy
     }
     public setToogleNumber(is : boolean) {
         this.toggleNumber = is;
@@ -271,8 +232,8 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,type,"centerX","centerY",x1,x2,y1,y2,radius,"isOccupied",color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEnding","isEndingFor","isStarting","isStartingFor","belongTo","canOccupy","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37);',
-                values: [this.id,this.type,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.isOccupied,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEnding,this.isEndingFor,this.isStarting,this.isStartingFor,this.belongTo,this.canOccupy,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31);',
+                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds],
               }
               client
               .query(query)
@@ -284,7 +245,6 @@ export class Tile_db{
     public static load(data:any){
         let ret = new Tile_db()
         ret.setId(data.id)
-        ret.setType(data.type)
         ret.setCenterX(data.centerX)
         ret.setCenterY(data.centerY)
         ret.setX1(data.x1)
@@ -292,7 +252,6 @@ export class Tile_db{
         ret.setY1(data.y1)
         ret.setY2(data.y2)
         ret.setRadius(data.radius)
-        ret.setIsOccupied(data.isOccupied)
         ret.setColor(data.color)
         ret.setStroke(data.stroke)
         ret.setStrokeColor(data.strokeColor)
@@ -301,12 +260,8 @@ export class Tile_db{
         ret.setBackgroundFile(data.backgroundFile)
         ret.setPatternFile(data.patternFile)
         ret.setTileNumber(data.tileNumber)
-        ret.setIsEnding(data.isEnding)
         ret.setIsEndingFor(data.isEndingFor)
-        ret.setIsStarting(data.isStarting)
         ret.setIsStartingFor(data.isStartingFor)
-        ret.setBelongTo(data.belongTo)
-        ret.setCanOccupy(data.canOccupy)
         ret.setToogleNumber(data.toggleNumber)
         ret.setNumberingColor(data.numberingColor)
         ret.setFollowingTileNumber(data.numberOfFollowingTile)
