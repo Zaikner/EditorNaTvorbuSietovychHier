@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.Pawn = void 0;
 var canvas_1 = require("./canvas");
+var clientSocket_js_1 = require("./clientSocket.js");
 var Pawn = /** @class */ (function () {
     function Pawn(player, tile) {
         this.id = 0;
@@ -42,7 +43,7 @@ var Pawn = /** @class */ (function () {
         var params = new URLSearchParams(window.location.search);
         if (canvas_1.editor.getGame().getIsOnturn()) {
             setTimeout(function () {
-                canvas_1.editorSocket.emit('change Pawn position', { pawnId: p.id, tileId: p.tileId, room: params.get('id'), id: (0, canvas_1.getCookie)('id') });
+                clientSocket_js_1.editorSocket.emit('change Pawn position', { pawnId: p.id, tileId: p.tileId, room: params.get('id'), id: (0, clientSocket_js_1.getCookie)('id') });
                 startTile.setIsChoosen(false);
                 canvas_1.editor.setChoosenTile(undefined);
                 canvas_1.editor.reactToTile(actuallTile, numOfTiles, p);

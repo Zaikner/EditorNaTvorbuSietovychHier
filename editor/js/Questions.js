@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.showResults = exports.pickQuestion = exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
 var canvas_1 = require("./canvas");
+var clientSocket_js_1 = require("./clientSocket.js");
 var num = 0;
 var newQuestions = [];
 var givenOptions = 0;
@@ -23,7 +24,7 @@ function initCreation(parent) {
     text.style.marginLeft = '15px';
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = canvas_1.texts[66];
+    label.textContent = clientSocket_js_1.texts[66];
     div.appendChild(label);
     div.appendChild(text);
     div.style.marginBottom = '5px';
@@ -55,13 +56,13 @@ function addOption(parent, txt, is, id) {
     text.value = txt;
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = canvas_1.texts[66];
+    label.textContent = clientSocket_js_1.texts[66];
     div.appendChild(check);
     div.appendChild(label);
     div.appendChild(text);
     if (txt != '') {
         var editButton = document.createElement('button');
-        editButton.textContent = canvas_1.texts[64];
+        editButton.textContent = clientSocket_js_1.texts[64];
         editButton.classList.add('btn');
         editButton.classList.add('btn-secondary');
         editButton.type = 'button';
@@ -71,12 +72,12 @@ function addOption(parent, txt, is, id) {
         });
         div.appendChild(editButton);
         var deleteButton = document.createElement('button');
-        deleteButton.textContent = canvas_1.texts[70];
+        deleteButton.textContent = clientSocket_js_1.texts[70];
         deleteButton.classList.add('btn');
         deleteButton.classList.add('btn-secondary');
         deleteButton.addEventListener('click', function () {
             var _a;
-            canvas_1.editorSocket.emit('deleteQuestion', { id: id });
+            clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: id });
             (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.removeChild(div);
         });
         //deleteButton.classList.add('btn btn-secondary')
@@ -90,7 +91,7 @@ function addOption(parent, txt, is, id) {
         console.log('new quest su:');
         console.log(newQuestions);
         var deleteButton = document.createElement('button');
-        deleteButton.textContent = canvas_1.texts[70];
+        deleteButton.textContent = clientSocket_js_1.texts[70];
         deleteButton.type = 'button';
         deleteButton.classList.add('btn');
         deleteButton.classList.add('btn-secondary');
@@ -146,7 +147,7 @@ function createQuestion(id) {
     num = 0;
     console.log('vklada otazky');
     console.log(data);
-    canvas_1.editorSocket.emit('newQuestion', data);
+    clientSocket_js_1.editorSocket.emit('newQuestion', data);
 }
 exports.createQuestion = createQuestion;
 function showAllQuestions(data) {
@@ -207,8 +208,8 @@ function pickQuestion(data) {
                 $('#pickQuestionModal').modal('hide');
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
-                document.getElementById('pickedQuestionParagraph').textContent = canvas_1.texts[71] + elem.questionText;
-                document.getElementById('bindQuestion').textContent = canvas_1.texts[72];
+                document.getElementById('pickedQuestionParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
+                document.getElementById('bindQuestion').textContent = clientSocket_js_1.texts[72];
             };
             list.appendChild(quest);
             (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
@@ -244,9 +245,9 @@ function editQuestionMenu(id, txt, elem) {
     text.style.marginLeft = '15px';
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
-    label.textContent = canvas_1.texts[66];
+    label.textContent = clientSocket_js_1.texts[66];
     var editButton = document.createElement('button');
-    editButton.textContent = canvas_1.texts[64];
+    editButton.textContent = clientSocket_js_1.texts[64];
     editButton.type = 'button';
     editButton.classList.add('btn');
     editButton.classList.add('btn-secondary');
@@ -266,11 +267,11 @@ function editQuestionMenu(id, txt, elem) {
 function editOption(id, check, text) {
     console.log('emitol edit option');
     console.log({ id: id, isAnswer: check.checked, text: text.value });
-    canvas_1.editorSocket.emit('editOption', { id: id, isAnswer: check.checked, text: text.value });
+    clientSocket_js_1.editorSocket.emit('editOption', { id: id, isAnswer: check.checked, text: text.value });
     //$('#editModal').modal('show')
 }
 function editQuestion(id, text) {
-    canvas_1.editorSocket.emit('editQuestion', { id: id, text: text.value });
+    clientSocket_js_1.editorSocket.emit('editQuestion', { id: id, text: text.value });
     //$('#editModal').modal('show')
 }
 function askQuestion(data) {
@@ -316,7 +317,7 @@ function askQuestion(data) {
 }
 exports.askQuestion = askQuestion;
 function evaluateQuestion() {
-    document.getElementById('answerButtonRoom').removeEventListener('click', canvas_1.clickFunction);
+    document.getElementById('answerButtonRoom').removeEventListener('click', clientSocket_js_1.clickFunction);
     var params = new URLSearchParams(window.location.search);
     var right = [];
     var wrong = [];
@@ -335,11 +336,11 @@ function evaluateQuestion() {
             wrong.push(button.id);
         }
     }
-    canvas_1.editorSocket.emit('showAnswersToOthers', { room: params.get('id'), wrong: wrong, right: right });
+    clientSocket_js_1.editorSocket.emit('showAnswersToOthers', { room: params.get('id'), wrong: wrong, right: right });
     setTimeout(function () {
         $('#answerModal').modal('hide');
         var answ = (wrong.length == 0);
-        canvas_1.editorSocket.emit('wasRightAnswer', { is: answ, room: params.get('id') });
+        clientSocket_js_1.editorSocket.emit('wasRightAnswer', { is: answ, room: params.get('id') });
     }, 5000);
 }
 exports.evaluateQuestion = evaluateQuestion;

@@ -1,4 +1,5 @@
-import { calibreEventCoords, canvas, ctx, doc, editor, reload, texts } from "./canvas"
+import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
+import { texts } from "./clientSocket"
 import { spawnButton, spawnCanvas, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { Tile } from "./Tile"

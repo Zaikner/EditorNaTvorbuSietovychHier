@@ -4,7 +4,8 @@ import { QuestionOption } from '../../services/db/RDG/QuestionOption';
 import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
 
 
-import {clickFunction, doc, editor, editorSocket, elementDeleter,texts} from './canvas'
+import { doc, editor,  elementDeleter} from './canvas'
+import { editorSocket,clickFunction,texts} from './clientSocket.js'
 import { spawnButton } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 

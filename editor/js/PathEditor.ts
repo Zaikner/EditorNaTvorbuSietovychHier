@@ -1,9 +1,10 @@
-import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload, texts} from './canvas.js'
+import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
 
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
 import {removeAllButtons,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles, showActualState} from './TileEditor.js'
 import { spawnButton } from './Elements.js';
+import { texts } from './clientSocket.js';
 
 var can = false
 function editTrack(){

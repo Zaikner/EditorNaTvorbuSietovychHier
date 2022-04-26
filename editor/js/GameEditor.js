@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.GameEditor = void 0;
 var canvas_js_1 = require("./canvas.js");
+var clientSocket_js_1 = require("./clientSocket.js");
 var Tile_js_1 = require("./Tile.js");
 var Game_js_1 = require("./Game.js");
 var TileEditor_js_1 = require("./TileEditor.js");
@@ -210,9 +211,9 @@ var GameEditor = /** @class */ (function () {
                     });
                 }
             });
-            canvas_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
+            clientSocket_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
                 questionId: tile.getQuestionId(),
-                id: (0, canvas_js_1.getCookie)('id'),
+                id: (0, clientSocket_js_1.getCookie)('id'),
                 returnValue: returnValue,
                 pawnId: pawn.id,
                 forward: tile.getForward(),

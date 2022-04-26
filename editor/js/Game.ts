@@ -1,7 +1,8 @@
 import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
-import { editor, editorSocket, getCookie} from './canvas.js';
+import { editor} from './canvas.js';
+import { editorSocket, getCookie} from './clientSocket.js'
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';

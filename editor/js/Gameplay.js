@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.throwDice = exports.changeWaitingRoom = exports.initDice = exports.initGameInfo = void 0;
 var Elements_1 = require("./Elements");
 var canvas_1 = require("./canvas");
+var clientSocket_js_1 = require("./clientSocket.js");
 var diceImages = [];
 var dice;
 var _loop_1 = function (i) {
@@ -16,7 +17,7 @@ for (var i = 1; i <= 6; i++) {
     _loop_1(i);
 }
 function initGameInfo(name) {
-    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', canvas_1.texts[118] + name, true);
+    (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[118] + name, true);
 }
 exports.initGameInfo = initGameInfo;
 function initDice() {
@@ -51,7 +52,7 @@ function throwDice(token) {
             clearInterval(interval);
             console.log('player emitol takyto hod:');
             console.log({ room: params_1.get('id'), value: n, tileId: (_a = canvas_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId() });
-            canvas_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_b = canvas_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getId() });
+            clientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_b = canvas_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getId() });
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else {
@@ -59,7 +60,7 @@ function throwDice(token) {
             n = Math.floor(Math.random() * 6) + 1;
             if (t != n) {
                 t = n;
-                canvas_1.editorSocket.emit('show Dice', { id: params.get('id'), value: t });
+                clientSocket_js_1.editorSocket.emit('show Dice', { id: params.get('id'), value: t });
             }
             var image_1 = new Image();
             image_1.src = '../../src/Dice' + t + '.png';
@@ -93,10 +94,10 @@ function changeWaitingRoom(accs) {
         var place = document.createElement('place');
         if (accs[i].place > 0) {
             if (accs[i].place == 1) {
-                quest.textContent = canvas_1.texts[116] + quest.textContent;
+                quest.textContent = clientSocket_js_1.texts[116] + quest.textContent;
             }
             else {
-                quest.textContent = accs[i].place.toString() + canvas_1.texts[117] + quest.textContent;
+                quest.textContent = accs[i].place.toString() + clientSocket_js_1.texts[117] + quest.textContent;
             }
         }
         var questClone = quest.cloneNode();

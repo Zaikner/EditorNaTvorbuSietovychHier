@@ -1,4 +1,5 @@
-import {doc,ctx, editor,reload,texts, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
+import {doc,ctx, editor,reload, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
+import { texts } from './clientSocket.js'
 import { spawnButton, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu, spawnSliderWithValueShower } from './Elements.js'
 import {removeAllButtons,removeAllListenersAdded, saveInsertingTiles, unchooseEverything} from './TileEditor.js'
 

@@ -1,5 +1,6 @@
 
-import { ctx, editor, editorSocket, getCookie, reload } from "./canvas";
+import { ctx, editor,  reload } from "./canvas";
+import { editorSocket, getCookie} from './clientSocket.js'
 import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
 import { Tile } from "./Tile";
 

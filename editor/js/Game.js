@@ -4,6 +4,7 @@ exports.Game = void 0;
 var Path_js_1 = require("./Path.js");
 var Background_js_1 = require("./Background.js");
 var canvas_js_1 = require("./canvas.js");
+var clientSocket_js_1 = require("./clientSocket.js");
 var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
@@ -48,7 +49,7 @@ var Game = /** @class */ (function () {
             Array.from(this.pawnStyle.values()).forEach(function (pawnStyle) {
                 savedPawnStyles_1.push(pawnStyle.JSONfyStyle());
             });
-            canvas_js_1.editorSocket.emit('saveGame', { name: this.name,
+            clientSocket_js_1.editorSocket.emit('saveGame', { name: this.name,
                 author: this.author,
                 background: this.background.save(),
                 tiles: savedTiles_1,
@@ -56,7 +57,7 @@ var Game = /** @class */ (function () {
                 pawns: savedPawns_1,
                 styles: savedPawnStyles_1,
                 rules: this.rules,
-                id: (0, canvas_js_1.getCookie)('id'),
+                id: (0, clientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles()
             });
         }

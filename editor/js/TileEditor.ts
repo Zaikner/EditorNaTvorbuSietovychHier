@@ -1,6 +1,6 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload, editorSocket, canMovePawnFunc, texts} from './canvas.js'
-
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload} from './canvas.js'
+import { editorSocket,canMovePawnFunc,texts} from './clientSocket.js'
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
 import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'

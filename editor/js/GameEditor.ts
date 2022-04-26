@@ -1,4 +1,5 @@
-import {canvas,ctx, calibreEventCoords, editorSocket, getCookie, editor, reload} from './canvas.js'
+import {canvas,ctx, calibreEventCoords, editor, reload} from './canvas.js'
+import { editorSocket, getCookie} from './clientSocket.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 

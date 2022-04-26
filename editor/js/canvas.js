@@ -1,422 +1,23 @@
 "use strict";
-var _a;
 exports.__esModule = true;
-exports.texts = exports.clickFunction = exports.canMovePawnFunc = exports.getCookie = exports.resize = exports.editorSocket = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
-var Tile_js_1 = require("./Tile.js");
+exports.loadGameNames = exports.resize = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
-var socket_io_client_1 = require("socket.io-client");
 var Elements_1 = require("./Elements");
-var Background_1 = require("./Background");
-var Gameplay_1 = require("./Gameplay");
 var PawnEditor_1 = require("./PawnEditor");
 var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
-var Warning_1 = require("./Warning");
-var BackgroundComponent_1 = require("./BackgroundComponent");
-var texts = [];
-exports.texts = texts;
+var clientSocket_1 = require("./clientSocket");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
-var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
-exports.editorSocket = editorSocket;
-editorSocket.emit('get texts', { language: getCookie('language') });
-editorSocket.emit('loadGameNames');
+var params = new URLSearchParams(window.location.search);
 //socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');
 exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
-editorSocket.on('connected', function (msg) {
-    var newIds = new Map();
-    var newId = 0;
-    msg.tiles.forEach(function (tile) {
-        newId++;
-        var addedTile = new Tile_js_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
-        addedTile.setId(newId);
-        newIds.set(tile.id, newId);
-        addedTile.setStroke(tile.stroke);
-        addedTile.setStrokeColor(tile.strokeColor);
-        addedTile.setShape(tile.shape);
-        addedTile.setIsChoosen(tile.isChoosen);
-        if (tile.backgroundFile != 'none') {
-            var image_1 = new Image();
-            image_1.src = tile.backgroundFile;
-            image_1.onload = function () {
-                addedTile.setBackgroundFile(image_1);
-                reload(editor, ctx);
-            };
-        }
-        if (tile.patternFile != 'none') {
-            var image_2 = new Image();
-            image_2.src = tile.patternFile;
-            image_2.onload = function () {
-                addedTile.setPatternFile(image_2);
-                reload(editor, ctx);
-            };
-        }
-        //addedTile.setBackgroundFile(tile.backgroundFile)
-        //addedTile.setPatternFile(tile.patternFile)
-        addedTile.setIsEndingFor(tile.isEndingFor);
-        addedTile.setIsStartingFor(tile.isStartingFor);
-        addedTile.setToogleNumber(tile.toggleNumber);
-        addedTile.setNumberingColor(tile.numberingColor);
-        addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
-        addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
-        addedTile.setSkip(tile.skip);
-        addedTile.setRepeat(tile.repeat);
-        addedTile.setForward(tile.forward);
-        addedTile.setBackward(tile.backward);
-        addedTile.setMustThrown(tile.mustThrown);
-        addedTile.setTurnsToSetFree(tile.turnToSetFree);
-        addedTile.setQuestionId(tile.questionId);
-        var t = tile.nextTilesIds;
-        var add = new Map();
-        for (var i_1 = 0; i_1 * 2 < t.length; i_1++) {
-            add.set(t[2 * i_1], t[2 * i_1 + 1]);
-        }
-        addedTile.setNextTilesIds(add);
-        editor.getGame().addTile(addedTile);
-        reload(editor, ctx);
-    });
-    editor.setNextTileId(newId + 1);
-    var background = new Background_1.Background();
-    background.setColor(msg.background.color);
-    if (msg.background.image != 'none') {
-        var backImage_1 = new Image();
-        backImage_1.src = msg.background.image;
-        backImage_1.onload = function () {
-            background.setBackgroundImage(backImage_1);
-            editor.getGame().setBackground(background);
-            reload(editor, ctx);
-        };
-        background.setBackgroundImage(backImage_1);
-    }
-    msg.components.forEach(function (component) {
-        var newComponent = new BackgroundComponent_1.BackgroundComponent();
-        if (component.image != 'none' || component.image != undefined) {
-            var image_3 = new Image();
-            image_3.src = component.image;
-            image_3.onload = function () {
-                newComponent.setImage(image_3);
-                background.getComponents().push(newComponent);
-                reload(editor, ctx);
-            };
-        }
-        newComponent.setType(component.type);
-        newComponent.setColor(component.color);
-        newComponent.setImage(component.image);
-        newComponent.setImageHeight(component.imageHeigth);
-        newComponent.setImageWidth(component.imageWidth);
-        newComponent.setCenterX(component.centerX);
-        newComponent.setCenterY(component.centerY);
-        newComponent.setRadius(component.radius);
-        newComponent.setStroke(component.stroke);
-        newComponent.setStrokeColor(component.strokeColor);
-        newComponent.setX1(component.x1);
-        newComponent.setY1(component.y1);
-        newComponent.setX2(component.x2);
-        newComponent.setY2(component.y2);
-    });
-    editor.getGame().setBackground(background);
-    //editor.getGame().setBackground(msg.background)
-    editor.getGame().setAuthor(msg.game.author);
-    editor.getGame().setName(msg.game.name);
-    editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
-    editor.getGame().setRules(msg.rules);
-    var gameNextTiles = msg.game.nextTilesIds;
-    var add = new Map();
-    for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
-        add.set(gameNextTiles[2 * i_2], gameNextTiles[2 * i_2 + 1]);
-    }
-    editor.getGame().setNextTilesIds(add);
-    var tokens = [];
-    for (var i_3 = 1; i_3 <= editor.getGame().getnumOfPlayers(); i_3++) {
-        tokens.push('Player ' + i_3);
-    }
-    editor.getGame().setPlayerTokens(tokens);
-    (0, Gameplay_1.initGameInfo)(msg.game.name);
-    var i = 0;
-    msg.pawns.forEach(function (pawn) {
-        i++;
-        var tile = editor.findTileById(newIds.get(pawn.tileId));
-        var p = new Pawn_1.Pawn(pawn.player, tile);
-        p.id = pawn.id;
-        editor.getGame().getPawns().push(p);
-        //tile.getPawns().push(p)
-    });
-    msg.styles.forEach(function (style) {
-        var p = new PawnStyle_1.PawnStyle(style.player, style.color, style.type);
-        //p.setImage(image)
-        editor.getGame().getPawnStyle().set(style.player, p);
-    });
-    console.log('loaded game:');
-    console.log(editor);
-});
-editorSocket.on('react to event: forward', function (msg) {
-    editor.getGame().setIsOnTurn(true);
-    var ret = editor.getGame().howManyCanMove(msg.pawnId, msg.value);
-    Warning_1.Warning.showInGame('Event occured: Go forward!');
-    editorSocket.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id') });
-});
-editorSocket.on('react to event: backward', function (msg) {
-    console.log('recieved react to event: backward');
-    editor.getGame().setIsOnTurn(true);
-    var ret = editor.getGame().howManyCanMoveBack(msg.pawnId, msg.value);
-    Warning_1.Warning.showInGame('Event occured: Go backward!');
-    editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
-});
-editorSocket.on('not author', function () {
-    Warning_1.Warning.show('You can not create game with this name. Game with this name already exists, and you are not author of it.');
-    console.log('not author');
-});
-editorSocket.on('game saved', function () {
-    window.location.replace('/');
-});
-editorSocket.on('react to event: skip', function (msg) {
-    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
-});
-editorSocket.on('react to event:must Thrown', function (msg) {
-    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'must wait ' + msg.turnsLeft + '! turns or throw ' + msg.value + ' to set pawn free ');
-});
-editorSocket.on('return pawns to starting tile', function (msg) {
-    msg.ids.forEach(function (id) {
-        editor.findPawnById(id).returnToStart();
-    });
-    reload(editor, ctx);
-});
-editorSocket.on('join Room', function (msg) {
-    editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
-    if (!msg.started) {
-        $('#waitingModal').modal('show');
-    }
-    reload(editor, ctx);
-    editorSocket.on('player joined', function (msg) {
-        editorSocket.emit('reload waiting room', { room: params.get('id') });
-        var chat = document.getElementById('chat');
-        var chatPlaying = document.getElementById("chatPlaying");
-        if (chat.value == '') {
-            chat.value = msg.msg;
-        }
-        else {
-            chat.value = chat.value + '\n' + msg.msg;
-        }
-        if (chatPlaying.value == '') {
-            chatPlaying.value = msg.msg;
-        }
-        else {
-            chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
-        }
-        reload(editor, ctx);
-    });
-});
-editorSocket.on('player left', function (msg) {
-    editorSocket.emit('reload waiting room', { room: params.get('id') });
-    reload(editor, ctx);
-});
-editorSocket.on('game started', function (msg) {
-    // editor.getGame().setHasStarted(true)
-    $('#waitingModal').modal('hide');
-    var chat = document.getElementById('chat');
-    var chatPlaying = document.getElementById("chatPlaying");
-    if (chat.value == '') {
-        chat.value = msg.msg;
-    }
-    else {
-        chat.value = chat.value + '\n' + msg.msg;
-    }
-    if (chatPlaying.value == '') {
-        chatPlaying.value = msg.msg;
-    }
-    else {
-        chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
-    }
-});
-var params = new URLSearchParams(window.location.search);
-//editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
-editorSocket.on('move Pawn', function (msg) {
-    //msg.pawn.move(msg.value)
-    console.log('recieved move Pawn');
-    var pawn = (editor.getGame().movePawnById(msg.pawn, msg.value));
-    editor.setChoosenTile(undefined);
-});
-editorSocket.on('move Pawn back', function (msg) {
-    //msg.pawn.move(msg.value)
-    console.log('recieved move Pawn back');
-    var pawn = (editor.movePawnBack(msg.pawn, msg.value, true));
-    editor.setChoosenTile(undefined);
-});
-editorSocket.on('return Pawn to place', function (msg) {
-    editor.movePawnBack(msg.pawnId, msg.tileId, false);
-});
-editorSocket.on('loadAnswersToOthers', function (msg) {
-    (0, Questions_1.showResults)(msg.right, msg.wrong);
-});
-editorSocket.on('evaluate End', function (msg) {
-    console.log('emitol evalued end');
-    var is = editor.playerEnded(msg.token);
-    if (is) {
-        console.log('TENTO SKONCIL');
-        console.log('player');
-    }
-    editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
-});
-editorSocket.on('game has ended', function (msg) {
-    $('#endModal').modal('show');
-});
-editorSocket.on('show Dice value', function (msg) {
-    var image = new Image();
-    image.src = '../../src/Dice' + msg.value + '.png';
-    image.id = 'Dice';
-    image.onload = function () {
-        var _a;
-        elementDeleter('dicePlace');
-        (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image);
-    };
-});
-var isEditor = false;
-var zoz = window.location.href.split('/');
-editorSocket.on('got texts', function (msg) {
-    var _a, _b, _c, _d, _e;
-    exports.texts = texts = msg.text;
-    console.log(texts);
-    if (zoz[zoz.length - 2] === 'editor') {
-        edit();
-        var butt = (0, Elements_1.spawnButton)(document, 'rulesButtons', "questionRuleButton", ["btn", "btn-secondary"], texts[35], function () {
-            $('#rulesModal').modal('hide');
-        });
-        butt.onclick = function () {
-            editor.getGame().setRules(document.getElementById("ruleInput").value);
-        };
-        //document.getElementById('rulesButtons')!
-        // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
-        isEditor = true;
-        //editor.getGame().setInitSizeX(window.innerWidth)
-        //editor.getGame().setInitSizeY(window.innerHeight)
-    }
-    else {
-        //
-        if (params.get('id') != null) {
-            document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
-            editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
-            editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
-            (0, Gameplay_1.initDice)();
-        }
-        else {
-            editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
-        }
-        reload(editor, ctx);
-        (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-            window.location.replace('/gameLobby');
-        });
-        (_b = document.getElementById('startGameRoom')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
-            Warning_1.Warning.show('Are you sure to start the Game ? After start no one will be able to join!');
-        });
-        (_c = document.getElementById("confirmStart")) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
-            editorSocket.emit('game has started', { room: params.get('id') });
-        });
-        (_d = document.getElementById('messageSubmitButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
-            editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlace').value });
-            document.getElementById('messagePlace').value = '';
-        });
-        (_e = document.getElementById('messagePlayingSubmitButton')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
-            editorSocket.emit('chat-waitingRoom', { roomId: params.get('id'), id: getCookie('id'), msg: document.getElementById('messagePlayingPlace').value });
-            document.getElementById('messagePlayingPlace').value = '';
-        });
-    }
-});
-editorSocket.on('wrong game name', function () {
-    Warning_1.Warning.show('Game with this name does not exist');
-});
-editorSocket.on('turn', function (msg) {
-    console.log('recieved: turn');
-    console.log(editor.getGame().getIsOnturn());
-    //canvas.removeEventListener('click',pickTile)
-    elementDeleter('onTurnPlace');
-    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, true);
-});
-editorSocket.on('turnMove', function (msg) {
-    var _a;
-    console.log('recieved: turn move');
-    editor.getGame().setIsOnTurn(true);
-    (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
-        // canvas.removeEventListener('click',pickTile)
-        (0, Gameplay_1.throwDice)(msg.token);
-    }
-    //}
-    );
-});
-var canMovePawnFunc;
-exports.canMovePawnFunc = canMovePawnFunc;
-editorSocket.on('canMovePawn', function (msg) {
-    console.log('canMovePawn emitol token:' + msg.token);
-    var can = false;
-    editor.getGame().getPawns().forEach(function (pawn) {
-        if (pawn.player == msg.token) {
-            if (pawn.canMove(msg.value)) {
-                can = true;
-            }
-        }
-    });
-    if (can) {
-        exports.canMovePawnFunc = canMovePawnFunc = function (event) { (0, TileEditor_js_1.pickTile)(event, msg.token, msg.value); };
-        canvas.addEventListener('click', canMovePawnFunc);
-    }
-    else {
-        Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
-        editorSocket.emit('evaluated end', { is: false, room: params.get('id') });
-    }
-});
-// editorSocket.on('can throw',()=>{
-//   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
-// })
-editorSocket.on('add chat message', function (data) {
-    var chat = document.getElementById('chat');
-    var chatPlaying = document.getElementById("chatPlaying");
-    if (chat.value == '') {
-        chat.value = data.name + ':' + data.msg;
-    }
-    else {
-        chat.value = chat.value + '\n' + data.name + ':' + data.msg;
-    }
-    if (chatPlaying.value == '') {
-        chatPlaying.value = data.name + ':' + data.msg;
-    }
-    else {
-        chatPlaying.value = chatPlaying.value + '\n' + data.name + ':' + data.msg;
-    }
-});
-editorSocket.on('loadedQuestions', function (data) {
-    (0, Questions_1.showAllQuestions)(data);
-    (0, Questions_1.pickQuestion)(data);
-});
-//editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
-editorSocket.on('loadedAnswerQuestions', function (data) {
-    (0, Questions_1.askQuestion)(data);
-});
-var clickFunction = function () { (0, Questions_1.evaluateQuestion)(); };
-exports.clickFunction = clickFunction;
-editorSocket.on('canReactToAnswer', function () {
-    document.getElementById('answerButtonRoom').addEventListener('click', clickFunction);
-});
-editorSocket.on('add Opt', function (data) {
-    (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
-});
-editorSocket.on('reloaded waiting room', function (msg) {
-    (0, Gameplay_1.changeWaitingRoom)(msg.names);
-});
-editorSocket.on('player ended', function (msg) {
-    editorSocket.emit('reload waiting room', { room: params.get('id') });
-    Warning_1.Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.');
-    console.log('zapol');
-});
-(_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-    $('#rulesModal').modal('show');
-    document.getElementById("ruleInput").value = editor.getGame().getRules();
-});
 function edit() {
     var _a, _b, _c, _d, _e;
     mainMenu();
@@ -424,67 +25,67 @@ function edit() {
     //   updateNextTileIds()
     // })
     document.getElementById('forwardButton').addEventListener('click', function () {
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[97], true);
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[97], true);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('forward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = texts[98];
-            document.getElementById('pickedEventParagraph').textContent = texts[99] + ' ' + nums + ' ' + texts[100];
+            document.getElementById('bindEvent').textContent = clientSocket_1.texts[98];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[99] + ' ' + nums + ' ' + clientSocket_1.texts[100];
         });
     });
     document.getElementById('backwardButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[102], true);
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[102], true);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('backward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = texts[98];
-            document.getElementById('pickedEventParagraph').textContent = texts[103] + ' ' + nums + ' ' + texts[100];
+            document.getElementById('bindEvent').textContent = clientSocket_1.texts[98];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[103] + ' ' + nums + ' ' + clientSocket_1.texts[100];
         });
     });
     document.getElementById('skipButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[104], true);
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[104], true);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('skip', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = texts[98];
-            document.getElementById('pickedEventParagraph').textContent = texts[105] + ' ' + nums + ' ' + texts[100];
+            document.getElementById('bindEvent').textContent = clientSocket_1.texts[98];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[105] + ' ' + nums + ' ' + clientSocket_1.texts[100];
         });
     });
     document.getElementById('repeatButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[106], true);
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[106], true);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = texts[98];
-            document.getElementById('pickedEventParagraph').textContent = texts[107] + ' ' + nums + ' ' + texts[100];
+            document.getElementById('bindEvent').textContent = clientSocket_1.texts[98];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[107] + ' ' + nums + ' ' + clientSocket_1.texts[100];
         });
     });
     document.getElementById('stopButton').addEventListener('click', function () {
         elementDeleter('askTheQuestionEventEdit');
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[108], true);
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[108], true);
         var freeInput = (0, Elements_1.spawnNumberInput)(document, 'askTheQuestionEventEdit', 'freeInput');
         freeInput.max = '6';
         freeInput.min = '1';
-        freeInput.placeholder = texts[55];
-        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', texts[109], true);
-        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], texts[101], function () {
+        freeInput.placeholder = clientSocket_1.texts[55];
+        (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[109], true);
+        (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
             $('#editEventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            document.getElementById('bindEvent').textContent = texts[98];
-            document.getElementById('pickedEventParagraph').textContent = texts[110] + freeInput.value + texts[111] + nums + texts[100];
+            document.getElementById('bindEvent').textContent = clientSocket_1.texts[98];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[110] + freeInput.value + clientSocket_1.texts[111] + nums + clientSocket_1.texts[100];
         });
     });
     //$('#rulesModal').modal('show');
@@ -507,7 +108,7 @@ function edit() {
     document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
     document.getElementById('questionManager').addEventListener('click', function () {
         elementDeleter('listContainer');
-        editorSocket.emit('loadQuestions');
+        clientSocket_1.editorSocket.emit('loadQuestions');
     });
     // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
     // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
@@ -533,15 +134,16 @@ function edit() {
     (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
-        editorSocket.emit('load game', { id: getCookie('id'), name: val, response: true });
+        clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: val, response: true });
         mainMenu();
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById("resetQuestionID").addEventListener('click', function () {
         editor.setQuestionId(-1);
-        document.getElementById('bindQuestion').textContent = texts[114];
+        document.getElementById('bindQuestion').textContent = clientSocket_1.texts[114];
     });
 }
+exports.edit = edit;
 var doc = document;
 exports.doc = doc;
 document.getElementById("canvasPlace").appendChild(canvas);
@@ -559,7 +161,7 @@ function mainMenu() {
     numShower.id = 'numShower';
     numShower.textContent = editor.getGame().getnumOfPlayers().toString();
     var text = document.createElement('p');
-    text.textContent = texts[22];
+    text.textContent = clientSocket_1.texts[22];
     document.getElementById("numOfPlayersPlace").appendChild(text);
     document.getElementById("numOfPlayersPlace").appendChild(numShower);
     numOfPlayersSlider.onclick = function () {
@@ -607,7 +209,7 @@ function mainMenu() {
     gameName.id = 'gameName';
     gameName.value = editor.getGame().getName();
     text = document.createElement('p');
-    text.textContent = texts[23];
+    text.textContent = clientSocket_1.texts[23];
     document.getElementById("gameNamePlace").appendChild(text);
     gameName.oninput = function () {
         editor.getGame().setName(gameName.value);
@@ -619,7 +221,7 @@ function mainMenu() {
     text.textContent = 'Typ hry:';
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
-    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', texts[112], true);
+    (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_1.texts[112], true);
     var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '0', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
     slid.onchange = function () {
         var max = parseInt(slid.value);
@@ -672,7 +274,7 @@ function mainMenu() {
         editor.getGame().setNumberOfStartingPawns(max);
         reload(editor, ctx);
     };
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], texts[113], function () {
+    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
         editor.getGame().saveGame();
         //window.location.replace('/')
     });
@@ -687,7 +289,7 @@ function resize(editor, context) {
     //endDrawingPath()
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
-    if (!isEditor) {
+    if (!clientSocket_1.isEditor) {
         if (editor.getGame().getInitSizeX() == 0) {
             editor.getGame().setInitSizeX(canvas.width);
         }
@@ -757,20 +359,6 @@ function calibreEventCoords(event) {
     return { x: event.offsetX, y: event.offsetY };
 }
 exports.calibreEventCoords = calibreEventCoords;
-function getCookie(name) {
-    var cookie = new Map();
-    document.cookie.split(';').forEach(function (el) {
-        var _a = el.split('='), k = _a[0], v = _a[1];
-        var key = k.trim();
-        cookie.set(key, v);
-    });
-    return cookie.get(name);
-}
-exports.getCookie = getCookie;
-editorSocket.on('loadedGameNames', function (msg) {
-    console.log('socket odchytil loadedGameNames');
-    loadGameNames(msg.names);
-});
 function loadGameNames(names) {
     var root = document.getElementById('loadGameModalBody');
     names.forEach(function (name) {
@@ -794,7 +382,7 @@ function loadGameNames(names) {
         p.style.fontWeight = 'bold';
         p.onclick = function () {
             (0, TileEditor_js_1.removeAllButtons)();
-            editorSocket.emit('load game', { id: getCookie('id'), name: name, response: true });
+            clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: name, response: true });
             $('#loadGameModal').modal('hide');
             mainMenu();
         };
@@ -806,9 +394,10 @@ function loadGameNames(names) {
         root.appendChild(div);
     });
 }
+exports.loadGameNames = loadGameNames;
 window.onload = function () {
     if (params.get('id') != null) {
-        editorSocket.emit('reload waiting room', { room: params.get('id') });
+        clientSocket_1.editorSocket.emit('reload waiting room', { room: params.get('id') });
     }
 };
 setInterval(function () { resize(editor, ctx); }, 500);
