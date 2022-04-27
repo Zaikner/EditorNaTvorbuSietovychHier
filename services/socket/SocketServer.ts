@@ -405,7 +405,7 @@ export class ServerSocket{
           console.log(msg.is,msg.token,place)
           player.setPlace(place)
           console.log('prisiel aspon po emit')
-          this.io.in(msg.room).emit('player ended',{player:player.getAccount().getName(),place:place})
+          this.io.in(msg.room).emit('player ended',{player:player.getAccount().getName(),place:place,token:player.token})
         }
         
         if(r.gameEnded()){
@@ -479,9 +479,12 @@ export class ServerSocket{
           return
         }
         socket.join(msg.roomId)
-       
+        
         let r = GameManager.getActiveRooms().get(parseInt(msg.roomId))
-        if (r.getHasStarted()){
+        let isSpectator = r.isSpectator(acc)
+        
+        if (r.getHasStarted() || isSpectator){
+          console.log('emitol spravne')
           this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
 
         }

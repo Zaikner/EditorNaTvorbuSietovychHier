@@ -18,6 +18,7 @@ var Room = /** @class */ (function () {
         this.returnValue = -1;
         this.choosedPawnId = -1;
         this.playersWhichEnded = [];
+        this.spectators = [];
         this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
@@ -30,9 +31,20 @@ var Room = /** @class */ (function () {
     // }
     Room.prototype.join = function (player) {
         if (player.getToken() != 'spectator') {
-            this.players.push(player);
-            player.setToken('Player ' + (this.numOfPresentPlayers + 1));
-            this.numOfPresentPlayers++;
+            if (this.numOfPresentPlayers == this.maxPlayers) {
+                SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'room is full', {});
+                player.setToken('spectator');
+                this.spectators.push(player);
+                console.log('premenil na spectator');
+            }
+            else {
+                this.players.push(player);
+                player.setToken('Player ' + (this.numOfPresentPlayers + 1));
+                this.numOfPresentPlayers++;
+            }
+        }
+        else {
+            this.spectators.push(player);
         }
         SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString(), started: this.hasStarted });
         console.log(' joinol a emitol playerovi: ' + player.getAccount().getSocketId());
@@ -44,6 +56,9 @@ var Room = /** @class */ (function () {
         if (player.getToken() != 'spectator') {
             this.players = this.players.filter(function (t) { return t != player; });
             this.numOfPresentPlayers--;
+        }
+        else {
+            this.spectators = this.spectators.filter(function (t) { return t != player; });
         }
     };
     Room.prototype.broadcast = function (msg) {
@@ -88,6 +103,24 @@ var Room = /** @class */ (function () {
         });
         return ret;
     };
+    Room.prototype.findPlayerOnAccount = function (acc) {
+        var ret = undefined;
+        this.players.forEach(function (player) {
+            if (player.getAccount() == acc) {
+                ret = player;
+            }
+        });
+        return ret;
+    };
+    Room.prototype.isSpectator = function (acc) {
+        var ret = false;
+        this.spectators.forEach(function (player) {
+            if (player.getAccount() == acc) {
+                ret = true;
+            }
+        });
+        return ret;
+    };
     Room.prototype.getId = function () {
         return this.id;
     };
@@ -111,6 +144,12 @@ var Room = /** @class */ (function () {
     };
     Room.prototype.setPlayers = function (newPlayers) {
         this.players = newPlayers;
+    };
+    Room.prototype.getSpectators = function () {
+        return this.spectators;
+    };
+    Room.prototype.setSpectators = function (newSpectator) {
+        this.spectators = newSpectator;
     };
     Room.prototype.getPlayersWhichEnded = function () {
         return this.playersWhichEnded;

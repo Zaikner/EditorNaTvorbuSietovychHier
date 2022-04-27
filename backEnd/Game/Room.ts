@@ -16,6 +16,7 @@ export class Room{
         private returnValue:number = -1;
         private choosedPawnId:number = -1
         private playersWhichEnded:Array<Player> = []
+        private spectators:Array<Player>=[]
 
        
         private pawnPositions:Map<number,number> = new Map()
@@ -34,10 +35,23 @@ export class Room{
         // }
         public join(player:Player){
             if (player.getToken() != 'spectator'){
-                this.players.push(player)
-                player.setToken('Player '+ (this.numOfPresentPlayers+1))
-              
-                this.numOfPresentPlayers++;
+
+                if (this.numOfPresentPlayers == this.maxPlayers){
+                    ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'room is full',{})
+                    player.setToken('spectator')
+                    this.spectators.push(player)
+                    console.log('premenil na spectator')
+                }
+                else{
+                    this.players.push(player)
+                    player.setToken('Player '+ (this.numOfPresentPlayers+1))
+                  
+                    this.numOfPresentPlayers++;
+                 }
+               
+            }
+            else{
+                this.spectators.push(player)
             }
          
             ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString(),started:this.hasStarted})
@@ -53,6 +67,9 @@ export class Room{
             if (player.getToken() != 'spectator'){
                 this.players = this.players.filter((t) => {return t != player});
                 this.numOfPresentPlayers--;
+            }
+            else{
+                this.spectators = this.spectators.filter((t) => {return t != player});
             }
            
         }
@@ -108,6 +125,24 @@ export class Room{
             })
             return ret
         }
+        findPlayerOnAccount(acc:Account){
+            let ret = undefined
+            this.players.forEach((player:Player)=>{
+                if (player.getAccount() == acc){
+                    ret = player
+                }
+            })
+            return ret
+        }
+        isSpectator(acc:Account){
+            let ret = false
+            this.spectators.forEach((player:Player)=>{
+                if (player.getAccount() == acc){
+                    ret = true
+                }
+            })
+            return ret
+        }
         public getId() : number {
             return this.id
         }
@@ -132,6 +167,12 @@ export class Room{
         }
         public setPlayers(newPlayers:Array<Player>){
             this.players = newPlayers
+        }
+        public getSpectators(){
+            return this.spectators
+        }
+        public setSpectators(newSpectator:Array<Player>){
+            this.spectators = newSpectator
         }
         public getPlayersWhichEnded(){
             return this.playersWhichEnded

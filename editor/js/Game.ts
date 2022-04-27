@@ -31,6 +31,8 @@ class Game{
     //private hasStarted = false;
     private isOnTurn = false
     private nextTilesIds:Map<string,number> = new Map()
+    private canThrow = false;
+
     
 
 
@@ -98,7 +100,8 @@ class Game{
         this.pawns.forEach((p:Pawn)=>{
             console.log(p)
             if (p.id == id && !moved){
-                console.log('pohol som idkcom' + id)
+                console.log('pohol som idkcom' + id + ' o ' + value)
+                
                 moved = true
                 if (p.canMove(value)){
                     p.move(value)
@@ -275,6 +278,12 @@ class Game{
     }
     public getNextTilesIds(){
         return this.nextTilesIds
+    }
+    setCanThrow(is:boolean){
+        this.canThrow = is
+    }
+    getCanThrow(){
+        return this.canThrow
     }
     // getHasStarted(){
     //     return  this.hasStarted

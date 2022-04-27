@@ -343,10 +343,13 @@ editorSocket.on('turnMove', function (msg) {
     var _a;
     console.log('recieved: turn move');
     canvas_1.editor.getGame().setIsOnTurn(true);
+    canvas_1.editor.getGame().setCanThrow(true);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
         // canvas.removeEventListener('click',pickTile)
-        (0, Gameplay_1.throwDice)(msg.token);
+        if (canvas_1.editor.getGame().getCanThrow()) {
+            (0, Gameplay_1.throwDice)(msg.token);
+        }
     }
     //}
     );
@@ -414,6 +417,11 @@ editorSocket.on('player ended', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
     Warning_1.Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.');
     console.log('zapol');
+    canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
+        if (pawn.player == msg.token) {
+            pawn.hasEnded = true;
+        }
+    });
 });
 (_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
     $('#rulesModal').modal('show');
@@ -422,4 +430,7 @@ editorSocket.on('player ended', function (msg) {
 editorSocket.on('loadedGameNames', function (msg) {
     console.log('socket odchytil loadedGameNames');
     (0, canvas_1.loadGameNames)(msg.names);
+});
+editorSocket.on('room is full', function () {
+    Warning_1.Warning.showInGame('This game room is full, you become spectator');
 });

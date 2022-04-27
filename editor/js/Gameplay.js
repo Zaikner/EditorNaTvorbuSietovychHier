@@ -41,6 +41,8 @@ function initDice() {
 }
 exports.initDice = initDice;
 function throwDice(token) {
+    console.log('hodin throw dice');
+    canvas_1.editor.getGame().setCanThrow(false);
     var params = new URLSearchParams(window.location.search);
     var t = 0;
     var times = 0;

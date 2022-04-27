@@ -208,7 +208,7 @@ function pickQuestion(data) {
                 $('#pickQuestionModal').modal('hide');
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
-                document.getElementById('pickedQuestionParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
+                document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
                 document.getElementById('bindQuestion').textContent = clientSocket_js_1.texts[72];
             };
             list.appendChild(quest);

@@ -233,7 +233,7 @@ function pickQuestion(data:any){
                                      $('#pickQuestionModal').modal('hide')
                                      editor.setQuestionId(elem.questionId)
                                      console.log('Question id je teraz:'+editor.getQuestionId());
-                                     document.getElementById('pickedQuestionParagraph')!.textContent = texts[71] + elem.questionText;
+                                     document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
                                      (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
             list.appendChild(quest)

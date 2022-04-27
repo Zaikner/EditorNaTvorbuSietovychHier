@@ -317,6 +317,7 @@ editorSocket.on('evaluate End',(msg:{token:string})=>{
   if (is){
     console.log('TENTO SKONCIL')
     console.log('player')
+  
    
   }
   editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
@@ -418,14 +419,25 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
    
     
   })
+
+ 
   editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
     console.log('recieved: turn move')
     editor.getGame().setIsOnTurn(true)
+    editor.getGame().setCanThrow(true)
+    
     document.getElementById('Dice')?.addEventListener('click',function()
     {// let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
      // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
      // canvas.removeEventListener('click',pickTile)
-      throwDice(msg.token)}
+     if (editor.getGame().getCanThrow()){
+        throwDice(msg.token)
+     }
+    
+    
+    
+    
+    }
     //}
     )
     
@@ -495,10 +507,15 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
    
   })
   
-  editorSocket.on('player ended',(msg:{player:string,place:number})=>{
+  editorSocket.on('player ended',(msg:{player:string,place:number,token:string})=>{
     editorSocket.emit('reload waiting room',{room:params.get('id')})
     Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.')
     console.log('zapol')
+    editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+        if (pawn.player == msg.token){
+            pawn.hasEnded = true
+        }
+    })
   })
   document.getElementById("showRulesButton")?.addEventListener('click',function(){
    
@@ -514,5 +531,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     loadGameNames(msg.names)
   })
 
+  editorSocket.on('room is full',()=>{
+      Warning.showInGame('This game room is full, you become spectator')
+  })
 
   export{editorSocket,canMovePawnFunc,isEditor,clickFunction,getCookie,texts}

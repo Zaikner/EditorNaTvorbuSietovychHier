@@ -46,6 +46,8 @@ function initDice(){
     }
 }
 function throwDice(token:string){
+    console.log('hodin throw dice')
+    editor.getGame().setCanThrow(false)
     const params = new URLSearchParams(window.location.search);
     let t = 0
     let times = 0

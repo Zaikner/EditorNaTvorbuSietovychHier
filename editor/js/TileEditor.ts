@@ -83,6 +83,10 @@ function spawnElements(){
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
     colorPicker.onchange = showActualState
 
+
+    //spawnParagraph(doc,"tileEditingPlace",'',texts[173],true)
+    //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
+
     spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
     let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider','20','50','1','30')
     sizeOfTileSlider.onchange = showActualState
@@ -185,30 +189,30 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnParagraph(document,'tileEditingPlace','',texts[143],true)
     spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
 
-    spawnParagraph(document,'tileEditingPlace','',texts[144],true)
-    let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
+    //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
+    //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
 
-    spawnParagraph(document,'tileEditingPlace','',texts[72],true)
-    spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
+    //pawnParagraph(document,'tileEditingPlace','',texts[72],true)
+    //spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
       
-      if (!questionChecker.checked){
-        Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
-      }
-      else{
-        editorSocket.emit('loadQuestions')
-        $('#pickQuestionModal').modal('show');
-      }
+    //   if (!questionChecker.checked){
+    //     Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
+    //   }
+    //   else{
+    //     editorSocket.emit('loadQuestions')
+    //     $('#pickQuestionModal').modal('show');
+    //   }
     
 
-    })
-    spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145],true)
+    // })
+    //spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145],true)
     spawnParagraph(document,'tileEditingPlace','',texts[146],true)
     let eventChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','eventChecker',false,[texts[92],texts[93]])
 
     
 
     spawnParagraph(document,'tileEditingPlace','',texts[98],true)
-    spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],texts[114],function(){
+    spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],texts[174],function(){
       if (!eventChecker.checked){
         Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
       }
@@ -462,12 +466,12 @@ function insertTilesMenu():void{
     //   addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
     // }
     
-    if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-      addedTile.setQuestionId(editor.getQuestionId())
-    }
-    else{
-      addedTile.setQuestionId(-1)
-    }
+    // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+    //   addedTile.setQuestionId(editor.getQuestionId())
+    // }
+    // else{
+    //   addedTile.setQuestionId(-1)
+    // }
 
     addedTile.setNextTilesIds(returnNextTileMap())
     reload(editor,ctx)
@@ -550,12 +554,15 @@ function insertTilesMenu():void{
         editor.getGame().removePawn(pawn)
       }})
 
-      if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-        editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
-      }
-      else{
-        editor.getChoosenTile()?.setQuestionId(-1)
-      }
+      // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+      //   editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
+      // }
+      // else{
+      //   editor.getChoosenTile()?.setQuestionId(-1)
+      // }
+
+
+      editor.getChoosenTile()!.setNextTilesIds(returnNextTileMap())
     console.log(editor.getChoosenTile())
     reload(editor,ctx)
   }
@@ -604,41 +611,40 @@ function insertTilesMenu():void{
       
       
 
-      if (tile.getQuestionId()!=-1){
-        (<HTMLInputElement>document.getElementById('askQuestionChecker')).checked = true;
-        (doc.getElementById("askQuestionCheckerShower"))!.textContent = texts[93]
+      // if (tile.getQuestionId()!=-1){
+      //   (<HTMLInputElement>document.getElementById('askQuestionChecker')).checked = true;
+      //   (doc.getElementById("askQuestionCheckerShower"))!.textContent = texts[93]
         
-        document.getElementById('bindQuestion')!.textContent = 'Choosen Question Id: '+tile.getQuestionId()
+      //   //document.getElementById('bindQuestion')!.textContent = 'Choosen Question Id: '+tile.getQuestionId()
        
 
-      }
+      // }
       if (tile.getSkip()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
         (doc.getElementById('eventCheckerShower'))!.textContent = texts[93]
-        document.getElementById('bindEvent')!.textContent =texts[105] + tile.getSkip() +texts[100]
-        
+        document.getElementById('pickedEventParagraph')!.textContent =texts[105] + tile.getSkip() +texts[100]    
       }
       if (tile.getRepeat()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
         (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
-        document.getElementById('bindEvent')!.textContent =texts[108] + tile.getRepeat() +texts[100]
+        document.getElementById('pickedEventParagraph')!.textContent =texts[108] + tile.getRepeat() +texts[100]
         
       }
       if (tile.getForward()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
         (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
-        document.getElementById('bindEvent')!.textContent =texts[99] + tile.getForward() +texts[100]
+        document.getElementById('pickedEventParagraph')!.textContent =texts[99] + tile.getForward() +texts[100]
       }
       if (tile.getBackward()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
         (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
-        document.getElementById('bindEvent')!.textContent =texts[103] + tile.getBackward() +texts[10]
+        document.getElementById('pickedEventParagraph')!.textContent =texts[103] + tile.getBackward() +texts[10]
       }
       if (tile.getMustThrown()!=0){
         (<HTMLInputElement>document.getElementById('eventChecker')).checked = true;
         (doc.getElementById('eventCheckerShower'))!.textContent = texts[93];
-        texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
-        document.getElementById('bindEvent')!.textContent =texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
+
+        document.getElementById('pickedEventParagraph')!.textContent =texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
       }
 
       if (outlineChecker.checked){
@@ -677,9 +683,20 @@ function insertTilesMenu():void{
       else{
         doc.getElementById("toogleNumberingCheckerShower")!.textContent = texts[93]
       }
+
+      Array.from(editor.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
+      
+        (<HTMLInputElement>document.getElementById('nextTile'+key))!.textContent = value.toString();
+        (<HTMLInputElement>document.getElementById('nextTile'+key))!.value = value.toString()
+        console.log('nastavil '+ value)
+        console.log((<HTMLInputElement>document.getElementById('nextTile'+key))!)
+
+      })
+  
     }
 
     //startingFor = doc.getElementById('')
+   
     return tile
   }
 
@@ -737,6 +754,7 @@ function insertTilesMenu():void{
     
   }
   function generateNextTiles(){
+
     elementDeleter('nextTileModalBody')
     editor.getGame().getPlayerTokens().forEach((token:string)=>{
         console.log('pridal'+token)
@@ -749,8 +767,15 @@ function insertTilesMenu():void{
         let input = document.createElement('input')
         input.type = 'number'
         input.id ='nextTile'+token
-        input.value = editor.getGame().getNextTilesIds().get(token)!.toString()
+        if (editor.getChoosenTile()!=undefined){
+          input.value = editor.getChoosenTile()!.getNextTilesIds().get(token)!.toString()
+        }
+        else{
+          input.value = editor.getGame().getNextTilesIds().get(token)!.toString()
+        }
+       
         input.onchange = function(){
+          
             editor.getGame().getNextTilesIds().set(token,parseInt(input.value))
         }
 

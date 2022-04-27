@@ -31,6 +31,7 @@ var Game = /** @class */ (function () {
         //private hasStarted = false;
         this.isOnTurn = false;
         this.nextTilesIds = new Map();
+        this.canThrow = false;
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -82,7 +83,7 @@ var Game = /** @class */ (function () {
         this.pawns.forEach(function (p) {
             console.log(p);
             if (p.id == id && !moved) {
-                console.log('pohol som idkcom' + id);
+                console.log('pohol som idkcom' + id + ' o ' + value);
                 moved = true;
                 if (p.canMove(value)) {
                     p.move(value);
@@ -246,6 +247,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getNextTilesIds = function () {
         return this.nextTilesIds;
+    };
+    Game.prototype.setCanThrow = function (is) {
+        this.canThrow = is;
+    };
+    Game.prototype.getCanThrow = function () {
+        return this.canThrow;
     };
     return Game;
 }());

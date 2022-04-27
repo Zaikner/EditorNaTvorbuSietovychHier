@@ -7,6 +7,7 @@ var Pawn = /** @class */ (function () {
     function Pawn(player, tile) {
         this.id = 0;
         this.color = '#000000';
+        this.hasEnded = false;
         this.player = player;
         this.tile = tile;
         this.tileId = tile.getId();

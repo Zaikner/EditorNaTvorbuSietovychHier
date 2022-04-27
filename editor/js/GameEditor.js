@@ -205,7 +205,7 @@ var GameEditor = /** @class */ (function () {
             this.game.getPlayerTokens().forEach(function (token) {
                 if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player) {
                     tile.getPawns().forEach(function (p) {
-                        if (p.player == token) {
+                        if (p.player == token && !p.hasEnded) {
                             canRemovePawnIds_1.push(p.id);
                         }
                     });

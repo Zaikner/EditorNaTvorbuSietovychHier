@@ -399,7 +399,7 @@ var ServerSocket = /** @class */ (function () {
                     console.log(msg.is, msg.token, place);
                     player.setPlace(place);
                     console.log('prisiel aspon po emit');
-                    _this.io["in"](msg.room).emit('player ended', { player: player.getAccount().getName(), place: place });
+                    _this.io["in"](msg.room).emit('player ended', { player: player.getAccount().getName(), place: place, token: player.token });
                 }
                 if (r.gameEnded()) {
                     _this.io["in"](msg.room).emit('game has ended', { leaderboards: [] });
@@ -461,7 +461,9 @@ var ServerSocket = /** @class */ (function () {
                 }
                 socket.join(msg.roomId);
                 var r = GameManager.getActiveRooms().get(parseInt(msg.roomId));
-                if (r.getHasStarted()) {
+                var isSpectator = r.isSpectator(acc);
+                if (r.getHasStarted() || isSpectator) {
+                    console.log('emitol spravne');
                     _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.(spectating)' });
                 }
                 else {

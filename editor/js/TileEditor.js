@@ -74,6 +74,8 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[124], true);
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
     colorPicker.onchange = showActualState;
+    //spawnParagraph(doc,"tileEditingPlace",'',texts[173],true)
+    //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[125], true);
     var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', '20', '50', '1', '30');
     sizeOfTileSlider.onchange = showActualState;
@@ -142,23 +144,23 @@ function spawnElements() {
     (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eleminationChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[143], true);
     (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', canvas_js_1.editor.getGame().getPlayerTokens(), 'immune');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[144], true);
-    var questionChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'askQuestionChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[72], true);
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindQuestion', ['btn', 'btn-secondary'], clientSocket_js_1.texts[114], function () {
-        if (!questionChecker.checked) {
-            Warning_js_1.Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.');
-        }
-        else {
-            clientSocket_js_1.editorSocket.emit('loadQuestions');
-            $('#pickQuestionModal').modal('show');
-        }
-    });
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedQuestionParagraph', clientSocket_js_1.texts[145], true);
+    //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
+    //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
+    //pawnParagraph(document,'tileEditingPlace','',texts[72],true)
+    //spawnButton(document,'tileEditingPlace','bindQuestion',['btn','btn-secondary'],texts[114],function(){
+    //   if (!questionChecker.checked){
+    //     Warning.show('Asking question is not allowed. If you want to enable it, it can be enabled by ticking "Ask question on this tile?" checkkox.')
+    //   }
+    //   else{
+    //     editorSocket.emit('loadQuestions')
+    //     $('#pickQuestionModal').modal('show');
+    //   }
+    // })
+    //spawnParagraph(document,'tileEditingPlace','pickedQuestionParagraph',texts[145],true)
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[146], true);
     var eventChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eventChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[98], true);
-    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], clientSocket_js_1.texts[114], function () {
+    (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], clientSocket_js_1.texts[174], function () {
         if (!eventChecker.checked) {
             Warning_js_1.Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.');
         }
@@ -381,12 +383,12 @@ var spawnTile = function (coords) {
     // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
     //   addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
     // }
-    if (document.getElementById('askQuestionChecker').checked) {
-        addedTile.setQuestionId(canvas_js_1.editor.getQuestionId());
-    }
-    else {
-        addedTile.setQuestionId(-1);
-    }
+    // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+    //   addedTile.setQuestionId(editor.getQuestionId())
+    // }
+    // else{
+    //   addedTile.setQuestionId(-1)
+    // }
     addedTile.setNextTilesIds(returnNextTileMap());
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     console.log(addedTile);
@@ -395,7 +397,7 @@ var spawnTile = function (coords) {
 };
 exports.spawnTile = spawnTile;
 var update = function () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c;
     console.log('zavolal update');
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
@@ -459,12 +461,13 @@ var update = function () {
             canvas_js_1.editor.getGame().removePawn(pawn);
         }
     });
-    if (document.getElementById('askQuestionChecker').checked) {
-        (_d = canvas_js_1.editor.getChoosenTile()) === null || _d === void 0 ? void 0 : _d.setQuestionId(canvas_js_1.editor.getQuestionId());
-    }
-    else {
-        (_e = canvas_js_1.editor.getChoosenTile()) === null || _e === void 0 ? void 0 : _e.setQuestionId(-1);
-    }
+    // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
+    //   editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
+    // }
+    // else{
+    //   editor.getChoosenTile()?.setQuestionId(-1)
+    // }
+    canvas_js_1.editor.getChoosenTile().setNextTilesIds(returnNextTileMap());
     console.log(canvas_js_1.editor.getChoosenTile());
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
 };
@@ -502,36 +505,35 @@ var setValues = function (tile, copyNumber) {
             tileNumberSetter.value = '';
             //tileFollowingSetter.value = ''
         }
-        if (tile.getQuestionId() != -1) {
-            document.getElementById('askQuestionChecker').checked = true;
-            (canvas_js_1.doc.getElementById("askQuestionCheckerShower")).textContent = clientSocket_js_1.texts[93];
-            document.getElementById('bindQuestion').textContent = 'Choosen Question Id: ' + tile.getQuestionId();
-        }
+        // if (tile.getQuestionId()!=-1){
+        //   (<HTMLInputElement>document.getElementById('askQuestionChecker')).checked = true;
+        //   (doc.getElementById("askQuestionCheckerShower"))!.textContent = texts[93]
+        //   //document.getElementById('bindQuestion')!.textContent = 'Choosen Question Id: '+tile.getQuestionId()
+        // }
         if (tile.getSkip() != 0) {
             document.getElementById('eventChecker').checked = true;
             (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = clientSocket_js_1.texts[93];
-            document.getElementById('bindEvent').textContent = clientSocket_js_1.texts[105] + tile.getSkip() + clientSocket_js_1.texts[100];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[105] + tile.getSkip() + clientSocket_js_1.texts[100];
         }
         if (tile.getRepeat() != 0) {
             document.getElementById('eventChecker').checked = true;
             (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = clientSocket_js_1.texts[93];
-            document.getElementById('bindEvent').textContent = clientSocket_js_1.texts[108] + tile.getRepeat() + clientSocket_js_1.texts[100];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[108] + tile.getRepeat() + clientSocket_js_1.texts[100];
         }
         if (tile.getForward() != 0) {
             document.getElementById('eventChecker').checked = true;
             (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = clientSocket_js_1.texts[93];
-            document.getElementById('bindEvent').textContent = clientSocket_js_1.texts[99] + tile.getForward() + clientSocket_js_1.texts[100];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[99] + tile.getForward() + clientSocket_js_1.texts[100];
         }
         if (tile.getBackward() != 0) {
             document.getElementById('eventChecker').checked = true;
             (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = clientSocket_js_1.texts[93];
-            document.getElementById('bindEvent').textContent = clientSocket_js_1.texts[103] + tile.getBackward() + clientSocket_js_1.texts[10];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[103] + tile.getBackward() + clientSocket_js_1.texts[10];
         }
         if (tile.getMustThrown() != 0) {
             document.getElementById('eventChecker').checked = true;
             (canvas_js_1.doc.getElementById('eventCheckerShower')).textContent = clientSocket_js_1.texts[93];
-            clientSocket_js_1.texts[110] + tile.getMustThrown() + clientSocket_js_1.texts[111] + tile.getTurnsToSetFree() + clientSocket_js_1.texts[100];
-            document.getElementById('bindEvent').textContent = clientSocket_js_1.texts[110] + tile.getMustThrown() + clientSocket_js_1.texts[111] + tile.getTurnsToSetFree() + clientSocket_js_1.texts[100];
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[110] + tile.getMustThrown() + clientSocket_js_1.texts[111] + tile.getTurnsToSetFree() + clientSocket_js_1.texts[100];
         }
         if (outlineChecker.checked) {
             canvas_js_1.doc.getElementById("outlineCheckerShower").textContent = clientSocket_js_1.texts[93];
@@ -562,6 +564,13 @@ var setValues = function (tile, copyNumber) {
         else {
             canvas_js_1.doc.getElementById("toogleNumberingCheckerShower").textContent = clientSocket_js_1.texts[93];
         }
+        Array.from(canvas_js_1.editor.getChoosenTile().getNextTilesIds().entries()).forEach(function (_a) {
+            var key = _a[0], value = _a[1];
+            document.getElementById('nextTile' + key).textContent = value.toString();
+            document.getElementById('nextTile' + key).value = value.toString();
+            console.log('nastavil ' + value);
+            console.log(document.getElementById('nextTile' + key));
+        });
     }
     //startingFor = doc.getElementById('')
     return tile;
@@ -619,7 +628,12 @@ function generateNextTiles() {
         var input = document.createElement('input');
         input.type = 'number';
         input.id = 'nextTile' + token;
-        input.value = canvas_js_1.editor.getGame().getNextTilesIds().get(token).toString();
+        if (canvas_js_1.editor.getChoosenTile() != undefined) {
+            input.value = canvas_js_1.editor.getChoosenTile().getNextTilesIds().get(token).toString();
+        }
+        else {
+            input.value = canvas_js_1.editor.getGame().getNextTilesIds().get(token).toString();
+        }
         input.onchange = function () {
             canvas_js_1.editor.getGame().getNextTilesIds().set(token, parseInt(input.value));
         };

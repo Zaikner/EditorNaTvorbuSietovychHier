@@ -162,8 +162,9 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
-
-
+document.getElementById('eventQuestionButton')!.addEventListener('click',function(){
+  editorSocket.emit('loadQuestions')
+  $('#pickQuestionModal').modal('show');})
 
 document.getElementById('loadCreatedGameModal')?.addEventListener('click',function(){
   let val = (<HTMLInputElement>document.getElementById('gameNameInput'))!.value
@@ -458,48 +459,51 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
 function loadGameNames(names:Array<string>){
   let root = document.getElementById('loadGameModalBody')!
 
-  names.forEach((name:string)=>{
-    let div = document.createElement('div')
-    div.style.textAlign = 'left'
-    let hr = document.createElement('hr')
-      hr.style.margin = '5%'
-      hr.style.backgroundColor = 'white'
-      div.appendChild(hr)
-
-    let p = document.createElement('paragraph')
-    p.style.color = 'white'
-    p.style.fontSize = '20px'
-    p.style.marginLeft = '100px'
-    p.textContent = name
-    p.addEventListener('mouseEnter',function(){
-      p.style.cursor = 'pointer'
-    })
-    p.addEventListener('mouseLeave',function(){
-      p.style.cursor = 'default'
-    })
-    p.style.fontWeight = 'bold'
-    
-    p.onclick = function(){
-      removeAllButtons()
-      editorSocket.emit('load game',{id:getCookie('id'),name:name,response:true})
-      $('#loadGameModal').modal('hide')
-      mainMenu()
-    }
+  if (root!= undefined){
+    names.forEach((name:string)=>{
+      let div = document.createElement('div')
+      div.style.textAlign = 'left'
+      let hr = document.createElement('hr')
+        hr.style.margin = '5%'
+        hr.style.backgroundColor = 'white'
+        div.appendChild(hr)
   
-    // let button = document.createElement('button')
-    // button.textContent = 'Choose!'
-    // button.classList.add('btn','btn-secondary')
-
+      let p = document.createElement('paragraph')
+      p.style.color = 'white'
+      p.style.fontSize = '20px'
+      p.style.marginLeft = '100px'
+      p.textContent = name
+      p.addEventListener('mouseEnter',function(){
+        p.style.cursor = 'pointer'
+      })
+      p.addEventListener('mouseLeave',function(){
+        p.style.cursor = 'default'
+      })
+      p.style.fontWeight = 'bold'
+      
+      p.onclick = function(){
+        removeAllButtons()
+        editorSocket.emit('load game',{id:getCookie('id'),name:name,response:true})
+        $('#loadGameModal').modal('hide')
+        mainMenu()
+      }
     
-
-
-
-    div.append(p)
-    // div.append(button)
-    root.appendChild(div)
-  })
-
-
+      // let button = document.createElement('button')
+      // button.textContent = 'Choose!'
+      // button.classList.add('btn','btn-secondary')
+  
+      
+  
+  
+  
+      div.append(p)
+      // div.append(button)
+      root.appendChild(div)
+    })
+  
+  
+  }
+ 
 }
 
 

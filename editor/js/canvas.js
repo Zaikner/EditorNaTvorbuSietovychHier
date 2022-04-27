@@ -131,6 +131,10 @@ function edit() {
     //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
+    document.getElementById('eventQuestionButton').addEventListener('click', function () {
+        clientSocket_1.editorSocket.emit('loadQuestions');
+        $('#pickQuestionModal').modal('show');
+    });
     (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
@@ -361,38 +365,40 @@ function calibreEventCoords(event) {
 exports.calibreEventCoords = calibreEventCoords;
 function loadGameNames(names) {
     var root = document.getElementById('loadGameModalBody');
-    names.forEach(function (name) {
-        var div = document.createElement('div');
-        div.style.textAlign = 'left';
-        var hr = document.createElement('hr');
-        hr.style.margin = '5%';
-        hr.style.backgroundColor = 'white';
-        div.appendChild(hr);
-        var p = document.createElement('paragraph');
-        p.style.color = 'white';
-        p.style.fontSize = '20px';
-        p.style.marginLeft = '100px';
-        p.textContent = name;
-        p.addEventListener('mouseEnter', function () {
-            p.style.cursor = 'pointer';
+    if (root != undefined) {
+        names.forEach(function (name) {
+            var div = document.createElement('div');
+            div.style.textAlign = 'left';
+            var hr = document.createElement('hr');
+            hr.style.margin = '5%';
+            hr.style.backgroundColor = 'white';
+            div.appendChild(hr);
+            var p = document.createElement('paragraph');
+            p.style.color = 'white';
+            p.style.fontSize = '20px';
+            p.style.marginLeft = '100px';
+            p.textContent = name;
+            p.addEventListener('mouseEnter', function () {
+                p.style.cursor = 'pointer';
+            });
+            p.addEventListener('mouseLeave', function () {
+                p.style.cursor = 'default';
+            });
+            p.style.fontWeight = 'bold';
+            p.onclick = function () {
+                (0, TileEditor_js_1.removeAllButtons)();
+                clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: name, response: true });
+                $('#loadGameModal').modal('hide');
+                mainMenu();
+            };
+            // let button = document.createElement('button')
+            // button.textContent = 'Choose!'
+            // button.classList.add('btn','btn-secondary')
+            div.append(p);
+            // div.append(button)
+            root.appendChild(div);
         });
-        p.addEventListener('mouseLeave', function () {
-            p.style.cursor = 'default';
-        });
-        p.style.fontWeight = 'bold';
-        p.onclick = function () {
-            (0, TileEditor_js_1.removeAllButtons)();
-            clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: name, response: true });
-            $('#loadGameModal').modal('hide');
-            mainMenu();
-        };
-        // let button = document.createElement('button')
-        // button.textContent = 'Choose!'
-        // button.classList.add('btn','btn-secondary')
-        div.append(p);
-        // div.append(button)
-        root.appendChild(div);
-    });
+    }
 }
 exports.loadGameNames = loadGameNames;
 window.onload = function () {

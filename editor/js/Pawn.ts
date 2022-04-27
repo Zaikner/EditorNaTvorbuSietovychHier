@@ -1,4 +1,5 @@
 
+import { BlobOptions } from "buffer";
 import { ctx, editor,  reload } from "./canvas";
 import { editorSocket, getCookie} from './clientSocket.js'
 import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
@@ -11,6 +12,7 @@ export class Pawn{
     tileId:number;
     startingTileId:number;
     color:string = '#000000';
+    hasEnded:boolean = false;
    
     constructor(player:string,tile:Tile){
         this.player = player
@@ -47,8 +49,7 @@ export class Pawn{
         let p = this;
         for (let i = 0;i < numOfTiles ; i++){
         
-            setTimeout(function(){
-             
+                setTimeout(function(){   
                 actuallTile.removePawn(p)
                 actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
                 

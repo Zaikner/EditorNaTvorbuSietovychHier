@@ -233,7 +233,7 @@ class GameEditor{
             this.game.getPlayerTokens().forEach((token:string)=>{
                 if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player){
                     tile.getPawns().forEach((p:Pawn)=>{
-                        if (p.player == token){
+                        if (p.player == token && !p.hasEnded){
                             canRemovePawnIds.push(p.id)
                         }
                     })
@@ -280,6 +280,7 @@ class GameEditor{
         })
         return ret
     }
+   
     movePawnBack(pawnId:number,value:number,react:boolean){
        
         
