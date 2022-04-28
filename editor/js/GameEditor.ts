@@ -46,7 +46,7 @@ class GameEditor{
         this.game = new Game()
         
         this.game.getPlayerTokens().forEach((token:string)=>{
-            this.game.getNextTilesIds().set(token,this.getNextTileId()+1)
+            this.game.getNextTilesIds().set(token,2)
         })
     }   
 

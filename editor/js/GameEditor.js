@@ -39,7 +39,7 @@ var GameEditor = /** @class */ (function () {
         var _this = this;
         this.game = new Game_js_1.Game();
         this.game.getPlayerTokens().forEach(function (token) {
-            _this.game.getNextTilesIds().set(token, _this.getNextTileId() + 1);
+            _this.game.getNextTilesIds().set(token, 2);
         });
     };
     GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background, pattern) {

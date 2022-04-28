@@ -371,8 +371,8 @@ window.addEventListener('resize', function(){resize(editor,ctx)});
 // // resize canvas
 function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   console.log('initSizeX:'+editor.getGame().getInitSizeX() )
-   console.log('initSizeY:'+editor.getGame().getInitSizeY() )
+   //console.log('initSizeX:'+editor.getGame().getInitSizeX() )
+   //console.log('initSizeY:'+editor.getGame().getInitSizeY() )
    context.canvas.width = window.innerWidth / 3 * 2-30;
    context.canvas.height = window.innerHeight;
    if(!isEditor){
@@ -459,6 +459,8 @@ function elementDeleter(parent:string){
   }
 }
 function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
+  //console.log({x:event.offsetX*editor.getGame().getScaleX(),y:event.offsetY*editor.getGame().getScaleY()})
+  //console.log({x:event.offsetX,y:event.offsetY})
   return {x:event.offsetX,y:event.offsetY}
 }
 

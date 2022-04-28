@@ -320,10 +320,11 @@ class Tile{
 
     isPointedAt(x:number,y:number){
         if (this.shape == 'circle'){
-            if (Math.sqrt( Math.pow((this.centerX-x), 2) + Math.pow((this.centerY-y), 2)) <= this.radius)
+            if (Math.sqrt( Math.pow((this.centerX*editor.getGame().getScaleX()-x), 2) + Math.pow((this.centerY*editor.getGame().getScaleY()-y), 2)) <= this.radius)
            {   
                return true
            }
+           //if (((Math.pow(x-this.centerX*editor.getGame().getScaleX(),2)/Math.pow(this.radius*editor.getGame().getScaleX(),2))+(Math.pow(y-this.centerY*editor.getGame().getScaleY(),2)/Math.pow(this.radius*editor.getGame().getScaleY(),2))<=1)
         }
         if (this.shape == 'square'){
             if (this.x1 <= x && x <= this.x2 && this.y1 <= y && y <= this.y2){
