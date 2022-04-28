@@ -38,7 +38,7 @@ router
                 f = acc.getAvatar()
                 //console.log(f)
             }
-            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore()});
+            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore(),name:acc.getName()});
         }
         
         

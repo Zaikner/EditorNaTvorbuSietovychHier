@@ -7,6 +7,8 @@ export class Game_db{
     private author:string = '';
     private numOfPlayers:number = 0;
     private nextTilesIds:Array<string> = []
+    private initSizeX:number = 0;
+    private initSizeY:number = 0;
     constructor(){
 
     }
@@ -43,13 +45,25 @@ export class Game_db{
     public getNextTilesIds(){
         return this.nextTilesIds
     }
+    getInitSizeX(){
+        return this.initSizeX
+    }
+    setInitSizeX(newCoord:number){
+        return this.initSizeX = newCoord
+    }
+    getInitSizeY(){
+        return this.initSizeY
+    }
+    setInitSizeY(newCoord:number){
+        return this.initSizeY = newCoord
+    }
     
     public insert(){
         let client = DbConnect.get()
             const query = {
                 name: 'insert-game',
-                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4);',
-                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds],
+                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6);',
+                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY],
               }
               client
               .query(query)
@@ -62,8 +76,8 @@ export class Game_db{
                     const query = {
                         name: 'upsert-game',
                         
-                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds";',
-                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds],
+                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY";',
+                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY],
                       }
                       client
                       .query(query)
@@ -79,6 +93,8 @@ export class Game_db{
                 ret.setAuthor(data.author)
                 ret.setNumOfPlayers(data.numOfPlayers)
                 ret.setNextTilesIds(data.nextTilesIds)
+                ret.setInitSizeX(data.initSizeX)
+                ret.setInitSizeY(data.initSizeY)
                 return ret
                 }
     

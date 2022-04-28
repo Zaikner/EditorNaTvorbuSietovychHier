@@ -18,25 +18,28 @@ head
         #atributes
           .container-fluid
             .row
-              p.col-6.fs-5.accountParagraph=text[12]+':' 
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[12]+':' 
+               .col-6.fs-5
+                form(action='/account/change/password', method='get')
+                  p(style='font-weight:bold;')=name
           .container-fluid
             .row
-              p.col-6.fs-5.accountParagraph=text[13]+':' 
+              p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[13]+':' 
               .col-6.fs-5
                 form(action='/account/change/password', method='get')
                   button.btn.btn-primary(type='submit')=text[152]
           .container-fluid
             .row
-              p.col-6.fs-5.accountParagraph=text[14]+':' 
+              p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[14]+':' 
               .col-6.fs-5
                 form(action='/account/change/avatar', method='get')
                   button.btn.btn-primary(type='submit')=text[152]
           .container-fluid
             .row
-               p.col-6.fs-5.accountParagraph='Score'+':' 
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[179]+':' 
                .col-6.fs-5
                 form(action='/account/change/password', method='get')
-                  p=score
+                  p(style='font-weight:bold;')=score
       #modalFooter.modal-footer
         form.text-center.maxWidth(action='/logout', method='get')
           button.btn.btn-primary(type='submit')=text[153]

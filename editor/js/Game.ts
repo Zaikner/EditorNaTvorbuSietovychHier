@@ -70,7 +70,9 @@ class Game{
                                           styles:savedPawnStyles,
                                           rules:this.rules,
                                           id:getCookie('id'),
-                                          nextTilesIds:this.mapNextTiles()
+                                          nextTilesIds:this.mapNextTiles(),
+                                          initSizeX:this.initSizeX,
+                                          initSizeY:this.initSizeY
                                         })
            
         }

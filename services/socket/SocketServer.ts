@@ -122,6 +122,8 @@ export class ServerSocket{
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
         g.setNextTilesIds(data.nextTilesIds)
+        g.setInitSizeX(data.initSizeX)
+        g.setInitSizeY(data.initSizeY)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
           t.setId(tile.id+lastId)

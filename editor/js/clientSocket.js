@@ -35,6 +35,8 @@ exports.getCookie = getCookie;
 editorSocket.emit('get texts', { language: getCookie('language') });
 editorSocket.emit('loadGameNames');
 editorSocket.on('connected', function (msg) {
+    console.log('obdržal:');
+    console.log(msg);
     canvas_1.editor.setGame(new Game_1.Game());
     (0, canvas_1.clear)();
     var newIds = new Map();
@@ -133,6 +135,8 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setName(msg.game.name);
     canvas_1.editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
     canvas_1.editor.getGame().setRules(msg.rules);
+    canvas_1.editor.getGame().setInitSizeX(msg.game.initSizeX);
+    canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {

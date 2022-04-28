@@ -59,7 +59,9 @@ var Game = /** @class */ (function () {
                 styles: savedPawnStyles_1,
                 rules: this.rules,
                 id: (0, clientSocket_js_1.getCookie)('id'),
-                nextTilesIds: this.mapNextTiles()
+                nextTilesIds: this.mapNextTiles(),
+                initSizeX: this.initSizeX,
+                initSizeY: this.initSizeY
             });
         }
     };

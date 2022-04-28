@@ -9,6 +9,8 @@ var Game_db = /** @class */ (function () {
         this.author = '';
         this.numOfPlayers = 0;
         this.nextTilesIds = [];
+        this.initSizeX = 0;
+        this.initSizeY = 0;
     }
     Game_db.prototype.getId = function () {
         return this.id;
@@ -40,12 +42,24 @@ var Game_db = /** @class */ (function () {
     Game_db.prototype.getNextTilesIds = function () {
         return this.nextTilesIds;
     };
+    Game_db.prototype.getInitSizeX = function () {
+        return this.initSizeX;
+    };
+    Game_db.prototype.setInitSizeX = function (newCoord) {
+        return this.initSizeX = newCoord;
+    };
+    Game_db.prototype.getInitSizeY = function () {
+        return this.initSizeY;
+    };
+    Game_db.prototype.setInitSizeY = function (newCoord) {
+        return this.initSizeY = newCoord;
+    };
     Game_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4);',
-            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6);',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY]
         };
         client
             .query(query)
@@ -55,8 +69,8 @@ var Game_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds") VALUES($1,$2,$3,$4)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds";',
-            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY";',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY]
         };
         client
             .query(query)
@@ -69,6 +83,8 @@ var Game_db = /** @class */ (function () {
         ret.setAuthor(data.author);
         ret.setNumOfPlayers(data.numOfPlayers);
         ret.setNextTilesIds(data.nextTilesIds);
+        ret.setInitSizeX(data.initSizeX);
+        ret.setInitSizeY(data.initSizeY);
         return ret;
     };
     return Game_db;

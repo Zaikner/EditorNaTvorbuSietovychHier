@@ -32,6 +32,7 @@ class GameManager{
             let styles = await PawnStyleFinder.getIntance().findByName(name)
             let rules = await RulesFinder.getIntance().findByName(name)
             let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
+         
             
        return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText(),components:backgroundComponents}
     }

@@ -154,6 +154,8 @@ var ServerSocket = /** @class */ (function () {
                             g.setName(data.name);
                             g.setNumOfPlayers(data.numOfPlayers);
                             g.setNextTilesIds(data.nextTilesIds);
+                            g.setInitSizeX(data.initSizeX);
+                            g.setInitSizeY(data.initSizeY);
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);

@@ -78,6 +78,8 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, BackgroundComponentFinder_js_1.BackgroundComponentFinder.getIntance().findByName(name)];
                     case 7:
                         backgroundComponents = _a.sent();
+                        console.log('nacital hru:');
+                        console.log(game);
                         return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText(), components: backgroundComponents }];
                 }
             });

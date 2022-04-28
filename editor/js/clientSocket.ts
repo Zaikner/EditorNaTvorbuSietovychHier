@@ -32,6 +32,8 @@ function getCookie(name:string) {
 editorSocket.emit('loadGameNames')
 
 editorSocket.on('connected',(msg)=>{
+    console.log('obdržal:')
+    console.log(msg)
     editor.setGame(new Game())
     clear()
     let newIds:Map<number,number> = new Map()
@@ -151,6 +153,9 @@ editorSocket.on('connected',(msg)=>{
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
    
     editor.getGame().setRules(msg.rules)
+
+    editor.getGame().setInitSizeX(msg.game.initSizeX)
+    editor.getGame().setInitSizeY(msg.game.initSizeY)
   
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()

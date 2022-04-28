@@ -157,8 +157,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'s
 spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
 spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'end')
 
-spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
-spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
+// spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
+// spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
     spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
