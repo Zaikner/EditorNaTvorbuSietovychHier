@@ -54,11 +54,11 @@ function addOption(parent, txt, is, id) {
     text.name = 'ans' + num;
     text.required = true;
     text.value = txt;
-    var label = canvas_1.doc.createElement('label');
-    label.style.color = 'white';
-    label.textContent = clientSocket_js_1.texts[66];
+    //  let label = doc.createElement('label')
+    //  label.style.color='white'
+    //  label.textContent = texts[66] 
     div.appendChild(check);
-    div.appendChild(label);
+    //div.appendChild(label)
     div.appendChild(text);
     if (txt != '') {
         var editButton = document.createElement('button');

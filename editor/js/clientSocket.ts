@@ -1,8 +1,9 @@
 import { io } from "socket.io-client";
 import { Background } from "./Background";
 import { BackgroundComponent } from "./BackgroundComponent";
-import { ctx, reload,editor, elementDeleter, canvas, loadGameNames, edit } from "./canvas";
+import { ctx, reload,editor, elementDeleter, canvas, loadGameNames, edit, clear } from "./canvas";
 import { spawnButton, spawnParagraph } from "./Elements";
+import { Game } from "./Game";
 import { changeWaitingRoom, initDice, initGameInfo, throwDice } from "./Gameplay";
 import { Pawn } from "./Pawn";
 import { PawnStyle } from "./PawnStyle";
@@ -31,7 +32,8 @@ function getCookie(name:string) {
 editorSocket.emit('loadGameNames')
 
 editorSocket.on('connected',(msg)=>{
-  
+    editor.setGame(new Game())
+    clear()
     let newIds:Map<number,number> = new Map()
     let newId = 0
     msg.tiles.forEach((tile:any) =>{
@@ -265,7 +267,7 @@ editorSocket.on('player left',(msg:{msg:string})=>{
   reload(editor,ctx)
 })
 
-editorSocket.on('game started',(msg:{msg:string})=>{
+editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
  // editor.getGame().setHasStarted(true)
  $('#waitingModal').modal('hide')
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
@@ -283,6 +285,19 @@ editorSocket.on('game started',(msg:{msg:string})=>{
   else{
     chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
   }
+  let rem:Array<Pawn> = []
+  editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+      if (!msg.tokens.includes(pawn.player)){
+        rem.push(pawn)
+      }
+  })
+  console.log('removol')
+  console.log(rem)
+  rem.forEach((pawn:Pawn)=>{
+    editor.getGame().removePawn(pawn)
+    pawn.tile.removePawn(pawn)
+  })
+  reload(editor,ctx)
 })
 
 

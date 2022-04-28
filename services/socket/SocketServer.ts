@@ -254,7 +254,7 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         r.setHasStarted(true)
         
-        this.io.in(msg.room).emit('game started',{msg:'Game has started!'})
+        this.io.in(msg.room).emit('game started',{msg:'Game has started!',tokens:r.getPlayers().map((p:any)=>p.getToken())})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
      
         this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -644,9 +644,9 @@ export class ServerSocket{
         socket.join(msg.roomName)
       })
       socket.on('reload waiting room',(msg:{room:string})=>{
-        let names:Array<{name:string,avatar:string,place:number}>= []
+        let names:Array<{name:string,avatar:string,place:number,token:string}>= []
         GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach((player:any)=>{
-          names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar(),place:player.getPlace()})
+          names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar(),place:player.getPlace(),token:player.getToken()})
         }
         )
         console.log('emitol reload waiting')

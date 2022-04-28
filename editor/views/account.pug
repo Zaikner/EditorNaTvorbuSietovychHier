@@ -36,7 +36,7 @@ head
                p.col-6.fs-5.accountParagraph='Score'+':' 
                .col-6.fs-5
                 form(action='/account/change/password', method='get')
-                  button.btn.btn-primary()=score
+                  p=score
       #modalFooter.modal-footer
         form.text-center.maxWidth(action='/logout', method='get')
           button.btn.btn-primary(type='submit')=text[153]

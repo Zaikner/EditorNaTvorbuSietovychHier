@@ -1,0 +1,66 @@
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title=texts[175]
+  script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+  script(src='https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js')
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css' integrity='sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2' crossorigin='anonymous')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
+#loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5#modalHeader.modal-title=texts[175]
+        button.close(type='button' data-dismiss='modal')
+      #modalBody.modal-body
+        p=texts[175]
+        p
+      #modalFooter.modal-footer
+        form#route.text-center(action='/account/change/avatar' method='post' style='width: 100%;' enctype='multipart/form-data' autocomplete='off')
+          input#fileInput.form-control(type='file' name='avatar' oninput='func()')
+          button.btn.btn-primary(type='submit')=texts[152]
+        form.text-center(action='/account' method='get' style='width: 100%;')
+          button.btn.btn-primary(type='submit')=texts[158]
+script(src='/socket.io/socket.io.js')
+script.
+  const socket = io("http://localhost:8001/");
+script.
+  import { io } from "socket.io-client";
+  const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
+script.
+  $(window).on('load', function() {
+  $('#loginModal').modal('show');
+  });
+  function getDataUrlFromImage(img) {
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  // Set width and height
+  console.log(img)
+  canvas.width = img.width;
+  canvas.height = img.height;
+  // Draw the image
+  ctx.drawImage(img, 0, 0);
+  console.log(canvas.width)
+  console.log(canvas.height)
+  Cookies.set('avatar',canvas.toDataURL('image/jpeg'))
+  Cookies.set('avatar','hehe')
+  //document.getElementById('route').action = '/account/change/avatar/id/'+canvas.toDataURL('image/jpeg',0.1)
+  socket.emit('msg','/change/avatar/id/'+canvas.toDataURL('image/jpeg'))
+  //return canvas.toDataURL('image/jpeg')
+  //console.log(canvas.toDataURL('image/jpeg'))
+  }
+  let func = function(){
+  if ((document.getElementById("fileInput")).files.length > 0){
+  let img = new Image()
+  img.src =URL.createObjectURL((document.getElementById("fileInput")).files[0])
+  img.onload = function(){
+  getDataUrlFromImage(img)
+  }
+  //console.log(URL.createObjectURL((document.getElementById("fileInput")).files[0]) )
+  }
+  else{
+  Cookies.set('avatar','')
+  }
+  }

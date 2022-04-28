@@ -79,6 +79,7 @@ function throwDice(token) {
 }
 exports.throwDice = throwDice;
 function changeWaitingRoom(accs) {
+    console.log(accs);
     var div = document.getElementById('waitingContainer');
     var divPlaying = document.getElementById('playingContainer');
     var divending = document.getElementById('endContainer');
@@ -89,7 +90,8 @@ function changeWaitingRoom(accs) {
     var _loop_3 = function () {
         var quest = document.createElement('button');
         quest.type = 'button';
-        quest.classList.add("list-group-item", "list-group-item-action", "active", "btn-danger");
+        quest.classList.add("list-group-item", "list-group-item-action", "active");
+        quest.style.backgroundColor = canvas_1.editor.getGame().getPawnStyle().get(accs[i].token).getColor();
         quest.style.textAlign = 'center';
         quest.textContent = accs[i].name;
         div.appendChild(quest);

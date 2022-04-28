@@ -87,7 +87,7 @@ function throwDice(token:string){
 }
 
 function changeWaitingRoom(accs:any){
-
+    console.log(accs)
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
     let divPlaying = <HTMLDivElement>document.getElementById('playingContainer')
     let divending = <HTMLDivElement>document.getElementById('endContainer')
@@ -100,7 +100,8 @@ function changeWaitingRoom(accs:any){
         
         let quest = document.createElement('button')
         quest.type = 'button';
-        quest.classList.add("list-group-item","list-group-item-action","active","btn-danger")
+        quest.classList.add("list-group-item","list-group-item-action","active")
+        quest.style.backgroundColor = editor.getGame().getPawnStyle().get(accs[i].token)!.getColor()
         quest.style.textAlign =  'center';
         quest.textContent =accs[i].name
         div.appendChild(quest)

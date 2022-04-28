@@ -7,6 +7,7 @@ var Background_1 = require("./Background");
 var BackgroundComponent_1 = require("./BackgroundComponent");
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
+var Game_1 = require("./Game");
 var Gameplay_1 = require("./Gameplay");
 var Pawn_1 = require("./Pawn");
 var PawnStyle_1 = require("./PawnStyle");
@@ -34,6 +35,8 @@ exports.getCookie = getCookie;
 editorSocket.emit('get texts', { language: getCookie('language') });
 editorSocket.emit('loadGameNames');
 editorSocket.on('connected', function (msg) {
+    canvas_1.editor.setGame(new Game_1.Game());
+    (0, canvas_1.clear)();
     var newIds = new Map();
     var newId = 0;
     msg.tiles.forEach(function (tile) {
@@ -237,6 +240,19 @@ editorSocket.on('game started', function (msg) {
     else {
         chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
     }
+    var rem = [];
+    canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
+        if (!msg.tokens.includes(pawn.player)) {
+            rem.push(pawn);
+        }
+    });
+    console.log('removol');
+    console.log(rem);
+    rem.forEach(function (pawn) {
+        canvas_1.editor.getGame().removePawn(pawn);
+        pawn.tile.removePawn(pawn);
+    });
+    (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
 });
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {

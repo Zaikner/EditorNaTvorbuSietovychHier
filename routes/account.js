@@ -96,14 +96,27 @@ router.route("/login")
 });
 router
 .route("/change/avatar")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
 
-  
-    res.sendFile('changeAvatar.html',{root:'./editor/views'});
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+    res.render('changeAvatar.pug',{root:'./editor/views',texts:text});
     
 }).post(async(req,res) =>
 {   
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
    
     //console.log('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
     let acc = AccountManager.getAccountByClientId(req.cookies.id)
@@ -126,20 +139,32 @@ router
 .route("/change/avatar/id/:id")
 .post(async(request,res) =>
 {   
-   
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
    console.log(request)
    let avatar = request.files.avatar;
-   res.sendFile('changeAvatar.html',{root:'./editor/views'});
+   res.render('changeAvatar.pug',{root:'./editor/views',texts:text});
 });
 ;
 
 
 router
 .route("/change/password")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
-    
-    res.render('changePassword',{root:'./editor/views',text:''})
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
+    res.render('changePassword',{root:'./editor/views',text:'',texts:text})
     
 })
 .post(async(request,res) =>
@@ -156,16 +181,16 @@ router
     if (acc != undefined){
         if (request.body.oldPassword === AccountManager.decode(acc.getPassword())){
             if (request.body.confirm!= request.body.password){
-                res.render('changePassword',{root:'./editor/views',text:texts[165]})
+                res.render('changePassword',{root:'./editor/views',text:text[165],texts:text})
             }
             else{
                 
                 AccountManager.changePassword(acc.getName(),request.body.password)
-                res.render('changePassword',{root:'./editor/views',text:text[166]})
+                res.render('changePassword',{root:'./editor/views',text:text[166],texts:text})
             }
         }
         else{
-            res.render('changePassword',{root:'./editor/views',text:text[167]})
+            res.render('changePassword',{root:'./editor/views',text:text[167],texts:text})
         }
         
     }

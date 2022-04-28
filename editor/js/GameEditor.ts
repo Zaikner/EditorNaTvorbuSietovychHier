@@ -351,6 +351,64 @@ class GameEditor{
         }
         
     }
+    checkIfAllPlayersHaveStartingTile():Array<string>{
+        let all = this.game.getPlayerTokens()
+        let present:Set<string> = new Set()
+        
+        this.game.getTiles().forEach((tile:Tile)=>{
+            all.forEach((token:string)=>{
+                if (tile.getIsStartingFor().includes(token)){
+                    present.add(token)
+                }
+            })
+
+        })
+
+        let p = Array.from(present)
+        let notStarted:Array<string> = []
+        all.forEach((token:string)=>{
+            if(!p.includes(token)){
+                notStarted.push(token)
+            }
+        })
+    
+        return notStarted
+        
+    }
+    checkIfAllPlayersHaveFinishTile(){
+        let all = this.game.getPlayerTokens()
+        let present:Set<string> = new Set()
+        
+        this.game.getTiles().forEach((tile:Tile)=>{
+            all.forEach((token:string)=>{
+                if (tile.getIsEndingFor().includes(token)){
+                    present.add(token)
+                }
+            })
+
+        })
+
+        let p = Array.from(present)
+        let notFinished:Array<string> = []
+        all.forEach((token:string)=>{
+            if(!p.includes(token)){
+                notFinished.push(token)
+            }
+        })
+    
+        return notFinished
+    }
+    checkIfPathFromStartToEndExists(){
+
+    }
+
+    getAllStartTiles(){
+        return this.game.getTiles().filter((t) => {return t.getIsStartingFor().length>0}).flatMap((tile:Tile)=>tile.getIsStartingFor())
+    }
+    getAllFinishTiles(){
+        return this.game.getTiles().filter((t) => {return t.getIsEndingFor().length>0});
+    }
+    
   getGame(){
     return this.game
 }

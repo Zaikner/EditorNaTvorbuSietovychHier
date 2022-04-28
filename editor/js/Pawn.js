@@ -18,7 +18,7 @@ var Pawn = /** @class */ (function () {
         var ret = true;
         var actuallTile = this.tile;
         for (var i = 0; i < numOfTiles; i++) {
-            actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber());
+            actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(this.player));
             if (actuallTile == undefined) {
                 ret = false;
                 break;
@@ -34,7 +34,7 @@ var Pawn = /** @class */ (function () {
         for (var i = 0; i < numOfTiles; i++) {
             setTimeout(function () {
                 actuallTile.removePawn(p);
-                actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber());
+                actuallTile = canvas_1.editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(p.player));
                 actuallTile.getPawns().push(p);
                 p.tileId = actuallTile.getId();
                 p.tile = actuallTile;

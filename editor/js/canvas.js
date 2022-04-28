@@ -9,6 +9,7 @@ var PawnEditor_1 = require("./PawnEditor");
 var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
+var Warning_1 = require("./Warning");
 var clientSocket_1 = require("./clientSocket");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
@@ -279,7 +280,15 @@ function mainMenu() {
         reload(editor, ctx);
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
-        editor.getGame().saveGame();
+        if (editor.checkIfAllPlayersHaveFinishTile().length > 0) {
+            Warning_1.Warning.show('Not all players have finish tile.');
+        }
+        else if (editor.checkIfAllPlayersHaveStartingTile().length > 0) {
+            Warning_1.Warning.show('Not all players have starting tile.');
+        }
+        else {
+            editor.getGame().saveGame();
+        }
         //window.location.replace('/')
     });
 }

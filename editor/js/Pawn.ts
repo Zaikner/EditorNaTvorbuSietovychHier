@@ -27,7 +27,7 @@ export class Pawn{
       
 
         for (let i = 0;i < numOfTiles ; i++){
-            actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
+            actuallTile = editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(this.player)!)!
                 
                 
             if (actuallTile == undefined){
@@ -51,7 +51,7 @@ export class Pawn{
         
                 setTimeout(function(){   
                 actuallTile.removePawn(p)
-                actuallTile = editor.getGame().findTileByTileId(actuallTile.getFollowingTileNumber())!
+                actuallTile = editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(p.player)!)!
                 
 
                 actuallTile.getPawns().push(p)

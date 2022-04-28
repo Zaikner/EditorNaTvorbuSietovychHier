@@ -268,7 +268,7 @@ var ServerSocket = /** @class */ (function () {
             socket.on('game has started', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 r.setHasStarted(true);
-                _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!' });
+                _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!', tokens: r.getPlayers().map(function (p) { return p.getToken(); }) });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
             });
@@ -658,7 +658,7 @@ var ServerSocket = /** @class */ (function () {
             socket.on('reload waiting room', function (msg) {
                 var names = [];
                 GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach(function (player) {
-                    names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar(), place: player.getPlace() });
+                    names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar(), place: player.getPlace(), token: player.getToken() });
                 });
                 console.log('emitol reload waiting');
                 _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });

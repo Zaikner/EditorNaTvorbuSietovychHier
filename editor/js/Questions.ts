@@ -67,13 +67,13 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.value = txt
      
 
-     let label = doc.createElement('label')
-     label.style.color='white'
-     label.textContent = texts[66] 
+    //  let label = doc.createElement('label')
+    //  label.style.color='white'
+    //  label.textContent = texts[66] 
      
     
      div.appendChild(check)
-     div.appendChild(label)
+     //div.appendChild(label)
      div.appendChild(text)
 
      if(txt != ''){

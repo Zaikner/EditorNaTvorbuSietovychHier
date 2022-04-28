@@ -341,7 +341,16 @@ slid.onchange = function(){
 }
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
-  editor.getGame().saveGame()
+  if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+    Warning.show('Not all players have finish tile.')
+  }
+  else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+    Warning.show('Not all players have starting tile.')
+  }
+  else{
+    editor.getGame().saveGame()
+  }
+  
   //window.location.replace('/')
 })
 }

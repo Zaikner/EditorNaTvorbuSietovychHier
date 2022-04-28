@@ -310,6 +310,52 @@ var GameEditor = /** @class */ (function () {
             this.turnToSetFree = values.num;
         }
     };
+    GameEditor.prototype.checkIfAllPlayersHaveStartingTile = function () {
+        var all = this.game.getPlayerTokens();
+        var present = new Set();
+        this.game.getTiles().forEach(function (tile) {
+            all.forEach(function (token) {
+                if (tile.getIsStartingFor().includes(token)) {
+                    present.add(token);
+                }
+            });
+        });
+        var p = Array.from(present);
+        var notStarted = [];
+        all.forEach(function (token) {
+            if (!p.includes(token)) {
+                notStarted.push(token);
+            }
+        });
+        return notStarted;
+    };
+    GameEditor.prototype.checkIfAllPlayersHaveFinishTile = function () {
+        var all = this.game.getPlayerTokens();
+        var present = new Set();
+        this.game.getTiles().forEach(function (tile) {
+            all.forEach(function (token) {
+                if (tile.getIsEndingFor().includes(token)) {
+                    present.add(token);
+                }
+            });
+        });
+        var p = Array.from(present);
+        var notFinished = [];
+        all.forEach(function (token) {
+            if (!p.includes(token)) {
+                notFinished.push(token);
+            }
+        });
+        return notFinished;
+    };
+    GameEditor.prototype.checkIfPathFromStartToEndExists = function () {
+    };
+    GameEditor.prototype.getAllStartTiles = function () {
+        return this.game.getTiles().filter(function (t) { return t.getIsStartingFor().length > 0; }).flatMap(function (tile) { return tile.getIsStartingFor(); });
+    };
+    GameEditor.prototype.getAllFinishTiles = function () {
+        return this.game.getTiles().filter(function (t) { return t.getIsEndingFor().length > 0; });
+    };
     GameEditor.prototype.getGame = function () {
         return this.game;
     };
