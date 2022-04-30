@@ -9,6 +9,7 @@ var background = undefined;
 function editBackground() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
+    (0, Elements_js_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[19]);
     var backgroundChecker = canvas_js_1.doc.createElement('input');
     backgroundChecker.type = 'checkbox';
     backgroundChecker.id = 'backgroundChecker';

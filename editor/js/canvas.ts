@@ -5,7 +5,7 @@ import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, remo
 import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 
-import { spawnButton, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
+import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
 
 
 import { Background } from "./Background";
@@ -130,13 +130,13 @@ document.getElementById('editBackground')!.addEventListener('click',function(){
 document.getElementById('insertTiles')!.addEventListener('click',function(){
   unchooseEverything()
   insertTilesMenu();} );
-document.getElementById('moveTiles')!.addEventListener('click',function(){
-  unchooseEverything()
-  moveTiles();} );
-document.getElementById('editTiles')!.addEventListener('click',function(){
-  unchooseEverything()
-  editTiles();} );
-document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
+// document.getElementById('moveTiles')!.addEventListener('click',function(){
+//   unchooseEverything()
+//   moveTiles();} );
+// document.getElementById('editTiles')!.addEventListener('click',function(){
+//   unchooseEverything()
+//   editTiles();} );
+// document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
 document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
                                                                                 editorSocket.emit('loadQuestions');} )
@@ -203,7 +203,7 @@ function mainMenu(){
   
  started = false
 
-
+spawnHeading(document,'buttonPlace','',texts[21])
 let numOfPlayersSlider:HTMLInputElement = document.createElement('input')
 numOfPlayersSlider.type = 'range'
 numOfPlayersSlider.id = 'numOfPlayers';
@@ -285,7 +285,7 @@ document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider','0','4','1',editor.getGame().getNumberOfStartingPawns().toString())
+let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider','1','4','1',editor.getGame().getNumberOfStartingPawns().toString())
 slid.onchange = function(){
   let max = parseInt(slid!.value)
   if (max > editor.getGame().getNumberOfStartingPawns()){
@@ -346,16 +346,19 @@ slid.onchange = function(){
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
   if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
-    Warning.show('Not all players have finish tile.')
+    Warning.show(texts[183])
   }
   else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
-    Warning.show('Not all players have starting tile.')
+    Warning.show(texts[184])
   }
   else{
     editor.getGame().saveGame()
   }
   
   //window.location.replace('/')
+})
+spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],function(){
+
 })
 }
 

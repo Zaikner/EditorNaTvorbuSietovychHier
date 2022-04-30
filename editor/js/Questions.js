@@ -84,6 +84,9 @@ function addOption(parent, txt, is, id) {
     text.style.width = '50%';
     text.style.float = 'left';
     text.placeholder = 'Zadaj odpoveď číslo: ' + num;
+    if (id > 0) {
+        text.setAttribute('optionId', id.toString());
+    }
     var check = canvas_1.doc.createElement('input');
     check.type = 'checkbox';
     check.id = 'check' + num;
@@ -179,8 +182,7 @@ function showAllQuestions(data) {
             quest.style.textAlign = 'center';
             quest.textContent = elem.questionText;
             quest.onclick = function () {
-                $('#editModal').modal('show');
-                $('#questionModal').modal('hide');
+                //$('#questionModal').modal('hide')
                 var allQuests = [];
                 data.forEach(function (q) {
                     if (q.questionId == elem.questionId) {
@@ -238,12 +240,13 @@ function pickQuestion(data) {
 exports.pickQuestion = pickQuestion;
 var func = function () { };
 function editQuestionMenu(id, txt, elem) {
-    var _a;
-    (0, canvas_1.elementDeleter)('editQuestion');
+    var _a, _b;
+    //elementDeleter('editQuestion')
     (0, TileEditor_1.removeAllButtons)();
     document.getElementById('questionEditButton').removeEventListener('click', func);
     func = function () { createQuestion(id); };
     document.getElementById('questionEditButton').addEventListener('click', func);
+    (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[180]);
     newQuestions = [];
     num = 0;
     var div = canvas_1.doc.createElement('div');
@@ -256,23 +259,26 @@ function editQuestionMenu(id, txt, elem) {
     text.name = 'question';
     text.required = true;
     text.value = txt;
-    text.style.marginLeft = '15px';
+    text.style.width = '50%';
+    text.style.float = 'left';
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
     label.textContent = clientSocket_js_1.texts[66];
-    var editButton = document.createElement('button');
-    editButton.textContent = clientSocket_js_1.texts[64];
-    editButton.type = 'button';
-    editButton.classList.add('btn');
-    editButton.classList.add('btn-secondary');
-    editButton.addEventListener('click', function () {
-        editQuestion(id, text);
-    });
-    div.appendChild(label);
+    label.style.float = 'left';
+    // let editButton = document.createElement('button')
+    // editButton.textContent = texts[64]
+    // editButton.type = 'button'
+    // editButton.style.float = 'left'
+    // editButton.classList.add('btn')
+    // editButton.classList.add('btn-secondary')
+    // editButton.addEventListener('click',function(){
+    //     editQuestion(id,text)
+    // })
+    (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(label);
     div.appendChild(text);
-    div.appendChild(editButton);
+    //div.appendChild(editButton)
     div.style.marginBottom = '5px';
-    (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
+    (_b = document.getElementById('tileEditingPlace')) === null || _b === void 0 ? void 0 : _b.appendChild(div);
     elem.forEach(function (e) {
         addOption('tileEditingPlace', e[1].optionText, e[1].isAnswer, e[0]);
     });

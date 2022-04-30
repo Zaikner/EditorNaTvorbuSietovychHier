@@ -27,18 +27,18 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   //-       button#editComponent.btn.btn-secondary.dropdown-item(type='button')=text[40]
   //-     li
   //-       button#deleteComponent.btn.btn-secondary.dropdown-item(type='button')=text[41]
-  li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
-    a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[19]
-    ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
-      li
-      li
-        button#insertTiles.btn.btn-secondary.dropdown-item(type='button')=text[42]
-      li
-        button#editTiles.btn.btn-secondary.dropdown-item(type='button')=text[43]
-      li
-        button#moveTiles.btn.btn-secondary.dropdown-item(type='button')=text[44]
-      li
-        button#deleteTiles.btn.btn-secondary.dropdown-item(type='button')=text[45]
+  button#insertTiles.btn.btn-secondary.py-2.navbarButton(type='button')=text[19]
+  //- li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
+  //-   a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[19]
+  //-   ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
+  //-     li
+     
+  //-     li
+  //-       button#editTiles.btn.btn-secondary.dropdown-item(type='button')=text[43]
+  //-     li
+  //-       button#moveTiles.btn.btn-secondary.dropdown-item(type='button')=text[44]
+  //-     li
+  //-       button#deleteTiles.btn.btn-secondary.dropdown-item(type='button')=text[45]
   button#generalInfoButton.btn.btn-secondary.py-2.navbarButton(type='button')=text[46]
   form(action='/' method='get')
     button#mainMenuButton.btn.btn-secondary.py-2.navbarButton(type='submit')=text[11]
@@ -53,7 +53,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
         #numOfPlayersPlace.col-12
         #gameNamePlace.col-12
         #gameTypePlace.col-12
-        #headingPlace.col-12
+        #questionPlace.col-12
         #questionPlace.col-12
         #tileEditingPlace.col-12
         #dicePlace.col-12

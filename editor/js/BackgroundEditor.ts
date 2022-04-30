@@ -1,6 +1,6 @@
 import {doc,ctx, editor,reload, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
 import { texts } from './clientSocket.js'
-import { spawnButton, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu, spawnSliderWithValueShower } from './Elements.js'
+import { spawnButton, spawnColorPicker, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu, spawnSliderWithValueShower } from './Elements.js'
 import {removeAllButtons,removeAllListenersAdded, saveInsertingTiles, unchooseEverything} from './TileEditor.js'
 
 var background:HTMLImageElement = undefined!
@@ -8,6 +8,7 @@ function editBackground(){
     removeAllButtons()
     removeAllListenersAdded()
 
+    spawnHeading(document,'buttonPlace','',texts[19])
      let backgroundChecker:HTMLInputElement = doc.createElement('input')
     backgroundChecker.type = 'checkbox'
     backgroundChecker.id = 'backgroundChecker';

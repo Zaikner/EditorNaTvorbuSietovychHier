@@ -3,7 +3,7 @@ import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload
 import { editorSocket,canMovePawnFunc,texts} from './clientSocket.js'
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
-import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput}from './Elements.js'
+import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnNumberInput, spawnHeading}from './Elements.js'
 import { Tile } from './Tile.js'
 import {Warning} from './Warning.js'
 import { deletePawn, insertPawn } from './PawnEditor.js'
@@ -78,6 +78,7 @@ let deleteHandler = function(event:MouseEvent){
 function spawnElements(){
     //$('#exampleModal').modal('toggle')
 
+    spawnHeading(document,'tileEditingPlace','',texts[19])
     spawnCanvas(doc,'tileEditingPlace','changeCanvas')
     spawnParagraph(doc,"tileEditingPlace",'',texts[124],true)
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
@@ -214,7 +215,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnParagraph(document,'tileEditingPlace','',texts[98],true)
     spawnButton(document,'tileEditingPlace','bindEvent',['btn','btn-secondary'],texts[174],function(){
       if (!eventChecker.checked){
-        Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
+        //Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
       }
       else{
        

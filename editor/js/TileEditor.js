@@ -5,7 +5,6 @@ var canvas_js_1 = require("./canvas.js");
 var clientSocket_js_1 = require("./clientSocket.js");
 var PathEditor_js_1 = require("./PathEditor.js");
 var Elements_js_1 = require("./Elements.js");
-var Warning_js_1 = require("./Warning.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
 var BackgroundEditor_js_1 = require("./BackgroundEditor.js");
@@ -70,6 +69,7 @@ var deleteHandler = function (event) {
 };
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
+    (0, Elements_js_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[19]);
     (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[124], true);
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
@@ -162,7 +162,7 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[98], true);
     (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'bindEvent', ['btn', 'btn-secondary'], clientSocket_js_1.texts[174], function () {
         if (!eventChecker.checked) {
-            Warning_js_1.Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.');
+            //Warning.show('Adding event is not allowed. If you want to enable it, it can be enabled by ticking "Does event occur when moving to this tile ???" checkkox.')
         }
         else {
             $('#EventModal').modal('show');

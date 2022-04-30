@@ -105,6 +105,10 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.style.width = '50%'
      text.style.float = 'left'
      text.placeholder = 'Zadaj odpoveď číslo: '+num
+     if (id > 0){
+        text.setAttribute('optionId',id.toString())
+     }
+     
 
      let check = doc.createElement('input')
      check.type = 'checkbox'
@@ -214,8 +218,8 @@ function showAllQuestions(data:any){
             quest.classList.add("list-group-item","list-group-item-action","active","btn-info")
             quest.style.textAlign =  'center';
             quest.textContent = elem.questionText
-            quest.onclick =function(){ $('#editModal').modal('show')
-                                     $('#questionModal').modal('hide')
+            quest.onclick =function(){ //$('#editModal').modal('show')
+                                     //$('#questionModal').modal('hide')
                                      let allQuests:any = []
                                     
                                      data.forEach((q:any) => {
@@ -277,12 +281,14 @@ function pickQuestion(data:any){
 }
 let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
-    elementDeleter('editQuestion')
+    //elementDeleter('editQuestion')
     removeAllButtons()
     document.getElementById('questionEditButton')!.removeEventListener('click',func)
     func = function(){createQuestion(id)}
 
     document.getElementById('questionEditButton')!.addEventListener('click',func)
+
+    spawnHeading(document,'tileEditingPlace','',texts[180])
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -297,26 +303,30 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     text.name = 'question'
     text.required = true
     text.value = txt
-    text.style.marginLeft = '15px'
+    text.style.width = '50%'
+    text.style.float = 'left'
 
     let label = doc.createElement('label')
     label.style.color='white'
     label.textContent = texts[66]
+    label.style.float='left'
 
-    let editButton = document.createElement('button')
-    editButton.textContent = texts[64]
-    editButton.type = 'button'
-    editButton.classList.add('btn')
-    editButton.classList.add('btn-secondary')
-    editButton.addEventListener('click',function(){
-        editQuestion(id,text)
-    })
+    // let editButton = document.createElement('button')
+    // editButton.textContent = texts[64]
+    // editButton.type = 'button'
+    // editButton.style.float = 'left'
+
+    // editButton.classList.add('btn')
+    // editButton.classList.add('btn-secondary')
+    // editButton.addEventListener('click',function(){
+    //     editQuestion(id,text)
+    // })
     
     
     
-    div.appendChild(label)
+    document.getElementById('tileEditingPlace')?.appendChild(label)
     div.appendChild(text)
-    div.appendChild(editButton)
+    //div.appendChild(editButton)
     div.style.marginBottom = '5px'
     document.getElementById('tileEditingPlace')?.appendChild(div)
 

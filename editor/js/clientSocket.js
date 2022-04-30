@@ -181,7 +181,7 @@ editorSocket.on('react to event: backward', function (msg) {
     editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('not author', function () {
-    Warning_1.Warning.show('You can not create game with this name. Game with this name already exists, and you are not author of it.');
+    Warning_1.Warning.show(texts[185]);
     console.log('not author');
 });
 editorSocket.on('game saved', function () {
@@ -335,7 +335,7 @@ editorSocket.on('got texts', function (msg) {
             window.location.replace('/gameLobby');
         });
         (_b = document.getElementById('startGameRoom')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
-            Warning_1.Warning.show('Are you sure to start the Game ? After start no one will be able to join!');
+            Warning_1.Warning.show(texts[186]);
         });
         (_c = document.getElementById("confirmStart")) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
             editorSocket.emit('game has started', { room: params.get('id') });
@@ -351,7 +351,7 @@ editorSocket.on('got texts', function (msg) {
     }
 });
 editorSocket.on('wrong game name', function () {
-    Warning_1.Warning.show('Game with this name does not exist');
+    Warning_1.Warning.show(texts[187]);
 });
 editorSocket.on('turn', function (msg) {
     console.log('recieved: turn');
@@ -436,7 +436,7 @@ editorSocket.on('reloaded waiting room', function (msg) {
 });
 editorSocket.on('player ended', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
-    Warning_1.Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.');
+    Warning_1.Warning.showInGame(msg.player + texts[190] + msg.place + texts[189]);
     console.log('zapol');
     canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
         if (pawn.player == msg.token) {
@@ -454,5 +454,5 @@ editorSocket.on('loadedGameNames', function (msg) {
     (0, gameLoader_1.loadGameMenu)(msg.names);
 });
 editorSocket.on('room is full', function () {
-    Warning_1.Warning.showInGame('This game room is full, you become spectator');
+    Warning_1.Warning.showInGame(texts[188]);
 });

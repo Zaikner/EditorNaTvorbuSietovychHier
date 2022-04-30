@@ -98,15 +98,13 @@ function edit() {
         (0, TileEditor_js_1.unchooseEverything)();
         (0, TileEditor_js_1.insertTilesMenu)();
     });
-    document.getElementById('moveTiles').addEventListener('click', function () {
-        (0, TileEditor_js_1.unchooseEverything)();
-        (0, TileEditor_js_1.moveTiles)();
-    });
-    document.getElementById('editTiles').addEventListener('click', function () {
-        (0, TileEditor_js_1.unchooseEverything)();
-        (0, TileEditor_js_1.editTiles)();
-    });
-    document.getElementById('deleteTiles').addEventListener('click', function () { (0, TileEditor_js_1.deleteTiles)(); });
+    // document.getElementById('moveTiles')!.addEventListener('click',function(){
+    //   unchooseEverything()
+    //   moveTiles();} );
+    // document.getElementById('editTiles')!.addEventListener('click',function(){
+    //   unchooseEverything()
+    //   editTiles();} );
+    // document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
     document.getElementById('questionManager').addEventListener('click', function () {
         elementDeleter('listContainer');
         clientSocket_1.editorSocket.emit('loadQuestions');
@@ -158,6 +156,7 @@ document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
 function mainMenu() {
     started = false;
+    (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_1.texts[21]);
     var numOfPlayersSlider = document.createElement('input');
     numOfPlayersSlider.type = 'range';
     numOfPlayersSlider.id = 'numOfPlayers';
@@ -230,7 +229,7 @@ function mainMenu() {
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
     (0, Elements_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_1.texts[112], true);
-    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '0', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
+    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'tileNumberSlider', '1', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
     slid.onchange = function () {
         var max = parseInt(slid.value);
         if (max > editor.getGame().getNumberOfStartingPawns()) {
@@ -284,15 +283,17 @@ function mainMenu() {
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
         if (editor.checkIfAllPlayersHaveFinishTile().length > 0) {
-            Warning_1.Warning.show('Not all players have finish tile.');
+            Warning_1.Warning.show(clientSocket_1.texts[183]);
         }
         else if (editor.checkIfAllPlayersHaveStartingTile().length > 0) {
-            Warning_1.Warning.show('Not all players have starting tile.');
+            Warning_1.Warning.show(clientSocket_1.texts[184]);
         }
         else {
             editor.getGame().saveGame();
         }
         //window.location.replace('/')
+    });
+    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
     });
 }
 exports.mainMenu = mainMenu;

@@ -75,6 +75,7 @@ exports.deletePawn = deletePawn;
 function pawnEditMenu() {
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
+    (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_1.texts[18]);
     (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', clientSocket_1.texts[74], true);
     var playerPicker = (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', [], canvas_1.editor.getGame().getPlayerTokens());
     playerPicker.onchange = function () {

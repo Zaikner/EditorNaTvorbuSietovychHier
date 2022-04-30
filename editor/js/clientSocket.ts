@@ -219,7 +219,7 @@ editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
 })
 
 editorSocket.on('not author',()=>{
-  Warning.show('You can not create game with this name. Game with this name already exists, and you are not author of it.')
+  Warning.show(texts[185])
   console.log ('not author')
 })
 editorSocket.on('game saved',()=>{
@@ -404,7 +404,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
       document.getElementById('startGameRoom')?.addEventListener('click',function(){
        
      
-        Warning.show('Are you sure to start the Game ? After start no one will be able to join!')
+        Warning.show(texts[186])
        
        
       })
@@ -430,7 +430,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   
   
   editorSocket.on('wrong game name',()=>{
-    Warning.show('Game with this name does not exist')
+    Warning.show(texts[187])
   })
   editorSocket.on('turn',(msg:{player:string,token:string})=>{
     console.log('recieved: turn')
@@ -532,7 +532,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   
   editorSocket.on('player ended',(msg:{player:string,place:number,token:string})=>{
     editorSocket.emit('reload waiting room',{room:params.get('id')})
-    Warning.showInGame(msg.player + ' finished on ' + msg.place + ' place.')
+    Warning.showInGame(msg.player + texts[190] + msg.place + texts[189])
     console.log('zapol')
     editor.getGame().getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == msg.token){
@@ -559,7 +559,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   
   
   editorSocket.on('room is full',()=>{
-      Warning.showInGame('This game room is full, you become spectator')
+      Warning.showInGame(texts[188])
   })
 
   export{editorSocket,canMovePawnFunc,isEditor,clickFunction,getCookie,texts}

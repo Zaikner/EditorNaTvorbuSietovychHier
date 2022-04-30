@@ -2,7 +2,7 @@ import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
 import { editor} from './canvas.js';
-import { editorSocket, getCookie} from './clientSocket.js'
+import { editorSocket, getCookie, texts} from './clientSocket.js'
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
@@ -42,7 +42,7 @@ class Game{
 
     saveGame(){
         if (this.name.length == 0){
-            Warning.show("You can't create game without name!")
+            Warning.show(texts[182])
         }
         else{
             let savedTiles:any = []

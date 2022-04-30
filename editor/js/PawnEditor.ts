@@ -1,6 +1,6 @@
 import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
 import { texts } from "./clientSocket"
-import { spawnButton, spawnCanvas, spawnColorPicker, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
+import { spawnButton, spawnCanvas, spawnColorPicker, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { Tile } from "./Tile"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
@@ -79,6 +79,7 @@ function pawnEditMenu(){
     removeAllListenersAdded()
     removeAllButtons()
 
+    spawnHeading(document,'tileEditingPlace','',texts[18])
     spawnParagraph(doc,'tileEditingPlace','',texts[74],true)
     let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
     playerPicker.onchange = function(){

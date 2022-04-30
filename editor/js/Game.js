@@ -35,7 +35,7 @@ var Game = /** @class */ (function () {
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
-            Warning_js_1.Warning.show("You can't create game without name!");
+            Warning_js_1.Warning.show(clientSocket_js_1.texts[182]);
         }
         else {
             var savedTiles_1 = [];
