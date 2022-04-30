@@ -42,7 +42,7 @@ var QuestionsWithAnswers_1 = require("./QuestionsWithAnswers");
 var QuestionWithAnswersFinder = /** @class */ (function () {
     function QuestionWithAnswersFinder() {
     }
-    QuestionWithAnswersFinder.getIntance = function () { return this.INSTANCE; };
+    QuestionWithAnswersFinder.getInstance = function () { return this.INSTANCE; };
     QuestionWithAnswersFinder.prototype.findAll = function () {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
@@ -111,6 +111,17 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                 }
             });
         });
+    };
+    QuestionWithAnswersFinder.prototype.deleteOptionsByQuestionId = function (questionId) {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'delete-option',
+            text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
+            values: [questionId]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
     QuestionWithAnswersFinder.INSTANCE = new QuestionWithAnswersFinder();
     return QuestionWithAnswersFinder;

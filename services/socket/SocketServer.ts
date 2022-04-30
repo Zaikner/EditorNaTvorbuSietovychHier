@@ -30,6 +30,7 @@ import { BackgroundComponent_db } from "../db/RDG/BackgroundComponent_db";
 import { BackgroundComponentFinder } from "../db/RDG/BackgroundComponentFinder";
 import { PawnFinder } from "../db/RDG/PawnFinder";
 import { PawnStyleFinder } from "../db/RDG/PawnStyleFinder";
+import { QuestionOptionFinder } from "../db/RDG/QuestionOptionFinder";
 
 
 const Player = require( "../../backEnd/Game/Player")
@@ -318,7 +319,7 @@ export class ServerSocket{
             console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
-            let questions = await QuestionWithAnswersFinder.getIntance().findById(msg.questionId)
+            let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.questionId)
             let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean;}[] = []
             console.log(questions)
     
@@ -506,9 +507,10 @@ export class ServerSocket{
       //   console.log('pripojil'+acc)
       // })
 
-      socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean}>,id:string,questionId:number})=>{
+      socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean,id:string}>,id:string,questionId:number})=>{
         let quest = new Question()
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
+        QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
         let id = 0
         if (data.questionId < 0){
           
@@ -528,15 +530,27 @@ export class ServerSocket{
         quest.setId(id)
         //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
 
-        quest.insert()
-
-        data.options.forEach((elem:{txt:string,isAnswer:boolean}) => {
+        quest.upsert()
+        let lastOption = await QuestionOptionFinder.getIntance().findWithLastId();
+        let lastId = lastOption![0].getId()+1
+        data.options.forEach((elem:{txt:string,isAnswer:boolean,id:string}) => {
           let option = new QuestionOption()
+          
+          if (elem.id == undefined){
+              option.setId(lastId)
+              lastId++;
+              console.log('posunul')
+          }
+          else{
+            option.setId(id)
+            console.log(elem.id)
+            console.log('nastavil id:' + id)
+          }
           option.setText(elem.txt)
           option.setQuestionId(id)
           option.setIsAnswer(elem.isAnswer)
           console.log(option)
-          option.insert()
+          option.upsert()
         })
         
         //console.log(await QuestionWithAnswersFinder.getIntance().findAll())
@@ -593,7 +607,7 @@ export class ServerSocket{
       })
       
       socket.on('loadQuestions',async()=>{
-        let questions = await QuestionWithAnswersFinder.getIntance().findAll()
+        let questions = await QuestionWithAnswersFinder.getInstance().findAll()
 
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {
@@ -613,7 +627,7 @@ export class ServerSocket{
       socket.on('answerQuestion',async(msg:{id:number})=>{
         console.log('odchytil answerQuestion' )
         console.log(msg.id)
-        let questions = await QuestionWithAnswersFinder.getIntance().findById(msg.id)
+        let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.id)
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
         console.log(questions)
 

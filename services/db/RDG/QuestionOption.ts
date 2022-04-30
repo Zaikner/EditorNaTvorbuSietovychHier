@@ -50,6 +50,20 @@ export class QuestionOption{
               .then((res:any) => console.log(res.rows[0]))
               .catch((e:Error) => console.error(e.stack))}
 
+  
+
+    public upsert(){
+                let client = DbConnect.get()
+                const query = {
+                    name: 'insert-option',
+                    text: 'INSERT INTO "bachelorsThesis"."Option"(id,text,"questionId","isAnswer") VALUES($1,$2,$3,$4)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "questionId" = EXCLUDED."questionId","isAnswer" = EXCLUDED."isAnswer"',
+                    values: [this.id,this.text,this.questionId,this.isAnswer],
+                  }
+                  client
+                  .query(query)
+                  .then((res:any) => console.log(res.rows[0]))
+                  .catch((e:Error) => console.error(e.stack))}
+
     public update(){
                 let client = DbConnect.get()
                 

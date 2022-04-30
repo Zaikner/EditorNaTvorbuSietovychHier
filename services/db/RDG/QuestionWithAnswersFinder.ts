@@ -6,7 +6,7 @@ import { QuestionWithAnswers } from "./QuestionsWithAnswers";
 
 export class QuestionWithAnswersFinder{
     private static INSTANCE:QuestionWithAnswersFinder = new QuestionWithAnswersFinder()
-    public static getIntance():QuestionWithAnswersFinder{return this.INSTANCE}
+    public static getInstance():QuestionWithAnswersFinder{return this.INSTANCE}
 
     private constructor(){
 
@@ -63,5 +63,15 @@ export class QuestionWithAnswersFinder{
             } 
           }
 
-         
+          public deleteOptionsByQuestionId(questionId:number){
+            let client = DbConnect.get()
+                const query = {
+                    name: 'delete-option',
+                    text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
+                    values: [questionId],
+                  }
+                  client
+                  .query(query)
+                  .then((res:any) => console.log(res.rows[0]))
+                  .catch((e:Error) => console.error(e.stack))}
 }

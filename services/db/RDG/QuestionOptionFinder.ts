@@ -9,7 +9,29 @@ export class QuestionOptionFinder{
     private constructor(){
 
     }
+    public async findWithLastId(){
+        let client = DbConnect.get()
+        try {
+            const query = {
+                name: 'select-option-id',
+                text: 'SELECT * FROM "bachelorsThesis"."Option" ORDER BY id DESC LIMIT 1;',
+                values: [],
+              }
+            var results = await  client.query(query)
+            var ret:Array<QuestionOption> = []
+           
+            await results.rows.forEach((row:any) => {
+          
+                ret.push(QuestionOption.load(row))
+            });
+           
+            return ret
     
+        }
+        catch(err){
+          console.log("Connection failed")
+        } 
+      }
 
     // public async findAllByQuestionId(id:number){
     //         let client = DbConnect.get()

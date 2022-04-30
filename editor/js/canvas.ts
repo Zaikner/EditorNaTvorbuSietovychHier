@@ -148,15 +148,15 @@ document.getElementById('generalInfoButton')!.addEventListener('click',function(
   removeAllButtons()
   removeAllListenersAdded()
   mainMenu();})
-document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
-document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
-document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
-document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
+// document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
+// document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
+// document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
+// document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
   
 //document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
-document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation('questionOptions');
+document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation();
                                                                                                       })
 
 //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
@@ -174,6 +174,10 @@ document.getElementById('loadCreatedGameModal')?.addEventListener('click',functi
   mainMenu()
   
 })
+document.getElementById('loadGameButton')?.addEventListener('click',function(){
+  editorSocket.emit('loadGameNames')
+})
+
 
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 
@@ -464,61 +468,6 @@ function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
   return {x:event.offsetX,y:event.offsetY}
 }
 
-
-
-
-
-function loadGameNames(names:Array<string>){
-  let root = document.getElementById('loadGameModalBody')!
-
-  if (root!= undefined){
-    names.forEach((name:string)=>{
-      let div = document.createElement('div')
-      div.style.textAlign = 'left'
-      let hr = document.createElement('hr')
-        hr.style.margin = '5%'
-        hr.style.backgroundColor = 'white'
-        div.appendChild(hr)
-  
-      let p = document.createElement('paragraph')
-      p.style.color = 'white'
-      p.style.fontSize = '20px'
-      p.style.marginLeft = '100px'
-      p.textContent = name
-      p.addEventListener('mouseEnter',function(){
-        p.style.cursor = 'pointer'
-      })
-      p.addEventListener('mouseLeave',function(){
-        p.style.cursor = 'default'
-      })
-      p.style.fontWeight = 'bold'
-      
-      p.onclick = function(){
-        removeAllButtons()
-        editorSocket.emit('load game',{id:getCookie('id'),name:name,response:true})
-        $('#loadGameModal').modal('hide')
-        mainMenu()
-      }
-    
-      // let button = document.createElement('button')
-      // button.textContent = 'Choose!'
-      // button.classList.add('btn','btn-secondary')
-  
-      
-  
-  
-  
-      div.append(p)
-      // div.append(button)
-      root.appendChild(div)
-    })
-  
-  
-  }
- 
-}
-
-
 window.onload = function(){
   if(params.get('id') != null){
     editorSocket.emit('reload waiting room',{room:params.get('id')})
@@ -530,4 +479,4 @@ window.onload = function(){
 
 
 setInterval(function(){resize(editor,ctx)},500)
-export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,editor,reload,resize,loadGameNames};
+export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,editor,reload,resize};

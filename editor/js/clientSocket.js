@@ -8,10 +8,12 @@ var BackgroundComponent_1 = require("./BackgroundComponent");
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
 var Game_1 = require("./Game");
+var gameLoader_1 = require("./gameLoader");
 var Gameplay_1 = require("./Gameplay");
 var Pawn_1 = require("./Pawn");
 var PawnStyle_1 = require("./PawnStyle");
 var Questions_1 = require("./Questions");
+var Rules_1 = require("./Rules");
 var Tile_1 = require("./Tile");
 var TileEditor_1 = require("./TileEditor");
 var Warning_1 = require("./Warning");
@@ -33,7 +35,6 @@ function getCookie(name) {
 }
 exports.getCookie = getCookie;
 editorSocket.emit('get texts', { language: getCookie('language') });
-editorSocket.emit('loadGameNames');
 editorSocket.on('connected', function (msg) {
     console.log('obdržal:');
     console.log(msg);
@@ -416,7 +417,7 @@ editorSocket.on('add chat message', function (data) {
 });
 editorSocket.on('loadedQuestions', function (data) {
     (0, Questions_1.showAllQuestions)(data);
-    (0, Questions_1.pickQuestion)(data);
+    //pickQuestion(data)
 });
 //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
 editorSocket.on('loadedAnswerQuestions', function (data) {
@@ -444,12 +445,13 @@ editorSocket.on('player ended', function (msg) {
     });
 });
 (_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-    $('#rulesModal').modal('show');
+    //$('#rulesModal').modal('show');
+    (0, Rules_1.rulesMenu)();
     document.getElementById("ruleInput").value = canvas_1.editor.getGame().getRules();
 });
 editorSocket.on('loadedGameNames', function (msg) {
     console.log('socket odchytil loadedGameNames');
-    (0, canvas_1.loadGameNames)(msg.names);
+    (0, gameLoader_1.loadGameMenu)(msg.names);
 });
 editorSocket.on('room is full', function () {
     Warning_1.Warning.showInGame('This game room is full, you become spectator');

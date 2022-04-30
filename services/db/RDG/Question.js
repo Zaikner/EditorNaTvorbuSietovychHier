@@ -37,6 +37,17 @@ var Question = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Question.prototype.upsert = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'upsert-question',
+            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, author = EXCLUDED.author',
+            values: [this.id, this.text, this.author]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Question.prototype.update = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {

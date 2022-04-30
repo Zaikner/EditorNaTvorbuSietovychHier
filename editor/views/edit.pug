@@ -9,23 +9,24 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   .container-fluid
     .navbar-header
       a.navbar-brand(href='#')=text[0]
-  button#loadGameButton.btn.btn-secondary.py-2.navbarButton(type='button' onclick="$('#loadGameModal').modal('show')")=text[15]
+  button#loadGameButton.btn.btn-secondary.py-2.navbarButton(type='button')=text[15]
   button#showRulesButton.btn.btn-secondary.py-2.navbarButton(type='button' )=text[16]
-  button#questionManager.btn.btn-secondary.py-2.navbarButton(type='button' onclick="$('#questionModal').modal('show')")=text[17]
+  button#questionManager.btn.btn-secondary.py-2.navbarButton(type='button')=text[17]
   button#editPawn.btn.btn-secondary.py-2.navbarButton(type='button')=text[18]
-  li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
-    a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[36]
-    ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
-      li
-        button#editBackground.btn.btn-secondary.dropdown-item(type='button')=text[37]
-      li
-        button#addComponent.btn.btn-secondary.dropdown-item(type='button')=text[38]
-      li
-        button#moveComponent.btn.btn-secondary.dropdown-item(type='button')=text[39]
-      li
-        button#editComponent.btn.btn-secondary.dropdown-item(type='button')=text[40]
-      li
-        button#deleteComponent.btn.btn-secondary.dropdown-item(type='button')=text[41]
+  button#editBackground.btn.btn-secondary.py-2.navbarButton(type='button')=text[36]
+  //- li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
+  //-   a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[36]
+  //-   ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
+  //-     li
+  //-       button#editBackground.btn.btn-secondary.dropdown-item(type='button')=text[37]
+  //-     li
+  //-       button#addComponent.btn.btn-secondary.dropdown-item(type='button')=text[38]
+  //-     li
+  //-       button#moveComponent.btn.btn-secondary.dropdown-item(type='button')=text[39]
+  //-     li
+  //-       button#editComponent.btn.btn-secondary.dropdown-item(type='button')=text[40]
+  //-     li
+  //-       button#deleteComponent.btn.btn-secondary.dropdown-item(type='button')=text[41]
   li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
     a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[19]
     ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
@@ -52,6 +53,8 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
         #numOfPlayersPlace.col-12
         #gameNamePlace.col-12
         #gameTypePlace.col-12
+        #headingPlace.col-12
+        #questionPlace.col-12
         #tileEditingPlace.col-12
         #dicePlace.col-12
         #WarningModal.modal.fade(tabindex='-1' role='dialog')
@@ -259,7 +262,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 .container.alignCenter
                   h5#modalHeader.modal-title.whiteColor.alignCenter=text[16]
               #modalBody.modal-body
-                textarea#ruleInput(style='width: 100%; height: 50vh;')
+                //textarea#ruleInput(style='width: 100%; height: 50vh;')
                 #rulesButtons.container.alignCenter
                   button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');" style='margin-right: 1%') Ok!
             // <div class="container" id = 'containerAdd' style="text-align: center;"></div>

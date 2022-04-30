@@ -42,7 +42,18 @@ export class Question{
               .query(query)
               .then((res:any) => console.log(res.rows[0]))
               .catch((e:Error) => console.error(e.stack))}
-
+    public upsert(){
+                let client = DbConnect.get()
+                    const query = {
+                        name: 'upsert-question',
+                        text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, author = EXCLUDED.author',
+                        values: [this.id,this.text,this.author],
+                      }
+                      client
+                      .query(query)
+                      .then((res:any) => console.log(res.rows[0]))
+                      .catch((e:Error) => console.error(e.stack))}
+        
     public update(){
                 let client = DbConnect.get()
                     const query = {

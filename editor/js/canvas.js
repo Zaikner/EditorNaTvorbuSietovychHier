@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.loadGameNames = exports.resize = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.resize = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var GameEditor_js_1 = require("./GameEditor.js");
@@ -20,7 +20,7 @@ exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
 function edit() {
-    var _a, _b, _c, _d, _e;
+    var _a, _b;
     mainMenu();
     // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
     //   updateNextTileIds()
@@ -119,15 +119,15 @@ function edit() {
         (0, TileEditor_js_1.removeAllListenersAdded)();
         mainMenu();
     });
-    (_a = document.getElementById('addComponent')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { (0, BackgroundEditor_1.addComponentMenu)(); });
-    (_b = document.getElementById('editComponent')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () { (0, BackgroundEditor_1.editComponentMenu)(); });
-    (_c = document.getElementById('moveComponent')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () { (0, BackgroundEditor_1.moveComponentMenu)(); });
-    (_d = document.getElementById('deleteComponent')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () { (0, BackgroundEditor_1.deleteComponentMenu)(); });
+    // document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
+    // document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
+    // document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
+    // document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
     //document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
     document.getElementById('createQuestionButtonModal').addEventListener('click', function () {
-        (0, Questions_1.initCreation)('questionOptions');
+        (0, Questions_1.initCreation)();
     });
     //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
@@ -136,11 +136,14 @@ function edit() {
         clientSocket_1.editorSocket.emit('loadQuestions');
         $('#pickQuestionModal').modal('show');
     });
-    (_e = document.getElementById('loadCreatedGameModal')) === null || _e === void 0 ? void 0 : _e.addEventListener('click', function () {
+    (_a = document.getElementById('loadCreatedGameModal')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
         clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: val, response: true });
         mainMenu();
+    });
+    (_b = document.getElementById('loadGameButton')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+        clientSocket_1.editorSocket.emit('loadGameNames');
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     document.getElementById("resetQuestionID").addEventListener('click', function () {
@@ -376,44 +379,6 @@ function calibreEventCoords(event) {
     return { x: event.offsetX, y: event.offsetY };
 }
 exports.calibreEventCoords = calibreEventCoords;
-function loadGameNames(names) {
-    var root = document.getElementById('loadGameModalBody');
-    if (root != undefined) {
-        names.forEach(function (name) {
-            var div = document.createElement('div');
-            div.style.textAlign = 'left';
-            var hr = document.createElement('hr');
-            hr.style.margin = '5%';
-            hr.style.backgroundColor = 'white';
-            div.appendChild(hr);
-            var p = document.createElement('paragraph');
-            p.style.color = 'white';
-            p.style.fontSize = '20px';
-            p.style.marginLeft = '100px';
-            p.textContent = name;
-            p.addEventListener('mouseEnter', function () {
-                p.style.cursor = 'pointer';
-            });
-            p.addEventListener('mouseLeave', function () {
-                p.style.cursor = 'default';
-            });
-            p.style.fontWeight = 'bold';
-            p.onclick = function () {
-                (0, TileEditor_js_1.removeAllButtons)();
-                clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: name, response: true });
-                $('#loadGameModal').modal('hide');
-                mainMenu();
-            };
-            // let button = document.createElement('button')
-            // button.textContent = 'Choose!'
-            // button.classList.add('btn','btn-secondary')
-            div.append(p);
-            // div.append(button)
-            root.appendChild(div);
-        });
-    }
-}
-exports.loadGameNames = loadGameNames;
 window.onload = function () {
     if (params.get('id') != null) {
         clientSocket_1.editorSocket.emit('reload waiting room', { room: params.get('id') });

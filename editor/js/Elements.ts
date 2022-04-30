@@ -1,4 +1,3 @@
-import e = require("express");
 import { editor } from "./canvas";
 import { showActualState } from "./TileEditor";
 
@@ -212,5 +211,41 @@ function spawnNumberInput(doc:HTMLDocument,parent:string,id:string){
   doc.getElementById(parent)!.appendChild(numberSetter);
   return numberSetter
 }
+function spawnHeading(doc:HTMLDocument,parent:string,id:string,txt:string){
+  let heading = doc.createElement('H1')
+  heading.id = id;
+  heading.classList.add('alignCenter')
+  heading.textContent = txt
+  heading.style.color = 'white'
+  doc.getElementById(parent)!.appendChild(heading);
+  return heading
+}
+function spawnTextArea(doc:HTMLDocument,parent:string,id:string,txt:string){
+  let textfield = doc.createElement('textarea')
+  textfield.id = id
+  textfield.classList.add('ruleField')
+  
+  doc.getElementById(parent)!.appendChild(textfield);
+  return textfield
+}
 
-export{spawnColorPicker,spawnParagraph,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}
+function spawnDiv(doc:HTMLDocument,parent:string,id:string,classList:Array<string>){
+  let div:HTMLDivElement = doc.createElement('div')
+    div.id = id;
+    classList.forEach((c:string)=>{
+      div.classList.add(c)
+    })
+    doc.getElementById(parent)!.appendChild(div);
+    return div
+}
+
+function spawnLabel(doc:HTMLDocument,labelFor:string,txt:string){
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = labelFor
+  label.textContent = txt;
+  label.style.color = 'white'
+  return label
+
+}
+
+export{spawnColorPicker,spawnDiv,spawnParagraph,spawnLabel,spawnHeading,spawnTextArea,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}

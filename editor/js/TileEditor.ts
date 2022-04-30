@@ -343,6 +343,8 @@ function insertTilesMenu():void{
     elementDeleter('gameTypePlace')
     elementDeleter('gameNamePlace')
     elementDeleter('tileEditingPlace');
+    elementDeleter('questionPlace');
+    elementDeleter('headingPlace');
 
   }
   function removeAllListenersAdded(){

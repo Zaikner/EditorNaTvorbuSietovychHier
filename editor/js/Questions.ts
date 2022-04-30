@@ -1,20 +1,23 @@
-import e = require('express');
+
+import { disconnect } from 'process';
 import { ids } from 'webpack';
 import { QuestionOption } from '../../services/db/RDG/QuestionOption';
 import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
 
 
-import { doc, editor,  elementDeleter} from './canvas'
+import { doc, editor,  elementDeleter, mainMenu} from './canvas'
 import { editorSocket,clickFunction,texts} from './clientSocket.js'
-import { spawnButton } from './Elements';
+import { spawnButton, spawnDiv, spawnHeading } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 
 let num = 0
 let newQuestions:Array<number> = []
 let givenOptions = 0
 console.log('zapol aspon subor')
-function initCreation(parent:string){
-    elementDeleter(parent)
+function initCreation(){
+    removeAllButtons()
+
+    spawnHeading(document,'headingPlace','',texts[58])
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -28,36 +31,70 @@ function initCreation(parent:string){
     text.classList.add('form-control')
     text.name = 'question'
     text.required = true
-    text.style.marginLeft = '15px'
+    text.style.width = '50%'
+    text.placeholder = 'Sem napíš otázku'
+    //text.style.marginLeft = '15px'
 
 
     let label = doc.createElement('label')
     label.style.color='white'
+    label.htmlFor = text.id
     label.textContent = texts[66] 
     
-    
+     
     div.appendChild(label)
     div.appendChild(text)
     div.style.marginBottom = '5px'
-    document.getElementById(parent)?.appendChild(div)
+    div.style.width = '100%'
+    document.getElementById('questionPlace')?.appendChild(div)
 
-    addOption(parent,'',false)
-    addOption(parent,'',false)
+    addOption('questionPlace','',false)
+    addOption('questionPlace','',false)
+
+    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
+    div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(-1);})
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions')})
+}
+
+
+function renumOptions(){
+    let i = 1;
+    let n = 1;
+
+    while(n<= num){
+        let text:HTMLInputElement = <HTMLInputElement>document.getElementById('ans'+i)
+        let check:HTMLInputElement = <HTMLInputElement>document.getElementById('check'+i)
+        if (text == undefined){
+            i++;
+
+            text =<HTMLInputElement>document.getElementById('ans'+i)
+            check = <HTMLInputElement>document.getElementById('check'+i)
+        }
+        if (text != undefined){
+            text.placeholder = 'Zadaj odpoveď číslo: '+n 
+            text.id = 'ans'+n
+
+            check.id = 'check'+n
+        }
+       
+        i++;
+        n++
+        console.log(text)
+        console.log(n)
+    }
+   
 }
 function addOption(parent:string,txt:string,is:boolean,id:number=-1){
     console.log('pridal option')
+
+  
      num++;
      let div = doc.createElement('div')
-     div.classList.add("form-group")
-
-     let check = doc.createElement('input')
-     check.type = 'checkbox'
-     check.id = 'check'+num
-     check.style.width = '20px'
-     check.classList.add('form-control')
-     check.name = 'check'+num
-     check.checked = is
-
+     div.classList.add("form-group",'inline')
+     div.style.width='120%'
+     
+     
      let text = doc.createElement('input')
      text.type = 'text'
      text.id = 'ans'+num
@@ -65,79 +102,55 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.name = 'ans'+num
      text.required = true
      text.value = txt
-     
+     text.style.width = '50%'
+     text.style.float = 'left'
+     text.placeholder = 'Zadaj odpoveď číslo: '+num
 
-    //  let label = doc.createElement('label')
-    //  label.style.color='white'
-    //  label.textContent = texts[66] 
+     let check = doc.createElement('input')
+     check.type = 'checkbox'
+     check.id = 'check'+num
+     check.style.width = '20px'
      
-    
-     div.appendChild(check)
-     //div.appendChild(label)
+     check.classList.add('form-control')
+     check.name = 'check'+num
+     check.checked = is
+     check.style.float = 'left'
+
+     let labelCheck:HTMLLabelElement = doc.createElement('label')
+     labelCheck.htmlFor = check.id
+     labelCheck.textContent = 'správne '
+     labelCheck.style.color = 'white'
+     labelCheck.style.float = 'left'
+     labelCheck.style.fontSize = '20px'
+   
      div.appendChild(text)
 
-     if(txt != ''){
-        let editButton = document.createElement('button')
-        editButton.textContent = texts[64]
-        editButton.classList.add('btn')
-        editButton.classList.add('btn-secondary')
-        editButton.type = 'button'
-      
-        editButton.addEventListener('click',function(){
-            editOption(id,check,text)
-            $('#editModal').modal('show')
-        })
-        div.appendChild(editButton)
-       
-
-        let deleteButton = document.createElement('button')
-        deleteButton.textContent = texts[70]
-        deleteButton.classList.add('btn')
-        deleteButton.classList.add('btn-secondary')
-        deleteButton.addEventListener('click',function(){
-            editorSocket.emit('deleteQuestion',{id:id})
-            document.getElementById(parent)?.removeChild(div)
-        })
-        //deleteButton.classList.add('btn btn-secondary')
-        div.appendChild(deleteButton)
         
-        text.setAttribute('questionId',id.toString())
-        console.log('priradil atribut'  + id)
-     }
-     else{
-      
-        //deleteButton.classList.add('btn btn-secondary')
-      
-        newQuestions.push(num.valueOf())
-        console.log('new quest su:')
-        console.log(newQuestions)
-        let deleteButton = document.createElement('button')
-        deleteButton.textContent = texts[70]
-        deleteButton.type = 'button'
-        deleteButton.classList.add('btn')
-        deleteButton.classList.add('btn-secondary')
-        deleteButton.addEventListener('click',function(){
-            newQuestions = newQuestions.filter((p) => {return p != (num+1)});
-            document.getElementById(parent)?.removeChild(div)
-        })
-        // let insertButton = document.createElement('button')
-        // insertButton.type = 'button'
-        // insertButton.textContent = 'Insert!'
-        // insertButton.classList.add('btn')
-        // insertButton.classList.add('btn-secondary')
-        // insertButton.addEventListener('click',function(){
-        //     //insertButton
-        //     editorSocket.emit('insertQuestion',{text:text.value,isAnswer:check.checked})
-        //     //document.getElementById(parent)?.removeChild(div)
-        // })
-        // //deleteButton.classList.add('btn btn-secondary')
-        // div.appendChild(insertButton)
+ newQuestions.push(num.valueOf())
+ console.log('new quest su:')
+ console.log(newQuestions)
+ let deleteButton = document.createElement('button')
+ deleteButton.textContent = texts[70]
+ deleteButton.type = 'button'
+ deleteButton.classList.add('btn')
+ deleteButton.classList.add('btn-secondary')
+ deleteButton.style.float = 'left'
+ deleteButton.addEventListener('click',function(){
+     newQuestions = newQuestions.filter((p) => {return p != (num+1)});
+     document.getElementById(parent)?.removeChild(div)
+     num--;
+     renumOptions()
+
         div.appendChild(deleteButton)
         text.setAttribute('questionId','none')
        
-     }
+     })
 
      div.style.marginBottom = '5px'
+     div.style.marginBottom = '5px'
+     div.style.width = '100%'
+     div.appendChild(check)
+     div.appendChild(labelCheck)
      document.getElementById(parent)?.appendChild(div)
 } 
 
@@ -155,11 +168,16 @@ function createQuestion(id:number){
     console.log(newQuestions)
     for (let a = 0; a < newQuestions.length;a++){
         let i = newQuestions[a]
-        if(<HTMLInputElement>document.getElementById('check'+i)!=undefined && document.getElementById('ans'+i)!.getAttribute('questionId') === 'none'){
-            options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value})
+        if(<HTMLInputElement>document.getElementById('check'+i)!=undefined ){
+
+            options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
         }
         else{
             console.log('undefined bol')
+            console.log(<HTMLInputElement>document.getElementById('check'+i))
+            console.log(<HTMLInputElement>document.getElementById('ans'+i))
+
+          
             console.log(i)
         }
        
@@ -171,17 +189,27 @@ function createQuestion(id:number){
     console.log('vklada otazky')
     console.log(data)
     editorSocket.emit('newQuestion',data)
+   
     
 }
 
 function showAllQuestions(data:any){
+    removeAllButtons()
+    removeAllListenersAdded()
+    spawnHeading(document,'tileEditingPlace','',texts[17])
+    let bt =spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[58],function(){initCreation()})
+    bt.style.marginBottom = '3%;'
+
+  
+                                                                                                      
+    
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
         console.log('vykonal')
         if (questions.get(elem.questionId) === undefined){
             let list = document.createElement('div')
             list.classList.add("list-group")
-            list.style.marginBottom = "5%";
+            list.style.marginTop = "5%";
             questions.set(elem.questionId,list)
 
             let quest = document.createElement('button')
@@ -202,7 +230,7 @@ function showAllQuestions(data:any){
                                     editQuestionMenu(elem.questionId,elem.questionText,allQuests)}
             list.appendChild(quest)
 
-            document.getElementById('listContainer')?.appendChild(list)
+            document.getElementById('tileEditingPlace')?.appendChild(list)
         }
         let opt = document.createElement('button')
         opt.type = 'button';
@@ -214,7 +242,8 @@ function showAllQuestions(data:any){
     })
 }
 function pickQuestion(data:any){
-    elementDeleter('listPickerContainer')
+    removeAllButtons()
+
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
         console.log('vykonal')
@@ -238,7 +267,7 @@ function pickQuestion(data:any){
                                      }
             list.appendChild(quest)
 
-            document.getElementById('listPickerContainer')?.appendChild(list)
+            document.getElementById('questionPlace')?.appendChild(list)
         }
         let opt = document.createElement('button')
         opt.type = 'button';
@@ -252,6 +281,7 @@ function pickQuestion(data:any){
 let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
     elementDeleter('editQuestion')
+    removeAllButtons()
     document.getElementById('questionEditButton')!.removeEventListener('click',func)
     func = function(){createQuestion(id)}
 
@@ -291,11 +321,11 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     div.appendChild(text)
     div.appendChild(editButton)
     div.style.marginBottom = '5px'
-    document.getElementById('editQuestion')?.appendChild(div)
+    document.getElementById('tileEditingPlace')?.appendChild(div)
 
     elem.forEach((e:any)=>{
 
-        addOption('editQuestion',e[1].optionText,e[1].isAnswer,e[0])
+        addOption('tileEditingPlace',e[1].optionText,e[1].isAnswer,e[0])
     })
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
     
@@ -313,6 +343,7 @@ function editQuestion(id:number,text:HTMLInputElement){
 function askQuestion(data:any){
     let questions:Map<number,HTMLDivElement> = new Map()
     elementDeleter('answerQuestion')
+    removeAllButtons()
     let i = 0
     data.forEach((elem:any) =>{
         i++;
@@ -332,7 +363,7 @@ function askQuestion(data:any){
 
             list.appendChild(quest)
 
-            document.getElementById('answerQuestion')?.appendChild(list)
+            document.getElementById('tileEditingPlace')?.appendChild(list)
         }
         let opt = document.createElement('button')
         opt.id = 'givenOption'+i;

@@ -61,6 +61,22 @@ canvas{
 .maxWidth{
   width: 100%;
 }
+.maxHeight{
+  height: 100%;
+}
+.ruleField{
+  width: 100%;
+  height: 500%;
+}
+.inline{
+  display: inline;
+}
+.buttonLeftMargin{
+  margin-left: 3%;
+}
+.topMargin{
+  margin-top:3%;
+}
 .gamelobby{
   text-align: center;
   align-items: center;

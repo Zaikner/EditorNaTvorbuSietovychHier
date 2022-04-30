@@ -3,13 +3,16 @@ exports.__esModule = true;
 exports.showResults = exports.pickQuestion = exports.initCreation = exports.removeLastOption = exports.evaluateQuestion = exports.askQuestion = exports.showAllQuestions = exports.createQuestion = exports.addOption = void 0;
 var canvas_1 = require("./canvas");
 var clientSocket_js_1 = require("./clientSocket.js");
+var Elements_1 = require("./Elements");
+var TileEditor_1 = require("./TileEditor");
 var num = 0;
 var newQuestions = [];
 var givenOptions = 0;
 console.log('zapol aspon subor');
-function initCreation(parent) {
+function initCreation() {
     var _a;
-    (0, canvas_1.elementDeleter)(parent);
+    (0, TileEditor_1.removeAllButtons)();
+    (0, Elements_1.spawnHeading)(document, 'headingPlace', '', clientSocket_js_1.texts[58]);
     newQuestions = [];
     num = 0;
     var div = canvas_1.doc.createElement('div');
@@ -21,32 +24,56 @@ function initCreation(parent) {
     text.classList.add('form-control');
     text.name = 'question';
     text.required = true;
-    text.style.marginLeft = '15px';
+    text.style.width = '50%';
+    text.placeholder = 'Sem napíš otázku';
+    //text.style.marginLeft = '15px'
     var label = canvas_1.doc.createElement('label');
     label.style.color = 'white';
+    label.htmlFor = text.id;
     label.textContent = clientSocket_js_1.texts[66];
     div.appendChild(label);
     div.appendChild(text);
     div.style.marginBottom = '5px';
-    (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(div);
-    addOption(parent, '', false);
-    addOption(parent, '', false);
+    div.style.width = '100%';
+    (_a = document.getElementById('questionPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
+    addOption('questionPlace', '', false);
+    addOption('questionPlace', '', false);
+    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Add option', function () { addOption('questionPlace', '', false); });
+    div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(-1); });
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions'); });
 }
 exports.initCreation = initCreation;
+function renumOptions() {
+    var i = 1;
+    var n = 1;
+    while (n <= num) {
+        var text = document.getElementById('ans' + i);
+        var check = document.getElementById('check' + i);
+        if (text == undefined) {
+            i++;
+            text = document.getElementById('ans' + i);
+            check = document.getElementById('check' + i);
+        }
+        if (text != undefined) {
+            text.placeholder = 'Zadaj odpoveď číslo: ' + n;
+            text.id = 'ans' + n;
+            check.id = 'check' + n;
+        }
+        i++;
+        n++;
+        console.log(text);
+        console.log(n);
+    }
+}
 function addOption(parent, txt, is, id) {
     var _a;
     if (id === void 0) { id = -1; }
     console.log('pridal option');
     num++;
     var div = canvas_1.doc.createElement('div');
-    div.classList.add("form-group");
-    var check = canvas_1.doc.createElement('input');
-    check.type = 'checkbox';
-    check.id = 'check' + num;
-    check.style.width = '20px';
-    check.classList.add('form-control');
-    check.name = 'check' + num;
-    check.checked = is;
+    div.classList.add("form-group", 'inline');
+    div.style.width = '120%';
     var text = canvas_1.doc.createElement('input');
     text.type = 'text';
     text.id = 'ans' + num;
@@ -54,68 +81,47 @@ function addOption(parent, txt, is, id) {
     text.name = 'ans' + num;
     text.required = true;
     text.value = txt;
-    //  let label = doc.createElement('label')
-    //  label.style.color='white'
-    //  label.textContent = texts[66] 
-    div.appendChild(check);
-    //div.appendChild(label)
+    text.style.width = '50%';
+    text.style.float = 'left';
+    text.placeholder = 'Zadaj odpoveď číslo: ' + num;
+    var check = canvas_1.doc.createElement('input');
+    check.type = 'checkbox';
+    check.id = 'check' + num;
+    check.style.width = '20px';
+    check.classList.add('form-control');
+    check.name = 'check' + num;
+    check.checked = is;
+    check.style.float = 'left';
+    var labelCheck = canvas_1.doc.createElement('label');
+    labelCheck.htmlFor = check.id;
+    labelCheck.textContent = 'správne ';
+    labelCheck.style.color = 'white';
+    labelCheck.style.float = 'left';
+    labelCheck.style.fontSize = '20px';
     div.appendChild(text);
-    if (txt != '') {
-        var editButton = document.createElement('button');
-        editButton.textContent = clientSocket_js_1.texts[64];
-        editButton.classList.add('btn');
-        editButton.classList.add('btn-secondary');
-        editButton.type = 'button';
-        editButton.addEventListener('click', function () {
-            editOption(id, check, text);
-            $('#editModal').modal('show');
-        });
-        div.appendChild(editButton);
-        var deleteButton = document.createElement('button');
-        deleteButton.textContent = clientSocket_js_1.texts[70];
-        deleteButton.classList.add('btn');
-        deleteButton.classList.add('btn-secondary');
-        deleteButton.addEventListener('click', function () {
-            var _a;
-            clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: id });
-            (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.removeChild(div);
-        });
-        //deleteButton.classList.add('btn btn-secondary')
-        div.appendChild(deleteButton);
-        text.setAttribute('questionId', id.toString());
-        console.log('priradil atribut' + id);
-    }
-    else {
-        //deleteButton.classList.add('btn btn-secondary')
-        newQuestions.push(num.valueOf());
-        console.log('new quest su:');
-        console.log(newQuestions);
-        var deleteButton = document.createElement('button');
-        deleteButton.textContent = clientSocket_js_1.texts[70];
-        deleteButton.type = 'button';
-        deleteButton.classList.add('btn');
-        deleteButton.classList.add('btn-secondary');
-        deleteButton.addEventListener('click', function () {
-            var _a;
-            newQuestions = newQuestions.filter(function (p) { return p != (num + 1); });
-            (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.removeChild(div);
-        });
-        // let insertButton = document.createElement('button')
-        // insertButton.type = 'button'
-        // insertButton.textContent = 'Insert!'
-        // insertButton.classList.add('btn')
-        // insertButton.classList.add('btn-secondary')
-        // insertButton.addEventListener('click',function(){
-        //     //insertButton
-        //     editorSocket.emit('insertQuestion',{text:text.value,isAnswer:check.checked})
-        //     //document.getElementById(parent)?.removeChild(div)
-        // })
-        // //deleteButton.classList.add('btn btn-secondary')
-        // div.appendChild(insertButton)
+    newQuestions.push(num.valueOf());
+    console.log('new quest su:');
+    console.log(newQuestions);
+    var deleteButton = document.createElement('button');
+    deleteButton.textContent = clientSocket_js_1.texts[70];
+    deleteButton.type = 'button';
+    deleteButton.classList.add('btn');
+    deleteButton.classList.add('btn-secondary');
+    deleteButton.style.float = 'left';
+    deleteButton.addEventListener('click', function () {
+        var _a;
+        newQuestions = newQuestions.filter(function (p) { return p != (num + 1); });
+        (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.removeChild(div);
+        num--;
+        renumOptions();
         div.appendChild(deleteButton);
         text.setAttribute('questionId', 'none');
-    }
+    });
     div.style.marginBottom = '5px';
+    div.style.marginBottom = '5px';
+    div.style.width = '100%';
+    div.appendChild(check);
+    div.appendChild(labelCheck);
     (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(div);
 }
 exports.addOption = addOption;
@@ -134,11 +140,13 @@ function createQuestion(id) {
     console.log(newQuestions);
     for (var a = 0; a < newQuestions.length; a++) {
         var i = newQuestions[a];
-        if (document.getElementById('check' + i) != undefined && document.getElementById('ans' + i).getAttribute('questionId') === 'none') {
-            options.push({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value });
+        if (document.getElementById('check' + i) != undefined) {
+            options.push({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value, id: document.getElementById('ans' + i).getAttribute('optionId') });
         }
         else {
             console.log('undefined bol');
+            console.log(document.getElementById('check' + i));
+            console.log(document.getElementById('ans' + i));
             console.log(i);
         }
     }
@@ -151,6 +159,11 @@ function createQuestion(id) {
 }
 exports.createQuestion = createQuestion;
 function showAllQuestions(data) {
+    (0, TileEditor_1.removeAllButtons)();
+    (0, TileEditor_1.removeAllListenersAdded)();
+    (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[17]);
+    var bt = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { initCreation(); });
+    bt.style.marginBottom = '3%;';
     var questions = new Map();
     data.forEach(function (elem) {
         var _a, _b;
@@ -158,7 +171,7 @@ function showAllQuestions(data) {
         if (questions.get(elem.questionId) === undefined) {
             var list = document.createElement('div');
             list.classList.add("list-group");
-            list.style.marginBottom = "5%";
+            list.style.marginTop = "5%";
             questions.set(elem.questionId, list);
             var quest = document.createElement('button');
             quest.type = 'button';
@@ -177,7 +190,7 @@ function showAllQuestions(data) {
                 editQuestionMenu(elem.questionId, elem.questionText, allQuests);
             };
             list.appendChild(quest);
-            (_a = document.getElementById('listContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+            (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }
         var opt = document.createElement('button');
         opt.type = 'button';
@@ -189,7 +202,7 @@ function showAllQuestions(data) {
 }
 exports.showAllQuestions = showAllQuestions;
 function pickQuestion(data) {
-    (0, canvas_1.elementDeleter)('listPickerContainer');
+    (0, TileEditor_1.removeAllButtons)();
     var questions = new Map();
     data.forEach(function (elem) {
         var _a, _b;
@@ -212,7 +225,7 @@ function pickQuestion(data) {
                 document.getElementById('bindQuestion').textContent = clientSocket_js_1.texts[72];
             };
             list.appendChild(quest);
-            (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+            (_a = document.getElementById('questionPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }
         var opt = document.createElement('button');
         opt.type = 'button';
@@ -227,6 +240,7 @@ var func = function () { };
 function editQuestionMenu(id, txt, elem) {
     var _a;
     (0, canvas_1.elementDeleter)('editQuestion');
+    (0, TileEditor_1.removeAllButtons)();
     document.getElementById('questionEditButton').removeEventListener('click', func);
     func = function () { createQuestion(id); };
     document.getElementById('questionEditButton').addEventListener('click', func);
@@ -258,9 +272,9 @@ function editQuestionMenu(id, txt, elem) {
     div.appendChild(text);
     div.appendChild(editButton);
     div.style.marginBottom = '5px';
-    (_a = document.getElementById('editQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
+    (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
     elem.forEach(function (e) {
-        addOption('editQuestion', e[1].optionText, e[1].isAnswer, e[0]);
+        addOption('tileEditingPlace', e[1].optionText, e[1].isAnswer, e[0]);
     });
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
 }
@@ -277,6 +291,7 @@ function editQuestion(id, text) {
 function askQuestion(data) {
     var questions = new Map();
     (0, canvas_1.elementDeleter)('answerQuestion');
+    (0, TileEditor_1.removeAllButtons)();
     var i = 0;
     data.forEach(function (elem) {
         var _a, _b;
@@ -293,7 +308,7 @@ function askQuestion(data) {
             quest.style.textAlign = 'center';
             quest.textContent = elem.questionText;
             list.appendChild(quest);
-            (_a = document.getElementById('answerQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+            (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }
         var opt = document.createElement('button');
         opt.id = 'givenOption' + i;

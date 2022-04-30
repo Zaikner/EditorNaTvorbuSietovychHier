@@ -276,6 +276,8 @@ function removeAllButtons() {
     (0, canvas_js_1.elementDeleter)('gameTypePlace');
     (0, canvas_js_1.elementDeleter)('gameNamePlace');
     (0, canvas_js_1.elementDeleter)('tileEditingPlace');
+    (0, canvas_js_1.elementDeleter)('questionPlace');
+    (0, canvas_js_1.elementDeleter)('headingPlace');
 }
 exports.removeAllButtons = removeAllButtons;
 function removeAllListenersAdded() {

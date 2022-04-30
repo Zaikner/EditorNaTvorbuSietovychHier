@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnParagraph = exports.spawnColorPicker = void 0;
+exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnTextArea = exports.spawnHeading = exports.spawnLabel = exports.spawnParagraph = exports.spawnDiv = exports.spawnColorPicker = void 0;
 var canvas_1 = require("./canvas");
 function spawnColorPicker(doc, parent, id) {
     var colorPicker = doc.createElement('input');
@@ -204,3 +204,39 @@ function spawnNumberInput(doc, parent, id) {
     return numberSetter;
 }
 exports.spawnNumberInput = spawnNumberInput;
+function spawnHeading(doc, parent, id, txt) {
+    var heading = doc.createElement('H1');
+    heading.id = id;
+    heading.classList.add('alignCenter');
+    heading.textContent = txt;
+    heading.style.color = 'white';
+    doc.getElementById(parent).appendChild(heading);
+    return heading;
+}
+exports.spawnHeading = spawnHeading;
+function spawnTextArea(doc, parent, id, txt) {
+    var textfield = doc.createElement('textarea');
+    textfield.id = id;
+    textfield.classList.add('ruleField');
+    doc.getElementById(parent).appendChild(textfield);
+    return textfield;
+}
+exports.spawnTextArea = spawnTextArea;
+function spawnDiv(doc, parent, id, classList) {
+    var div = doc.createElement('div');
+    div.id = id;
+    classList.forEach(function (c) {
+        div.classList.add(c);
+    });
+    doc.getElementById(parent).appendChild(div);
+    return div;
+}
+exports.spawnDiv = spawnDiv;
+function spawnLabel(doc, labelFor, txt) {
+    var label = doc.createElement('label');
+    label.htmlFor = labelFor;
+    label.textContent = txt;
+    label.style.color = 'white';
+    return label;
+}
+exports.spawnLabel = spawnLabel;

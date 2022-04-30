@@ -51,17 +51,7 @@ export class QuestionWithAnswers{
         this.isAnswer  = newAnswer
     }
 
-    public deleteOptionsByQuestionId(questionId:number){
-        let client = DbConnect.get()
-            const query = {
-                name: 'delete-option',
-                text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
-                values: [questionId],
-              }
-              client
-              .query(query)
-              .then((res:any) => console.log(res.rows[0]))
-              .catch((e:Error) => console.error(e.stack))}
+    
     
     public static load(data:any){
      

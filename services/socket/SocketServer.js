@@ -54,6 +54,7 @@ var BackgroundComponent_db_1 = require("../db/RDG/BackgroundComponent_db");
 var BackgroundComponentFinder_1 = require("../db/RDG/BackgroundComponentFinder");
 var PawnFinder_1 = require("../db/RDG/PawnFinder");
 var PawnStyleFinder_1 = require("../db/RDG/PawnStyleFinder");
+var QuestionOptionFinder_1 = require("../db/RDG/QuestionOptionFinder");
 var Player = require("../../backEnd/Game/Player");
 var path = require('path');
 var AccountManager = require('../../backEnd/Accounts/AccountManager.js');
@@ -323,7 +324,7 @@ var ServerSocket = /** @class */ (function () {
                             console.log('nasiel otazku');
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findById(msg.questionId)];
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.questionId)];
                         case 1:
                             questions = _a.sent();
                             data_1 = [];
@@ -484,7 +485,7 @@ var ServerSocket = /** @class */ (function () {
             //   console.log('pripojil'+acc)
             // })
             socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var quest, lastQuest, id;
+                var quest, lastQuest, id, lastOption, lastId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -492,6 +493,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findWithLastId()];
                         case 1:
                             lastQuest = _a.sent();
+                            QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
                             id = 0;
                             if (data.questionId < 0) {
                                 try {
@@ -507,14 +509,28 @@ var ServerSocket = /** @class */ (function () {
                             quest.setText(data.question);
                             quest.setId(id);
                             //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
-                            quest.insert();
+                            quest.upsert();
+                            return [4 /*yield*/, QuestionOptionFinder_1.QuestionOptionFinder.getIntance().findWithLastId()];
+                        case 2:
+                            lastOption = _a.sent();
+                            lastId = lastOption[0].getId() + 1;
                             data.options.forEach(function (elem) {
                                 var option = new QuestionOption_1.QuestionOption();
+                                if (elem.id == undefined) {
+                                    option.setId(lastId);
+                                    lastId++;
+                                    console.log('posunul');
+                                }
+                                else {
+                                    option.setId(id);
+                                    console.log(elem.id);
+                                    console.log('nastavil id:' + id);
+                                }
                                 option.setText(elem.txt);
                                 option.setQuestionId(id);
                                 option.setIsAnswer(elem.isAnswer);
                                 console.log(option);
-                                option.insert();
+                                option.upsert();
                             });
                             return [2 /*return*/];
                     }
@@ -586,7 +602,7 @@ var ServerSocket = /** @class */ (function () {
                 var questions, data;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findAll()];
+                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findAll()];
                         case 1:
                             questions = _a.sent();
                             data = [];
@@ -613,7 +629,7 @@ var ServerSocket = /** @class */ (function () {
                         case 0:
                             console.log('odchytil answerQuestion');
                             console.log(msg.id);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getIntance().findById(msg.id)];
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.id)];
                         case 1:
                             questions = _a.sent();
                             data = [];

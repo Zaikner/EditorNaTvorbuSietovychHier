@@ -1,13 +1,15 @@
 import { io } from "socket.io-client";
 import { Background } from "./Background";
 import { BackgroundComponent } from "./BackgroundComponent";
-import { ctx, reload,editor, elementDeleter, canvas, loadGameNames, edit, clear } from "./canvas";
+import { ctx, reload,editor, elementDeleter, canvas, edit, clear } from "./canvas";
 import { spawnButton, spawnParagraph } from "./Elements";
 import { Game } from "./Game";
+import { loadGameMenu } from "./gameLoader";
 import { changeWaitingRoom, initDice, initGameInfo, throwDice } from "./Gameplay";
 import { Pawn } from "./Pawn";
 import { PawnStyle } from "./PawnStyle";
 import { addOption, askQuestion, evaluateQuestion, pickQuestion, showAllQuestions, showResults } from "./Questions";
+import { rulesMenu } from "./Rules";
 import { Tile } from "./Tile";
 import { pickTile } from "./TileEditor";
 import { Warning } from "./Warning";
@@ -29,7 +31,7 @@ function getCookie(name:string) {
     return cookie.get(name);
   }
   editorSocket.emit('get texts',{language:getCookie('language')})
-editorSocket.emit('loadGameNames')
+
 
 editorSocket.on('connected',(msg)=>{
     console.log('obdržal:')
@@ -509,7 +511,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
    )
   
   editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)
-                                             pickQuestion(data)})
+                                             //pickQuestion(data)
+                                            })
   //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
   editorSocket.on('loadedAnswerQuestions',(data)=>{
     askQuestion(data)
@@ -539,7 +542,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   document.getElementById("showRulesButton")?.addEventListener('click',function(){
    
-    $('#rulesModal').modal('show');
+    //$('#rulesModal').modal('show');
+    rulesMenu();
     (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
    
     
@@ -548,9 +552,12 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
 
   editorSocket.on('loadedGameNames',(msg:{names:Array<string>})=>{
     console.log('socket odchytil loadedGameNames')
-    loadGameNames(msg.names)
+    loadGameMenu(msg.names)
+  
   })
 
+  
+  
   editorSocket.on('room is full',()=>{
       Warning.showInGame('This game room is full, you become spectator')
   })
