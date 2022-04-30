@@ -532,17 +532,22 @@ export class ServerSocket{
 
         quest.upsert()
         let lastOption = await QuestionOptionFinder.getIntance().findWithLastId();
-        let lastId = lastOption![0].getId()+1
+        let lastId:number = 0
+        if (lastOption!.length > 0){
+          lastId = <number>(lastOption![0].getId())
+        }
+        lastId++;
+       
         data.options.forEach((elem:{txt:string,isAnswer:boolean,id:string}) => {
           let option = new QuestionOption()
           
           if (elem.id == undefined){
-              option.setId(lastId)
+              option.setId(<number>lastId)
               lastId++;
-              console.log('posunul')
+              console.log('posunul'+lastId)
           }
           else{
-            option.setId(id)
+            option.setId(<number>id)
             console.log(elem.id)
             console.log('nastavil id:' + id)
           }

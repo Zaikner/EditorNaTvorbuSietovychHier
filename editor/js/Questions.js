@@ -114,9 +114,9 @@ function addOption(parent, txt, is, id) {
         (_a = document.getElementById(parent)) === null || _a === void 0 ? void 0 : _a.removeChild(div);
         num--;
         renumOptions();
-        div.appendChild(deleteButton);
-        text.setAttribute('questionId', 'none');
     });
+    div.appendChild(deleteButton);
+    //text.setAttribute('questionId','none')
     div.style.marginBottom = '5px';
     div.style.marginBottom = '5px';
     div.style.width = '100%';

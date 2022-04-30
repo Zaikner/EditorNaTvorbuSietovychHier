@@ -513,13 +513,17 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, QuestionOptionFinder_1.QuestionOptionFinder.getIntance().findWithLastId()];
                         case 2:
                             lastOption = _a.sent();
-                            lastId = lastOption[0].getId() + 1;
+                            lastId = 0;
+                            if (lastOption.length > 0) {
+                                lastId = (lastOption[0].getId());
+                            }
+                            lastId++;
                             data.options.forEach(function (elem) {
                                 var option = new QuestionOption_1.QuestionOption();
                                 if (elem.id == undefined) {
                                     option.setId(lastId);
                                     lastId++;
-                                    console.log('posunul');
+                                    console.log('posunul' + lastId);
                                 }
                                 else {
                                     option.setId(id);

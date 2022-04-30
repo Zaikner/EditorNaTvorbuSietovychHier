@@ -139,13 +139,10 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      newQuestions = newQuestions.filter((p) => {return p != (num+1)});
      document.getElementById(parent)?.removeChild(div)
      num--;
-     renumOptions()
-
-        div.appendChild(deleteButton)
-        text.setAttribute('questionId','none')
-       
+     renumOptions()     
      })
-
+     div.appendChild(deleteButton)
+     //text.setAttribute('questionId','none')
      div.style.marginBottom = '5px'
      div.style.marginBottom = '5px'
      div.style.width = '100%'
