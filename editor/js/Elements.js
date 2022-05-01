@@ -2,12 +2,22 @@
 exports.__esModule = true;
 exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnTextArea = exports.spawnHeading = exports.spawnLabel = exports.spawnParagraph = exports.spawnDiv = exports.spawnColorPicker = void 0;
 var canvas_1 = require("./canvas");
-function spawnColorPicker(doc, parent, id) {
+function spawnColorPicker(doc, parent, id, lbl, func) {
+    if (func === void 0) { func = function () { }; }
+    spawnDiv(document, parent, 'div' + id, []);
+    var label = doc.createElement('label');
+    label.htmlFor = id;
+    label.textContent = lbl;
+    label.style.float = 'left';
+    label.style.fontSize = 'large';
     var colorPicker = doc.createElement('input');
     colorPicker.type = 'color';
     colorPicker.id = id;
     colorPicker.value = 'white';
-    doc.getElementById(parent).appendChild(colorPicker);
+    colorPicker.style.float = 'right';
+    colorPicker.onchange = function () { func(); };
+    doc.getElementById('div' + id).appendChild(label);
+    doc.getElementById('div' + id).appendChild(colorPicker);
     return colorPicker;
 }
 exports.spawnColorPicker = spawnColorPicker;
@@ -82,7 +92,13 @@ function spawnButton(doc, parent, id, classList, txt, func) {
     return button;
 }
 exports.spawnButton = spawnButton;
-function spawnSelectMenu(doc, parent, id, classList, options) {
+function spawnSelectMenu(doc, parent, id, lbl, classList, options) {
+    spawnDiv(document, parent, 'div' + id, []);
+    var label = doc.createElement('label');
+    label.htmlFor = id;
+    label.textContent = lbl;
+    label.style.float = 'left';
+    label.style.fontSize = 'large';
     var menu = doc.createElement('select');
     menu.id = id;
     classList.forEach(function (add) {
@@ -94,26 +110,45 @@ function spawnSelectMenu(doc, parent, id, classList, options) {
         option.text = options[i];
         menu.appendChild(option);
     }
-    doc.getElementById(parent).appendChild(menu);
+    doc.getElementById('div' + id).appendChild(label);
+    doc.getElementById('div' + id).appendChild(menu);
     return menu;
 }
 exports.spawnSelectMenu = spawnSelectMenu;
-function spawnImageInput(doc, parent, id, txt, func) {
+function spawnImageInput(doc, parent, id, txt, lbl, func) {
+    spawnDiv(document, parent, 'div' + id, []);
+    var label = doc.createElement('label');
+    label.htmlFor = id;
+    label.textContent = lbl;
+    label.style.float = 'left';
+    label.style.fontSize = 'large';
     var image = doc.createElement('input');
     image.id = id;
     image.type = 'file';
     image.accept = ".jpg, .jpeg, .png";
     image.textContent = txt;
+    image.style.float = 'right';
+    image.style.width = '50%';
     image.oninput = function () {
         func();
     };
-    doc.getElementById(parent).appendChild(image);
+    image.onchange = function () { func(); };
+    doc.getElementById('div' + id).appendChild(label);
+    doc.getElementById('div' + id).appendChild(image);
+    return image;
 }
 exports.spawnImageInput = spawnImageInput;
-function spawnMultiSelect(doc, parent, id, options, type) {
+function spawnMultiSelect(doc, parent, id, lbl, options, type) {
+    spawnDiv(document, parent, 'div' + id, []);
+    var label = doc.createElement('label');
+    label.htmlFor = id;
+    label.textContent = lbl;
+    label.style.float = 'left';
+    label.style.fontSize = 'large';
     var startMenuWrapper = doc.createElement('div');
     startMenuWrapper.id = 'startMenuWrapper';
     startMenuWrapper.classList.add("dropdown");
+    startMenuWrapper.style.float = 'right';
     var startMenuButton = doc.createElement('button');
     startMenuButton.id = 'startMenuButton';
     startMenuButton.textContent = 'Choose!';
@@ -194,6 +229,8 @@ function spawnMultiSelect(doc, parent, id, options, type) {
         _loop_1(i);
     }
     startMenuWrapper.appendChild(startMenuDropdown);
+    doc.getElementById('div' + id).appendChild(label);
+    doc.getElementById('div' + id).appendChild(startMenuWrapper);
 }
 exports.spawnMultiSelect = spawnMultiSelect;
 function spawnNumberInput(doc, parent, id) {
@@ -210,6 +247,7 @@ function spawnHeading(doc, parent, id, txt) {
     heading.classList.add('alignCenter');
     heading.textContent = txt;
     heading.style.color = 'white';
+    heading.style.margin = '3%';
     doc.getElementById(parent).appendChild(heading);
     return heading;
 }
@@ -225,6 +263,8 @@ exports.spawnTextArea = spawnTextArea;
 function spawnDiv(doc, parent, id, classList) {
     var div = doc.createElement('div');
     div.id = id;
+    div.style.float = 'left';
+    div.style.width = '100%';
     classList.forEach(function (c) {
         div.classList.add(c);
     });

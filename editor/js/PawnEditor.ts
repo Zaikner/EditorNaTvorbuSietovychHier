@@ -1,6 +1,6 @@
 import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
 import { texts } from "./clientSocket"
-import { spawnButton, spawnCanvas, spawnColorPicker, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
+import { spawnButton, spawnCanvas, spawnColorPicker, spawnDiv, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { Tile } from "./Tile"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
@@ -18,8 +18,8 @@ function pawnInsertMenu(){
     // spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
     // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
-    spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
-    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    //spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[73],['btn','btn-secondary'],editor.getGame().getPlayerTokens())
     canvas.addEventListener('click',insertPawn)
 }
 
@@ -80,47 +80,67 @@ function pawnEditMenu(){
     removeAllButtons()
 
     spawnHeading(document,'tileEditingPlace','',texts[18])
-    spawnParagraph(doc,'tileEditingPlace','',texts[74],true)
-    let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+   
+    let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[74],['btn','btn-secondary'],editor.getGame().getPlayerTokens())
     playerPicker.onchange = function(){
         drawActualPawnLook(playerPicker.value)
     }
     spawnCanvas(doc,'tileEditingPlace','pawnStyle')
-    spawnParagraph(doc,'tileEditingPlace','',texts[75],true)
-    let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
+   
+    let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker',texts[75])
     colorPicker.onchange = function(){
         editor.getGame().getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
+        editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
         drawActualPawnLook(playerPicker.value)
+        drawStyles(colorPicker.value)
     }
-    spawnParagraph(doc,'tileEditingPlace','',texts[76],true)
-    spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],texts[77],function(){$('#pawnModal').modal('show')
-     drawStyles(colorPicker.value)})
+    // spawnParagraph(doc,'tileEditingPlace','',texts[76],true)
+    // spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],texts[77],function(){$('#pawnModal').modal('show')
+    //  drawStyles(colorPicker.value)})
 
-    spawnParagraph(doc,'tileEditingPlace','',texts[78],true)
-    spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[63],function(){
+    spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[78],texts[78],function(){
 
         if ((<HTMLInputElement>document.getElementById('imagePicker')!).files!.length > 0){
             editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(new Image())
             editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
-              
+            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
+                drawActualPawnLook(playerPicker.value)
+          
+            }
+           
             }
           else{
             editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
           }
 
     })
-
+    let p = spawnParagraph(doc,'tileEditingPlace','',texts[76],true)
+    spawnDiv(document,'tileEditingPlace','pawnPickerDiv',[])
+    
+    p.style.textAlign = 'center'
     for (let i = 1; i <= 7; i++){
-        let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
-        
-        button.onclick = function(){
+        //let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
+        let c = spawnCanvas(document,'pawnPickerDiv','canvasPawn'+i)
+        c.classList.add('pawnType')
+        c.style.width = '50px';
+        c.style.height = '50px'
+        // button.onclick = function(){
+        //     let player = playerPicker.value
+        //     editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
+        //     editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
+        //     console.log(editor.getGame().getPawnStyle())
+        //     drawActualPawnLook(player)
+        // }
+        c.onclick = function(){
             let player = playerPicker.value
             editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
+            editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
             console.log(editor.getGame().getPawnStyle())
             drawActualPawnLook(player)
         }
-        drawActualPawnLook('Player 1')
     }
+    drawActualPawnLook('Player 1')
+    drawStyles(colorPicker.value)
     
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
     
@@ -130,7 +150,7 @@ function pawnDeleteMenu(){
     removeAllListenersAdded()
     removeAllButtons()
     spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
-    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',[],editor.getGame().getPlayerTokens())
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[129],[],editor.getGame().getPlayerTokens())
     canvas.addEventListener('click',deletePawn)
 
 }

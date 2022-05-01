@@ -10,73 +10,22 @@ function editBackground() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
     (0, Elements_js_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[19]);
-    var backgroundChecker = canvas_js_1.doc.createElement('input');
-    backgroundChecker.type = 'checkbox';
-    backgroundChecker.id = 'backgroundChecker';
-    var text = canvas_js_1.doc.createElement('p');
-    text.textContent = clientSocket_js_1.texts[91];
-    var hasBackgroundImageShower = canvas_js_1.doc.createElement('paragraph');
-    hasBackgroundImageShower.id = 'hasBackgroundImageShower';
-    hasBackgroundImageShower.textContent = clientSocket_js_1.texts[92];
-    backgroundChecker.oninput = function () {
-        if (backgroundChecker.checked) {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = clientSocket_js_1.texts[93];
-        }
-        else {
-            canvas_js_1.doc.getElementById("hasBackgroundImageShower").textContent = clientSocket_js_1.texts[92];
-        }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(backgroundChecker);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(hasBackgroundImageShower);
-    var backgroundImage = canvas_js_1.doc.createElement('input');
-    backgroundImage.id = 'backgroundImage';
-    backgroundImage.type = 'file';
-    backgroundImage.accept = ".jpg, .jpeg, .png";
-    backgroundImage.textContent = clientSocket_js_1.texts[86];
-    backgroundImage.oninput = function () {
+    (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'backgroundImage', '', clientSocket_js_1.texts[91], function () {
+        var backgroundImage = document.getElementById('backgroundImage');
         if (backgroundImage.files.length > 0) {
             background = new Image();
             background.src = URL.createObjectURL(backgroundImage.files[0]);
+            background.onload = function () {
+                canvas_js_1.editor.getGame().getBackground().setBackgroundImage(background);
+                (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+            };
         }
-        else {
-            background = undefined;
-        }
-    };
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(backgroundImage);
-    var buttonSubmit = canvas_js_1.doc.createElement('button');
-    buttonSubmit.id = 'changeBackground';
-    buttonSubmit.textContent = clientSocket_js_1.texts[35];
-    buttonSubmit.classList.add("btn");
-    buttonSubmit.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(buttonSubmit);
-    canvas_js_1.doc.getElementById("changeBackground").addEventListener('click', function () {
-        if (backgroundChecker.checked) {
-            canvas_js_1.editor.getGame().getBackground().setBackgroundImage(background);
-        }
-        else {
-            canvas_js_1.editor.getGame().getBackground()["delete"]();
-        }
-        canvas_js_1.editor.getGame().getBackground().setColor(colorPicker.value);
+    });
+    (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'colorPicker', clientSocket_js_1.texts[95], function () {
+        canvas_js_1.editor.getGame().getBackground().setColor(document.getElementById('colorPicker').value);
+        canvas_js_1.editor.getGame().getBackground().setBackgroundImage(undefined);
         (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
-    var buttonDelete = canvas_js_1.doc.createElement('button');
-    buttonDelete.id = 'deleteBackground';
-    buttonDelete.textContent = clientSocket_js_1.texts[94];
-    buttonDelete.classList.add("btn");
-    buttonDelete.classList.add("btn-dark");
-    canvas_js_1.doc.getElementById("buttonPlace").appendChild(buttonDelete);
-    canvas_js_1.doc.getElementById("deleteBackground").addEventListener('click', function () {
-        canvas_js_1.editor.getGame().getBackground()["delete"]();
-        (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
-    });
-    var colorPicker = canvas_js_1.doc.createElement('input');
-    colorPicker.type = 'color';
-    colorPicker.id = 'colorPicker';
-    text = canvas_js_1.doc.createElement('p');
-    text.textContent = clientSocket_js_1.texts[95];
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(text);
-    canvas_js_1.doc.getElementById("tileEditingPlace").appendChild(colorPicker);
 }
 exports.editBackground = editBackground;
 var moveComponentHandler = function (event) {
@@ -123,15 +72,15 @@ function spawnComponentElements(edit) {
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[81], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentSizeSlider', '30', '300', '10', '100');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[82], true);
-    (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentColorPicker');
+    (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentColorPicker', clientSocket_js_1.texts[82]);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[83], true);
     (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentOutlineSlider', '0', '20', '10', '100');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[84], true);
-    (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentOutlineColorPicker');
-    (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[85], true);
-    (0, Elements_js_1.spawnSelectMenu)(document, 'tileEditingPlace', 'componentTypeMenu', ['btn', 'btn-secondary'], ['circle', 'square', 'image']);
+    (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentOutlineColorPicker', clientSocket_js_1.texts[84]);
+    //spawnParagraph(document,'tileEditingPlace','',texts[85],true)
+    (0, Elements_js_1.spawnSelectMenu)(document, 'tileEditingPlace', 'componentTypeMenu', clientSocket_js_1.texts[85], ['btn', 'btn-secondary'], ['circle', 'square', 'image']);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[86], true);
-    (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'componentImage', clientSocket_js_1.texts[86], function () {
+    (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'componentImage', clientSocket_js_1.texts[86], clientSocket_js_1.texts[86], function () {
         if (document.getElementById('componentImage').files.length > 0) {
             canvas_js_1.editor.getGame().getBackground().setNextComponentImage(new Image());
             canvas_js_1.editor.getGame().getBackground().getNextComponentImage().src = URL.createObjectURL(document.getElementById('componentImage').files[0]);

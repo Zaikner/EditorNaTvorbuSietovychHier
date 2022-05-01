@@ -81,7 +81,7 @@ function spawnElements(){
     spawnHeading(document,'tileEditingPlace','',texts[19])
     spawnCanvas(doc,'tileEditingPlace','changeCanvas')
     spawnParagraph(doc,"tileEditingPlace",'',texts[124],true)
-    let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker')
+    let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker',texts[124])
     colorPicker.onchange = showActualState
 
 
@@ -97,7 +97,7 @@ function spawnElements(){
     outlineChecker.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
-    let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker')
+    let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker',texts[127])
     outlineColorPicker.onchange = showActualState
     
 
@@ -106,8 +106,8 @@ function spawnElements(){
     let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider','1','10','1','3')
     sizeOfOutlineSlider.onchange = showActualState
     
-    spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
-    let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',["btn","btn-dark"],['circle','square'])
+    //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
+    let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',texts[129],["btn","btn-dark"],['circle','square'])
     shapeMenu.onchange= showActualState
     
 
@@ -116,7 +116,7 @@ function spawnElements(){
     let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,[texts[92],texts[93]])
     patternChecker.onchange = showActualState
 
-  spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],function(){
+  spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],texts[131],function(){
   
     if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
       editor.setPattern(new Image())
@@ -137,7 +137,7 @@ function spawnElements(){
     let backgroundChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'backgroundChecker',false,[texts[92],texts[93]])
     backgroundChecker.onchange = showActualState
   
-    spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],function(){
+    spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],texts[134],function(){
   
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
         editor.setImage(new Image())
@@ -153,10 +153,10 @@ function spawnElements(){
     })
 
 spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
-spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'start')
+spawnMultiSelect(doc,'tileEditingPlace','',texts[135],editor.getGame().getPlayerTokens(),'start')
 
 spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
-spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'end')
+spawnMultiSelect(doc,'tileEditingPlace','',texts[136],editor.getGame().getPlayerTokens(),'end')
 
 // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
 // spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
@@ -165,7 +165,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
    
     spawnParagraph(doc,"tileEditingPlace",'',texts[138],true)
-    let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker')
+    let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker',texts[138])
     numberingColorPicker.onchange = showActualState
 
     spawnParagraph(doc,"tileEditingPlace",'',texts[139],true)
@@ -188,7 +188,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'e
     spawnCheckerWithValueShower(document,'tileEditingPlace','eleminationChecker',false,[texts[92],texts[93]])
 
     spawnParagraph(document,'tileEditingPlace','',texts[143],true)
-    spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',editor.getGame().getPlayerTokens(),'immune')
+    spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',texts[143],editor.getGame().getPlayerTokens(),'immune')
 
     //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
     //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])

@@ -9,90 +9,25 @@ function editBackground(){
     removeAllListenersAdded()
 
     spawnHeading(document,'buttonPlace','',texts[19])
-     let backgroundChecker:HTMLInputElement = doc.createElement('input')
-    backgroundChecker.type = 'checkbox'
-    backgroundChecker.id = 'backgroundChecker';
+   
+    spawnImageInput(document,'tileEditingPlace','backgroundImage','', texts[91],function(){
+      let backgroundImage:HTMLInputElement =<HTMLInputElement> document.getElementById('backgroundImage')
+      if (backgroundImage.files!.length > 0){
+        background = new Image()
+        background!.src =URL.createObjectURL(backgroundImage!.files![0]!)
+        background.onload = function(){
+          editor.getGame().getBackground().setBackgroundImage(background)
+          reload(editor,ctx)
+        }}})
+ 
 
-    let text = doc.createElement('p')
-    text.textContent = texts[91]
+  spawnColorPicker(document,'tileEditingPlace','colorPicker',texts[95],function(){
+    editor.getGame().getBackground().setColor((<HTMLInputElement>document.getElementById('colorPicker')).value)
+    editor.getGame().getBackground().setBackgroundImage(undefined!)
+   reload(editor,ctx)
+})
 
-    let hasBackgroundImageShower = doc.createElement('paragraph');
-    hasBackgroundImageShower.id = 'hasBackgroundImageShower'
-    hasBackgroundImageShower.textContent = texts[92]
-
-    backgroundChecker.oninput =function(){
-      if (backgroundChecker.checked){
-        doc.getElementById("hasBackgroundImageShower")!.textContent = texts[93]
-      }
-      else{
-        doc.getElementById("hasBackgroundImageShower")!.textContent = texts[92]
-      }
-
-    }
-    doc.getElementById("tileEditingPlace")!.appendChild(text);
-
-    doc.getElementById("tileEditingPlace")!.appendChild(backgroundChecker);
-    doc.getElementById("tileEditingPlace")!.appendChild(hasBackgroundImageShower);
-    
-  
-  let backgroundImage:HTMLInputElement = doc.createElement('input')
-  backgroundImage.id = 'backgroundImage'
-  backgroundImage.type = 'file'
-  backgroundImage.accept = ".jpg, .jpeg, .png"
-  backgroundImage.textContent = texts[86]
-  backgroundImage.oninput = function(){
-    
-    if (backgroundImage.files!.length > 0){
-      background = new Image()
-      background!.src =URL.createObjectURL(backgroundImage!.files![0]!)
-      
-    }
-    else{
-        background = undefined!
-    }
-  }
-  doc.getElementById("tileEditingPlace")!.appendChild(backgroundImage);
-
-  let buttonSubmit:HTMLButtonElement = doc.createElement('button')
-  buttonSubmit.id = 'changeBackground'
-  buttonSubmit.textContent = texts[35]
-  buttonSubmit.classList.add("btn")
-  buttonSubmit.classList.add("btn-dark")
-
-  doc.getElementById("buttonPlace")!.appendChild(buttonSubmit);
-  doc.getElementById("changeBackground")!.addEventListener('click',function(){
-      if (backgroundChecker.checked){
-        editor.getGame().getBackground().setBackgroundImage(background)
-      }
-      else{
-        editor.getGame().getBackground().delete()
-      }
-      editor.getGame().getBackground().setColor(colorPicker.value)
-      reload(editor,ctx)
-  });
-
-  let buttonDelete:HTMLButtonElement = doc.createElement('button')
-  buttonDelete.id = 'deleteBackground'
-  buttonDelete.textContent = texts[94]
-  buttonDelete.classList.add("btn")
-  buttonDelete.classList.add("btn-dark")
-
-  doc.getElementById("buttonPlace")!.appendChild(buttonDelete);
-  doc.getElementById("deleteBackground")!.addEventListener('click',function(){
-      editor.getGame().getBackground().delete()
-      reload(editor,ctx)
-  });
-
-  let colorPicker:HTMLInputElement = doc.createElement('input')
-  colorPicker.type = 'color'
-  colorPicker.id = 'colorPicker';
-  
- text = doc.createElement('p')
-  text.textContent = texts[95]
-  doc.getElementById("tileEditingPlace")!.appendChild(text);
-
-  doc.getElementById("tileEditingPlace")!.appendChild( colorPicker);
-}
+ }
 
 let moveComponentHandler = function(event:MouseEvent){
   editor.getGame().getBackground().findComponent(event,false)
@@ -142,19 +77,19 @@ function spawnComponentElements(edit:boolean){
   spawnSliderWithValueShower(document,'tileEditingPlace','componentSizeSlider','30','300','10','100')
 
   spawnParagraph(document,'tileEditingPlace','',texts[82],true)
-  spawnColorPicker(document,'tileEditingPlace','componentColorPicker')
+  spawnColorPicker(document,'tileEditingPlace','componentColorPicker',texts[82])
 
   spawnParagraph(document,'tileEditingPlace','',texts[83],true)
   spawnSliderWithValueShower(document,'tileEditingPlace','componentOutlineSlider','0','20','10','100')
 
   spawnParagraph(document,'tileEditingPlace','',texts[84],true)
-  spawnColorPicker(document,'tileEditingPlace','componentOutlineColorPicker')
+  spawnColorPicker(document,'tileEditingPlace','componentOutlineColorPicker',texts[84])
 
-  spawnParagraph(document,'tileEditingPlace','',texts[85],true)
-  spawnSelectMenu(document,'tileEditingPlace','componentTypeMenu',['btn','btn-secondary'],['circle','square','image'])
+  //spawnParagraph(document,'tileEditingPlace','',texts[85],true)
+  spawnSelectMenu(document,'tileEditingPlace','componentTypeMenu',texts[85],['btn','btn-secondary'],['circle','square','image'])
 
   spawnParagraph(document,'tileEditingPlace','',texts[86],true)
-  spawnImageInput(document,'tileEditingPlace','componentImage',texts[86],function(){
+  spawnImageInput(document,'tileEditingPlace','componentImage',texts[86],texts[86],function(){
 
     if ((<HTMLInputElement>document.getElementById('componentImage')!).files!.length > 0){
       editor.getGame().getBackground().setNextComponentImage(new Image())

@@ -3,12 +3,24 @@ import { showActualState } from "./TileEditor";
 
 
 
-function spawnColorPicker(doc:HTMLDocument,parent:string,id:string){
+function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,func:Function= function(){}){
+
+    spawnDiv(document,parent,'div'+id,[])
+    let label:HTMLLabelElement = doc.createElement('label')
+    label.htmlFor = id
+    label.textContent = lbl
+    label.style.float = 'left'
+    label.style.fontSize = 'large'
+
+
     let colorPicker:HTMLInputElement = doc.createElement('input')
     colorPicker.type = 'color'
     colorPicker.id = id;
     colorPicker.value = 'white';
-    doc.getElementById(parent)!.appendChild( colorPicker);
+    colorPicker.style.float = 'right'
+    colorPicker.onchange = function(){func()}
+    doc.getElementById('div'+id)!.appendChild( label);
+    doc.getElementById('div'+id)!.appendChild( colorPicker);
     return colorPicker
 }
 
@@ -88,7 +100,15 @@ function spawnButton(doc:HTMLDocument,parent:string,id:string,classList:Array<st
     doc.getElementById(parent)!.appendChild(button)
     return button
 }
-function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,classList:Array<string>,options:Array<string>){
+function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>){
+
+  spawnDiv(document,parent,'div'+id,[])
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+
     let menu:HTMLSelectElement = doc.createElement('select')
     menu.id = id;
     classList.forEach((add:string)=>{
@@ -100,24 +120,46 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,classList:Arra
       option.text = options[i];
       menu.appendChild(option);
     }
-    doc.getElementById(parent)!.appendChild(menu);
+    doc.getElementById('div'+id)!.appendChild( label);
+    doc.getElementById('div'+id)!.appendChild( menu);
     return menu
 }
-function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,func:Function){
-  let image:HTMLInputElement = doc.createElement('input')
-  image.id = id
-  image.type = 'file'
-  image.accept = ".jpg, .jpeg, .png"
-  image.textContent = txt
-  image.oninput = function(){ 
-   func()
-  }
-  doc.getElementById(parent)!.appendChild(image);
+function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl:string,func:Function){
+    spawnDiv(document,parent,'div'+id,[])
+    let label:HTMLLabelElement = doc.createElement('label')
+    label.htmlFor = id
+    label.textContent = lbl
+    label.style.float = 'left'
+    label.style.fontSize = 'large'
+
+    let image:HTMLInputElement = doc.createElement('input')
+    image.id = id
+    image.type = 'file'
+    image.accept = ".jpg, .jpeg, .png"
+    image.textContent = txt
+    image.style.float = 'right'
+    image.style.width = '50%'
+    image.oninput = function(){ 
+     func()
+    }
+   
+   image.onchange = function(){func()}
+    doc.getElementById('div'+id)!.appendChild( label);
+    doc.getElementById('div'+id)!.appendChild( image);
+    return image
 }
-function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array<string>,type:string){
+function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,options:Array<string>,type:string){
+  spawnDiv(document,parent,'div'+id,[])
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'
   startMenuWrapper.classList.add("dropdown")
+  startMenuWrapper.style.float = 'right'
   let startMenuButton = doc.createElement('button')
   startMenuButton.id = 'startMenuButton'
   startMenuButton.textContent = 'Choose!'
@@ -203,6 +245,9 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,options:Array
         startMenuDropdown.appendChild(option);
     }
     startMenuWrapper.appendChild(startMenuDropdown)
+
+    doc.getElementById('div'+id)!.appendChild( label);
+    doc.getElementById('div'+id)!.appendChild( startMenuWrapper);
 }
 function spawnNumberInput(doc:HTMLDocument,parent:string,id:string){
   let numberSetter:HTMLInputElement = doc.createElement('input')
@@ -217,6 +262,7 @@ function spawnHeading(doc:HTMLDocument,parent:string,id:string,txt:string){
   heading.classList.add('alignCenter')
   heading.textContent = txt
   heading.style.color = 'white'
+  heading.style.margin = '3%'
   doc.getElementById(parent)!.appendChild(heading);
   return heading
 }
@@ -232,6 +278,8 @@ function spawnTextArea(doc:HTMLDocument,parent:string,id:string,txt:string){
 function spawnDiv(doc:HTMLDocument,parent:string,id:string,classList:Array<string>){
   let div:HTMLDivElement = doc.createElement('div')
     div.id = id;
+    div.style.float ='left'
+    div.style.width = '100%'
     classList.forEach((c:string)=>{
       div.classList.add(c)
     })

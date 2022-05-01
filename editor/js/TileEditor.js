@@ -72,7 +72,7 @@ function spawnElements() {
     (0, Elements_js_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[19]);
     (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[124], true);
-    var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker');
+    var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker', clientSocket_js_1.texts[124]);
     colorPicker.onchange = showActualState;
     //spawnParagraph(doc,"tileEditingPlace",'',texts[173],true)
     //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
@@ -83,18 +83,18 @@ function spawnElements() {
     var outlineChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'outlineChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     outlineChecker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[127], true);
-    var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker');
+    var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker', clientSocket_js_1.texts[127]);
     outlineColorPicker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[128], true);
     var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', '1', '10', '1', '3');
     sizeOfOutlineSlider.onchange = showActualState;
-    (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[129], true);
-    var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ["btn", "btn-dark"], ['circle', 'square']);
+    //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
+    var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', clientSocket_js_1.texts[129], ["btn", "btn-dark"], ['circle', 'square']);
     shapeMenu.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[130], true);
     var patternChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'patternChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     patternChecker.onchange = showActualState;
-    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', clientSocket_js_1.texts[131], function () {
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tilePattern', clientSocket_js_1.texts[131], clientSocket_js_1.texts[131], function () {
         if (canvas_js_1.doc.getElementById('tilePattern').files.length > 0) {
             canvas_js_1.editor.setPattern(new Image());
             canvas_js_1.editor.getPattern().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tilePattern').files[0]);
@@ -109,7 +109,7 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[133], true);
     var backgroundChecker = (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'backgroundChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     backgroundChecker.onchange = showActualState;
-    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', clientSocket_js_1.texts[134], function () {
+    (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', clientSocket_js_1.texts[134], clientSocket_js_1.texts[134], function () {
         if (canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
             canvas_js_1.editor.setImage(new Image());
             canvas_js_1.editor.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
@@ -122,15 +122,15 @@ function spawnElements() {
         }
     });
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[135], true);
-    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'start');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[135], canvas_js_1.editor.getGame().getPlayerTokens(), 'start');
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[136], true);
-    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', canvas_js_1.editor.getGame().getPlayerTokens(), 'end');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[136], canvas_js_1.editor.getGame().getPlayerTokens(), 'end');
     // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
     // spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[137], true);
     (0, Elements_js_1.spawnCheckerWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'toogleNumberingChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[138], true);
-    var numberingColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker');
+    var numberingColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'numberingColorPicker', clientSocket_js_1.texts[138]);
     numberingColorPicker.onchange = showActualState;
     (0, Elements_js_1.spawnParagraph)(canvas_js_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[139], true);
     var tileNumberSetter = (0, Elements_js_1.spawnNumberInput)(canvas_js_1.doc, "tileEditingPlace", 'tileNumberSetter');
@@ -143,7 +143,7 @@ function spawnElements() {
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[142], true);
     (0, Elements_js_1.spawnCheckerWithValueShower)(document, 'tileEditingPlace', 'eleminationChecker', false, [clientSocket_js_1.texts[92], clientSocket_js_1.texts[93]]);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[143], true);
-    (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', canvas_js_1.editor.getGame().getPlayerTokens(), 'immune');
+    (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', clientSocket_js_1.texts[143], canvas_js_1.editor.getGame().getPlayerTokens(), 'immune');
     //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
     //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
     //pawnParagraph(document,'tileEditingPlace','',texts[72],true)
