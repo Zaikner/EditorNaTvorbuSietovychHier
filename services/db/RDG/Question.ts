@@ -66,6 +66,18 @@ export class Question{
                       .query(query)
                       .then((res:any) => console.log(res.rows[0]))
                       .catch((e:Error) => console.error(e.stack))}
+    public delete(){
+                        let client = DbConnect.get()
+                            const query = {
+                                name: 'delete-question',
+        
+                                text: 'DELETE from "bachelorsThesis"."Question" WHERE id = $1;',
+                                values: [this.id],
+                              }
+                              client
+                              .query(query)
+                              .then((res:any) => console.log(res.rows[0]))
+                              .catch((e:Error) => console.error(e.stack))}
 
 
     public static load(data:any){

@@ -59,6 +59,17 @@ var Question = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Question.prototype["delete"] = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'delete-question',
+            text: 'DELETE from "bachelorsThesis"."Question" WHERE id = $1;',
+            values: [this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Question.load = function (data) {
         var ret = new Question();
         ret.setId(data.id);

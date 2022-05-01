@@ -494,6 +494,8 @@ var ServerSocket = /** @class */ (function () {
                         case 1:
                             lastQuest = _a.sent();
                             QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
+                            console.log('options na servery su:');
+                            console.log(data.options);
                             id = 0;
                             if (data.questionId < 0) {
                                 try {
@@ -520,57 +522,37 @@ var ServerSocket = /** @class */ (function () {
                             lastId++;
                             data.options.forEach(function (elem) {
                                 var option = new QuestionOption_1.QuestionOption();
-                                if (elem.id == undefined) {
-                                    option.setId(lastId);
-                                    lastId++;
-                                    console.log('posunul' + lastId);
-                                }
-                                else {
-                                    option.setId(id);
-                                    console.log(elem.id);
-                                    console.log('nastavil id:' + id);
-                                }
+                                option.setId(lastId);
+                                lastId++;
+                                console.log('posunul' + lastId);
+                                // if (elem.id == undefined){
+                                //     option.setId(<number>lastId)
+                                //     lastId++;
+                                //     console.log('posunul'+lastId)
+                                // }
+                                // else{
+                                //   option.setId(parseInt(elem.id))
+                                //   console.log(elem.id)
+                                //   console.log('nastavil id:' + elem.id)
+                                // }
                                 option.setText(elem.txt);
                                 option.setQuestionId(id);
                                 option.setIsAnswer(elem.isAnswer);
                                 console.log(option);
-                                option.upsert();
+                                option.insert();
                             });
                             return [2 /*return*/];
                     }
                 });
             }); });
-            socket.on('editOption', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var opt;
-                return __generator(this, function (_a) {
-                    console.log('edituje');
-                    console.log(data);
-                    opt = new QuestionOption_1.QuestionOption();
-                    opt.setId(parseInt(data.id));
-                    opt.setText(data.text);
-                    opt.setIsAnswer(data.isAnswer);
-                    opt.update();
-                    return [2 /*return*/];
-                });
-            }); });
-            socket.on('editQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+            socket.on('deleteQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var quest;
                 return __generator(this, function (_a) {
                     console.log('edituje');
+                    QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.id));
                     quest = new Question_1.Question();
-                    quest.setId(data.id);
-                    quest.setText(data.text);
-                    quest.update();
-                    return [2 /*return*/];
-                });
-            }); });
-            socket.on('deleteQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var opt;
-                return __generator(this, function (_a) {
-                    console.log('edituje');
-                    opt = new QuestionOption_1.QuestionOption();
-                    opt.setId(parseInt(data.id));
-                    opt["delete"]();
+                    quest.setId(parseInt(data.id));
+                    quest["delete"]();
                     return [2 /*return*/];
                 });
             }); });

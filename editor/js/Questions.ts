@@ -17,7 +17,7 @@ console.log('zapol aspon subor')
 function initCreation(){
     removeAllButtons()
 
-    spawnHeading(document,'headingPlace','',texts[58])
+    spawnHeading(document,'buttonPlace','',texts[58])
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -41,16 +41,18 @@ function initCreation(){
     label.htmlFor = text.id
     label.textContent = texts[66] 
     
-     
+    console.log('preslo uz')
+    console.log(div)
     div.appendChild(label)
     div.appendChild(text)
+    console.log('preslo uz')
     div.style.marginBottom = '5px'
     div.style.width = '100%'
-    document.getElementById('questionPlace')?.appendChild(div)
+    document.getElementById('questionPlace')!.appendChild(div)
 
     addOption('questionPlace','',false)
     addOption('questionPlace','',false)
-
+    console.log('preslo uz')
     spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(-1);})
@@ -106,6 +108,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.style.float = 'left'
      text.placeholder = 'Zadaj odpoveď číslo: '+num
      if (id > 0){
+         console.log('nastavil v add option id:' + id)
         text.setAttribute('optionId',id.toString())
      }
      
@@ -167,11 +170,15 @@ function createQuestion(id:number){
     let options = []
     console.log('CLICKOL')
     console.log(newQuestions)
-    for (let a = 0; a < newQuestions.length;a++){
-        let i = newQuestions[a]
+    for (let i = 1; i <= num;i++){
+       
         if(<HTMLInputElement>document.getElementById('check'+i)!=undefined ){
-
-            options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
+            console.log('pridal pri create question')
+            console.log({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
+            if ((<HTMLInputElement>document.getElementById('ans'+i)!).value!=''){
+                options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
+            }
+          
         }
         else{
             console.log('undefined bol')
@@ -283,12 +290,8 @@ let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
     //elementDeleter('editQuestion')
     removeAllButtons()
-    document.getElementById('questionEditButton')!.removeEventListener('click',func)
-    func = function(){createQuestion(id)}
-
-    document.getElementById('questionEditButton')!.addEventListener('click',func)
-
-    spawnHeading(document,'tileEditingPlace','',texts[180])
+ 
+    spawnHeading(document,'buttonPlace','',texts[180])
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -324,16 +327,26 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     
     
     
-    document.getElementById('tileEditingPlace')?.appendChild(label)
+    document.getElementById('questionPlace')?.appendChild(label)
     div.appendChild(text)
     //div.appendChild(editButton)
     div.style.marginBottom = '5px'
-    document.getElementById('tileEditingPlace')?.appendChild(div)
+    document.getElementById('questionPlace')?.appendChild(div)
 
     elem.forEach((e:any)=>{
-
-        addOption('tileEditingPlace',e[1].optionText,e[1].isAnswer,e[0])
+        console.log('pred pridanim')
+        console.log(e)
+        addOption('questionPlace',e[1].optionText,e[1].isAnswer,e[0])
     })
+    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
+    div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(id);})
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
+        editorSocket.emit('deleteQuestion',{id:id})
+        
+        editorSocket.emit('loadQuestions')})
+    
+    
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
     
 }

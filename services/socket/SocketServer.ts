@@ -511,6 +511,8 @@ export class ServerSocket{
         let quest = new Question()
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
         QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
+        console.log('options na servery su:')
+        console.log(data.options)
         let id = 0
         if (data.questionId < 0){
           
@@ -540,51 +542,35 @@ export class ServerSocket{
        
         data.options.forEach((elem:{txt:string,isAnswer:boolean,id:string}) => {
           let option = new QuestionOption()
-          
-          if (elem.id == undefined){
-              option.setId(<number>lastId)
-              lastId++;
-              console.log('posunul'+lastId)
-          }
-          else{
-            option.setId(<number>id)
-            console.log(elem.id)
-            console.log('nastavil id:' + id)
-          }
+          option.setId(<number>lastId)
+          lastId++;
+          console.log('posunul'+lastId)
+          // if (elem.id == undefined){
+          //     option.setId(<number>lastId)
+          //     lastId++;
+          //     console.log('posunul'+lastId)
+          // }
+          // else{
+          //   option.setId(parseInt(elem.id))
+          //   console.log(elem.id)
+          //   console.log('nastavil id:' + elem.id)
+          // }
           option.setText(elem.txt)
           option.setQuestionId(id)
           option.setIsAnswer(elem.isAnswer)
           console.log(option)
-          option.upsert()
+          option.insert()
         })
         
         //console.log(await QuestionWithAnswersFinder.getIntance().findAll())
       })
-      socket.on('editOption', async(data:{isAnswer:boolean,text:string,id:string})=>{
-        console.log('edituje')
-        console.log(data)
-        let opt = new QuestionOption()
-        opt.setId(parseInt(data.id))
-        opt.setText(data.text)
-        opt.setIsAnswer(data.isAnswer)
-        opt.update()
-        
-      })
-      socket.on('editQuestion', async(data:{text:string,id:number})=>{
-        console.log('edituje')
-
-        let quest = new Question()
-        quest.setId(data.id)
-        quest.setText(data.text)
-        
-        quest.update()
-        
-      })
+  
       socket.on('deleteQuestion', async(data:{id:string})=>{
         console.log('edituje')
-        let opt = new QuestionOption()
-        opt.setId(parseInt(data.id))
-        opt.delete()
+        QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.id))
+        let quest= new Question()
+        quest.setId(parseInt(data.id))
+        quest.delete()
         
       })
       // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{

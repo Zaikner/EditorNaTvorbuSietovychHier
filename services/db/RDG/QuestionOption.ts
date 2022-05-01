@@ -54,6 +54,8 @@ export class QuestionOption{
 
     public upsert(){
                 let client = DbConnect.get()
+                console.log('upsertuje:')
+                console.log(this)
                 const query = {
                     name: 'insert-option',
                     text: 'INSERT INTO "bachelorsThesis"."Option"(id,text,"questionId","isAnswer") VALUES($1,$2,$3,$4)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "questionId" = EXCLUDED."questionId","isAnswer" = EXCLUDED."isAnswer"',
