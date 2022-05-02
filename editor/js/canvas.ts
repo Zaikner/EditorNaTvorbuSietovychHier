@@ -7,16 +7,12 @@ import {GameEditor} from './GameEditor.js'
 
 import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
 
-
-import { Background } from "./Background";
-import { initGameInfo,initDice, changeWaitingRoom, throwDice } from "./Gameplay";
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
 import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion, showResults} from "./Questions";
 
 import { PawnStyle } from "./PawnStyle";
-import { Warning } from "./Warning";
-import { BackgroundComponent } from "./BackgroundComponent";
+
 import { editorSocket, isEditor,getCookie,texts } from "./clientSocket";
 
 
@@ -139,7 +135,7 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){
 // document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
 document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
-                                                                                editorSocket.emit('loadQuestions');} )
+                                                                                editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')});} )
 // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
 // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
 
@@ -163,7 +159,7 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
 document.getElementById('eventQuestionButton')!.addEventListener('click',function(){
-  editorSocket.emit('loadQuestions')
+  editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})
   $('#pickQuestionModal').modal('show');})
 
 document.getElementById('loadCreatedGameModal')?.addEventListener('click',function(){
@@ -345,20 +341,32 @@ slid.onchange = function(){
 }
 
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
-  if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
-    Warning.show(texts[183])
-  }
-  else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
-    Warning.show(texts[184])
-  }
-  else{
+  // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+  //   Warning.show(texts[183])
+  // }
+  // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+  //   Warning.show(texts[184])
+  // }
+  // else{
+
     editor.getGame().saveGame()
-  }
+  //}
   
   //window.location.replace('/')
 })
 spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],function(){
-
+  // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+  //   Warning.show(texts[183])
+  // }
+  // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+  //   Warning.show(texts[184])
+  // }
+  // else{
+  //   editor.getGame().setIsPublished(true)
+  //   editor.getGame().saveGame()
+  // }
+  editor.getGame().setIsPublished(true)
+  editor.getGame().saveGame()
 })
 }
 

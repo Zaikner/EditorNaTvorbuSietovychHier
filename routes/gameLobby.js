@@ -32,7 +32,7 @@ router
       return
     }
     console.log(await GameFinder.getIntance().findAll())
-    let a = (await GameFinder.getIntance().findAll()).map((game) => game.getName())
+    let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
     let rooms = Array.from(GameManager.getActiveRooms().values())
     .map(room => [room.getId(),
         "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),

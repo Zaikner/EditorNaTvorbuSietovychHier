@@ -9,7 +9,6 @@ var PawnEditor_1 = require("./PawnEditor");
 var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
-var Warning_1 = require("./Warning");
 var clientSocket_1 = require("./clientSocket");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
@@ -107,7 +106,7 @@ function edit() {
     // document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
     document.getElementById('questionManager').addEventListener('click', function () {
         elementDeleter('listContainer');
-        clientSocket_1.editorSocket.emit('loadQuestions');
+        clientSocket_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') });
     });
     // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
     // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
@@ -131,7 +130,7 @@ function edit() {
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
     document.getElementById('eventQuestionButton').addEventListener('click', function () {
-        clientSocket_1.editorSocket.emit('loadQuestions');
+        clientSocket_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') });
         $('#pickQuestionModal').modal('show');
     });
     (_a = document.getElementById('loadCreatedGameModal')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
@@ -282,18 +281,30 @@ function mainMenu() {
         reload(editor, ctx);
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
-        if (editor.checkIfAllPlayersHaveFinishTile().length > 0) {
-            Warning_1.Warning.show(clientSocket_1.texts[183]);
-        }
-        else if (editor.checkIfAllPlayersHaveStartingTile().length > 0) {
-            Warning_1.Warning.show(clientSocket_1.texts[184]);
-        }
-        else {
-            editor.getGame().saveGame();
-        }
+        // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+        //   Warning.show(texts[183])
+        // }
+        // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+        //   Warning.show(texts[184])
+        // }
+        // else{
+        editor.getGame().saveGame();
+        //}
         //window.location.replace('/')
     });
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
+        // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+        //   Warning.show(texts[183])
+        // }
+        // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+        //   Warning.show(texts[184])
+        // }
+        // else{
+        //   editor.getGame().setIsPublished(true)
+        //   editor.getGame().saveGame()
+        // }
+        editor.getGame().setIsPublished(true);
+        editor.getGame().saveGame();
     });
 }
 exports.mainMenu = mainMenu;

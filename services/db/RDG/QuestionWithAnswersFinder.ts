@@ -36,6 +36,7 @@ export class QuestionWithAnswersFinder{
               console.log("Connection failed")
             } 
           }
+        
           public async findById(id:number){
             
             let client = DbConnect.get()
@@ -62,7 +63,32 @@ export class QuestionWithAnswersFinder{
               console.log("Connection failed")
             } 
           }
-
+          public async findByAuthor(author:number){
+            
+            let client = DbConnect.get()
+            try {
+              
+                const query = {
+                    name: 'select-question-with-answer-id',
+                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.author = $1;',
+                    values: [author],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<QuestionWithAnswers> = []
+              
+                await results.rows.forEach((row:any) => {
+              
+                    ret.push(QuestionWithAnswers.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log(err)
+              console.log("Connection failed")
+            } 
+          }
           public deleteOptionsByQuestionId(questionId:number){
             let client = DbConnect.get()
                 const query = {

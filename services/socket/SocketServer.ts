@@ -125,6 +125,7 @@ export class ServerSocket{
         g.setNextTilesIds(data.nextTilesIds)
         g.setInitSizeX(data.initSizeX)
         g.setInitSizeY(data.initSizeY)
+        g.setIsPublished(data.isPublished)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
           t.setId(tile.id+lastId)
@@ -510,6 +511,8 @@ export class ServerSocket{
       socket.on('newQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean,id:string}>,id:string,questionId:number})=>{
         let quest = new Question()
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
+        let acc = AccountManager.getAccountByClientId(data.id)
+      
         QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
         console.log('options na servery su:')
         console.log(data.options)
@@ -530,6 +533,7 @@ export class ServerSocket{
        
         quest.setText(data.question)
         quest.setId(id)
+        quest.setAuthor(acc.getName())
         //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
 
         quest.upsert()
@@ -558,6 +562,7 @@ export class ServerSocket{
           option.setText(elem.txt)
           option.setQuestionId(id)
           option.setIsAnswer(elem.isAnswer)
+  
           console.log(option)
           option.insert()
         })
@@ -597,8 +602,10 @@ export class ServerSocket{
         
       })
       
-      socket.on('loadQuestions',async()=>{
-        let questions = await QuestionWithAnswersFinder.getInstance().findAll()
+      socket.on('loadQuestions',async(msg:{id:string})=>{
+        let acc = AccountManager.getAccountByClientId(msg.id)
+  
+        let questions = await QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getName())
 
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {

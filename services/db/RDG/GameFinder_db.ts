@@ -32,13 +32,40 @@ export class GameFinder{
               console.log("Connection failed")
             } 
           }
-          public async findAll(){
+    public async findAll(){
             let client = DbConnect.get()
         
             try {
                 const query = {
                     name: 'select-game-all',
                     text: 'SELECT * FROM "bachelorsThesis"."Game";',
+                    values: [],
+                  }
+               
+                var results = await  client.query(query)
+           
+                var ret:Array<Game_db> = []
+               
+                await results.rows.forEach((row:any) => {
+              
+                    ret.push(Game_db.load(row))
+                });
+              
+                return ret
+        
+            }
+            catch(err){
+              console.log(err)
+              console.log("Connection failed")
+            } 
+          }
+      public async findAllPublished(){
+            let client = DbConnect.get()
+        
+            try {
+                const query = {
+                    name: 'select-game-all-published',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE "isPublished" = true;',
                     values: [],
                   }
                

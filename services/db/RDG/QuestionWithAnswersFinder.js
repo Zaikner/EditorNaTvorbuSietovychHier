@@ -112,6 +112,41 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             });
         });
     };
+    QuestionWithAnswersFinder.prototype.findByAuthor = function (author) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, query, results, ret, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        client = DbConnect_1.DbConnect.get();
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        query = {
+                            name: 'select-question-with-answer-id',
+                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.author = $1;',
+                            values: [author]
+                        };
+                        return [4 /*yield*/, client.query(query)];
+                    case 2:
+                        results = _a.sent();
+                        ret = [];
+                        return [4 /*yield*/, results.rows.forEach(function (row) {
+                                ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, ret];
+                    case 4:
+                        err_3 = _a.sent();
+                        console.log(err_3);
+                        console.log("Connection failed");
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
     QuestionWithAnswersFinder.prototype.deleteOptionsByQuestionId = function (questionId) {
         var client = DbConnect_1.DbConnect.get();
         var query = {

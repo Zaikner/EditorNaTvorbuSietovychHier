@@ -73,14 +73,24 @@ function deletePawn(event) {
 }
 exports.deletePawn = deletePawn;
 function pawnEditMenu() {
+    var _a, _b, _c;
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, TileEditor_1.removeAllButtons)();
     (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_1.texts[18]);
     var playerPicker = (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', clientSocket_1.texts[74], ['btn', 'btn-secondary'], canvas_1.editor.getGame().getPlayerTokens());
     playerPicker.onchange = function () {
+        var _a;
         drawActualPawnLook(playerPicker.value);
+        for (var i = 1; i <= 8; i++) {
+            document.getElementById('canvasPawn' + i).style.borderColor = 'white';
+        }
+        var type = (_a = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _a === void 0 ? void 0 : _a.getType();
+        document.getElementById('canvasPawn' + type.charAt(type.length - 1)).style.borderColor = 'red';
     };
-    (0, Elements_1.spawnCanvas)(canvas_1.doc, 'tileEditingPlace', 'pawnStyle');
+    // let cavn = spawnCanvas(doc,'tileEditingPlace','pawnStyle')
+    // cavn.classList.add('pawnType')
+    // cavn.style.width = '100px'
+    // cavn.style.height = '100px'
     var colorPicker = (0, Elements_1.spawnColorPicker)(canvas_1.doc, 'tileEditingPlace', 'pawnColorPicker', clientSocket_1.texts[75]);
     colorPicker.onchange = function () {
         var _a, _b;
@@ -93,16 +103,21 @@ function pawnEditMenu() {
     // spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],texts[77],function(){$('#pawnModal').modal('show')
     //  drawStyles(colorPicker.value)})
     (0, Elements_1.spawnImageInput)(canvas_1.doc, 'tileEditingPlace', 'imagePicker', clientSocket_1.texts[78], clientSocket_1.texts[78], function () {
-        var _a, _b;
+        var _a, _b, _c;
         if (document.getElementById('imagePicker').files.length > 0) {
             (_a = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _a === void 0 ? void 0 : _a.setImage(new Image());
+            (_b = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.setType('type 8');
             canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value).getImage().src = URL.createObjectURL(document.getElementById('imagePicker').files[0]);
             canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value).getImage().onload = function () {
                 drawActualPawnLook(playerPicker.value);
             };
+            for (var i = 1; i <= 7; i++) {
+                document.getElementById('canvasPawn' + i).style.borderColor = 'white';
+            }
+            document.getElementById('canvasPawn' + 8).style.borderColor = 'red';
         }
         else {
-            (_b = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.setImage(undefined);
+            (_c = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _c === void 0 ? void 0 : _c.setImage(undefined);
         }
     });
     var p = (0, Elements_1.spawnParagraph)(canvas_1.doc, 'tileEditingPlace', '', clientSocket_1.texts[76], true);
@@ -110,10 +125,15 @@ function pawnEditMenu() {
     p.style.textAlign = 'center';
     var _loop_1 = function (i) {
         //let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
-        var c = (0, Elements_1.spawnCanvas)(document, 'pawnPickerDiv', 'canvasPawn' + i);
-        c.classList.add('pawnType');
-        c.style.width = '50px';
-        c.style.height = '50px';
+        var c_1 = (0, Elements_1.spawnCanvas)(document, 'pawnPickerDiv', 'canvasPawn' + i);
+        c_1.classList.add('pawnType');
+        c_1.style.width = '50px';
+        c_1.style.height = '50px';
+        var type_1 = (_a = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _a === void 0 ? void 0 : _a.getType();
+        var image = (_b = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.getImage();
+        if (i.toString() == type_1.charAt(type_1.length - 1) && image == undefined) {
+            c_1.style.borderColor = 'red';
+        }
         // button.onclick = function(){
         //     let player = playerPicker.value
         //     editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
@@ -121,9 +141,13 @@ function pawnEditMenu() {
         //     console.log(editor.getGame().getPawnStyle())
         //     drawActualPawnLook(player)
         // }
-        c.onclick = function () {
+        c_1.onclick = function () {
             var _a, _b;
+            for (var i_1 = 1; i_1 <= 8; i_1++) {
+                document.getElementById('canvasPawn' + i_1).style.borderColor = 'white';
+            }
             var player = playerPicker.value;
+            c_1.style.borderColor = 'red';
             (_a = canvas_1.editor.getGame().getPawnStyle().get(player)) === null || _a === void 0 ? void 0 : _a.setType('type' + i);
             (_b = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.setImage(undefined);
             console.log(canvas_1.editor.getGame().getPawnStyle());
@@ -133,6 +157,30 @@ function pawnEditMenu() {
     for (var i = 1; i <= 7; i++) {
         _loop_1(i);
     }
+    var c = (0, Elements_1.spawnCanvas)(document, 'pawnPickerDiv', 'canvasPawn' + 8);
+    c.classList.add('pawnType');
+    c.style.width = '50px';
+    c.style.height = '50px';
+    var type = (_c = canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value)) === null || _c === void 0 ? void 0 : _c.getType();
+    if (type.charAt(type.length - 1) == '8') {
+        c.style.borderColor = 'red';
+    }
+    c.onclick = function () {
+        var _a;
+        if (document.getElementById('imagePicker').files.length > 0) {
+            for (var i = 1; i <= 8; i++) {
+                document.getElementById('canvasPawn' + i).style.borderColor = 'white';
+            }
+            var player = playerPicker.value;
+            c.style.borderColor = 'red';
+            (_a = canvas_1.editor.getGame().getPawnStyle().get(player)) === null || _a === void 0 ? void 0 : _a.setType('type' + 8);
+            canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value).getImage().src = URL.createObjectURL(document.getElementById('imagePicker').files[0]);
+            canvas_1.editor.getGame().getPawnStyle().get(playerPicker.value).getImage().onload = function () {
+                drawActualPawnLook(playerPicker.value);
+            };
+            drawActualPawnLook(player);
+        }
+    };
     drawActualPawnLook('Player 1');
     drawStyles(colorPicker.value);
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
@@ -147,6 +195,7 @@ function pawnDeleteMenu() {
 }
 exports.pawnDeleteMenu = pawnDeleteMenu;
 function drawStyles(color) {
+    var _a;
     var cs = document.getElementById('canvasPawn1');
     cs.width = 100;
     cs.height = 100;
@@ -225,6 +274,21 @@ function drawStyles(color) {
     width = cs.width;
     height = cs.height;
     drawPawnType7(contextik, 50, 20, 20, 100, 100, color);
+    cs = document.getElementById('canvasPawn8');
+    cs.width = 100;
+    cs.height = 100;
+    contextik = cs.getContext("2d");
+    contextik.resetTransform();
+    width = cs.width;
+    height = cs.height;
+    var image = (_a = canvas_1.editor.getGame().getPawnStyle().get(document.getElementById('playerSelect').value)) === null || _a === void 0 ? void 0 : _a.getImage();
+    if (image != undefined) {
+        drawPawnImage(contextik, 50, 30, 30, 100, 100, image);
+        console.log('kreslil');
+    }
+    else {
+        console.log('je undefined');
+    }
 }
 function drawPawnType1(contextik, headCenterX, headCenterY, radius, width, height, color) {
     contextik.beginPath();
@@ -324,35 +388,36 @@ function drawPawnImage(contextik, headCenterX, headCenterY, radius, width, heigh
 }
 exports.drawPawnImage = drawPawnImage;
 function drawActualPawnLook(player) {
-    var cs = document.getElementById('pawnStyle');
-    var context = cs.getContext("2d");
-    context.clearRect(0, 0, cs.width, cs.height);
+    // let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
+    // let context = <CanvasRenderingContext2D> cs.getContext("2d")
+    // context.clearRect(0,0,cs.width,cs.height)
     var style = canvas_1.editor.getGame().getPawnStyle().get(player);
-    if ((style === null || style === void 0 ? void 0 : style.getImage()) != undefined) {
-        drawPawnImage(context, cs.width / 2, 40, 40, 100, 100, style === null || style === void 0 ? void 0 : style.getImage());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type1') {
-        drawPawnType1(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type2') {
-        drawPawnType2(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type3') {
-        drawPawnType3(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type4') {
-        drawPawnType4(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type5') {
-        drawPawnType5(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type6') {
-        drawPawnType6(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else if ((style === null || style === void 0 ? void 0 : style.getType()) === 'type7') {
-        drawPawnType7(context, cs.width / 2, 40, 40, 100, 100, style.getColor());
-    }
-    else {
-        console.log('nie je dorobene');
-    }
+    drawStyles(style.getColor());
+    // if (style?.getImage()!= undefined){
+    //     drawPawnImage(context,cs.width/2,40,40,100,100,style?.getImage())
+    // }
+    // else if (style?.getType() === 'type1'){
+    //     drawPawnType1( context,cs.width/2,40,30,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type2'){
+    //     drawPawnType2( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type3'){
+    //     drawPawnType3( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type4'){
+    //     drawPawnType4( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type5'){
+    //     drawPawnType5( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type6'){
+    //     drawPawnType6( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type7'){
+    //     drawPawnType7( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else{
+    //     console.log('nie je dorobene')
+    // }
 }

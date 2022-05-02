@@ -158,6 +158,7 @@ editorSocket.on('connected',(msg)=>{
 
     editor.getGame().setInitSizeX(msg.game.initSizeX)
     editor.getGame().setInitSizeY(msg.game.initSizeY)
+    editor.getGame().setIsPublished(msg.game.isPublished)
   
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()

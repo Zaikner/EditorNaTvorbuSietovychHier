@@ -1,10 +1,3 @@
-
-import { disconnect } from 'process';
-import { ids } from 'webpack';
-import { QuestionOption } from '../../services/db/RDG/QuestionOption';
-import { QuestionOptionFinder } from '../../services/db/RDG/QuestionOptionFinder';
-
-
 import { doc, editor,  elementDeleter, mainMenu} from './canvas'
 import { editorSocket,clickFunction,texts} from './clientSocket.js'
 import { spawnButton, spawnDiv, spawnHeading } from './Elements';
@@ -13,6 +6,7 @@ import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
 let num = 0
 let newQuestions:Array<number> = []
 let givenOptions = 0
+
 console.log('zapol aspon subor')
 function initCreation(){
     removeAllButtons()
@@ -56,7 +50,7 @@ function initCreation(){
     spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(-1);})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions')})
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})})
 }
 
 
@@ -344,7 +338,7 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
         editorSocket.emit('deleteQuestion',{id:id})
         
-        editorSocket.emit('loadQuestions')})
+        editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})})
     
     
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})

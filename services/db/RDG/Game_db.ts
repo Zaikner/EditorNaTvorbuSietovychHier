@@ -9,6 +9,7 @@ export class Game_db{
     private nextTilesIds:Array<string> = []
     private initSizeX:number = 0;
     private initSizeY:number = 0;
+    private isPublished:boolean = false;
     constructor(){
 
     }
@@ -57,13 +58,19 @@ export class Game_db{
     setInitSizeY(newCoord:number){
         return this.initSizeY = newCoord
     }
+    setIsPublished(is:boolean){
+        this.isPublished = is
+    }
+    getIsPublished(){
+        return this.isPublished
+    }
     
     public insert(){
         let client = DbConnect.get()
             const query = {
                 name: 'insert-game',
-                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6);',
-                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY],
+                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7);',
+                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished],
               }
               client
               .query(query)
@@ -76,8 +83,8 @@ export class Game_db{
                     const query = {
                         name: 'upsert-game',
                         
-                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY") VALUES($1,$2,$3,$4,$5,$6)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY";',
-                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY],
+                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished";',
+                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished],
                       }
                       client
                       .query(query)
@@ -95,6 +102,7 @@ export class Game_db{
                 ret.setNextTilesIds(data.nextTilesIds)
                 ret.setInitSizeX(data.initSizeX)
                 ret.setInitSizeY(data.initSizeY)
+                ret.setIsPublished(data.isPublished)
                 return ret
                 }
     

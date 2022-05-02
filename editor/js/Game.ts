@@ -25,6 +25,7 @@ class Game{
     private scaleY:number = 1;
     private pawns:Array<Pawn> = []
     private rules:string = ''
+    private isPublished:boolean = false;
     private numberOfStartingPawns:number = 1;
     
     //----------playing---------
@@ -72,7 +73,8 @@ class Game{
                                           id:getCookie('id'),
                                           nextTilesIds:this.mapNextTiles(),
                                           initSizeX:this.initSizeX,
-                                          initSizeY:this.initSizeY
+                                          initSizeY:this.initSizeY,
+                                          isPublished:this.isPublished
                                         })
            
         }
@@ -286,6 +288,12 @@ class Game{
     }
     getCanThrow(){
         return this.canThrow
+    }
+    setIsPublished(is:boolean){
+        this.isPublished = is
+    }
+    getIsPublished(){
+        return this.isPublished
     }
     // getHasStarted(){
     //     return  this.hasStarted

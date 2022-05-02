@@ -157,6 +157,7 @@ var ServerSocket = /** @class */ (function () {
                             g.setNextTilesIds(data.nextTilesIds);
                             g.setInitSizeX(data.initSizeX);
                             g.setInitSizeY(data.initSizeY);
+                            g.setIsPublished(data.isPublished);
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);
@@ -485,7 +486,7 @@ var ServerSocket = /** @class */ (function () {
             //   console.log('pripojil'+acc)
             // })
             socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var quest, lastQuest, id, lastOption, lastId;
+                var quest, lastQuest, acc, id, lastOption, lastId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -493,6 +494,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findWithLastId()];
                         case 1:
                             lastQuest = _a.sent();
+                            acc = AccountManager.getAccountByClientId(data.id);
                             QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
                             console.log('options na servery su:');
                             console.log(data.options);
@@ -510,6 +512,7 @@ var ServerSocket = /** @class */ (function () {
                             }
                             quest.setText(data.question);
                             quest.setId(id);
+                            quest.setAuthor(acc.getName());
                             //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
                             quest.upsert();
                             return [4 /*yield*/, QuestionOptionFinder_1.QuestionOptionFinder.getIntance().findWithLastId()];
@@ -584,11 +587,13 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
-            socket.on('loadQuestions', function () { return __awaiter(_this, void 0, void 0, function () {
-                var questions, data;
+            socket.on('loadQuestions', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var acc, questions, data;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findAll()];
+                        case 0:
+                            acc = AccountManager.getAccountByClientId(msg.id);
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getName())];
                         case 1:
                             questions = _a.sent();
                             data = [];

@@ -138,6 +138,7 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setRules(msg.rules);
     canvas_1.editor.getGame().setInitSizeX(msg.game.initSizeX);
     canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);
+    canvas_1.editor.getGame().setIsPublished(msg.game.isPublished);
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {

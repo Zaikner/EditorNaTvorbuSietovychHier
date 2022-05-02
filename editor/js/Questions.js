@@ -44,7 +44,7 @@ function initCreation() {
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Add option', function () { addOption('questionPlace', '', false); });
     div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(-1); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions'); });
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') }); });
 }
 exports.initCreation = initCreation;
 function renumOptions() {
@@ -293,7 +293,7 @@ function editQuestionMenu(id, txt, elem) {
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(id); });
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () {
         clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: id });
-        clientSocket_js_1.editorSocket.emit('loadQuestions');
+        clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') });
     });
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
 }

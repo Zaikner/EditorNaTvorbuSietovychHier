@@ -84,8 +84,20 @@ function pawnEditMenu(){
     let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[74],['btn','btn-secondary'],editor.getGame().getPlayerTokens())
     playerPicker.onchange = function(){
         drawActualPawnLook(playerPicker.value)
+
+        for (let i = 1; i <= 8; i++){
+            document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
+        }
+        let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
+        document.getElementById('canvasPawn'+type!.charAt(type!.length - 1))!.style.borderColor = 'red'
+       
     }
-    spawnCanvas(doc,'tileEditingPlace','pawnStyle')
+    // let cavn = spawnCanvas(doc,'tileEditingPlace','pawnStyle')
+    // cavn.classList.add('pawnType')
+    // cavn.style.width = '100px'
+    // cavn.style.height = '100px'
+
+    
    
     let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker',texts[75])
     colorPicker.onchange = function(){
@@ -102,12 +114,16 @@ function pawnEditMenu(){
 
         if ((<HTMLInputElement>document.getElementById('imagePicker')!).files!.length > 0){
             editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(new Image())
+            editor.getGame().getPawnStyle().get(playerPicker.value)?.setType('type 8')
             editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
             editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
                 drawActualPawnLook(playerPicker.value)
           
             }
-           
+            for (let i = 1; i <= 7; i++){
+                document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
+            }
+            document.getElementById('canvasPawn'+8)!.style.borderColor = 'red'
             }
           else{
             editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
@@ -124,6 +140,11 @@ function pawnEditMenu(){
         c.classList.add('pawnType')
         c.style.width = '50px';
         c.style.height = '50px'
+        let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
+        let image = editor.getGame().getPawnStyle().get(playerPicker.value)?.getImage()
+        if (i.toString()  ==type!.charAt(type!.length - 1) && image == undefined){
+            c.style.borderColor = 'red'
+        }
         // button.onclick = function(){
         //     let player = playerPicker.value
         //     editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
@@ -132,12 +153,44 @@ function pawnEditMenu(){
         //     drawActualPawnLook(player)
         // }
         c.onclick = function(){
+
+            for (let i = 1; i <= 8; i++){
+                document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
+            }
             let player = playerPicker.value
+            c.style.borderColor = 'red'
             editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
             editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
             console.log(editor.getGame().getPawnStyle())
             drawActualPawnLook(player)
         }
+
+        
+    }
+    let c = spawnCanvas(document,'pawnPickerDiv','canvasPawn'+8)
+    c.classList.add('pawnType')
+    c.style.width = '50px';
+    c.style.height = '50px'
+    let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
+    if (type!.charAt(type!.length - 1) == '8'){
+        c.style.borderColor = 'red'
+    }
+    c.onclick = function(){
+        if ((<HTMLInputElement>document.getElementById('imagePicker')!).files!.length >0){
+            for (let i = 1; i <= 8; i++){
+                document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
+            }
+            let player = playerPicker.value
+            c.style.borderColor = 'red'
+            editor.getGame().getPawnStyle().get(player)?.setType('type'+8)
+            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
+            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
+                drawActualPawnLook(playerPicker.value)
+          
+            }
+            drawActualPawnLook(player)
+        }
+  
     }
     drawActualPawnLook('Player 1')
     drawStyles(colorPicker.value)
@@ -248,7 +301,24 @@ function drawStyles(color:string){
   
 
     drawPawnType7(contextik,50,20,20,100,100,color)
-}
+
+    cs = <HTMLCanvasElement>document.getElementById('canvasPawn8')!
+    cs.width = 100
+    cs.height = 100
+    contextik = <CanvasRenderingContext2D> cs.getContext("2d");
+    contextik.resetTransform()
+    width = cs.width
+    height = cs.height
+    let image =  editor.getGame().getPawnStyle().get((<HTMLSelectElement>document.getElementById('playerSelect'))!.value)?.getImage()
+    if (image!= undefined){
+        drawPawnImage(contextik,50,30,30,100,100,image!)
+        console.log('kreslil')
+    }
+    else{
+        console.log('je undefined')
+    }
+    }
+    
 
 function drawPawnType1(contextik:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,width:number,height:number,color:string)
 {
@@ -358,37 +428,38 @@ function drawPawnImage(contextik:CanvasRenderingContext2D,headCenterX:number,hea
 }
 function drawActualPawnLook(player:string){
     
-    let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
-    let context = <CanvasRenderingContext2D> cs.getContext("2d")
-    context.clearRect(0,0,cs.width,cs.height)
+    // let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
+    // let context = <CanvasRenderingContext2D> cs.getContext("2d")
+    // context.clearRect(0,0,cs.width,cs.height)
     let style = editor.getGame().getPawnStyle().get(player)
-    if (style?.getImage()!= undefined){
-        drawPawnImage(context,cs.width/2,40,40,100,100,style?.getImage())
-    }
-    else if (style?.getType() === 'type1'){
-        drawPawnType1( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type2'){
-        drawPawnType2( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type3'){
-        drawPawnType3( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type4'){
-        drawPawnType4( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type5'){
-        drawPawnType5( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type6'){
-        drawPawnType6( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else if(style?.getType()==='type7'){
-        drawPawnType7( context,cs.width/2,40,40,100,100,style!.getColor())
-    }
-    else{
-        console.log('nie je dorobene')
-    }
+    drawStyles(style!.getColor())
+    // if (style?.getImage()!= undefined){
+    //     drawPawnImage(context,cs.width/2,40,40,100,100,style?.getImage())
+    // }
+    // else if (style?.getType() === 'type1'){
+    //     drawPawnType1( context,cs.width/2,40,30,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type2'){
+    //     drawPawnType2( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type3'){
+    //     drawPawnType3( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type4'){
+    //     drawPawnType4( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type5'){
+    //     drawPawnType5( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type6'){
+    //     drawPawnType6( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else if(style?.getType()==='type7'){
+    //     drawPawnType7( context,cs.width/2,40,40,100,100,style!.getColor())
+    // }
+    // else{
+    //     console.log('nie je dorobene')
+    // }
     
     
 }

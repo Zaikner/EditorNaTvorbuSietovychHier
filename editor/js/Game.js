@@ -26,6 +26,7 @@ var Game = /** @class */ (function () {
         this.scaleY = 1;
         this.pawns = [];
         this.rules = '';
+        this.isPublished = false;
         this.numberOfStartingPawns = 1;
         //----------playing---------
         //private hasStarted = false;
@@ -61,7 +62,8 @@ var Game = /** @class */ (function () {
                 id: (0, clientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles(),
                 initSizeX: this.initSizeX,
-                initSizeY: this.initSizeY
+                initSizeY: this.initSizeY,
+                isPublished: this.isPublished
             });
         }
     };
@@ -255,6 +257,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getCanThrow = function () {
         return this.canThrow;
+    };
+    Game.prototype.setIsPublished = function (is) {
+        this.isPublished = is;
+    };
+    Game.prototype.getIsPublished = function () {
+        return this.isPublished;
     };
     return Game;
 }());

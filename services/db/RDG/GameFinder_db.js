@@ -112,6 +112,41 @@ var GameFinder = /** @class */ (function () {
             });
         });
     };
+    GameFinder.prototype.findAllPublished = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, query, results, ret, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        client = DbConnect_1.DbConnect.get();
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        query = {
+                            name: 'select-game-all-published',
+                            text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE "isPublished" = true;',
+                            values: []
+                        };
+                        return [4 /*yield*/, client.query(query)];
+                    case 2:
+                        results = _a.sent();
+                        ret = [];
+                        return [4 /*yield*/, results.rows.forEach(function (row) {
+                                ret.push(Game_db_1.Game_db.load(row));
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, ret];
+                    case 4:
+                        err_3 = _a.sent();
+                        console.log(err_3);
+                        console.log("Connection failed");
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
     GameFinder.INSTANCE = new GameFinder();
     return GameFinder;
 }());
