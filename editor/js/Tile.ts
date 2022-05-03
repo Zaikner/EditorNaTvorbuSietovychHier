@@ -111,9 +111,10 @@ class Tile{
         }
      
             //outline
+            ctx.resetTransform();
+            ctx.restore()
              if (this.stroke > 0){
-                ctx.resetTransform();
-                ctx.restore()
+              
                 ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                  ctx.strokeStyle =this.strokeColor
                  ctx.lineWidth = this.stroke
@@ -191,6 +192,10 @@ class Tile{
             diff = 20*this.radius/50
         }
         let diffY = 10
+        ctx.resetTransform();
+        ctx.restore()
+        ctx.beginPath()
+        ctx.closePath()
         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
       
         editor.getGame().getPlayerTokens().forEach((player)=>{

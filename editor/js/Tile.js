@@ -89,9 +89,9 @@ var Tile = /** @class */ (function () {
             }
         }
         //outline
+        ctx.resetTransform();
+        ctx.restore();
         if (this.stroke > 0) {
-            ctx.resetTransform();
-            ctx.restore();
             ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;
@@ -162,6 +162,10 @@ var Tile = /** @class */ (function () {
             diff = 20 * this.radius / 50;
         }
         var diffY = 10;
+        ctx.resetTransform();
+        ctx.restore();
+        ctx.beginPath();
+        ctx.closePath();
         ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
         canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (player) {
             drawn = 0;
