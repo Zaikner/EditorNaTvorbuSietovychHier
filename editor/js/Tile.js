@@ -100,7 +100,7 @@ var Tile = /** @class */ (function () {
             ctx.stroke();
         }
         // ak je vybrany
-        if (this.isChoosen) {
+        if (this.isChoosen && clientSocket_js_1.isEditor) {
             if (this.shape == 'circle') {
                 // ctx.lineWidth = 10
                 // ctx.strokeStyle = '#FF0000'

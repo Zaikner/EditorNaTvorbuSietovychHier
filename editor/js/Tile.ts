@@ -124,7 +124,7 @@ class Tile{
           
             // ak je vybrany
     
-                 if (this.isChoosen){
+                 if (this.isChoosen && isEditor){
                     if (this.shape == 'circle'){
                          // ctx.lineWidth = 10
                 // ctx.strokeStyle = '#FF0000'
