@@ -90,6 +90,8 @@ var Tile = /** @class */ (function () {
         }
         //outline
         if (this.stroke > 0) {
+            ctx.resetTransform();
+            ctx.restore();
             ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;

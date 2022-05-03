@@ -112,6 +112,8 @@ class Tile{
      
             //outline
              if (this.stroke > 0){
+                ctx.resetTransform();
+                ctx.restore()
                 ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                  ctx.strokeStyle =this.strokeColor
                  ctx.lineWidth = this.stroke
