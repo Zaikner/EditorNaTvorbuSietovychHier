@@ -161,7 +161,7 @@ export class AccountManager{
     }
     public static checkLogedAccounts(){
         setInterval(function(){   AccountManager.loggedAccounts.forEach((acc:Account)=>{
-            //console.log(acc)
+          
             ServerSocket.emitToSpecificSocket(acc.getSocketId(),'check if online',{})
         })},5000)
      
