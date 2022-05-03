@@ -75,3 +75,4 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 SocketServer.setIo(io)
 SocketServer.serverListen()
+AccountManager.checkLogedAccounts()

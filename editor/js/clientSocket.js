@@ -257,7 +257,7 @@ editorSocket.on('game started', function (msg) {
     });
     (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
 });
-//editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
+editorSocket.emit('set Socket', { id: getCookie('id') });
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
     console.log('recieved move Pawn');
@@ -276,6 +276,10 @@ editorSocket.on('return Pawn to place', function (msg) {
 });
 editorSocket.on('loadAnswersToOthers', function (msg) {
     (0, Questions_1.showResults)(msg.right, msg.wrong);
+});
+editorSocket.on('check if online', function () {
+    console.log('emitol online');
+    editorSocket.emit('online', { id: localStorage.getItem('id') });
 });
 editorSocket.on('evaluate End', function (msg) {
     console.log('emitol evalued end');

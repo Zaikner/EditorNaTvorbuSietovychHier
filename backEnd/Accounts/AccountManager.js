@@ -40,6 +40,7 @@ exports.AccountManager = void 0;
 var Account_db_js_1 = require("../../services/db/RDG/Account_db.js");
 var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var Account_js_1 = require("./Account.js");
+var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env');
 var AccountManager = /** @class */ (function () {
@@ -225,6 +226,14 @@ var AccountManager = /** @class */ (function () {
                 }
             });
         });
+    };
+    AccountManager.checkLogedAccounts = function () {
+        setInterval(function () {
+            AccountManager.loggedAccounts.forEach(function (acc) {
+                //console.log(acc)
+                SocketServer_js_1.ServerSocket.emitToSpecificSocket(acc.getSocketId(), 'check if online', {});
+            });
+        }, 5000);
     };
     AccountManager.getLogedAccounts = function () {
         return this.loggedAccounts;

@@ -1,6 +1,7 @@
 import {Account_db} from '../../services/db/RDG/Account_db.js'
 import { AccountFinder } from '../../services/db/RDG/AccountFinder.js';
 import{Account} from './Account.js'
+import { ServerSocket } from '../../services/socket/SocketServer.js';
 
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env')
@@ -157,6 +158,13 @@ export class AccountManager{
             accounts[0].update();
             
         }
+    }
+    public static checkLogedAccounts(){
+        setInterval(function(){   AccountManager.loggedAccounts.forEach((acc:Account)=>{
+            //console.log(acc)
+            ServerSocket.emitToSpecificSocket(acc.getSocketId(),'check if online',{})
+        })},5000)
+     
     }
     public static getLogedAccounts(){
         return this.loggedAccounts

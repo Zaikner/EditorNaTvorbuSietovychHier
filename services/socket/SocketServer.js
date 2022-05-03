@@ -107,6 +107,10 @@ var ServerSocket = /** @class */ (function () {
             socket.on('disconnect', function () {
                 GameManager.findRoomBySocketId(socket.id);
             });
+            socket.on('online', function (msg) {
+                var acc = AccountManager.getAccountByClientId(msg.id);
+                console.log(acc.name + ' is online!');
+            });
             socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var acc, existingGames, last, lastId, g, b, rule;
                 return __generator(this, function (_a) {
@@ -246,28 +250,29 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('set Socket', function (msg) {
+                console.log('obdrzal set Socket');
                 var acc = AccountManager.getAccountByClientId(msg.id);
                 if (acc === undefined) {
                     return;
                 }
                 acc.setSocketId(socket.id);
-                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                var cont = true;
-                // r.getPlayers().forEach((player:any)=>{
-                //   if (player.getAccount().getName() == acc.getName()){
-                //     cont = false
-                //   }
-                //   else{
-                //     console.log(player.getAccount().getName())
-                //     console.log(pl)
-                //   }
-                // })
-                if (r.getHasStarted() && cont) {
-                    r.join(new Player(acc, 'spectator'));
-                }
-                else if (cont) {
-                    r.join(new Player(acc, 'Player ' + (r.getNumOfPlayers() + 1)));
-                }
+                // let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+                // let cont = true
+                // // r.getPlayers().forEach((player:any)=>{
+                // //   if (player.getAccount().getName() == acc.getName()){
+                // //     cont = false
+                // //   }
+                // //   else{
+                // //     console.log(player.getAccount().getName())
+                // //     console.log(pl)
+                // //   }
+                // // })
+                // if (r.getHasStarted() && cont){
+                //   r.join(new Player(acc,'spectator'))
+                // }
+                // else if (cont){
+                //   r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+                // }
             });
             socket.on('game has started', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
@@ -735,6 +740,7 @@ var ServerSocket = /** @class */ (function () {
         this.io = io;
     };
     ServerSocket.emitToSpecificSocket = function (socketId, event, msg) {
+        console.log('firol' + event + ' pre socket: ' + socketId);
         this.io.to(socketId).emit(event, msg);
     };
     ServerSocket.emitToRoom = function (roomName, event, data) {

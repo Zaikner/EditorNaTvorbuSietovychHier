@@ -289,4 +289,11 @@ script(src='../editor/js/webpackVysledok.js')
   $(window).on('load', function(){$('#exampleModal').modal('toggle')});
   </script>
 script.
+  const editorSocket = io();
+  
+  editorSocket.emit('set Socket',{id:localStorage.getItem('id')})
+  editorSocket.on('check if online',()=>{
+  console.log('emitol online')
+  editorSocket.emit('online',{id:localStorage.getItem('id')})
+  })
   //localStorage.clear()
