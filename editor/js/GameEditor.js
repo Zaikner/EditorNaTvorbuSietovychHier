@@ -112,6 +112,7 @@ var GameEditor = /** @class */ (function () {
         // }
         if (this.choosenTile != undefined) {
             this.game.removeTile(this.choosenTile);
+            this.renumber(this.choosenTile.getTileNumber());
             this.choosenTile.getPawns().forEach(function (pawn) {
                 _this.game.removePawn(pawn);
             });
@@ -364,6 +365,23 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.getAllFinishTiles = function () {
         return this.game.getTiles().filter(function (t) { return t.getIsEndingFor().length > 0; });
+    };
+    GameEditor.prototype.renumber = function (deleted) {
+        var _this = this;
+        this.getGame().getTiles().forEach(function (tile) {
+            if (tile.getTileNumber() > deleted) {
+                tile.setTileNumber(tile.getTileNumber() - 1);
+                _this.getGame().getTiles().forEach(function (t) {
+                    _this.getGame().getPlayerTokens().forEach(function (token) {
+                        if (t.getNextTilesIds().get(token) == (tile.getTileNumber() + 1)) {
+                            console.log('premenil ' + (tile.getTileNumber() + 1) + ' na ' + tile.getTileNumber());
+                            t.getNextTilesIds().set(token, tile.getTileNumber());
+                        }
+                    });
+                });
+            }
+        });
+        (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     };
     GameEditor.prototype.getGame = function () {
         return this.game;

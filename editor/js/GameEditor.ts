@@ -131,14 +131,17 @@ class GameEditor{
         //         break
         //     }
         // }
+    
       if(this.choosenTile!=undefined){
         this.game.removeTile(this.choosenTile)
+        this.renumber(this.choosenTile.getTileNumber())
         this.choosenTile.getPawns().forEach((pawn:Pawn)=>{
                         this.game.removePawn(pawn)
                      })
         
         reload(editor,ctx)
       }
+      
 
      
     }
@@ -424,6 +427,26 @@ class GameEditor{
         return this.game.getTiles().filter((t) => {return t.getIsEndingFor().length>0});
     }
     
+
+    renumber(deleted:number){
+        this.getGame().getTiles().forEach((tile:Tile)=>{
+            if (tile.getTileNumber()>deleted){
+                tile.setTileNumber(tile.getTileNumber()-1)
+
+                this.getGame().getTiles().forEach((t:Tile)=>{
+                    this.getGame().getPlayerTokens().forEach((token:string)=>{
+                        if (t.getNextTilesIds().get(token) == (tile.getTileNumber()+1)){
+                            console.log('premenil '+ (tile.getTileNumber()+1) +' na ' + tile.getTileNumber())
+                            t.getNextTilesIds().set(token,tile.getTileNumber())
+                        }
+                    })
+                })
+            }
+        })
+      
+        reload(editor,ctx)
+        
+    }
   getGame(){
     return this.game
 }
