@@ -325,7 +325,7 @@ var ServerSocket = /** @class */ (function () {
                             console.log('nasiel otazku');
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
-                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getName())];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getGameName())];
                         case 1:
                             author = (_a.sent());
                             return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(author[0].getAuthor())];

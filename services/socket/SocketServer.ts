@@ -316,7 +316,7 @@ export class ServerSocket{
             console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
-            let author = (await GameFinder.getIntance().findByName(r.getName()))!
+            let author = (await GameFinder.getIntance().findByName(r.getGameName()))!
 
             let allQuesstions = await QuestionWithAnswersFinder.getInstance().findByAuthor(author[0]!.getAuthor())
             let randomId  = allQuesstions![Math.floor(Math.random()*allQuesstions!.length)]!.getQuestionId()
