@@ -114,7 +114,8 @@ class Tile{
             ctx.resetTransform();
             ctx.restore()
              if (this.stroke > 0){
-              
+                ctx.resetTransform();
+                ctx.restore()
                 ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                  ctx.strokeStyle =this.strokeColor
                  ctx.lineWidth = this.stroke
@@ -130,6 +131,8 @@ class Tile{
                 // ctx.setLineDash([1]);
                 // ctx.stroke()
                 // ctx.setLineDash([0]);
+                ctx.resetTransform();
+                ctx.restore()
                 ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+8);
                 grd.addColorStop(0, "red");
@@ -142,6 +145,8 @@ class Tile{
                 ctx.resetTransform();
                     }
                     else{
+                        ctx.resetTransform();
+                        ctx.restore()
                         ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                         var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
     
