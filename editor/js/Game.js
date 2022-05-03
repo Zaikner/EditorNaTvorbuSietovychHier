@@ -117,7 +117,7 @@ var Game = /** @class */ (function () {
         while (value > 0) {
             var tileId_1 = originalTile.getTileNumber();
             for (var i = 0; i < value; i++) {
-                var tile = canvas_js_1.editor.findTileByNextTileNumber(tileId_1);
+                var tile = canvas_js_1.editor.findTileByNextTileNumber(tileId_1, pawn.player);
                 if (tile != undefined) {
                     tileId_1 = tile.getTileNumber();
                     if (i + 1 == value) {

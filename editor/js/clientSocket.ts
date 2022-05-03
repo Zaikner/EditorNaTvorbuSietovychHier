@@ -79,6 +79,7 @@ editorSocket.on('connected',(msg)=>{
         addedTile.setMustThrown(tile.mustThrown)
         addedTile.setTurnsToSetFree(tile.turnToSetFree)
         addedTile.setQuestionId(tile.questionId)
+        addedTile.setRandomQuestion(tile.randomQuestion)
         let t = tile.nextTilesIds;
         let add:Map<string,number> = new Map()
         for (let i = 0; i*2 < t.length;i++){
@@ -325,8 +326,9 @@ editorSocket.on('move Pawn back',(msg:{pawn:number,value:number})=>{
   editor.setChoosenTile(undefined!)
 
 })
-editorSocket.on('return Pawn to place',(msg:{pawnId:number,tileId:number})=>{
-  editor.movePawnBack(msg.pawnId,msg.tileId,false)
+editorSocket.on('return Pawn to place',(msg:{pawnId:number,value:number})=>{
+  console.log('obdrzal return Pawn to place')
+  editor.movePawnBack(msg.pawnId,msg.value,false)
 })
 editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{
   showResults(msg.right,msg.wrong)

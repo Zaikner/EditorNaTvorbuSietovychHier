@@ -73,6 +73,7 @@ editorSocket.on('connected', function (msg) {
         addedTile.setMustThrown(tile.mustThrown);
         addedTile.setTurnsToSetFree(tile.turnToSetFree);
         addedTile.setQuestionId(tile.questionId);
+        addedTile.setRandomQuestion(tile.randomQuestion);
         var t = tile.nextTilesIds;
         var add = new Map();
         for (var i_1 = 0; i_1 * 2 < t.length; i_1++) {
@@ -270,7 +271,8 @@ editorSocket.on('move Pawn back', function (msg) {
     canvas_1.editor.setChoosenTile(undefined);
 });
 editorSocket.on('return Pawn to place', function (msg) {
-    canvas_1.editor.movePawnBack(msg.pawnId, msg.tileId, false);
+    console.log('obdrzal return Pawn to place');
+    canvas_1.editor.movePawnBack(msg.pawnId, msg.value, false);
 });
 editorSocket.on('loadAnswersToOthers', function (msg) {
     (0, Questions_1.showResults)(msg.right, msg.wrong);

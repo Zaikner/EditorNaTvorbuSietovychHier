@@ -34,6 +34,7 @@ class Tile{
     private mustThrown = 0;
     private turnToSetFree = 0;
     private nextTilesIds:Map<string,number> = new Map()
+    private randomQuestion  = false;
 
     constructor(centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
 
@@ -334,6 +335,7 @@ class Tile{
                 forward:this.forward,
                 backward:this.backward,
                 mustThrown:this.mustThrown,
+                randomQuestion:this.randomQuestion,
                 turnToSetFree:this.turnToSetFree,
                 nextTilesIds:this.mapNextTiles(),
                 id:this.id}
@@ -567,6 +569,12 @@ class Tile{
     }
     public getNextTilesIds(){
         return this.nextTilesIds
+    }
+    public setRandomQuestion(is:boolean){
+        this.randomQuestion = is
+    }
+    public getRandomQuestion(){
+        return this.randomQuestion
     }
 }
 

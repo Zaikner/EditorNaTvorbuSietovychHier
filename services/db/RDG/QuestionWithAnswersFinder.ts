@@ -63,7 +63,7 @@ export class QuestionWithAnswersFinder{
               console.log("Connection failed")
             } 
           }
-          public async findByAuthor(author:number){
+          public async findByAuthor(author:string){
             
             let client = DbConnect.get()
             try {

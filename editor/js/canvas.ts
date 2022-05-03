@@ -40,6 +40,14 @@ function edit(){
 // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
 //   updateNextTileIds()
 // })
+
+document.getElementById('randomQuestionID')?.addEventListener('click',function(){
+  editor.setEvents('random',{num:0,value:0})
+  $('#editEventModal').modal('hide')
+    elementDeleter('askTheQuestionEventEdit')
+    document.getElementById('pickedEventParagraph')!.textContent =texts[201]
+    update()
+})
 document.getElementById('noneButton')!.addEventListener('click',function(){
 
     editor.setEvents('none',{num:0,value:0})
@@ -58,6 +66,7 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[99] +' ' + nums +' ' + texts[100]
+    update()
   })
 })
 document.getElementById('backwardButton')!.addEventListener('click',function(){
@@ -73,6 +82,7 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[103] +' ' + nums +' ' + texts[100]
+    update()
   })
 })
 document.getElementById('skipButton')!.addEventListener('click',function(){
@@ -86,6 +96,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[105] +' ' + nums +' ' + texts[100]
+    update()
   })
   
 })
@@ -100,6 +111,7 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[107] +' ' + nums +' ' + texts[100]
+    update()
     
   })
   
@@ -124,6 +136,7 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[110] + freeInput.value +texts[111] + nums + texts[100];
+    update()
   })
   
 });

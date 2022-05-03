@@ -27,6 +27,7 @@ var Tile = /** @class */ (function () {
         this.mustThrown = 0;
         this.turnToSetFree = 0;
         this.nextTilesIds = new Map();
+        this.randomQuestion = false;
         this.centerX = centerX;
         this.centerY = centerY;
         this.x1 = x1;
@@ -280,6 +281,7 @@ var Tile = /** @class */ (function () {
             forward: this.forward,
             backward: this.backward,
             mustThrown: this.mustThrown,
+            randomQuestion: this.randomQuestion,
             turnToSetFree: this.turnToSetFree,
             nextTilesIds: this.mapNextTiles(),
             id: this.id
@@ -507,6 +509,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getNextTilesIds = function () {
         return this.nextTilesIds;
+    };
+    Tile.prototype.setRandomQuestion = function (is) {
+        this.randomQuestion = is;
+    };
+    Tile.prototype.getRandomQuestion = function () {
+        return this.randomQuestion;
     };
     return Tile;
 }());

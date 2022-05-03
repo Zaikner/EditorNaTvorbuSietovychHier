@@ -138,7 +138,7 @@ class Game{
             let tileId = originalTile.getTileNumber()
             for (let i = 0;i < value;i++){
                 
-                let tile = editor.findTileByNextTileNumber(tileId)
+                let tile = editor.findTileByNextTileNumber(tileId,pawn.player)
                 if (tile != undefined)
                 {
                     tileId = tile.getTileNumber()

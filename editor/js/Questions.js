@@ -245,6 +245,8 @@ function pickQuestion(data) {
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
                 document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
+                canvas_1.editor.setEvents('question', { num: elem.questionId, value: 0 });
+                (0, TileEditor_1.update)();
                 //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
             };
             list.appendChild(quest);
@@ -341,7 +343,7 @@ function askQuestion(data) {
             quest.style.textAlign = 'center';
             quest.textContent = elem.questionText;
             list.appendChild(quest);
-            (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+            (_a = document.getElementById('answerQuestion')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }
         var opt = document.createElement('button');
         opt.id = 'givenOption' + i;

@@ -19,11 +19,18 @@ exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
 function edit() {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     mainMenu();
     // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
     //   updateNextTileIds()
     // })
+    (_a = document.getElementById('randomQuestionID')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+        editor.setEvents('random', { num: 0, value: 0 });
+        $('#editEventModal').modal('hide');
+        elementDeleter('askTheQuestionEventEdit');
+        document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[201];
+        (0, TileEditor_js_1.update)();
+    });
     document.getElementById('noneButton').addEventListener('click', function () {
         editor.setEvents('none', { num: 0, value: 0 });
         $('#editEventModal').modal('hide');
@@ -41,6 +48,7 @@ function edit() {
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[99] + ' ' + nums + ' ' + clientSocket_1.texts[100];
+            (0, TileEditor_js_1.update)();
         });
     });
     document.getElementById('backwardButton').addEventListener('click', function () {
@@ -53,6 +61,7 @@ function edit() {
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[103] + ' ' + nums + ' ' + clientSocket_1.texts[100];
+            (0, TileEditor_js_1.update)();
         });
     });
     document.getElementById('skipButton').addEventListener('click', function () {
@@ -65,6 +74,7 @@ function edit() {
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[105] + ' ' + nums + ' ' + clientSocket_1.texts[100];
+            (0, TileEditor_js_1.update)();
         });
     });
     document.getElementById('repeatButton').addEventListener('click', function () {
@@ -77,6 +87,7 @@ function edit() {
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[107] + ' ' + nums + ' ' + clientSocket_1.texts[100];
+            (0, TileEditor_js_1.update)();
         });
     });
     document.getElementById('stopButton').addEventListener('click', function () {
@@ -94,6 +105,7 @@ function edit() {
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[110] + freeInput.value + clientSocket_1.texts[111] + nums + clientSocket_1.texts[100];
+            (0, TileEditor_js_1.update)();
         });
     });
     //$('#rulesModal').modal('show');
@@ -136,7 +148,7 @@ function edit() {
     });
     //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
-    (_a = document.getElementById('nextTileButtonSet')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+    (_b = document.getElementById('nextTileButtonSet')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
         var _a;
         editor.getGame().getPlayerTokens().forEach(function (token) {
             var input = document.getElementById('nextTile' + token).value;
@@ -152,13 +164,13 @@ function edit() {
         clientSocket_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: true });
         $('#pickQuestionModal').modal('show');
     });
-    (_b = document.getElementById('loadCreatedGameModal')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
+    (_c = document.getElementById('loadCreatedGameModal')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
         var val = document.getElementById('gameNameInput').value;
         (0, TileEditor_js_1.removeAllButtons)();
         clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: val, response: true });
         mainMenu();
     });
-    (_c = document.getElementById('loadGameButton')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', function () {
+    (_d = document.getElementById('loadGameButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
         clientSocket_1.editorSocket.emit('loadGameNames');
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });

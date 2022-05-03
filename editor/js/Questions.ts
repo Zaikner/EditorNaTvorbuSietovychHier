@@ -1,7 +1,7 @@
 import { doc, editor,  elementDeleter, mainMenu} from './canvas'
 import { editorSocket,clickFunction,texts} from './clientSocket.js'
 import { spawnButton, spawnDiv, spawnHeading } from './Elements';
-import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
+import { removeAllButtons, removeAllListenersAdded, update } from './TileEditor';
 import { Warning } from './Warning';
 
 let num = 0
@@ -257,6 +257,7 @@ function showAllQuestions(data:any){
        
     })
 }
+
 function pickQuestion(data:any){
     //removeAllButtons()
     elementDeleter('listPickerContainer')
@@ -282,6 +283,8 @@ function pickQuestion(data:any){
                                      editor.setQuestionId(elem.questionId)
                                      console.log('Question id je teraz:'+editor.getQuestionId());
                                      document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
+                                     editor.setEvents('question',{num:elem.questionId,value:0})
+                                     update()
                                      //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
             list.appendChild(quest)
@@ -394,7 +397,7 @@ function askQuestion(data:any){
 
             list.appendChild(quest)
 
-            document.getElementById('tileEditingPlace')?.appendChild(list)
+            document.getElementById('answerQuestion')?.appendChild(list)
         }
         let opt = document.createElement('button')
         opt.id = 'givenOption'+i;

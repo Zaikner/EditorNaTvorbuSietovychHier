@@ -33,6 +33,7 @@ var Tile_db = /** @class */ (function () {
         this.mustThrown = 0;
         this.turnToSetFree = 0;
         this.nextTilesIds = [];
+        this.randomQuestion = false;
     }
     Tile_db.prototype.setStroke = function (newStroke) {
         this.stroke = newStroke;
@@ -208,14 +209,20 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.setTurnsToSetFree = function (newTurns) {
         this.turnToSetFree = newTurns;
     };
+    Tile_db.prototype.setRandomQuestion = function (is) {
+        this.randomQuestion = is;
+    };
+    Tile_db.prototype.getRandomQuestion = function () {
+        return this.randomQuestion;
+    };
     Tile_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         console.log('insertuje toto');
         console.log(this);
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29);',
-            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds]
+            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
         };
         client
             .query(query)
@@ -252,6 +259,7 @@ var Tile_db = /** @class */ (function () {
         ret.setMustThrown(data.mustThrown);
         ret.setTurnsToSetFree(data.turnToSetFree);
         ret.setNextTilesIds(data.nextTilesIds);
+        ret.setRandomQuestion(data.randomQuestion);
         return ret;
     };
     return Tile_db;

@@ -29,6 +29,7 @@ class GameEditor{
     private backward = 0;
     private mustThrown = 0;
     private turnToSetFree = 0;
+    private randomQuestion = false;
     constructor(){
         this.initNewGame()
       
@@ -225,10 +226,10 @@ class GameEditor{
         })
         return t
     }
-    findTileByNextTileNumber(id:number):Tile{
+    findTileByNextTileNumber(id:number,token:string):Tile{
         let t:Tile = undefined!
         this.game.getTiles().forEach((tile:Tile)=>{
-            if (tile.getFollowingTileNumber() == id){
+            if (tile.getNextTilesIds().get(token) == id){
                 t = tile
               
             }
@@ -257,6 +258,7 @@ class GameEditor{
             })
             editorSocket.emit('react to tile',{room:params.get('id'),
                                             questionId:tile.getQuestionId(),
+                                            randomQuestion:tile.getRandomQuestion(),
                                             id:getCookie('id'),
                                             returnValue:returnValue,
                                             pawnId:pawn.id,
@@ -299,14 +301,15 @@ class GameEditor{
    
     movePawnBack(pawnId:number,value:number,react:boolean){
        
-        
+        console.log('vykonal move back pawnId:', pawnId , value, react)
         let pawn = this.findPawnById(pawnId)
         let tile = this.findTileById(pawn.tileId)
         tile.removePawn(pawn)
         for (let i = 0;i < value;i++){
             console.log('Previous tile with id: '+tile.getFollowingTileNumber())
-            tile = this.findTileByNextTileNumber(tile.getTileNumber())
-            
+            console.log('Previous tile with id: '+tile.getNextTilesIds().get(pawn.player))
+            tile = this.findTileByNextTileNumber(tile.getTileNumber()!,pawn.player)
+            console.log('otocil')
             console.log(tile)
         }
         tile.getPawns().push(pawn)
@@ -350,6 +353,7 @@ class GameEditor{
         this.mustThrown = 0;
         this.turnToSetFree = 0;
         this.questionId = -1;
+        this.randomQuestion = false;
 
         if (type == 'skip'){
             this.skip = values.num   
@@ -366,6 +370,12 @@ class GameEditor{
         else if (type == 'stop'){
             this.mustThrown = values.value;
             this.turnToSetFree = values.num;
+        }
+        else if (type == 'random'){
+            this.randomQuestion = true
+        }
+        else if(type == 'question'){
+            this.questionId = values.num
         }
         
     }
@@ -549,7 +559,12 @@ class GameEditor{
     public setTurnsToSetFree(newTurns:number){
         this.turnToSetFree = newTurns
     }
-    
+    public setRandomQuestion(is:boolean){
+        this.randomQuestion = is
+    }
+    public getRandomQuestion(){
+        return this.randomQuestion
+    }
     
 }
 

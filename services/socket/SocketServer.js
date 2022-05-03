@@ -189,6 +189,7 @@ var ServerSocket = /** @class */ (function () {
                                 t.setBackward(tile.backward);
                                 t.setMustThrown(tile.mustThrown);
                                 t.setTurnsToSetFree(tile.turnToSetFree);
+                                t.setRandomQuestion(tile.randomQuestion);
                                 t.insert();
                             });
                             g.upsert();
@@ -309,7 +310,7 @@ var ServerSocket = /** @class */ (function () {
                 socket.to(msg.id).emit('show Dice value', { value: msg.value });
             });
             socket.on('react to tile', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var r, questions, data_1;
+                var r, author, allQuesstions, randomId, questions, data_1, questions, data_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -317,15 +318,22 @@ var ServerSocket = /** @class */ (function () {
                             console.log('recieved react to tile id: ' + msg.id);
                             console.log(msg);
                             r = GameManager.getActiveRooms().get(parseInt(msg.room));
-                            if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 4];
+                            if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 8];
                             this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
-                            if (!(msg.questionId >= 0)) return [3 /*break*/, 2];
+                            if (!msg.randomQuestion) return [3 /*break*/, 4];
                             console.log('nasiel otazku');
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.questionId)];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getName())];
                         case 1:
+                            author = (_a.sent());
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(author[0].getAuthor())];
+                        case 2:
+                            allQuesstions = _a.sent();
+                            randomId = allQuesstions[Math.floor(Math.random() * allQuesstions.length)].getQuestionId();
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(randomId)];
+                        case 3:
                             questions = _a.sent();
                             data_1 = [];
                             console.log(questions);
@@ -341,8 +349,31 @@ var ServerSocket = /** @class */ (function () {
                             });
                             this.io.to(msg.room).emit('loadedAnswerQuestions', data_1);
                             socket.emit('canReactToAnswer');
-                            return [3 /*break*/, 3];
-                        case 2:
+                            return [3 /*break*/, 7];
+                        case 4:
+                            if (!(msg.questionId >= 0)) return [3 /*break*/, 6];
+                            console.log('nasiel otazku');
+                            r.setReturnValue(msg.returnValue);
+                            r.setChoosedPawnId(msg.pawnId);
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.questionId)];
+                        case 5:
+                            questions = _a.sent();
+                            data_2 = [];
+                            console.log(questions);
+                            questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
+                                data_2.push({
+                                    questionId: question.getQuestionId(),
+                                    optionId: question.getOptionId(),
+                                    questionText: question.getQuestionText(),
+                                    optionText: question.getOptionText(),
+                                    author: question.getAuthor(),
+                                    isAnswer: question.getIsAnswer()
+                                });
+                            });
+                            this.io.to(msg.room).emit('loadedAnswerQuestions', data_2);
+                            socket.emit('canReactToAnswer');
+                            return [3 /*break*/, 7];
+                        case 6:
                             if (msg.skip > 0) {
                                 r.getPlayerOnTurn().setSkip(msg.skip);
                                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
@@ -369,12 +400,12 @@ var ServerSocket = /** @class */ (function () {
                                 // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
                                 // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
                             }
-                            _a.label = 3;
-                        case 3: return [3 /*break*/, 5];
-                        case 4:
+                            _a.label = 7;
+                        case 7: return [3 /*break*/, 9];
+                        case 8:
                             console.log([r.getPlayerOnTurn().getAccount().getSocketId(), socket.id]);
-                            _a.label = 5;
-                        case 5: return [2 /*return*/];
+                            _a.label = 9;
+                        case 9: return [2 /*return*/];
                     }
                 });
             }); });
@@ -451,10 +482,12 @@ var ServerSocket = /** @class */ (function () {
             socket.on('wasRightAnswer', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (!msg.is) {
+                    console.log('vratil spat figurku ,lebo bol false');
                     _this.io["in"](msg.room).emit('return Pawn to place', { pawnId: r.getChoosedPawnId(), value: r.getReturnValue() });
                     r.getPawnPositions().set(r.getChoosedPawnId(), r.getReturnValue());
                 }
                 else {
+                    console.log('bol true');
                 }
                 //console.log(r)
                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });

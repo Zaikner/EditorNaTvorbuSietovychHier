@@ -26,6 +26,7 @@ var GameEditor = /** @class */ (function () {
         this.backward = 0;
         this.mustThrown = 0;
         this.turnToSetFree = 0;
+        this.randomQuestion = false;
         this.initNewGame();
     }
     GameEditor.prototype.nullEditor = function () {
@@ -196,10 +197,10 @@ var GameEditor = /** @class */ (function () {
         });
         return t;
     };
-    GameEditor.prototype.findTileByNextTileNumber = function (id) {
+    GameEditor.prototype.findTileByNextTileNumber = function (id, token) {
         var t = undefined;
         this.game.getTiles().forEach(function (tile) {
-            if (tile.getFollowingTileNumber() == id) {
+            if (tile.getNextTilesIds().get(token) == id) {
                 t = tile;
             }
         });
@@ -222,6 +223,7 @@ var GameEditor = /** @class */ (function () {
             });
             clientSocket_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
                 questionId: tile.getQuestionId(),
+                randomQuestion: tile.getRandomQuestion(),
                 id: (0, clientSocket_js_1.getCookie)('id'),
                 returnValue: returnValue,
                 pawnId: pawn.id,
@@ -258,12 +260,15 @@ var GameEditor = /** @class */ (function () {
         return ret;
     };
     GameEditor.prototype.movePawnBack = function (pawnId, value, react) {
+        console.log('vykonal move back pawnId:', pawnId, value, react);
         var pawn = this.findPawnById(pawnId);
         var tile = this.findTileById(pawn.tileId);
         tile.removePawn(pawn);
         for (var i = 0; i < value; i++) {
             console.log('Previous tile with id: ' + tile.getFollowingTileNumber());
-            tile = this.findTileByNextTileNumber(tile.getTileNumber());
+            console.log('Previous tile with id: ' + tile.getNextTilesIds().get(pawn.player));
+            tile = this.findTileByNextTileNumber(tile.getTileNumber(), pawn.player);
+            console.log('otocil');
             console.log(tile);
         }
         tile.getPawns().push(pawn);
@@ -303,6 +308,7 @@ var GameEditor = /** @class */ (function () {
         this.mustThrown = 0;
         this.turnToSetFree = 0;
         this.questionId = -1;
+        this.randomQuestion = false;
         if (type == 'skip') {
             this.skip = values.num;
         }
@@ -318,6 +324,12 @@ var GameEditor = /** @class */ (function () {
         else if (type == 'stop') {
             this.mustThrown = values.value;
             this.turnToSetFree = values.num;
+        }
+        else if (type == 'random') {
+            this.randomQuestion = true;
+        }
+        else if (type == 'question') {
+            this.questionId = values.num;
         }
     };
     GameEditor.prototype.checkIfAllPlayersHaveStartingTile = function () {
@@ -484,6 +496,12 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.setTurnsToSetFree = function (newTurns) {
         this.turnToSetFree = newTurns;
+    };
+    GameEditor.prototype.setRandomQuestion = function (is) {
+        this.randomQuestion = is;
+    };
+    GameEditor.prototype.getRandomQuestion = function () {
+        return this.randomQuestion;
     };
     return GameEditor;
 }());

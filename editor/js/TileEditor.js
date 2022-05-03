@@ -366,6 +366,7 @@ var spawnTile = function (coords) {
     addedTile.setMustThrown(canvas_js_1.editor.getMustThrown());
     addedTile.setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
     addedTile.setQuestionId(canvas_js_1.editor.getQuestionId());
+    addedTile.setRandomQuestion(canvas_js_1.editor.getRandomQuestion());
     // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
     //   addedTile.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     //   let tileWithSameNumber = editor.getGame().getTiles()
@@ -431,6 +432,7 @@ var update = function () {
     canvas_js_1.editor.getChoosenTile().setMustThrown(canvas_js_1.editor.getMustThrown());
     canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
     canvas_js_1.editor.getChoosenTile().setQuestionId(canvas_js_1.editor.getQuestionId());
+    canvas_js_1.editor.getChoosenTile().setRandomQuestion(canvas_js_1.editor.getRandomQuestion());
     // }
     // else{
     // editor.getChoosenTile()!.setSkip(0)
@@ -481,6 +483,7 @@ var setValues = function (tile, copyNumber) {
         canvas_js_1.editor.setMustThrown(tile.getMustThrown());
         canvas_js_1.editor.setTurnsToSetFree(tile.getTurnsToSetFree());
         canvas_js_1.editor.setQuestionId(tile.getQuestionId());
+        canvas_js_1.editor.setRandomQuestion(tile.getRandomQuestion());
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
         //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
@@ -530,6 +533,11 @@ var setValues = function (tile, copyNumber) {
         }
         else if (tile.getQuestionId() != -1) {
             document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + canvas_js_1.editor.getGame().getQuestions().get(tile.getQuestionId());
+        }
+        else if (tile.getRandomQuestion()) {
+            console.log('chooooooooooooooooooooooosen tile:');
+            console.log(canvas_js_1.editor.getChoosenTile());
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[201];
         }
         else {
             document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[197];

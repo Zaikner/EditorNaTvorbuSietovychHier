@@ -154,6 +154,7 @@ export class ServerSocket{
           t.setBackward(tile.backward)
           t.setMustThrown(tile.mustThrown)
           t.setTurnsToSetFree(tile.turnToSetFree)
+          t.setRandomQuestion(tile.randomQuestion)
           t.insert()
         })
         g.upsert()
@@ -303,7 +304,7 @@ export class ServerSocket{
         
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
-      socket.on('react to tile',async (msg:{room:string,questionId:number,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,turnsToSetFree:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
+      socket.on('react to tile',async (msg:{room:string,questionId:number,randomQuestion:boolean,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,turnsToSetFree:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
         //returnValue
         console.log('recieved react to tile id: '+msg.id)
         console.log(msg)
@@ -311,7 +312,32 @@ export class ServerSocket{
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
-          if (msg.questionId >= 0){
+          if (msg.randomQuestion){
+            console.log('nasiel otazku')
+            r.setReturnValue(msg.returnValue)
+            r.setChoosedPawnId(msg.pawnId)
+            let author = (await GameFinder.getIntance().findByName(r.getName()))!
+
+            let allQuesstions = await QuestionWithAnswersFinder.getInstance().findByAuthor(author[0]!.getAuthor())
+            let randomId  = allQuesstions![Math.floor(Math.random()*allQuesstions!.length)]!.getQuestionId()
+            let questions = await QuestionWithAnswersFinder.getInstance().findById(randomId)
+            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean;}[] = []
+            console.log(questions)
+    
+            questions?.forEach((question) => {
+              data.push({
+                questionId: question.getQuestionId(),
+                optionId: question.getOptionId(),
+                questionText: question.getQuestionText(),
+                optionText: question.getOptionText(),
+                author: question.getAuthor(),
+                isAnswer: question.getIsAnswer()})
+            })
+            
+            this.io.to(msg.room).emit('loadedAnswerQuestions',data)
+            socket.emit('canReactToAnswer')
+          }
+          else if (msg.questionId >= 0){
             console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
@@ -462,11 +488,12 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
 
         if (!msg.is){
+          console.log('vratil spat figurku ,lebo bol false')
           this.io.in(msg.room).emit('return Pawn to place',{pawnId:r.getChoosedPawnId(),value:r.getReturnValue()})
           r.getPawnPositions().set(r.getChoosedPawnId(),r.getReturnValue())
          }
         else{
-       
+          console.log('bol true')
         }
       
       

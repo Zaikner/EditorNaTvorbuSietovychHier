@@ -455,6 +455,7 @@ function insertTilesMenu():void{
     addedTile.setMustThrown(editor.getMustThrown())
     addedTile.setTurnsToSetFree(editor.getTurnsToSetFree())
     addedTile.setQuestionId(editor.getQuestionId())
+    addedTile.setRandomQuestion(editor.getRandomQuestion())
    
     
     // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
@@ -537,6 +538,7 @@ function insertTilesMenu():void{
     editor.getChoosenTile()!.setMustThrown(editor.getMustThrown())
     editor.getChoosenTile()!.setTurnsToSetFree(editor.getTurnsToSetFree())
     editor.getChoosenTile()!.setQuestionId(editor.getQuestionId())
+    editor.getChoosenTile()!.setRandomQuestion(editor.getRandomQuestion())
     // }
     // else{
       // editor.getChoosenTile()!.setSkip(0)
@@ -592,6 +594,7 @@ function insertTilesMenu():void{
       editor.setMustThrown(tile.getMustThrown())
       editor.setTurnsToSetFree(tile.getTurnsToSetFree())
       editor.setQuestionId(tile.getQuestionId())
+      editor.setRandomQuestion(tile.getRandomQuestion())
       let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
@@ -664,6 +667,11 @@ function insertTilesMenu():void{
       }
       else if (tile.getQuestionId()!=-1){
         document.getElementById('pickedEventParagraph')!.textContent = texts[71] + editor.getGame().getQuestions().get(tile.getQuestionId());
+      }
+      else if (tile.getRandomQuestion()){
+        console.log('chooooooooooooooooooooooosen tile:')
+        console.log(editor.getChoosenTile())
+        document.getElementById('pickedEventParagraph')!.textContent = texts[201]
       }
       else{
         document.getElementById('pickedEventParagraph')!.textContent = texts[197]
