@@ -120,14 +120,17 @@ title=text[1]
           div
 footer 
   p Gamelobby
+script(src='../socket.io/socket.io.js')
 script.
-   const editorSocket = io();
-  
-   editorSocket.emit('set Socket',{id:localStorage.getItem('id')})
-   editorSocket.on('check if online',()=>{
-   console.log('emitol online')
-   editorSocket.emit('online',{id:localStorage.getItem('id')})
-   })
+  document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
+  document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
+
+  let editorSocket = io()
+  editorSocket.emit('set Socket',{id:localStorage.getItem('id')})
+  editorSocket.on('check if online',()=>{
+  console.log('emitol online')
+  editorSocket.emit('online',{id:localStorage.getItem('id')})
+  })
  
  
   
