@@ -28,27 +28,32 @@ router
     
     
     console.log(text)
-    if(acc === undefined){
-      return
+    if (request.cookies.id != undefined && acc != undefined){
+        console.log(await GameFinder.getIntance().findAll())
+        let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
+        let rooms = Array.from(GameManager.getActiveRooms().values())
+        .map(room => [room.getId(),
+            "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
+            room.getGameName(),
+            function(){
+                room.join(new Player(acc))
+            }])
+        let scores =await AccountFinder.getIntance().findAllByOrderedScore()
+        let sendScores = []
+        for (let i = 1 ; i<= scores.length;i++){
+            sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
+        }
+        let players = GameManager.getActivePlayers(acc)
+        console.log(rooms)
+        console.log(sendScores)
+        res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
+        
+        
     }
-    console.log(await GameFinder.getIntance().findAll())
-    let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
-    let rooms = Array.from(GameManager.getActiveRooms().values())
-    .map(room => [room.getId(),
-        "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
-        room.getGameName(),
-        function(){
-            room.join(new Player(acc))
-        }])
-    let scores =await AccountFinder.getIntance().findAllByOrderedScore()
-    let sendScores = []
-    for (let i = 1 ; i<= scores.length;i++){
-        sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
+    else{
+        res.redirect('/gameLobby/login')
     }
-    let players = GameManager.getActivePlayers(acc)
-    console.log(rooms)
-    console.log(sendScores)
-    res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
+  
 });
 
 

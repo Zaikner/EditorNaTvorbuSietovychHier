@@ -19,22 +19,10 @@ router
         text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
     }
     if (request.cookies.id != undefined && acc != undefined){
-        if (acc.getIsGuest() === true){
-            
-            res.redirect('/editor/login')
-        }
-        else{
-            //SocketServer.getIo().emit('connected')
-            console.log('editor redirectuje')
-            let acc = AccountManager.getAccountByClientId(request.cookies.id)
-           
+        console.log('editor redirectuje')
+          
             res.render('edit',{root:'./editor/views',text:text});
           
-            // console.log(SocketServer.getIo().to(acc.getSocketId()))
-            // console.log(SocketServer.getIo().to(acc.getSocketId()).emit('connected'))
-            // SocketServer.getIo().to(acc.getSocketId()).emit('connected')
-            //console.log(io)
-        }
         
         
     }
