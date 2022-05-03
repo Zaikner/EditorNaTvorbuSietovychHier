@@ -38,7 +38,7 @@ router
                 f = acc.getAvatar()
                 //console.log(f)
             }
-            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore(),name:acc.getName()});
+            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore(),gameWon:acc.getGameWon(),gameLost:acc.getGameLost(),name:acc.getName()});
         }
         
         
@@ -86,11 +86,11 @@ router.route("/login")
     }
     else if (isLoged){
       
-        res.render('login',{root:'./editor/views',text:text[163],action:'/account/login'})
+        res.render('login',{root:'./editor/views',text:text[163],action:'/account/login',texts:text})
     }
     else{
       
-        res.render('login',{root:'./editor/views',text:text[164],action:'/account/login'})
+        res.render('login',{root:'./editor/views',text:text[164],action:'/account/login',texts:text})
     }
 
 });
@@ -110,19 +110,21 @@ router
     
 }).post(async(req,res) =>
 {   
+    console.log('padlo to na texte')
     let text;
-    if (request.cookies.language == 'SK'){
+    if (req.cookies.language == 'SK'){
         text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     }
     else{
         text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
     }
-   
+    console.log('presile request na zmenu avatara')
     //console.log('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
     let acc = AccountManager.getAccountByClientId(req.cookies.id)
     if (acc != undefined){
         let avatar = 'data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64")
         acc.setAvatar(avatar)
+        console.log('tu to este silo')
         AccountManager.changeAvatar(acc.getName(),avatar)
         //let accDb = AccountFinder.getIntance().findByName(acc.getName())
         //accDb.setAvatar('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
@@ -139,6 +141,7 @@ router
 .route("/change/avatar/id/:id")
 .post(async(request,res) =>
 {   
+    console.log('tu2')
     let text;
     if (request.cookies.language == 'SK'){
         text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())

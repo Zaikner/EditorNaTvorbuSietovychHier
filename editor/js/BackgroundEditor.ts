@@ -74,13 +74,13 @@ function spawnComponentElements(edit:boolean){
 
 
   spawnParagraph(document,'tileEditingPlace','',texts[81],true)
-  spawnSliderWithValueShower(document,'tileEditingPlace','componentSizeSlider','30','300','10','100')
+  spawnSliderWithValueShower(document,'tileEditingPlace','componentSizeSlider',texts[81],'30','300','10','100')
 
   spawnParagraph(document,'tileEditingPlace','',texts[82],true)
   spawnColorPicker(document,'tileEditingPlace','componentColorPicker',texts[82])
 
   spawnParagraph(document,'tileEditingPlace','',texts[83],true)
-  spawnSliderWithValueShower(document,'tileEditingPlace','componentOutlineSlider','0','20','10','100')
+  spawnSliderWithValueShower(document,'tileEditingPlace','componentOutlineSlider',texts[83],'0','20','10','100')
 
   spawnParagraph(document,'tileEditingPlace','',texts[84],true)
   spawnColorPicker(document,'tileEditingPlace','componentOutlineColorPicker',texts[84])
@@ -105,10 +105,10 @@ function spawnComponentElements(edit:boolean){
   })
 
   spawnParagraph(document,'tileEditingPlace','',texts[87],true)
-  spawnSliderWithValueShower(document,'tileEditingPlace','componentWidthSlider','1','500','10','100')
+  spawnSliderWithValueShower(document,'tileEditingPlace','componentWidthSlider',texts[87],'1','500','10','100')
 
   spawnParagraph(document,'tileEditingPlace','',texts[88],true)
-  spawnSliderWithValueShower(document,'tileEditingPlace','componentHeightSlider','1','500','10','100')
+  spawnSliderWithValueShower(document,'tileEditingPlace','componentHeightSlider',texts[88],'1','500','10','100')
 
 }
 let editComponent= function(){

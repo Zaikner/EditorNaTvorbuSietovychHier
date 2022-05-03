@@ -158,6 +158,7 @@ var ServerSocket = /** @class */ (function () {
                             g.setInitSizeX(data.initSizeX);
                             g.setInitSizeY(data.initSizeY);
                             g.setIsPublished(data.isPublished);
+                            g.setToogleNumber(data.toogleNumber);
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);
@@ -173,12 +174,10 @@ var ServerSocket = /** @class */ (function () {
                                 t.setStrokeColor(tile.strokeColor);
                                 t.setShape(tile.shape);
                                 t.setBackgroundFile(tile.backgroundFile);
-                                t.setPatternFile(tile.patternFile);
                                 t.setTileNumber(tile.tileNumber);
                                 t.setIsEndingFor(tile.isEndingFor);
                                 t.setIsStartingFor(tile.isStartingFor);
                                 t.setToogleNumber(tile.toggleNumber);
-                                t.setNumberingColor(tile.numberingColor);
                                 t.setFollowingTileNumber(tile.numberOfFollowingTile);
                                 t.setGameName(data.name);
                                 t.setQuestionId(tile.questionId);
@@ -410,6 +409,12 @@ var ServerSocket = /** @class */ (function () {
                     r.getPlayers().forEach(function (player) {
                         var acc = player.getAccount();
                         acc.setScore(acc.getScore() + r.getMaxPlayers() - player.getPlace() + 1);
+                        if (player.getPlace() == 1) {
+                            acc.setGameWon(acc.getGameWon() + 1);
+                        }
+                        else {
+                            acc.setGameLost(acc.getGameLost() + 1);
+                        }
                         player.getAccount().save();
                     });
                     //dorobit
@@ -607,8 +612,12 @@ var ServerSocket = /** @class */ (function () {
                                     isAnswer: question.getIsAnswer()
                                 });
                             });
-                            socket.emit('loadedQuestions', data);
-                            socket.emit('picked');
+                            if (msg.pick == false) {
+                                socket.emit('loadedQuestions', data);
+                            }
+                            else {
+                                socket.emit('loadedQuestions - pick', data);
+                            }
                             return [2 /*return*/];
                     }
                 });

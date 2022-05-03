@@ -42,18 +42,15 @@ var GameEditor = /** @class */ (function () {
             _this.game.getNextTilesIds().set(token, 2);
         });
     };
-    GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background, pattern) {
+    GameEditor.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background) {
         var tileNumber = this.nextTileNumber();
-        var newTile = new Tile_js_1.Tile('', coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.game.getNextTileNumber());
+        var newTile = new Tile_js_1.Tile(coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.game.getNextTileNumber());
         if (stroke != 0) {
             newTile.setStroke(stroke);
             newTile.setStrokeColor(strokeColor);
         }
         if (background != undefined) {
             newTile.setBackgroundFile(background);
-        }
-        if (pattern != undefined) {
-            newTile.setPatternFile(pattern);
         }
         newTile.setShape(shape);
         if (add) {
@@ -69,11 +66,13 @@ var GameEditor = /** @class */ (function () {
     };
     GameEditor.prototype.findTile = function (event, edit) {
         console.log('zavolal find tile');
+        var found = false;
         var coords = (0, canvas_js_1.calibreEventCoords)(event);
         var tiles = this.game.getTiles();
         for (var i = tiles.length - 1; i >= 0; i--) {
             if (tiles[i].isPointedAt(coords.x, coords.y)) {
                 console.log('nasiel');
+                found = true;
                 if (tiles[i] == this.choosenTile) {
                     tiles[i].setIsChoosen(false);
                     this.choosenTile = undefined;
@@ -84,29 +83,43 @@ var GameEditor = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
-                    if (!this.isMoving && edit)
-                        (0, TileEditor_js_1.editTiles)();
+                    //if (!this.isMoving && edit)editTiles()
                 }
                 break;
             }
         }
-    };
-    GameEditor.prototype.deleteTile = function (event) {
-        var _this = this;
-        var coords = (0, canvas_js_1.calibreEventCoords)(event);
-        var tiles = this.game.getTiles();
-        for (var i = tiles.length - 1; i >= 0; i--) {
-            if (tiles[i].isPointedAt(coords.x, coords.y)) {
-                this.game.removeTile(tiles[i]);
-                tiles[i].getPawns().forEach(function (pawn) {
-                    _this.game.removePawn(pawn);
-                });
-                break;
-            }
+        console.log('found je :');
+        console.log(found);
+        if (!found) {
+            (0, TileEditor_js_1.insert)(event);
+        }
+        else if (!this.isMoving && edit) {
+            (0, TileEditor_js_1.editTiles)();
         }
     };
-    GameEditor.prototype.updateChoosenTile = function (color, size, hasStroke, stroke, strokeColor, shape, image) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    GameEditor.prototype.deleteTile = function () {
+        // let coords = calibreEventCoords(event)
+        // let tiles = this.game.getTiles()
+        var _this = this;
+        // for (let i = tiles.length-1; i >= 0;i--){
+        //     if (tiles[i].isPointedAt(coords.x,coords.y)){
+        //         this.game.removeTile(tiles[i])
+        //         tiles[i].getPawns().forEach((pawn:Pawn)=>{
+        //             this.game.removePawn(pawn)
+        //         })
+        //         break
+        //     }
+        // }
+        if (this.choosenTile != undefined) {
+            this.game.removeTile(this.choosenTile);
+            this.choosenTile.getPawns().forEach(function (pawn) {
+                _this.game.removePawn(pawn);
+            });
+            (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+        }
+    };
+    GameEditor.prototype.updateChoosenTile = function (color, size, stroke, strokeColor, shape, image) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
         (_a = this.choosenTile) === null || _a === void 0 ? void 0 : _a.setColor(color);
         // this.choosenTile?.setCenterX(centerX)
         // this.choosenTile?.setCenterY(centerY)
@@ -117,17 +130,12 @@ var GameEditor = /** @class */ (function () {
         (_b = this.choosenTile) === null || _b === void 0 ? void 0 : _b.setRadius(size);
         (_c = this.choosenTile) === null || _c === void 0 ? void 0 : _c.setShape(shape);
         (_d = this.choosenTile) === null || _d === void 0 ? void 0 : _d.setBackgroundFile(image);
-        if (hasStroke) {
-            (_e = this.choosenTile) === null || _e === void 0 ? void 0 : _e.setStroke(stroke);
-            (_f = this.choosenTile) === null || _f === void 0 ? void 0 : _f.setStrokeColor(strokeColor);
-        }
-        else {
-            (_g = this.choosenTile) === null || _g === void 0 ? void 0 : _g.setStroke(0);
-        }
-        (_h = this.choosenTile) === null || _h === void 0 ? void 0 : _h.setX1(this.choosenTile.getCenterX() - size);
-        (_j = this.choosenTile) === null || _j === void 0 ? void 0 : _j.setX2(this.choosenTile.getCenterX() + size);
-        (_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.setY1(this.choosenTile.getCenterY() - size);
-        (_l = this.choosenTile) === null || _l === void 0 ? void 0 : _l.setY2(this.choosenTile.getCenterY() + size);
+        (_e = this.choosenTile) === null || _e === void 0 ? void 0 : _e.setStroke(stroke);
+        (_f = this.choosenTile) === null || _f === void 0 ? void 0 : _f.setStrokeColor(strokeColor);
+        (_g = this.choosenTile) === null || _g === void 0 ? void 0 : _g.setX1(this.choosenTile.getCenterX() - size);
+        (_h = this.choosenTile) === null || _h === void 0 ? void 0 : _h.setX2(this.choosenTile.getCenterX() + size);
+        (_j = this.choosenTile) === null || _j === void 0 ? void 0 : _j.setY1(this.choosenTile.getCenterY() - size);
+        (_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.setY2(this.choosenTile.getCenterY() + size);
         this.choosenTile;
     };
     GameEditor.prototype.moveTile = function (event) {
@@ -293,6 +301,7 @@ var GameEditor = /** @class */ (function () {
         this.backward = 0;
         this.mustThrown = 0;
         this.turnToSetFree = 0;
+        this.questionId = -1;
         if (type == 'skip') {
             this.skip = values.num;
         }

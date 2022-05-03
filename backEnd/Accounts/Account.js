@@ -9,6 +9,8 @@ var Account = /** @class */ (function () {
         this.isGuest = false;
         this.socketId = '';
         this.score = 0;
+        this.gameLost = 0;
+        this.gameWon = 0;
         this.name = name;
         this.password = password;
     }
@@ -18,6 +20,7 @@ var Account = /** @class */ (function () {
         newAcc.setPassword(this.password);
         newAcc.setScore(this.score);
         newAcc.setName(this.name);
+        newAcc.setGameLost(this.gameLost);
         newAcc.update();
     };
     Account.prototype.getScore = function () {
@@ -61,6 +64,18 @@ var Account = /** @class */ (function () {
     };
     Account.prototype.setSocketId = function (newId) {
         this.socketId = newId;
+    };
+    Account.prototype.getGameWon = function () {
+        return this.gameWon;
+    };
+    Account.prototype.setGameWon = function (newScore) {
+        this.gameWon = newScore;
+    };
+    Account.prototype.getGameLost = function () {
+        return this.gameLost;
+    };
+    Account.prototype.setGameLost = function (newScore) {
+        this.gameLost = newScore;
     };
     return Account;
 }());

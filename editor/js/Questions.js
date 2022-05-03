@@ -5,6 +5,7 @@ var canvas_1 = require("./canvas");
 var clientSocket_js_1 = require("./clientSocket.js");
 var Elements_1 = require("./Elements");
 var TileEditor_1 = require("./TileEditor");
+var Warning_1 = require("./Warning");
 var num = 0;
 var newQuestions = [];
 var givenOptions = 0;
@@ -41,10 +42,11 @@ function initCreation() {
     addOption('questionPlace', '', false);
     addOption('questionPlace', '', false);
     console.log('preslo uz');
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Add option', function () { addOption('questionPlace', '', false); });
     div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(-1); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') }); });
+    var but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[67], function () { addOption('questionPlace', '', false); });
+    //but.style.float = 'left'
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[58], function () { createQuestion(-1); });
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false }); });
 }
 exports.initCreation = initCreation;
 function renumOptions() {
@@ -143,6 +145,7 @@ function removeLastOption(parent) {
 exports.removeLastOption = removeLastOption;
 function createQuestion(id) {
     var options = [];
+    var can = false;
     console.log('CLICKOL');
     console.log(newQuestions);
     for (var i = 1; i <= num; i++) {
@@ -150,7 +153,11 @@ function createQuestion(id) {
             console.log('pridal pri create question');
             console.log({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value, id: document.getElementById('ans' + i).getAttribute('optionId') });
             if (document.getElementById('ans' + i).value != '') {
-                options.push({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value, id: document.getElementById('ans' + i).getAttribute('optionId') });
+                var isAnswer = document.getElementById('check' + i).checked;
+                if (isAnswer) {
+                    can = true;
+                }
+                options.push({ isAnswer: isAnswer, txt: document.getElementById('ans' + i).value, id: document.getElementById('ans' + i).getAttribute('optionId') });
             }
         }
         else {
@@ -160,12 +167,17 @@ function createQuestion(id) {
             console.log(i);
         }
     }
-    var data = { question: '', options: options, id: localStorage.getItem('id'), questionId: id };
-    data.question = document.getElementById('question').value;
-    num = 0;
-    console.log('vklada otazky');
-    console.log(data);
-    clientSocket_js_1.editorSocket.emit('newQuestion', data);
+    if (can) {
+        var data = { question: '', options: options, id: localStorage.getItem('id'), questionId: id };
+        data.question = document.getElementById('question').value;
+        num = 0;
+        console.log('vklada otazky');
+        console.log(data);
+        clientSocket_js_1.editorSocket.emit('newQuestion', data);
+    }
+    else {
+        Warning_1.Warning.show(clientSocket_js_1.texts[191]);
+    }
 }
 exports.createQuestion = createQuestion;
 function showAllQuestions(data) {
@@ -211,7 +223,9 @@ function showAllQuestions(data) {
 }
 exports.showAllQuestions = showAllQuestions;
 function pickQuestion(data) {
-    (0, TileEditor_1.removeAllButtons)();
+    //removeAllButtons()
+    (0, canvas_1.elementDeleter)('listPickerContainer');
+    //spawnHeading(document,'buttonPlace','',texts[198])
     var questions = new Map();
     data.forEach(function (elem) {
         var _a, _b;
@@ -231,10 +245,10 @@ function pickQuestion(data) {
                 canvas_1.editor.setQuestionId(elem.questionId);
                 console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
                 document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
-                document.getElementById('bindQuestion').textContent = clientSocket_js_1.texts[72];
+                //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
             };
             list.appendChild(quest);
-            (_a = document.getElementById('questionPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
+            (_a = document.getElementById('listPickerContainer')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
         }
         var opt = document.createElement('button');
         opt.type = 'button';
@@ -293,7 +307,7 @@ function editQuestionMenu(id, txt, elem) {
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(id); });
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () {
         clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: id });
-        clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id') });
+        clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
 }

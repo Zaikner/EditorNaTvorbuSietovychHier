@@ -2,10 +2,11 @@
 exports.__esModule = true;
 exports.Tile = void 0;
 var canvas_js_1 = require("./canvas.js");
+var clientSocket_js_1 = require("./clientSocket.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
 var utilityFunctions_js_1 = require("./utilityFunctions.js");
 var Tile = /** @class */ (function () {
-    function Tile(type, centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
+    function Tile(centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
         this.id = 0;
         this.color = "";
         this.stroke = 0;
@@ -13,12 +14,10 @@ var Tile = /** @class */ (function () {
         this.shape = 'circle';
         this.isChoosen = false;
         this.backgroundFile = undefined;
-        this.patternFile = undefined;
         this.isEndingFor = [];
         this.isStartingFor = [];
         this.cantBeEliminatedOnTile = [];
         this.toggleNumber = true;
-        this.numberingColor = '#000000';
         this.pawns = [];
         this.questionId = -1;
         this.skip = 0;
@@ -28,7 +27,6 @@ var Tile = /** @class */ (function () {
         this.mustThrown = 0;
         this.turnToSetFree = 0;
         this.nextTilesIds = new Map();
-        this.type = type;
         this.centerX = centerX;
         this.centerY = centerY;
         this.x1 = x1;
@@ -41,9 +39,10 @@ var Tile = /** @class */ (function () {
         this.numberOfFollowingTile = tileNumber + 1;
     }
     Tile.prototype.drawTile = function (canvas, ctx, showOnlyChange) {
+        console.log('nakreslil');
         ctx.beginPath();
         //obrazec bez outline -- nuluje
-        if (this.backgroundFile == undefined && this.patternFile == undefined) {
+        if (this.backgroundFile == undefined) {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 0;
             ctx.fillStyle = this.color;
@@ -88,45 +87,6 @@ var Tile = /** @class */ (function () {
                 ctx.restore();
             }
         }
-        else if (this.patternFile != undefined) {
-            if (this.shape == 'circle') {
-                ctx.save();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
-                var clipPath = new Path2D();
-                clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                ctx.clip(clipPath);
-                ctx.fillStyle = 'black';
-                ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                //ctx.fill()
-                ctx.stroke();
-                for (var i = 0; i * 20 + this.x1 < this.x2; i++) {
-                    for (var j = 0; j * 20 + this.y1 < this.y2; j++) {
-                        ctx.drawImage(this.patternFile, this.x1 + i * 20, this.y1 + j * 20, 20, 20);
-                    }
-                }
-                ctx.resetTransform();
-                ctx.restore();
-                //ctx.restore()
-            }
-            else {
-                ctx.save();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
-                var clipPath = new Path2D();
-                clipPath.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
-                ctx.clip(clipPath);
-                ctx.fillStyle = 'black';
-                ctx.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
-                //ctx.fill()
-                ctx.stroke();
-                for (var i = 0; i * 20 + this.x1 < this.x2; i++) {
-                    for (var j = 0; j * 20 + this.y1 < this.y2; j++) {
-                        ctx.drawImage(this.patternFile, this.x1 + i * 20, this.y1 + j * 20, 20, 20);
-                    }
-                }
-                ctx.resetTransform();
-                ctx.restore();
-            }
-        }
         //outline
         if (this.stroke > 0) {
             ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
@@ -166,11 +126,19 @@ var Tile = /** @class */ (function () {
                 ctx.resetTransform();
             }
         }
-        if (this.toggleNumber) {
+        if (canvas_js_1.editor.getGame().getToogleNumber() || clientSocket_js_1.isEditor) {
             //ctx.save() 
             //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
             ctx.font = "bold 30px Arial";
-            ctx.fillStyle = this.numberingColor;
+            if (this.strokeColor != this.color) {
+                ctx.fillStyle = this.strokeColor;
+            }
+            else if (this.strokeColor != '#000000') {
+                ctx.fillStyle = '#000000';
+            }
+            else {
+                ctx.fillStyle = '#FFFFFF';
+            }
             ctx.textBaseline = 'middle';
             ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
             ctx.resetTransform();
@@ -286,7 +254,7 @@ var Tile = /** @class */ (function () {
         return false;
     };
     Tile.prototype.JSONfyTile = function () {
-        return { type: this.type,
+        return {
             centerX: this.centerX,
             centerY: this.centerY,
             x1: this.x1,
@@ -299,12 +267,11 @@ var Tile = /** @class */ (function () {
             strokeColor: this.strokeColor,
             shape: this.shape,
             backgroundFile: this.backgroundFile === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.backgroundFile),
-            patternFile: this.patternFile === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.patternFile),
+            //patternFile:this.patternFile === undefined?'none':getDataUrlFromImage(this.patternFile),
             tileNumber: this.tileNumber,
             isEndingFor: this.isEndingFor,
             isStartingFor: this.isStartingFor,
             toggleNumber: this.toggleNumber,
-            numberingColor: this.numberingColor,
             numberOfFollowingTile: this.numberOfFollowingTile,
             questionId: this.questionId,
             cantBeEliminatedOnTile: this.cantBeEliminatedOnTile,
@@ -315,7 +282,8 @@ var Tile = /** @class */ (function () {
             mustThrown: this.mustThrown,
             turnToSetFree: this.turnToSetFree,
             nextTilesIds: this.mapNextTiles(),
-            id: this.id };
+            id: this.id
+        };
     };
     Tile.prototype.removePawn = function (pawn) {
         this.pawns = this.pawns.filter(function (p) { return p != pawn; });
@@ -390,12 +358,6 @@ var Tile = /** @class */ (function () {
     Tile.prototype.getIsChoosen = function () {
         return this.isChoosen;
     };
-    Tile.prototype.setType = function (newType) {
-        this.type = newType;
-    };
-    Tile.prototype.getType = function () {
-        return this.type;
-    };
     Tile.prototype.setX1 = function (newX1) {
         this.x1 = newX1;
     };
@@ -456,12 +418,6 @@ var Tile = /** @class */ (function () {
     Tile.prototype.setBackgroundFile = function (newFile) {
         this.backgroundFile = newFile;
     };
-    Tile.prototype.getPatternFile = function () {
-        return this.patternFile;
-    };
-    Tile.prototype.setPatternFile = function (newFile) {
-        this.patternFile = newFile;
-    };
     Tile.prototype.setIsEndingFor = function (newPlayers) {
         this.isEndingFor = newPlayers;
     };
@@ -479,12 +435,6 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.getToggleNumber = function () {
         return this.toggleNumber;
-    };
-    Tile.prototype.setNumberingColor = function (color) {
-        this.numberingColor = color;
-    };
-    Tile.prototype.getNumberingColor = function () {
-        return this.numberingColor;
     };
     Tile.prototype.getTileNumber = function () {
         return this.tileNumber;

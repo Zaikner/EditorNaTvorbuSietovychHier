@@ -2,6 +2,7 @@ import { doc, editor,  elementDeleter, mainMenu} from './canvas'
 import { editorSocket,clickFunction,texts} from './clientSocket.js'
 import { spawnButton, spawnDiv, spawnHeading } from './Elements';
 import { removeAllButtons, removeAllListenersAdded } from './TileEditor';
+import { Warning } from './Warning';
 
 let num = 0
 let newQuestions:Array<number> = []
@@ -47,10 +48,12 @@ function initCreation(){
     addOption('questionPlace','',false)
     addOption('questionPlace','',false)
     console.log('preslo uz')
-    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(-1);})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})})
+    let but = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[67],function(){addOption('questionPlace','',false)})
+    //but.style.float = 'left'
+    
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[58],function(){createQuestion(-1);})
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
 }
 
 
@@ -162,6 +165,7 @@ function removeLastOption(parent:string){
 }
 function createQuestion(id:number){
     let options = []
+    let can = false
     console.log('CLICKOL')
     console.log(newQuestions)
     for (let i = 1; i <= num;i++){
@@ -170,7 +174,11 @@ function createQuestion(id:number){
             console.log('pridal pri create question')
             console.log({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
             if ((<HTMLInputElement>document.getElementById('ans'+i)!).value!=''){
-                options.push({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
+                let isAnswer = (<HTMLInputElement>document.getElementById('check'+i)!).checked
+                if (isAnswer){
+                    can = true
+                }
+                options.push({isAnswer:isAnswer,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
             }
           
         }
@@ -185,12 +193,18 @@ function createQuestion(id:number){
        
     
     }
-    let data = {question:'',options:options,id:localStorage.getItem('id'),questionId:id}
-    data.question = (<HTMLInputElement>document.getElementById('question')!).value
-    num  = 0;
-    console.log('vklada otazky')
-    console.log(data)
-    editorSocket.emit('newQuestion',data)
+    if (can){
+        let data = {question:'',options:options,id:localStorage.getItem('id'),questionId:id}
+        data.question = (<HTMLInputElement>document.getElementById('question')!).value
+        num  = 0;
+        console.log('vklada otazky')
+        console.log(data)
+        editorSocket.emit('newQuestion',data)
+    }
+    else{
+        Warning.show(texts[191])
+    }
+  
    
     
 }
@@ -244,7 +258,10 @@ function showAllQuestions(data:any){
     })
 }
 function pickQuestion(data:any){
-    removeAllButtons()
+    //removeAllButtons()
+    elementDeleter('listPickerContainer')
+    //spawnHeading(document,'buttonPlace','',texts[198])
+   
 
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
@@ -265,11 +282,11 @@ function pickQuestion(data:any){
                                      editor.setQuestionId(elem.questionId)
                                      console.log('Question id je teraz:'+editor.getQuestionId());
                                      document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
-                                     (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
+                                     //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
             list.appendChild(quest)
 
-            document.getElementById('questionPlace')?.appendChild(list)
+            document.getElementById('listPickerContainer')?.appendChild(list)
         }
         let opt = document.createElement('button')
         opt.type = 'button';
@@ -338,7 +355,7 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
         editorSocket.emit('deleteQuestion',{id:id})
         
-        editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})})
+        editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
     
     
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})

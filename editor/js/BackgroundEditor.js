@@ -70,11 +70,11 @@ function spawnComponentElements(edit) {
         (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
     });
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[81], true);
-    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentSizeSlider', '30', '300', '10', '100');
+    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentSizeSlider', clientSocket_js_1.texts[81], '30', '300', '10', '100');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[82], true);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentColorPicker', clientSocket_js_1.texts[82]);
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[83], true);
-    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentOutlineSlider', '0', '20', '10', '100');
+    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentOutlineSlider', clientSocket_js_1.texts[83], '0', '20', '10', '100');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[84], true);
     (0, Elements_js_1.spawnColorPicker)(document, 'tileEditingPlace', 'componentOutlineColorPicker', clientSocket_js_1.texts[84]);
     //spawnParagraph(document,'tileEditingPlace','',texts[85],true)
@@ -93,9 +93,9 @@ function spawnComponentElements(edit) {
         }
     });
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[87], true);
-    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentWidthSlider', '1', '500', '10', '100');
+    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentWidthSlider', clientSocket_js_1.texts[87], '1', '500', '10', '100');
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[88], true);
-    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentHeightSlider', '1', '500', '10', '100');
+    (0, Elements_js_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'componentHeightSlider', clientSocket_js_1.texts[88], '1', '500', '10', '100');
 }
 var editComponent = function () {
 };

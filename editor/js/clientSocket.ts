@@ -42,7 +42,7 @@ editorSocket.on('connected',(msg)=>{
     let newId = 0
     msg.tiles.forEach((tile:any) =>{
       newId++;
-      let addedTile = new Tile(tile.type,tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
+      let addedTile = new Tile(tile.centerX,tile.centerY,tile.x1,tile.x2,tile.y1,tile.y2,tile.radius,tile.color,tile.tileNumber)
       
        addedTile.setId(newId)
        newIds.set(tile.id,newId)
@@ -58,25 +58,17 @@ editorSocket.on('connected',(msg)=>{
          reload(editor,ctx)
         }
        }
-       if(tile.patternFile != 'none'){
-        let image = new Image()
-        image.src = tile.patternFile
-        image.onload = function(){
-         addedTile.setPatternFile(image)
-         reload(editor,ctx)
-        }
-       }
-     
-        //addedTile.setBackgroundFile(tile.backgroundFile)
+      
+
+      //addedTile.setBackgroundFile(tile.backgroundFile)
         //addedTile.setPatternFile(tile.patternFile)
     
        addedTile.setIsEndingFor(tile.isEndingFor)
       
        addedTile.setIsStartingFor(tile.isStartingFor)
-    
-       
+     
        addedTile.setToogleNumber(tile.toggleNumber)
-       addedTile.setNumberingColor(tile.numberingColor)
+  
        addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
        addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
   
@@ -159,6 +151,7 @@ editorSocket.on('connected',(msg)=>{
     editor.getGame().setInitSizeX(msg.game.initSizeX)
     editor.getGame().setInitSizeY(msg.game.initSizeY)
     editor.getGame().setIsPublished(msg.game.isPublished)
+    editor.getGame().setToogleNumber(msg.game.toogleNumber)
   
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
@@ -201,6 +194,11 @@ editorSocket.on('connected',(msg)=>{
     });
     console.log('loaded game:')
     console.log(editor)
+
+    let gm:HTMLInputElement = <HTMLInputElement>document.getElementById('gameName')
+    if (gm!= undefined){
+      gm.value = editor.getGame().getName()
+    }
   })
 
   editorSocket.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
@@ -223,9 +221,9 @@ editorSocket.on('not author',()=>{
   Warning.show(texts[185])
   console.log ('not author')
 })
-editorSocket.on('game saved',()=>{
-  window.location.replace('/')
-})
+// editorSocket.on('game saved',()=>{
+//   window.location.replace('/')
+// })
 editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
   Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
 })
@@ -512,8 +510,26 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
    )
   
   editorSocket.on('loadedQuestions',(data)=>{showAllQuestions(data)
+        let newQuestions = new  Map<number,string>()
+
+        data.forEach((elem:any) =>{
+          newQuestions.set(elem.questionId,elem.questionText)
+          //elem.questionId
+        })
+        editor.getGame().setQuestions(newQuestions)
                                              //pickQuestion(data)
                                             })
+  editorSocket.on('loadedQuestions - pick',(data)=>{//showAllQuestions(data)
+                                              pickQuestion(data)
+                                              let newQuestions = new  Map<number,string>()
+
+                                              data.forEach((elem:any) =>{
+                                                newQuestions.set(elem.questionId,elem.questionText)
+                                                //elem.questionId
+                                              })
+                                              editor.getGame().setQuestions(newQuestions)
+                                             })
+                                           
   //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
   editorSocket.on('loadedAnswerQuestions',(data)=>{
     askQuestion(data)

@@ -12,6 +12,7 @@ var Game_db = /** @class */ (function () {
         this.initSizeX = 0;
         this.initSizeY = 0;
         this.isPublished = false;
+        this.toogleNumber = false;
     }
     Game_db.prototype.getId = function () {
         return this.id;
@@ -61,12 +62,18 @@ var Game_db = /** @class */ (function () {
     Game_db.prototype.getIsPublished = function () {
         return this.isPublished;
     };
+    Game_db.prototype.setToogleNumber = function (is) {
+        this.toogleNumber = is;
+    };
+    Game_db.prototype.getToggleNumber = function () {
+        return this.toogleNumber;
+    };
     Game_db.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7);',
-            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8);',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished, this.toogleNumber]
         };
         client
             .query(query)
@@ -76,8 +83,8 @@ var Game_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished";',
-            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
+            values: [this.name, this.author, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished, this.toogleNumber]
         };
         client
             .query(query)
@@ -93,6 +100,7 @@ var Game_db = /** @class */ (function () {
         ret.setInitSizeX(data.initSizeX);
         ret.setInitSizeY(data.initSizeY);
         ret.setIsPublished(data.isPublished);
+        ret.setToogleNumber(data.toogleNumber);
         return ret;
     };
     return Game_db;

@@ -33,6 +33,8 @@ class Game{
     private isOnTurn = false
     private nextTilesIds:Map<string,number> = new Map()
     private canThrow = false;
+    private toogleNumber = false;
+    private questions:Map<number,string> = new Map()
 
     
 
@@ -74,7 +76,8 @@ class Game{
                                           nextTilesIds:this.mapNextTiles(),
                                           initSizeX:this.initSizeX,
                                           initSizeY:this.initSizeY,
-                                          isPublished:this.isPublished
+                                          isPublished:this.isPublished,
+                                          toogleNumber:this.toogleNumber
                                         })
            
         }
@@ -277,8 +280,20 @@ class Game{
     getIsOnturn(){
         return this.isOnTurn
     }
+    public setToogleNumber(is : boolean) {
+        this.toogleNumber = is;
+    }
+    public getToogleNumber(){
+        return this.toogleNumber}
+
     public setNextTilesIds(newIds:Map<string,number>){
         this.nextTilesIds = newIds
+    }
+    public getQuestions(){
+        return this.questions}
+
+    public setQuestions(newQuestions:Map<number,string>){
+        this.questions = newQuestions
     }
     public getNextTilesIds(){
         return this.nextTilesIds

@@ -40,6 +40,18 @@ head
                .col-6.fs-5
                 form(action='/account/change/password', method='get')
                   p(style='font-weight:bold;')=score
+          .container-fluid
+            .row
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[193]
+               .col-6.fs-5
+                form(action='/account/change/password', method='get')
+                  p(style='font-weight:bold;')=gameWon
+          .container-fluid
+            .row
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[194]
+               .col-6.fs-5
+                form(action='/account/change/password', method='get')
+                  p(style='font-weight:bold;')=gameLost
       #modalFooter.modal-footer
         form.text-center.maxWidth(action='/logout', method='get')
           button.btn.btn-primary(type='submit')=text[153]

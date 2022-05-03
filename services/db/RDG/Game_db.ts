@@ -1,4 +1,5 @@
 
+import { BlobOptions } from "buffer";
 import { DbConnect } from "../DbConnect";
 
 export class Game_db{
@@ -10,6 +11,7 @@ export class Game_db{
     private initSizeX:number = 0;
     private initSizeY:number = 0;
     private isPublished:boolean = false;
+    private toogleNumber:boolean = false
     constructor(){
 
     }
@@ -64,13 +66,18 @@ export class Game_db{
     getIsPublished(){
         return this.isPublished
     }
+    public setToogleNumber(is : boolean) {
+        this.toogleNumber = is;
+    }
+    public getToggleNumber(){
+        return this.toogleNumber}
     
     public insert(){
         let client = DbConnect.get()
             const query = {
                 name: 'insert-game',
-                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7);',
-                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished],
+                text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8);',
+                values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber],
               }
               client
               .query(query)
@@ -83,8 +90,8 @@ export class Game_db{
                     const query = {
                         name: 'upsert-game',
                         
-                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished") VALUES($1,$2,$3,$4,$5,$6,$7)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished";',
-                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished],
+                        text: 'INSERT INTO "bachelorsThesis"."Game"(name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8)  ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
+                        values: [this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber],
                       }
                       client
                       .query(query)
@@ -103,6 +110,7 @@ export class Game_db{
                 ret.setInitSizeX(data.initSizeX)
                 ret.setInitSizeY(data.initSizeY)
                 ret.setIsPublished(data.isPublished)
+                ret.setToogleNumber(data.toogleNumber)
                 return ret
                 }
     

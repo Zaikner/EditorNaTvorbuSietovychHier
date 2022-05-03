@@ -18,12 +18,10 @@ var Tile_db = /** @class */ (function () {
         this.shape = 'circle';
         this.isChoosen = false;
         this.backgroundFile = '';
-        this.patternFile = '';
         this.tileNumber = 0;
         this.isEndingFor = [];
         this.isStartingFor = [];
         this.toggleNumber = true;
-        this.numberingColor = 'white';
         this.numberOfFollowingTile = 0;
         this.gameName = '';
         this.questionId = -1;
@@ -114,12 +112,6 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.setBackgroundFile = function (newFile) {
         this.backgroundFile = newFile;
     };
-    Tile_db.prototype.getPatternFile = function () {
-        return this.patternFile;
-    };
-    Tile_db.prototype.setPatternFile = function (newFile) {
-        this.patternFile = newFile;
-    };
     Tile_db.prototype.setIsEndingFor = function (newPlayers) {
         this.isEndingFor = newPlayers;
     };
@@ -137,12 +129,6 @@ var Tile_db = /** @class */ (function () {
     };
     Tile_db.prototype.getToggleNumber = function () {
         return this.toggleNumber;
-    };
-    Tile_db.prototype.setNumberingColor = function (color) {
-        this.numberingColor = color;
-    };
-    Tile_db.prototype.getNumberingColor = function () {
-        return this.numberingColor;
     };
     Tile_db.prototype.getTileNumber = function () {
         return this.tileNumber;
@@ -228,8 +214,8 @@ var Tile_db = /** @class */ (function () {
         console.log(this);
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31);',
-            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.patternFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberingColor, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds]
+            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds]
         };
         client
             .query(query)
@@ -251,12 +237,10 @@ var Tile_db = /** @class */ (function () {
         ret.setShape(data.shape);
         ret.setIsChoosen(data.isChoosen);
         ret.setBackgroundFile(data.backgroundFile);
-        ret.setPatternFile(data.patternFile);
         ret.setTileNumber(data.tileNumber);
         ret.setIsEndingFor(data.isEndingFor);
         ret.setIsStartingFor(data.isStartingFor);
         ret.setToogleNumber(data.toggleNumber);
-        ret.setNumberingColor(data.numberingColor);
         ret.setFollowingTileNumber(data.numberOfFollowingTile);
         ret.setGameName(data.gameName);
         ret.setQuestionId(data.questionId);

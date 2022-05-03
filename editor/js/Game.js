@@ -33,6 +33,8 @@ var Game = /** @class */ (function () {
         this.isOnTurn = false;
         this.nextTilesIds = new Map();
         this.canThrow = false;
+        this.toogleNumber = false;
+        this.questions = new Map();
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -63,7 +65,8 @@ var Game = /** @class */ (function () {
                 nextTilesIds: this.mapNextTiles(),
                 initSizeX: this.initSizeX,
                 initSizeY: this.initSizeY,
-                isPublished: this.isPublished
+                isPublished: this.isPublished,
+                toogleNumber: this.toogleNumber
             });
         }
     };
@@ -246,8 +249,20 @@ var Game = /** @class */ (function () {
     Game.prototype.getIsOnturn = function () {
         return this.isOnTurn;
     };
+    Game.prototype.setToogleNumber = function (is) {
+        this.toogleNumber = is;
+    };
+    Game.prototype.getToogleNumber = function () {
+        return this.toogleNumber;
+    };
     Game.prototype.setNextTilesIds = function (newIds) {
         this.nextTilesIds = newIds;
+    };
+    Game.prototype.getQuestions = function () {
+        return this.questions;
+    };
+    Game.prototype.setQuestions = function (newQuestions) {
+        this.questions = newQuestions;
     };
     Game.prototype.getNextTilesIds = function () {
         return this.nextTilesIds;

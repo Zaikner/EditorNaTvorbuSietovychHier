@@ -3,7 +3,7 @@ import { editorSocket, getCookie} from './clientSocket.js'
 import {Tile} from './Tile.js'
 import { Game } from './Game.js'
 
-import {editTiles} from './TileEditor.js'
+import {editTiles, insert} from './TileEditor.js'
 import { Pawn } from './Pawn.js';
 import { totalmem } from 'os';
 import { timeStamp } from 'console';
@@ -50,9 +50,9 @@ class GameEditor{
         })
     }   
 
-    initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement,pattern?:HTMLImageElement):Tile{
+    initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement):Tile{
         let tileNumber = this.nextTileNumber()
-        let newTile = new Tile('',coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
+        let newTile = new Tile(coords.x,coords.y,coords.x-size,coords.x+size,coords.y-size,coords.y+size,size,color,this.game.getNextTileNumber())
         
         if (stroke!=0){
             newTile.setStroke(stroke)
@@ -62,9 +62,7 @@ class GameEditor{
         if (background!=undefined){
             newTile.setBackgroundFile(background)
         }
-        if (pattern!=undefined){
-            newTile.setPatternFile(pattern)
-        }
+       
    
         newTile.setShape(shape)
         if (add){
@@ -84,12 +82,14 @@ class GameEditor{
   }
     findTile(event:MouseEvent,edit:boolean){
         console.log('zavolal find tile')
+        let found = false;
         let coords = calibreEventCoords(event)
         let tiles = this.game.getTiles()
         
         for (let i = tiles.length-1; i >= 0;i--){
             if (tiles[i].isPointedAt(coords.x,coords.y)){
                 console.log('nasiel')
+                found = true
                 if (tiles[i] == this.choosenTile){
                     tiles[i].setIsChoosen(false)               
                     this.choosenTile = undefined
@@ -100,31 +100,49 @@ class GameEditor{
                     }              
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
-                    if (!this.isMoving && edit)editTiles()
+                    //if (!this.isMoving && edit)editTiles()
+                    
                 }
                 break
             }
         }
+        console.log('found je :')
+        console.log(found)
+        if (!found){
+            insert(event)
+        }
+        else if (!this.isMoving && edit){
+            editTiles()
+        }
     }
   
-    deleteTile(event:MouseEvent){
+    deleteTile(){
         
-        let coords = calibreEventCoords(event)
-        let tiles = this.game.getTiles()
+        // let coords = calibreEventCoords(event)
+        // let tiles = this.game.getTiles()
         
-        for (let i = tiles.length-1; i >= 0;i--){
-            if (tiles[i].isPointedAt(coords.x,coords.y)){
-                this.game.removeTile(tiles[i])
-                tiles[i].getPawns().forEach((pawn:Pawn)=>{
-                    this.game.removePawn(pawn)
-                })
+        // for (let i = tiles.length-1; i >= 0;i--){
+        //     if (tiles[i].isPointedAt(coords.x,coords.y)){
+        //         this.game.removeTile(tiles[i])
+        //         tiles[i].getPawns().forEach((pawn:Pawn)=>{
+        //             this.game.removePawn(pawn)
+        //         })
                 
-                break
-            }
-        }
-      
+        //         break
+        //     }
+        // }
+      if(this.choosenTile!=undefined){
+        this.game.removeTile(this.choosenTile)
+        this.choosenTile.getPawns().forEach((pawn:Pawn)=>{
+                        this.game.removePawn(pawn)
+                     })
+        
+        reload(editor,ctx)
+      }
+
+     
     }
-    updateChoosenTile(color:string,size:number,hasStroke:boolean,stroke:number,strokeColor:string,shape:string,image?:HTMLImageElement){
+    updateChoosenTile(color:string,size:number,stroke:number,strokeColor:string,shape:string,image?:HTMLImageElement){
         this.choosenTile?.setColor(color)
         // this.choosenTile?.setCenterX(centerX)
         // this.choosenTile?.setCenterY(centerY)
@@ -135,13 +153,8 @@ class GameEditor{
         this.choosenTile?.setRadius(size)
         this.choosenTile?.setShape(shape)
         this.choosenTile?.setBackgroundFile(image!)
-        if (hasStroke){
-            this.choosenTile?.setStroke(stroke)
-            this.choosenTile?.setStrokeColor(strokeColor)
-        }
-        else{
-            this.choosenTile?.setStroke(0)
-        }
+        this.choosenTile?.setStroke(stroke)
+        this.choosenTile?.setStrokeColor(strokeColor)
         this.choosenTile?.setX1(this.choosenTile.getCenterX()-size)
         this.choosenTile?.setX2(this.choosenTile.getCenterX()+size)
         this.choosenTile?.setY1(this.choosenTile.getCenterY()-size)
@@ -333,6 +346,8 @@ class GameEditor{
         this.backward = 0
         this.mustThrown = 0;
         this.turnToSetFree = 0;
+        this.questionId = -1;
+
         if (type == 'skip'){
             this.skip = values.num   
         }

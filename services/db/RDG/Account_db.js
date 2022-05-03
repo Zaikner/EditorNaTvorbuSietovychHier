@@ -9,6 +9,8 @@ var Account_db = /** @class */ (function () {
         this.password = '';
         this.avatar = '';
         this.score = 0;
+        this.gameWon = 0;
+        this.gameLost = 0;
     }
     Account_db.prototype.getId = function () {
         return this.id;
@@ -21,6 +23,18 @@ var Account_db = /** @class */ (function () {
     };
     Account_db.prototype.setScore = function (newScore) {
         this.score = newScore;
+    };
+    Account_db.prototype.getGameWon = function () {
+        return this.gameWon;
+    };
+    Account_db.prototype.setGameWon = function (newScore) {
+        this.gameWon = newScore;
+    };
+    Account_db.prototype.getGameLost = function () {
+        return this.gameLost;
+    };
+    Account_db.prototype.setGameLost = function (newScore) {
+        this.gameLost = newScore;
     };
     Account_db.prototype.getName = function () {
         return this.name;
@@ -44,8 +58,8 @@ var Account_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-account',
-            text: 'INSERT INTO "bachelorsThesis"."Account"(name,password,avatar,score) Values($1,$2,$3,$4);',
-            values: [this.name, this.password, this.avatar, this.score]
+            text: 'INSERT INTO "bachelorsThesis"."Account"(name,password,avatar,score,"gameWon","gameLost") Values($1,$2,$3,$4,$5,$6);',
+            values: [this.name, this.password, this.avatar, this.score, this.gameWon, this.gameLost]
         };
         client
             .query(query)
@@ -55,8 +69,8 @@ var Account_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'update-account',
-            text: 'UPDATE "bachelorsThesis"."Account" SET name = $1 ,password = $2 ,avatar = $3,score = $4 WHERE name = $1;',
-            values: [this.name, this.password, this.avatar, this.score]
+            text: 'UPDATE "bachelorsThesis"."Account" SET name = $1 ,password = $2 ,avatar = $3,score = $4,"gameWon" = $5,"gameLost" = $6 WHERE name = $1;',
+            values: [this.name, this.password, this.avatar, this.score, this.gameWon, this.gameLost]
         };
         client
             .query(query)
@@ -69,6 +83,8 @@ var Account_db = /** @class */ (function () {
         newAcc.setPassword(data.password);
         newAcc.setScore(data.score);
         newAcc.setAvatar(data.avatar);
+        newAcc.setGameWon(data.gameWon);
+        newAcc.setGameLost(data.gameLost);
         return newAcc;
     };
     return Account_db;

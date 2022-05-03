@@ -1,11 +1,11 @@
 
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything } from "./TileEditor.js";
+import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
 import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
 import {GameEditor} from './GameEditor.js'
 
-import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower } from "./Elements";
+import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
 
 import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
@@ -40,14 +40,23 @@ function edit(){
 // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
 //   updateNextTileIds()
 // })
+document.getElementById('noneButton')!.addEventListener('click',function(){
+
+    editor.setEvents('none',{num:0,value:0})
+    $('#editEventModal').modal('hide')
+    elementDeleter('askTheQuestionEventEdit')
+    document.getElementById('pickedEventParagraph')!.textContent =texts[197]
+    update()
+})
 document.getElementById('forwardButton')!.addEventListener('click',function(){
+  elementDeleter('askTheQuestionEventEdit')
   spawnParagraph(document,'askTheQuestionEventEdit','',texts[97],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    document.getElementById('bindEvent')!.textContent = texts[98]
+    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[99] +' ' + nums +' ' + texts[100]
   })
 })
@@ -62,7 +71,7 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     elementDeleter('askTheQuestionEventEdit')
   
     
-    document.getElementById('bindEvent')!.textContent = texts[98]
+    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[103] +' ' + nums +' ' + texts[100]
   })
 })
@@ -75,7 +84,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     editor.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    document.getElementById('bindEvent')!.textContent = texts[98]
+    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[105] +' ' + nums +' ' + texts[100]
   })
   
@@ -89,7 +98,7 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     editor.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     elementDeleter('askTheQuestionEventEdit')
-    document.getElementById('bindEvent')!.textContent = texts[98]
+    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[107] +' ' + nums +' ' + texts[100]
     
   })
@@ -113,7 +122,7 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     elementDeleter('askTheQuestionEventEdit')
    
     
-    document.getElementById('bindEvent')!.textContent = texts[98]
+    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[110] + freeInput.value +texts[111] + nums + texts[100];
   })
   
@@ -125,7 +134,7 @@ document.getElementById('editBackground')!.addEventListener('click',function(){
   editBackground();} );
 document.getElementById('insertTiles')!.addEventListener('click',function(){
   unchooseEverything()
-  insertTilesMenu();} );
+  startInsertingByOne();} );
 // document.getElementById('moveTiles')!.addEventListener('click',function(){
 //   unchooseEverything()
 //   moveTiles();} );
@@ -135,7 +144,7 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){
 // document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
 
 document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
-                                                                                editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')});} )
+                                                                                editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false});} )
 // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
 // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
 
@@ -157,10 +166,22 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 
 //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
+document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
+  editor.getGame().getPlayerTokens().forEach((token:string)=>{
+    let input =(<HTMLInputElement>document.getElementById('nextTile'+token))!.value
+    // if (editor.getChoosenTile()!=undefined){
+    editor.getGame().getNextTilesIds().set(token,parseInt(input))
+  })
+  if (editor.getChoosenTile()!= undefined){
+    editor.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
+  }
+
+})
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
 document.getElementById('eventQuestionButton')!.addEventListener('click',function(){
-  editorSocket.emit('loadQuestions',{id:localStorage.getItem('id')})
-  $('#pickQuestionModal').modal('show');})
+  editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:true})
+  $('#pickQuestionModal').modal('show');
+})
 
 document.getElementById('loadCreatedGameModal')?.addEventListener('click',function(){
   let val = (<HTMLInputElement>document.getElementById('gameNameInput'))!.value
@@ -177,11 +198,11 @@ document.getElementById('loadGameButton')?.addEventListener('click',function(){
 
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 
-document.getElementById("resetQuestionID")!.addEventListener('click',function(){
-  editor.setQuestionId(-1);
-  (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
+// document.getElementById("resetQuestionID")!.addEventListener('click',function(){
+//   editor.setQuestionId(-1);
+//   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
  
-})
+// })
  }
 
 var doc = document;
@@ -252,6 +273,8 @@ numOfPlayersSlider.onclick =function(){
       //editor.getGame().getPawnStyle().Player
     }
   }
+  //spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
+  //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
   
   editor.getGame().setPlayerTokens(playerTokens)
   console.log(playerTokens)
@@ -280,8 +303,9 @@ text.textContent = 'Typ hry:'
 document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
-spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider','1','4','1',editor.getGame().getNumberOfStartingPawns().toString())
+//spawnParagraph(document,'tileEditingPlace','',texts[112],true)
+let slid = spawnSliderWithValueShower(document,'tileEditingPlace','tileNumberSlider',texts[112],'1','4','1',editor.getGame().getNumberOfStartingPawns().toString())
+slid.style.width = '100%'
 slid.onchange = function(){
   let max = parseInt(slid!.value)
   if (max > editor.getGame().getNumberOfStartingPawns()){
@@ -339,7 +363,15 @@ slid.onchange = function(){
  
   reload(editor,ctx)
 }
-
+let numbering = spawnCheckerWithLabel(doc,'tileEditingPlace','toogleNumberingChecker',texts[137],editor.getGame().getToogleNumber(),[texts[92],texts[93]])
+numbering.onchange = function(){
+  if (numbering.checked){
+    editor.getGame().setToogleNumber(true)
+  }
+  else{
+    editor.getGame().setToogleNumber(false)
+  }
+}
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
   // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
   //   Warning.show(texts[183])

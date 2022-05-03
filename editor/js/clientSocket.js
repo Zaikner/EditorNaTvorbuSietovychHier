@@ -44,7 +44,7 @@ editorSocket.on('connected', function (msg) {
     var newId = 0;
     msg.tiles.forEach(function (tile) {
         newId++;
-        var addedTile = new Tile_1.Tile(tile.type, tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
+        var addedTile = new Tile_1.Tile(tile.centerX, tile.centerY, tile.x1, tile.x2, tile.y1, tile.y2, tile.radius, tile.color, tile.tileNumber);
         addedTile.setId(newId);
         newIds.set(tile.id, newId);
         addedTile.setStroke(tile.stroke);
@@ -59,20 +59,11 @@ editorSocket.on('connected', function (msg) {
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
             };
         }
-        if (tile.patternFile != 'none') {
-            var image_2 = new Image();
-            image_2.src = tile.patternFile;
-            image_2.onload = function () {
-                addedTile.setPatternFile(image_2);
-                (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
-            };
-        }
         //addedTile.setBackgroundFile(tile.backgroundFile)
         //addedTile.setPatternFile(tile.patternFile)
         addedTile.setIsEndingFor(tile.isEndingFor);
         addedTile.setIsStartingFor(tile.isStartingFor);
         addedTile.setToogleNumber(tile.toggleNumber);
-        addedTile.setNumberingColor(tile.numberingColor);
         addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
         addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
         addedTile.setSkip(tile.skip);
@@ -107,10 +98,10 @@ editorSocket.on('connected', function (msg) {
     msg.components.forEach(function (component) {
         var newComponent = new BackgroundComponent_1.BackgroundComponent();
         if (component.image != 'none' || component.image != undefined) {
-            var image_3 = new Image();
-            image_3.src = component.image;
-            image_3.onload = function () {
-                newComponent.setImage(image_3);
+            var image_2 = new Image();
+            image_2.src = component.image;
+            image_2.onload = function () {
+                newComponent.setImage(image_2);
                 background.getComponents().push(newComponent);
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
             };
@@ -139,6 +130,7 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setInitSizeX(msg.game.initSizeX);
     canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);
     canvas_1.editor.getGame().setIsPublished(msg.game.isPublished);
+    canvas_1.editor.getGame().setToogleNumber(msg.game.toogleNumber);
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
@@ -167,6 +159,10 @@ editorSocket.on('connected', function (msg) {
     });
     console.log('loaded game:');
     console.log(canvas_1.editor);
+    var gm = document.getElementById('gameName');
+    if (gm != undefined) {
+        gm.value = canvas_1.editor.getGame().getName();
+    }
 });
 editorSocket.on('react to event: forward', function (msg) {
     canvas_1.editor.getGame().setIsOnTurn(true);
@@ -185,9 +181,9 @@ editorSocket.on('not author', function () {
     Warning_1.Warning.show(texts[185]);
     console.log('not author');
 });
-editorSocket.on('game saved', function () {
-    window.location.replace('/');
-});
+// editorSocket.on('game saved',()=>{
+//   window.location.replace('/')
+// })
 editorSocket.on('react to event: skip', function (msg) {
     Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
 });
@@ -418,7 +414,22 @@ editorSocket.on('add chat message', function (data) {
 });
 editorSocket.on('loadedQuestions', function (data) {
     (0, Questions_1.showAllQuestions)(data);
+    var newQuestions = new Map();
+    data.forEach(function (elem) {
+        newQuestions.set(elem.questionId, elem.questionText);
+        //elem.questionId
+    });
+    canvas_1.editor.getGame().setQuestions(newQuestions);
     //pickQuestion(data)
+});
+editorSocket.on('loadedQuestions - pick', function (data) {
+    (0, Questions_1.pickQuestion)(data);
+    var newQuestions = new Map();
+    data.forEach(function (elem) {
+        newQuestions.set(elem.questionId, elem.questionText);
+        //elem.questionId
+    });
+    canvas_1.editor.getGame().setQuestions(newQuestions);
 });
 //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
 editorSocket.on('loadedAnswerQuestions', function (data) {

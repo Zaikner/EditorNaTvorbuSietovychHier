@@ -1,5 +1,5 @@
 import { editor } from "./canvas";
-import { showActualState } from "./TileEditor";
+import { showActualState, update } from "./TileEditor";
 
 
 
@@ -44,6 +44,30 @@ function spawnCanvas(doc:HTMLDocument,parent:string,id:string){
   return canvas
 }
 
+function spawnCheckerWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:string,isChecked:boolean,options:Array<string>){
+  let checker:HTMLInputElement = doc.createElement('input')
+  checker.type = 'checkbox'
+  checker.id = id;
+  checker.checked = isChecked
+  checker.style.float = 'left'
+  checker.style.marginTop = '10px'
+  
+  
+  let div = spawnDiv(document,parent,'div'+id,[])
+  div.style.display='inline-block'
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+  label.style.verticalAlign = 'baseline'
+
+  
+
+  doc.getElementById('div'+id)!.appendChild(checker);
+  doc.getElementById('div'+id)!.appendChild(label);
+  return checker
+}
 function spawnCheckerWithValueShower(doc:HTMLDocument,parent:string,id:string,isChecked:boolean,options:Array<string>){
     let checker:HTMLInputElement = doc.createElement('input')
     checker.type = 'checkbox'
@@ -68,7 +92,14 @@ function spawnCheckerWithValueShower(doc:HTMLDocument,parent:string,id:string,is
     return checker
 }
 
-function spawnSliderWithValueShower(doc:HTMLDocument,parent:string,id:string,min:string,max:string,step:string,value:string){
+function spawnSliderWithValueShower(doc:HTMLDocument,parent:string,id:string,lbl:string,min:string,max:string,step:string,value:string){
+  spawnDiv(document,parent,'div'+id,[])
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+
     let slider:HTMLInputElement = doc.createElement('input')
     slider.type = 'range'
     slider.id = id;
@@ -76,16 +107,21 @@ function spawnSliderWithValueShower(doc:HTMLDocument,parent:string,id:string,min
     slider.min = min;
     slider.max = max;
     slider.step = step;
+    slider.style.float = 'right'
+    slider.style.width = '50%'
 
     let sliderShower = doc.createElement('paragraph');
     sliderShower.id = id+'Shower'
     sliderShower.textContent = value;
+    sliderShower.style.float = 'right'
 
     slider.oninput =function(){
         sliderShower!.textContent =  slider.value;
     }
-    doc.getElementById(parent)!.appendChild(slider);
-    doc.getElementById(parent)!.appendChild(sliderShower);
+    doc.getElementById('div'+id)!.appendChild(label);
+    doc.getElementById('div'+id)!.appendChild(slider);
+    doc.getElementById('div'+id)!.appendChild(sliderShower);
+    
     return slider
 }
 
@@ -100,6 +136,26 @@ function spawnButton(doc:HTMLDocument,parent:string,id:string,classList:Array<st
     doc.getElementById(parent)!.appendChild(button)
     return button
 }
+function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,txt:string,func:Function){
+  spawnDiv(document,parent,'div'+id,[])
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+
+  let button:HTMLButtonElement = doc.createElement('button')
+  button.id = 'div'+id;
+  button.textContent = txt;
+  button.style.float = 'right'
+  classList.forEach((add:string)=>{
+      button.classList.add(add)
+  })
+  button.addEventListener('click',function(){func()})
+  doc.getElementById('div'+id)!.appendChild(label)
+  doc.getElementById('div'+id)!.appendChild(button)
+  return button
+}
 function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>){
 
   spawnDiv(document,parent,'div'+id,[])
@@ -111,6 +167,7 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
 
     let menu:HTMLSelectElement = doc.createElement('select')
     menu.id = id;
+    menu.style.float ='right'
     classList.forEach((add:string)=>{
        menu.classList.add(add)
     })
@@ -123,6 +180,50 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
     doc.getElementById('div'+id)!.appendChild( label);
     doc.getElementById('div'+id)!.appendChild( menu);
     return menu
+}
+function spawnRadioButtons(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,onchangeFunc:Function){
+
+  let div = spawnDiv(document,parent,'div'+id,[])
+  let divkoMax = document.createElement('div')
+  divkoMax.style.float = 'right'
+  let label:HTMLLabelElement = doc.createElement('label')
+  label.htmlFor = id
+  label.textContent = lbl
+  label.style.float = 'left'
+  label.style.fontSize = 'large'
+  div.appendChild(label)
+
+    for (let i = 0; i < options.length; i++) {
+      let divko = doc.createElement('div')
+      divko.style.float= 'left'
+      let option = doc.createElement("input");
+      option.type ='checkbox'
+      option.value = options[i];
+      option.id = options[i]
+      option.style.width='20px'
+      option.style.height='20px'
+      option.style.marginTop = '20px'
+      option.style.marginLeft = '3%'
+      option.style.float = 'left'
+
+        
+      let checkerShower = doc.createElement('label');
+      checkerShower.id = id+'Shower'+i
+      checkerShower.textContent = options[i]
+      checkerShower.htmlFor = option.id
+      checkerShower.style.float='left'
+     
+      //option.onchange = function(){onchangeFunc()}
+      //option.text = options[i];
+      divko.append(option)
+      divko.append(checkerShower)
+      divkoMax.appendChild(divko);
+      
+    }
+    div.appendChild(divkoMax)
+   // doc.getElementById('div'+id)!.appendChild( label);
+    //doc.getElementById('div'+id)!.appendChild( menu);
+    //return menu
 }
 function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl:string,func:Function){
     spawnDiv(document,parent,'div'+id,[])
@@ -148,23 +249,29 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     doc.getElementById('div'+id)!.appendChild( image);
     return image
 }
-function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,options:Array<string>,type:string){
+function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string){
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
   label.style.fontSize = 'large'
+  label.style.marginRight = '15%'
 
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'
   startMenuWrapper.classList.add("dropdown")
+  //startMenuWrapper.style.marginTop = '10%'
   startMenuWrapper.style.float = 'right'
+  //startMenuWrapper.style.float = 'right'
   let startMenuButton = doc.createElement('button')
   startMenuButton.id = 'startMenuButton'
-  startMenuButton.textContent = 'Choose!'
+  startMenuButton.textContent = txt
   startMenuButton.classList.add("btn","btn-dark","dropdown-toggle")
   startMenuButton.setAttribute('data-bs-toggle','dropdown');
+  
+  startMenuButton.style.float = 'right'
+  //startMenuButton.style.marginTop = '3%'
   
   startMenuWrapper.appendChild(startMenuButton)
   document.getElementById('tileEditingPlace')!.appendChild(startMenuWrapper)
@@ -177,7 +284,7 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,op
       for (let i = 0; i < types.length; i++) {
         let option = doc.createElement("button");
         option.textContent = types[i];
-        option.id = types[i];
+        option.id = types[i]+type;
         option.style.backgroundColor = 'white'
         option.classList.add("dropdown-item",'btn')
         
@@ -199,22 +306,58 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,op
       
         option.addEventListener('click',function(e){
           if (type == 'start'){
-            if (editor.getStartForPlayers().includes(types[i])){
-              editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != types[i]}));
+            if (i == 0){
+              if (editor.getStartForPlayers().length < editor.getGame().getPlayerTokens().length){
+                  editor.setStartForPlayers(editor.getGame().getPlayerTokens().slice())
+                  editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != 'all'}));
+                  option.style.backgroundColor = 'yellow'
+                  for (let j = 0; j < types.length; j ++){
+                    document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
+                  }
+              }
+              else{
+                editor.setStartForPlayers([])
+                option.style.backgroundColor = 'white'
+                for (let j = 0; j < types.length; j ++){
+                  document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
+                }
+              }
             }
-            else{
-              editor.getStartForPlayers().push(types[i])
-            }
+            // if (editor.getStartForPlayers().includes(types[i])){
+            //   editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != types[i]}));
+            // }
+            // else{
+            //   editor.getStartForPlayers().push(types[i])
+            // }
           }
           else if(type == 'end'){
-            if (editor.getEndForPlayers().includes(types[i])){
-              editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != types[i]}));
-              console.log(editor.getEndForPlayers())
+            if (i == 0){
+              if (editor.getEndForPlayers().length < editor.getGame().getPlayerTokens().length){
+                console.log('aspon kliklo')
+                  editor.setEndForPlayers(editor.getGame().getPlayerTokens().slice())
+                  editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != 'all'}));
+                  option.style.backgroundColor = 'yellow'
+                  for (let j = 0; j < types.length; j ++){
+                    console.log('nafarbil na yeelow')
+                    document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
+                  }
+              }
+              else{
+                editor.setEndForPlayers([])
+                option.style.backgroundColor = 'white'
+                for (let j = 0; j < types.length; j ++){
+                  document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
+                }
+              }
             }
-            else{
-              editor.getEndForPlayers().push(types[i])
-              console.log(editor.getEndForPlayers())
-            }
+            // if (editor.getEndForPlayers().includes(types[i])){
+            //   editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != types[i]}));
+            //   console.log(editor.getEndForPlayers())
+            // }
+            // else{
+            //   editor.getEndForPlayers().push(types[i])
+            //   console.log(editor.getEndForPlayers())
+            // }
           }
           else if (type == 'enabled'){
             if (editor.getEnabledForPlayers().includes(types[i])){
@@ -225,19 +368,39 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,op
             }
           }
           else if (type == 'immune'){
-            if (editor.getCantBeEliminatedOnTile().includes(types[i])){
-              editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
-            }
-            else{
-              editor.getCantBeEliminatedOnTile().push(types[i])
-            }
+            if (i == 0){
+              if (editor.getCantBeEliminatedOnTile().length < editor.getGame().getPlayerTokens().length){
+                  editor.setCantBeEliminatedOnTile(editor.getGame().getPlayerTokens().slice())
+                  editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != 'all'}));
+                  option.style.backgroundColor = 'yellow'
+                  for (let j = 0; j < types.length; j ++){
+                    document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
+                  }
+              }
+              else{
+                editor.setCantBeEliminatedOnTile([])
+                option.style.backgroundColor = 'white'
+                for (let j = 0; j < types.length; j ++){
+                  document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
+                }
+              }}
+            // if (editor.getCantBeEliminatedOnTile().includes(types[i])){
+            //   editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
+            // }
+            // else{
+            //   editor.getCantBeEliminatedOnTile().push(types[i])
+            // }
           }
           console.log(editor.getStartForPlayers())
+          if (editor.getChoosenTile()!=undefined){
+            update()
+          }
+          
           e.stopPropagation()
-          if (option.style.backgroundColor == 'white'){
+          if (option.style.backgroundColor == 'white' && i!=0){
             option.style.backgroundColor = 'yellow'
           }
-          else{
+          else if(i!=0){
             option.style.backgroundColor = 'white'
           }
           e.stopPropagation()
@@ -245,6 +408,7 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,op
         startMenuDropdown.appendChild(option);
     }
     startMenuWrapper.appendChild(startMenuDropdown)
+  
 
     doc.getElementById('div'+id)!.appendChild( label);
     doc.getElementById('div'+id)!.appendChild( startMenuWrapper);
@@ -280,6 +444,7 @@ function spawnDiv(doc:HTMLDocument,parent:string,id:string,classList:Array<strin
     div.id = id;
     div.style.float ='left'
     div.style.width = '100%'
+    div.style.marginBottom = '3%'
     classList.forEach((c:string)=>{
       div.classList.add(c)
     })
@@ -296,4 +461,4 @@ function spawnLabel(doc:HTMLDocument,labelFor:string,txt:string){
 
 }
 
-export{spawnColorPicker,spawnDiv,spawnParagraph,spawnLabel,spawnHeading,spawnTextArea,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}
+export{spawnColorPicker,spawnDiv,spawnParagraph,spawnButtonWithLabel,spawnCheckerWithLabel,spawnRadioButtons,spawnLabel,spawnHeading,spawnTextArea,spawnCanvas,spawnCheckerWithValueShower,spawnSliderWithValueShower,spawnButton,spawnSelectMenu,spawnImageInput,spawnMultiSelect,spawnNumberInput}

@@ -14,12 +14,10 @@ export class Tile_db{
     private shape:string = 'circle'
     private isChoosen:boolean = false;
     private backgroundFile?:string = '';
-    private patternFile?:string = '';
     private tileNumber:number = 0;
     private isEndingFor:Array<String>=[]
     private isStartingFor:Array<String>=[]
     private toggleNumber:boolean = true;
-    private numberingColor:string = 'white'
     private numberOfFollowingTile:number = 0
     private gameName:string = '';
     private questionId:number = -1;
@@ -114,14 +112,6 @@ export class Tile_db{
     public setBackgroundFile(newFile:string){
          this.backgroundFile = newFile
     }
-    public getPatternFile(){
-        return this.patternFile
-    }
-    public setPatternFile(newFile:string){
-         this.patternFile = newFile
-    }
-    
-
     public setIsEndingFor(newPlayers:Array<string>){
         this.isEndingFor = newPlayers
     }
@@ -139,12 +129,7 @@ export class Tile_db{
     }
     public getToggleNumber(){
         return this.toggleNumber}
-    public setNumberingColor(color : string) {
-        this.numberingColor = color;
-    }
-    public getNumberingColor() {
-        return this.numberingColor;
-    }
+  
     public getTileNumber(){
         return this.tileNumber
     }
@@ -232,8 +217,8 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","patternFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberingColor","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31);',
-                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.patternFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberingColor,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29);',
+                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds],
               }
               client
               .query(query)
@@ -258,12 +243,10 @@ export class Tile_db{
         ret.setShape(data.shape)
         ret.setIsChoosen(data.isChoosen)
         ret.setBackgroundFile(data.backgroundFile)
-        ret.setPatternFile(data.patternFile)
         ret.setTileNumber(data.tileNumber)
         ret.setIsEndingFor(data.isEndingFor)
         ret.setIsStartingFor(data.isStartingFor)
         ret.setToogleNumber(data.toggleNumber)
-        ret.setNumberingColor(data.numberingColor)
         ret.setFollowingTileNumber(data.numberOfFollowingTile)
         ret.setGameName(data.gameName)
         ret.setQuestionId(data.questionId)

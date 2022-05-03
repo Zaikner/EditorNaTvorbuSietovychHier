@@ -14,15 +14,9 @@ import { QuestionFinder } from "../db/RDG/QuestionFinder";
 import { QuestionWithAnswersFinder } from "../db/RDG/QuestionWithAnswersFinder";
 import { Pawn } from "../db/RDG/Pawn";
 import { PawnStyles } from "../db/RDG/PawnStyle";
-import { QuestionWithAnswers } from "../db/RDG/QuestionsWithAnswers";
-import { text } from "body-parser";
-import { addOption, askQuestion } from "../../editor/js/Questions";
-import { BlobOptions } from "buffer";
+
 import { Rules } from "../db/RDG/Rules";
-import { RulesFinder } from "../db/RDG/RulesFinder";
-import { access } from "fs";
-import { editor } from "../../editor/js/canvas";
-import { Account } from "../../backEnd/Accounts/Account";
+
 import { TextsFinder } from "../db/RDG/TextFinder";
 import { Texts } from "../db/RDG/Texts";
 import { BackgroundComponent } from "../../editor/js/BackgroundComponent";
@@ -126,6 +120,7 @@ export class ServerSocket{
         g.setInitSizeX(data.initSizeX)
         g.setInitSizeY(data.initSizeY)
         g.setIsPublished(data.isPublished)
+        g.setToogleNumber(data.toogleNumber)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
           t.setId(tile.id+lastId)
@@ -141,13 +136,13 @@ export class ServerSocket{
           t.setStrokeColor(tile.strokeColor)
           t.setShape(tile.shape)
           t.setBackgroundFile(tile.backgroundFile)
-          t.setPatternFile(tile.patternFile)
+    
           t.setTileNumber(tile.tileNumber) 
           t.setIsEndingFor(tile.isEndingFor)
           t.setIsStartingFor(tile.isStartingFor)     
 
           t.setToogleNumber(tile.toggleNumber)
-          t.setNumberingColor(tile.numberingColor)
+  
           t.setFollowingTileNumber(tile.numberOfFollowingTile)
           t.setGameName(data.name)
           t.setQuestionId(tile.questionId)
@@ -417,6 +412,13 @@ export class ServerSocket{
           r.getPlayers().forEach((player:any)=>{
             let acc = player.getAccount()
             acc.setScore(acc.getScore()+r.getMaxPlayers()-player.getPlace()+1)
+
+            if (player.getPlace() == 1){
+              acc.setGameWon(acc.getGameWon()+1)
+            }
+            else{
+              acc.setGameLost(acc.getGameLost()+1)
+            }
             player.getAccount().save()
           })
           //dorobit
@@ -602,7 +604,7 @@ export class ServerSocket{
         
       })
       
-      socket.on('loadQuestions',async(msg:{id:string})=>{
+      socket.on('loadQuestions',async(msg:{id:string,pick:boolean})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
   
         let questions = await QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getName())
@@ -618,8 +620,14 @@ export class ServerSocket{
             isAnswer: question.getIsAnswer()})
         })
         
-        socket.emit('loadedQuestions',data)
-        socket.emit('picked')
+        if (msg.pick == false){
+          socket.emit('loadedQuestions',data)
+        }
+        else{
+          socket.emit('loadedQuestions - pick',data)
+        }
+       
+      
       })
 
       socket.on('answerQuestion',async(msg:{id:number})=>{

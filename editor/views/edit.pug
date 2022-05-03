@@ -67,7 +67,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #warningModalBody.modal-body
               #modalFooter.modal-footer
            
-                button.btn.btn-secondary(type='button' onclick=" $('#WarningModal').modal('hide')") Ok!
+                button.btn.btn-secondary(type='button' onclick=" $('#WarningModal').modal('hide')")=text[158]
         #EventModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c;')
@@ -76,6 +76,8 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #eventModalBody.modal-body.alignCenter
                 h6#modalHeader.modal-title.whiteColor=text[49]
+                  div(style='width:100%; margin: 20px;')
+                  button#noneButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;' onclick="$('#EventModal').modal('hide');")=text[196]
                 div(style='width:100%; margin: 20px;')
                   button#forwardButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')")=text[50]
                 div(style='width:100%; margin: 20px;')
@@ -90,7 +92,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                   button#eventQuestionButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;')=text[144]
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                button.btn.btn-secondary(type='button' onclick="$('#EventModal').modal('hide')") Ok!
+                button.btn.btn-secondary(type='button' onclick="$('#EventModal').modal('hide')")=text[158]
         #editEventModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c')
@@ -142,7 +144,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container.alignCenter
-                  button#setAnswerButton.btn.btn-secondary.alignCenter(type='button' style='margin-right: 1%;' onclick="$('#questionModal').modal('hide'); $('#answerModal').modal('hide');") Ok!
+                  button#setAnswerButton.btn.btn-secondary.alignCenter(type='button' style='margin-right: 1%;' onclick="$('#questionModal').modal('hide'); $('#answerModal').modal('hide');")=text[158]
                   button#createQuestionButtonModal.btn.btn-secondary.alignCenter(type='button' onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')")=text[58]
         #pickQuestionModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog.modal-xl
@@ -156,7 +158,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #modalFooter.modal-footer
                 .container.alignCenter
                   button.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
-                  button#resetQuestionID.btn.btn-secondary.alignCenter(type='button' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
+                  //button#resetQuestionID.btn.btn-secondary.alignCenter(type='button' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #answerModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
@@ -265,7 +267,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #modalBody.modal-body
                 //textarea#ruleInput(style='width: 100%; height: 50vh;')
                 #rulesButtons.container.alignCenter
-                  button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');" style='margin-right: 1%') Ok!
+                  button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');" style='margin-right: 1%')=text[158]
             // <div class="container" id = 'containerAdd' style="text-align: center;"></div>
           #modalFooter.modal-footer
             // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -1,11 +1,11 @@
 
 import { editor } from './canvas.js';
+import { isEditor } from './clientSocket.js';
 import { Pawn } from './Pawn.js';
 import { drawPawnImage, drawPawnType1, drawPawnType2, drawPawnType3, drawPawnType4, drawPawnType5, drawPawnType6, drawPawnType7 } from './PawnEditor.js';
 import {getDataUrlFromImage} from './utilityFunctions.js'
 class Tile{
     private id:number = 0;
-    private type:string;
     private centerX:number;
     private centerY:number;
     private x1:number;
@@ -19,13 +19,11 @@ class Tile{
     private shape:string = 'circle'
     private isChoosen:boolean = false;
     private backgroundFile?:HTMLImageElement = undefined;
-    private patternFile?:HTMLImageElement = undefined;
     private tileNumber:number;
     private isEndingFor:Array<string>=[]
     private isStartingFor:Array<string>=[]
     private cantBeEliminatedOnTile:Array<string> = []
     private toggleNumber:boolean = true;
-    private numberingColor:string = '#000000'
     private numberOfFollowingTile:number;
     private pawns:Array<Pawn> = []
     private questionId:number = -1
@@ -37,8 +35,8 @@ class Tile{
     private turnToSetFree = 0;
     private nextTilesIds:Map<string,number> = new Map()
 
-    constructor(type:string,centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
-        this.type = type;
+    constructor(centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
+
         this.centerX = centerX;
         this.centerY = centerY;
         this.x1 = x1;
@@ -54,10 +52,10 @@ class Tile{
 
     public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
      
-        
+        console.log('nakreslil')
         ctx.beginPath();
         //obrazec bez outline -- nuluje
-        if (this.backgroundFile == undefined && this.patternFile == undefined){
+        if (this.backgroundFile == undefined){
             
             ctx.strokeStyle =this.color
             ctx.lineWidth = 0
@@ -110,48 +108,7 @@ class Tile{
                 ctx.restore()
             }
         }
-        else if (this.patternFile != undefined){
-            if (this.shape == 'circle'){
-                ctx.save()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
-                var clipPath = new Path2D()
-                clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                ctx.clip(clipPath);
-                ctx.fillStyle = 'black'
-                ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                //ctx.fill()
-                ctx.stroke()
-                
-                for (let i = 0;i*20+this.x1 < this.x2;i++){
-                    for (let j = 0;j*20+this.y1 < this.y2;j++){
-                    ctx.drawImage(this.patternFile!,this.x1+i*20,this.y1+j*20,20,20)}
-                }
-                ctx.resetTransform();
-                ctx.restore()
-                //ctx.restore()
-            }
-            else{
-                ctx.save()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
-                var clipPath = new Path2D()
-                clipPath.rect(this.x1,this.y1,this.radius*2,this.radius*2)
-                ctx.clip(clipPath);
-                ctx.fillStyle = 'black'
-                ctx.rect(this.x1,this.y1,this.radius*2,this.radius*2)
-                //ctx.fill()
-                ctx.stroke()
-                
-                for (let i = 0;i*20+this.x1 < this.x2;i++){
-                    for (let j = 0;j*20+this.y1 < this.y2;j++){
-                    ctx.drawImage(this.patternFile!,this.x1+i*20,this.y1+j*20,20,20)}
-                }
-                ctx.resetTransform();
-                ctx.restore()
-            }
-        
-
-        }
-        
+     
             //outline
              if (this.stroke > 0){
                 ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
@@ -194,11 +151,20 @@ class Tile{
                         ctx.resetTransform();
                     }
             }
-            if (this.toggleNumber){
+            if (editor.getGame().getToogleNumber() || isEditor){
                 //ctx.save() 
                 //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
                 ctx.font = "bold 30px Arial";
-                ctx.fillStyle =  this.numberingColor
+                if (this.strokeColor != this.color){
+                    ctx.fillStyle =  this.strokeColor
+                }
+                else if (this.strokeColor!= '#000000'){
+                    ctx.fillStyle = '#000000'
+                }
+                else{
+                    ctx.fillStyle = '#FFFFFF'
+                }
+               
                 ctx.textBaseline = 'middle';
                 ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
                 ctx.resetTransform();
@@ -337,7 +303,7 @@ class Tile{
         return false;
     }
     JSONfyTile(){
-        return {type:this.type,
+        return {
                 centerX:this.centerX,
                 centerY:this.centerY,
                 x1:this.x1,
@@ -351,7 +317,7 @@ class Tile{
                 strokeColor:this.strokeColor,
                 shape:this.shape,
                 backgroundFile:this.backgroundFile === undefined?'none':getDataUrlFromImage(this.backgroundFile),
-                patternFile:this.patternFile === undefined?'none':getDataUrlFromImage(this.patternFile),
+                //patternFile:this.patternFile === undefined?'none':getDataUrlFromImage(this.patternFile),
                 tileNumber:this.tileNumber,
               
                 isEndingFor:this.isEndingFor,   
@@ -360,7 +326,6 @@ class Tile{
           
              
                 toggleNumber:this.toggleNumber,
-                numberingColor:this.numberingColor,
                 numberOfFollowingTile:this.numberOfFollowingTile,
                 questionId:this.questionId,
                 cantBeEliminatedOnTile:this.cantBeEliminatedOnTile,
@@ -450,12 +415,7 @@ class Tile{
     public getIsChoosen(){
         return this.isChoosen
     }
-    public setType(newType:string){
-        this.type = newType
-    }
-    public getType(){
-        return this.type
-    }
+
     public setX1(newX1:number){
         this.x1 = newX1
     }
@@ -517,12 +477,7 @@ class Tile{
     public setBackgroundFile(newFile:HTMLImageElement){
          this.backgroundFile = newFile
     }
-    public getPatternFile(){
-        return this.patternFile
-    }
-    public setPatternFile(newFile:HTMLImageElement){
-         this.patternFile = newFile
-    }
+
     public setIsEndingFor(newPlayers:Array<string>){
         this.isEndingFor = newPlayers
     }
@@ -541,12 +496,6 @@ class Tile{
     }
     public getToggleNumber(){
         return this.toggleNumber}
-    public setNumberingColor(color : string) {
-        this.numberingColor = color;
-    }
-    public getNumberingColor() {
-        return this.numberingColor;
-    }
     public getTileNumber(){
         return this.tileNumber
     }

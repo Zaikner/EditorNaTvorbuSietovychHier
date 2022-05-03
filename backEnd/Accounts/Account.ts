@@ -8,6 +8,8 @@ export class Account{
     private isGuest:boolean = false;
     private socketId:string = ''
     private score:number = 0
+    private gameLost:number = 0;
+    private gameWon:number = 0;
 
     constructor(name:string,password:string){
         this.name = name
@@ -19,6 +21,7 @@ export class Account{
         newAcc.setPassword(this.password)
         newAcc.setScore(this.score)
         newAcc.setName(this.name)
+        newAcc.setGameLost(this.gameLost)
         newAcc.update()
 
     }
@@ -64,5 +67,16 @@ export class Account{
     public setSocketId(newId:string){
         this.socketId = newId
     }
-
+    public getGameWon() : number {
+        return this.gameWon
+    }
+    public setGameWon(newScore:number){
+        this.gameWon  = newScore
+    }
+    public getGameLost() : number {
+        return this.gameLost
+    }
+    public setGameLost(newScore:number){
+        this.gameLost  = newScore
+    }
 }
