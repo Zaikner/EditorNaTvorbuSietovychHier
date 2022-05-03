@@ -34,6 +34,7 @@ export class Room{
         //     console.log(this.gameData)
         // }
         public join(player:Player){
+            console.log('aktivoval room join')
             if (player.getToken() != 'spectator'){
 
                 if (this.numOfPresentPlayers == this.maxPlayers){

@@ -69,7 +69,7 @@ export class QuestionWithAnswersFinder{
             try {
               
                 const query = {
-                    name: 'select-question-with-answer-Author',
+                    name: 'select-question-with-answer-author',
                     text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.author = $1;',
                     values: [author],
                   }

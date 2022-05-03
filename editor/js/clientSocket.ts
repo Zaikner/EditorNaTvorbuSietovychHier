@@ -238,7 +238,7 @@ editorSocket.on('return pawns to starting tile',(msg:{ids:Array<number>})=>{
   reload(editor,ctx)
 })
 editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
-  
+  console.log('obdrzal join room')
  
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
 
@@ -308,7 +308,7 @@ editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
 })
 
 
-editorSocket.emit('set Socket',{id:getCookie('id')})
+//editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
@@ -333,10 +333,7 @@ editorSocket.on('return Pawn to place',(msg:{pawnId:number,value:number})=>{
 editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{
   showResults(msg.right,msg.wrong)
 })
-editorSocket.on('check if online',()=>{
-  console.log('emitol online')
-  editorSocket.emit('online',{id:localStorage.getItem('id')})
-})
+
 editorSocket.on('evaluate End',(msg:{token:string})=>{
   console.log('emitol evalued end')
   let is = editor.playerEnded(msg.token)

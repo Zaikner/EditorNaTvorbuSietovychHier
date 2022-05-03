@@ -59,4 +59,4 @@ var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
 SocketServer.setIo(io);
 SocketServer.serverListen();
-AccountManager.checkLogedAccounts();
+//AccountManager.checkLogedAccounts()

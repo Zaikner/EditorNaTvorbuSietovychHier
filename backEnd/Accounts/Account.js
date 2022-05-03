@@ -63,6 +63,7 @@ var Account = /** @class */ (function () {
         return this.socketId;
     };
     Account.prototype.setSocketId = function (newId) {
+        console.log('nastavil socket id');
         this.socketId = newId;
     };
     Account.prototype.getGameWon = function () {

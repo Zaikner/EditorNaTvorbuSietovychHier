@@ -57,15 +57,7 @@ head
           button.btn.btn-primary(type='submit')=text[153]
         form.text-center.maxWidth(action='/', method='get')
           button.btn.btn-primary(type='submit')=text[154]
-script(src='../socket.io/socket.io.js')
 script.
   $(window).on('load', function() {
   $('#accountModal').modal('show');
   });
-  const editorSocket = io();
-  
-  editorSocket.emit('set Socket',{id:localStorage.getItem('id')})
-  editorSocket.on('check if online',()=>{
-  console.log('emitol online')
-  editorSocket.emit('online',{id:localStorage.getItem('id')})
-  })

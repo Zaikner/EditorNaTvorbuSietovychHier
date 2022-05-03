@@ -30,6 +30,7 @@ var Room = /** @class */ (function () {
     //     console.log(this.gameData)
     // }
     Room.prototype.join = function (player) {
+        console.log('aktivoval room join');
         if (player.getToken() != 'spectator') {
             if (this.numOfPresentPlayers == this.maxPlayers) {
                 SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'room is full', {});

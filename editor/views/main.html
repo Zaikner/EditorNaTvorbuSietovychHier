@@ -70,11 +70,7 @@
 <!-- </div> -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io();  
-  socket.emit('set Socket',{id:localStorage.getItem('id')})
-  socket.on('check if online',()=>{
-  console.log('emitol online')
-  socket.emit('online',{id:localStorage.getItem('id')})})
+  const socket = io();
 
   if (window.localStorage.getItem('id')){
     socket.emit('relog',{id:window.localStorage.getItem('id')})
@@ -102,7 +98,6 @@
       console.log('nastavil socket')
     Cookies.set('id',window.localStorage.getItem('id'))
   })
-  
   
 </script>
 </body>

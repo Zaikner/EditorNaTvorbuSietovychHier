@@ -65,6 +65,7 @@ export class Account{
         return this.socketId
     }
     public setSocketId(newId:string){
+        console.log('nastavil socket id')
         this.socketId = newId
     }
     public getGameWon() : number {

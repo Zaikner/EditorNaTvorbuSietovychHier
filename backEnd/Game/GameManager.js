@@ -78,8 +78,6 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, BackgroundComponentFinder_js_1.BackgroundComponentFinder.getIntance().findByName(name)];
                     case 7:
                         backgroundComponents = _a.sent();
-                        console.log('nacital hru:');
-                        console.log(game);
                         return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText(), components: backgroundComponents }];
                 }
             });
@@ -104,6 +102,7 @@ var GameManager = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
+                        console.log('aspon vyvroil room');
                         stop = false;
                         id = 0;
                         while (!stop) {
@@ -148,6 +147,7 @@ var GameManager = /** @class */ (function () {
         var rooms = Array.from(this.activeRooms.values());
         var _loop_1 = function (i) {
             rooms[i].getPlayers().forEach(function (player) {
+                console.log(acc);
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () { rooms[i].join(new Player_js_1.Player(acc, '')); }]);
             });
         };

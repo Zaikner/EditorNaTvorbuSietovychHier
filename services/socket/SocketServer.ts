@@ -36,8 +36,6 @@ export class ServerSocket{
     
 
     static serverListen(){
-
-
         this.io.on('connection', (socket:any) => {
             socket.emit('pipi')
             
@@ -83,10 +81,6 @@ export class ServerSocket{
                     
                 GameManager.findRoomBySocketId(socket.id)
             });
-        socket.on('online',(msg:{id:string})=>{
-          let acc = AccountManager.getAccountByClientId(msg.id);
-          console.log(acc.name + ' is online!')
-        })
         socket.on('saveGame',async (data:any) => {
           
           console.log('saved game:')
@@ -222,34 +216,34 @@ export class ServerSocket{
         socket.emit('game saved')
       });
 
-      socket.on('set Socket',(msg:{id:string})=>
+      socket.on('set Socket',(msg:{id:string,room:string})=>
       {
-        console.log('obdrzal set Socket')
+        console.log('dostal set Socket')
+        console.log(msg)
         let acc = AccountManager.getAccountByClientId(msg.id)
            if(acc === undefined){
              return
            }
-
           acc.setSocketId(socket.id)
    
-          // let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-          // let cont = true
-          // // r.getPlayers().forEach((player:any)=>{
-          // //   if (player.getAccount().getName() == acc.getName()){
-          // //     cont = false
-          // //   }
-          // //   else{
-          // //     console.log(player.getAccount().getName())
-          // //     console.log(pl)
-          // //   }
-          // // })
+          let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+          let cont = true
+          // r.getPlayers().forEach((player:any)=>{
+          //   if (player.getAccount().getName() == acc.getName()){
+          //     cont = false
+          //   }
+          //   else{
+          //     console.log(player.getAccount().getName())
+          //     console.log(pl)
+          //   }
+          // })
          
-          // if (r.getHasStarted() && cont){
-          //   r.join(new Player(acc,'spectator'))
-          // }
-          // else if (cont){
-          //   r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
-          // }
+          if (r.getHasStarted() && cont){
+            r.join(new Player(acc,'spectator'))
+          }
+          else if (cont){
+            r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+          }
          
       
      
@@ -731,7 +725,6 @@ export class ServerSocket{
         this.io = io
     }
     static emitToSpecificSocket(socketId:string,event:string,msg:Object){
-        console.log('firol' + event + ' pre socket: ' + socketId)
         this.io.to(socketId).emit(event,msg)
     }
     static emitToRoom(roomName:string,event:string,data:any){
