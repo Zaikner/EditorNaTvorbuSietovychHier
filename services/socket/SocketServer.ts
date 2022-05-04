@@ -696,8 +696,14 @@ export class ServerSocket{
         socket.join(msg.roomName)
       })
       socket.on('reload waiting room',(msg:{room:string})=>{
+        let r =  GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          socket.emit('exit to main menu')
+          console.log('exitol bo nebola roomka')
+          return
+        }
         let names:Array<{name:string,avatar:string,place:number,token:string}>= []
-        GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach((player:any)=>{
+        r.getPlayers().forEach((player:any)=>{
           names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar(),place:player.getPlace(),token:player.getToken()})
         }
         )

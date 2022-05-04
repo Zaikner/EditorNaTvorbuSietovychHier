@@ -711,8 +711,14 @@ var ServerSocket = /** @class */ (function () {
                 socket.join(msg.roomName);
             });
             socket.on('reload waiting room', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r == undefined) {
+                    socket.emit('exit to main menu');
+                    console.log('exitol bo nebola roomka');
+                    return;
+                }
                 var names = [];
-                GameManager.getActiveRooms().get(parseInt(msg.room)).getPlayers().forEach(function (player) {
+                r.getPlayers().forEach(function (player) {
                     names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar(), place: player.getPlace(), token: player.getToken() });
                 });
                 console.log('emitol reload waiting');

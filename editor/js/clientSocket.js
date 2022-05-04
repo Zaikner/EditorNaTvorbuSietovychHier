@@ -281,6 +281,9 @@ editorSocket.on('evaluate End', function (msg) {
     }
     editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
 });
+editorSocket.on('exit to main menu', function () {
+    window.location.replace('/gamelobby');
+});
 editorSocket.on('game has ended', function (msg) {
     $('#endModal').modal('show');
 });

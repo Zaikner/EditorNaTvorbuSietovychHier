@@ -343,7 +343,9 @@ editorSocket.on('evaluate End',(msg:{token:string})=>{
   }
   editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
 })
-
+editorSocket.on('exit to main menu',()=>{
+  window.location.replace('/gamelobby')
+})
 editorSocket.on('game has ended',(msg:{leaderboards:any})=>{
   $('#endModal').modal('show');
 })
