@@ -34,6 +34,13 @@ export class Room{
         //     console.log(this.gameData)
         // }
         public join(player:Player){
+            console.log('skusil join')
+            console.log(this.hasStarted)
+            if (this.numOfPresentPlayers == this.maxPlayers || this.hasStarted){
+                console.log('nepustil')
+                ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'room is full',{})
+                return;
+            }
             console.log('aktivoval room join')
             if (player.getToken() != 'spectator'){
 

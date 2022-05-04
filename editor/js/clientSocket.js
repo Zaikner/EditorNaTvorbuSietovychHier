@@ -36,8 +36,6 @@ function getCookie(name) {
 exports.getCookie = getCookie;
 editorSocket.emit('get texts', { language: getCookie('language') });
 editorSocket.on('connected', function (msg) {
-    console.log('obdržal:');
-    console.log(msg);
     canvas_1.editor.setGame(new Game_1.Game());
     (0, canvas_1.clear)();
     var newIds = new Map();
@@ -180,7 +178,6 @@ editorSocket.on('react to event: backward', function (msg) {
 });
 editorSocket.on('not author', function () {
     Warning_1.Warning.show(texts[185]);
-    console.log('not author');
 });
 // editorSocket.on('game saved',()=>{
 //   window.location.replace('/')
@@ -250,8 +247,6 @@ editorSocket.on('game started', function (msg) {
             rem.push(pawn);
         }
     });
-    console.log('removol');
-    console.log(rem);
     rem.forEach(function (pawn) {
         canvas_1.editor.getGame().removePawn(pawn);
         pawn.tile.removePawn(pawn);
@@ -261,7 +256,6 @@ editorSocket.on('game started', function (msg) {
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
-    console.log('recieved move Pawn');
     var pawn = (canvas_1.editor.getGame().movePawnById(msg.pawn, msg.value));
     canvas_1.editor.setChoosenTile(undefined);
 });
@@ -304,7 +298,6 @@ editorSocket.on('got texts', function (msg) {
     var _a, _b, _c, _d, _e;
     var zoz = window.location.href.split('/');
     exports.texts = texts = msg.text;
-    console.log(texts);
     if (zoz[zoz.length - 2] === 'editor') {
         (0, canvas_1.edit)();
         var butt = (0, Elements_1.spawnButton)(document, 'rulesButtons', "questionRuleButton", ["btn", "btn-secondary"], texts[35], function () {
@@ -470,4 +463,5 @@ editorSocket.on('loadedGameNames', function (msg) {
 });
 editorSocket.on('room is full', function () {
     Warning_1.Warning.showInGame(texts[188]);
+    setTimeout(function () { window.location.replace('/gameLobby'); }, 1000);
 });

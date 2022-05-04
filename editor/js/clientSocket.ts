@@ -34,8 +34,7 @@ function getCookie(name:string) {
 
 
 editorSocket.on('connected',(msg)=>{
-    console.log('obdržal:')
-    console.log(msg)
+   
     editor.setGame(new Game())
     clear()
     let newIds:Map<number,number> = new Map()
@@ -220,7 +219,7 @@ editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
 
 editorSocket.on('not author',()=>{
   Warning.show(texts[185])
-  console.log ('not author')
+ 
 })
 // editorSocket.on('game saved',()=>{
 //   window.location.replace('/')
@@ -298,8 +297,7 @@ editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
         rem.push(pawn)
       }
   })
-  console.log('removol')
-  console.log(rem)
+ 
   rem.forEach((pawn:Pawn)=>{
     editor.getGame().removePawn(pawn)
     pawn.tile.removePawn(pawn)
@@ -312,7 +310,7 @@ editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
 
 editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
-  console.log('recieved move Pawn')
+  
  
  let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
   editor.setChoosenTile(undefined!)
@@ -364,7 +362,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     
   let zoz = window.location.href.split('/')
     texts = msg.text
-    console.log(texts)
+  
     if (zoz[zoz.length-2] === 'editor'){
       edit()
       
@@ -579,6 +577,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   
   editorSocket.on('room is full',()=>{
       Warning.showInGame(texts[188])
+      setTimeout(function(){ window.location.replace('/gameLobby')},1000)
+     
   })
 
   export{editorSocket,canMovePawnFunc,isEditor,clickFunction,getCookie,texts}

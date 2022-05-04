@@ -264,12 +264,14 @@ var ServerSocket = /** @class */ (function () {
                 //     console.log(pl)
                 //   }
                 // })
-                if (r.getHasStarted() && cont) {
-                    r.join(new Player(acc, 'spectator'));
-                }
-                else if (cont) {
+                if (!r.getHasStarted() && cont) {
+                    //r.join(new Player(acc,'spectator'))
                     r.join(new Player(acc, 'Player ' + (r.getNumOfPlayers() + 1)));
                 }
+                // }
+                // else if (cont){
+                //   r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+                // }
             });
             socket.on('game has started', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
@@ -506,13 +508,13 @@ var ServerSocket = /** @class */ (function () {
                 socket.join(msg.roomId);
                 var r = GameManager.getActiveRooms().get(parseInt(msg.roomId));
                 var isSpectator = r.isSpectator(acc);
-                if (r.getHasStarted() || isSpectator) {
-                    console.log('emitol spravne');
-                    _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.(spectating)' });
-                }
-                else {
-                    _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.' });
-                }
+                // if (r.getHasStarted() || isSpectator){
+                //   console.log('emitol spravne')
+                //   this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
+                // }
+                // else{
+                _this.io["in"](msg.roomId).emit('player joined', { msg: 'Player ' + acc.getName() + ' has joined the room.' });
+                //}
             });
             // socket.on('relog',async(msg:{id:string})=>{
             //   console.log('skusil relognut'+msg.id)

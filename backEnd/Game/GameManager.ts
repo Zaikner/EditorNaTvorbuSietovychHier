@@ -42,6 +42,7 @@ class GameManager{
     }
     public static async createRoom(name:string,numOfPlayers:number){
         console.log('aspon vyvroil room')
+        
         //let id = Math.floor(Math.random()*9000)+1000
         let stop = false
         let id = 0
@@ -89,7 +90,8 @@ class GameManager{
         for (let i = 0; i < rooms.length;i++){
             rooms[i].getPlayers().forEach((player:Player)=>{
                 console.log(acc)
-                ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ rooms[i].join(new Player(acc,''))}])
+                ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ 
+                    rooms[i].join(new Player(acc,''))}])
             })
         }
         return ret

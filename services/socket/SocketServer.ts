@@ -238,12 +238,13 @@ export class ServerSocket{
           //   }
           // })
          
-          if (r.getHasStarted() && cont){
-            r.join(new Player(acc,'spectator'))
-          }
-          else if (cont){
-            r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
-          }
+          if (!r.getHasStarted() && cont){
+            //r.join(new Player(acc,'spectator'))
+            r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))}
+          // }
+          // else if (cont){
+          //   r.join(new Player(acc,'Player '+(r.getNumOfPlayers()+1)))
+          // }
          
       
      
@@ -518,14 +519,14 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.roomId))
         let isSpectator = r.isSpectator(acc)
         
-        if (r.getHasStarted() || isSpectator){
-          console.log('emitol spravne')
-          this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
+        // if (r.getHasStarted() || isSpectator){
+        //   console.log('emitol spravne')
+        //   this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
 
-        }
-        else{
+        // }
+        // else{
           this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.'})
-        }
+        //}
       })
       // socket.on('relog',async(msg:{id:string})=>{
       //   console.log('skusil relognut'+msg.id)

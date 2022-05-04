@@ -16,7 +16,7 @@ router
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     let games =  await GameFinder.getIntance().findByName(request.params.name)
     let game = games[0]
- 
+    
     let room = await GameManager.createRoom(request.params.name,game.getNumOfPlayers())
     //room.join(new Player(acc,'Player 1'))
   

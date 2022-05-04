@@ -22,31 +22,35 @@ title=text[1]
         .col-12(style=' overflow: auto; width: 100vh; height: 100vh;  bottom-padding:1px')
           .row(style='height:100vh; width: 100%;  bottom-padding:1px')
             .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%; bottom-padding:1px;')
-              div(style='margin: 5%;   background-color: white;overflow: hidden; width: 100%px;height: 40vh;  border-radius: 25px;')
-                p(style='font-size: 20px; font-family: sans-serif;')=text[3]
+              div(style='margin: 5%; margin-top: 0;   background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+                p(style='font-size: 15px; font-family: sans-serif; font-weight:bold;')=text[3]
                 hr
                 form
-                  p(style='font-size: 20px;')=text[156]
-                  input#roomIdSelecter(type='number')
-                  button.btn.btn-dark(type='submit')=text[8]
+                  div(style = 'float:left;')
+                    p(style='font-size: 15px; float:left;')=text[156]
+                  
+                    input#roomIdSelecter(type='number', style = 'height:15%; width:35%; float:left;')
+                    button.btn.btn-dark(type='submit' style = 'float:left;')=text[8]
                 form
-                  p(style='font-size: 20px;')=text[4]
-                  button.btn.btn-dark(type='button' id='create')=text[31]
-              div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
-                // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
-                label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                  div(style = 'float:left;')
+                    p(style='font-size: 15px; float:left;')=text[4]
+                    button.btn.btn-dark(type='button' id='create' style = 'text-align:right;')=text[31]
+              div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
+                label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[5]
                 ul.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each room in rooms
-                      form(action='/room?game:'+room[2] method='get' name='name' value = room[0])
+                      form(action='/room?game:'+room[2]+'?hasStarted:'+room[3] method='get' name='name' value = room[0])
                         strong 
                           li.list-group-item(name='room' value = room[2])= room[1]
                             |
                             input(type='hidden' name='id' value=room[0])
-                            button(type = 'submit' name='name' value = room[2] onclick = room[3]).btn.btn-dark=text[8]
-              div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
-                // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
-                label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                            //input(type='hidden' name='hasStarted' value=room[3])
+                            button(type = 'submit' name='name' value = room[2]).btn.btn-dark=text[8]
+              div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 30vh;  border-radius: 25px;')
+                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
+                label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong='Active players'
                 ul.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each player in players
@@ -64,8 +68,8 @@ title=text[1]
               br
               br
               div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
-                // <p style="font-size: 20px; font-family: sans-serif;">Active rooms</p>
-                label(for='chat' style='font-size: 20px; font-family: sans-serif; ')
+                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
+                label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong='Active players'
                 ul.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each player in players
@@ -77,7 +81,7 @@ title=text[1]
                             button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
             .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
               div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
-                p(style='font-size: 20px; font-family: sans-serif;')=text[7]
+                p(style='font-size: 15px; font-family: sans-serif;')=text[7]
                 hr
                 p Tu niekde bude checkbox alebo dropdown filter
                 br
@@ -121,8 +125,15 @@ title=text[1]
 footer 
   p Gamelobby
 script.
+  let full="#{full}";
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
+  $(window).on('load', function() {
+  if (full)
+     alert("#{text[188]}")
+   
+  });
+ 
  
  
   

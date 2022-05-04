@@ -16,7 +16,8 @@ router
 .route("/")
 .get( async(request,res) =>
 {   
-
+    console.log('gameLobbyparams:')
+    console.log(request.query)
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     let text;
     if (request.cookies.language == 'SK'){
@@ -27,26 +28,34 @@ router
     }
     
     
-    console.log(text)
+    //console.log(text)
     if (request.cookies.id != undefined && acc != undefined){
-        console.log(await GameFinder.getIntance().findAll())
+        //console.log(await GameFinder.getIntance().findAll())
         let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
         let rooms = Array.from(GameManager.getActiveRooms().values())
         .map(room => [room.getId(),
             "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
             room.getGameName(),
-            function(){
-                room.join(new Player(acc))
-            }])
+            room.getHasStarted()
+           ])
+        console.log('poslal rooms:')
+        console.log(rooms)
         let scores =await AccountFinder.getIntance().findAllByOrderedScore()
         let sendScores = []
         for (let i = 1 ; i<= scores.length;i++){
             sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
         }
         let players = GameManager.getActivePlayers(acc)
-        console.log(rooms)
-        console.log(sendScores)
-        res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
+        //console.log(rooms)
+        //console.log(sendScores)
+        if (request.query.full == undefined){
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
+        }
+        else{
+            console.log('aspon zachytil ze hra je plna')
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players,full:true});
+        }
+        
         
         
     }

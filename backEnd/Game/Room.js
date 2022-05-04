@@ -30,6 +30,13 @@ var Room = /** @class */ (function () {
     //     console.log(this.gameData)
     // }
     Room.prototype.join = function (player) {
+        console.log('skusil join');
+        console.log(this.hasStarted);
+        if (this.numOfPresentPlayers == this.maxPlayers || this.hasStarted) {
+            console.log('nepustil');
+            SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'room is full', {});
+            return;
+        }
         console.log('aktivoval room join');
         if (player.getToken() != 'spectator') {
             if (this.numOfPresentPlayers == this.maxPlayers) {
