@@ -554,7 +554,12 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     changeWaitingRoom(msg.names)
    
   })
-  
+  editorSocket.on('question is used',()=>{
+    Warning.show(texts[203])
+  })
+  editorSocket.on('random and 0',()=>{
+    Warning.show(texts[204])
+  })
   editorSocket.on('player ended',(msg:{player:string,place:number,token:string})=>{
     editorSocket.emit('reload waiting room',{room:params.get('id')})
     Warning.showInGame(msg.player + texts[190] + msg.place + texts[189])

@@ -308,10 +308,21 @@ function editQuestionMenu(id, txt, elem) {
     div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { createQuestion(id); });
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () {
-        clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: id });
+        deleteQuestion(id);
         clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
+}
+function deleteQuestion(id) {
+    if (canvas_1.editor.getGame().containsQuestionId(id)) {
+        Warning_1.Warning.show(clientSocket_js_1.texts[205]);
+    }
+    else if (canvas_1.editor.getGame().containsRandomQuestionAndQuestionNumberIs1()) {
+        Warning_1.Warning.show(clientSocket_js_1.texts[206]);
+    }
+    else {
+        clientSocket_js_1.editorSocket.emit('deleteQuestion', { id: localStorage.getItem('id'), questionId: id });
+    }
 }
 function editOption(id, check, text) {
     console.log('emitol edit option');

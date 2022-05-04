@@ -595,14 +595,42 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('deleteQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var quest;
+                var acc, can, questionNumber, lastRandomQuestion, quest;
                 return __generator(this, function (_a) {
-                    console.log('edituje');
-                    QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.id));
-                    quest = new Question_1.Question();
-                    quest.setId(parseInt(data.id));
-                    quest["delete"]();
-                    return [2 /*return*/];
+                    switch (_a.label) {
+                        case 0:
+                            console.log('edituje');
+                            acc = AccountManager.getAccountByClientId(data.id);
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
+                        case 1:
+                            can = (_a.sent()).length == 0;
+                            return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findAllByAuthor(acc.getName())];
+                        case 2:
+                            questionNumber = (_a.sent()).length;
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName())];
+                        case 3:
+                            lastRandomQuestion = (_a.sent()).length > 0;
+                            //DOPLNIT AUTHORA
+                            console.log('can je:' + can);
+                            console.log('questionNumber je' + questionNumber);
+                            console.log('number of question for author' + lastRandomQuestion);
+                            if (!(questionNumber == 1 && lastRandomQuestion)) return [3 /*break*/, 4];
+                            socket.emit('random and 0');
+                            return [3 /*break*/, 6];
+                        case 4: return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
+                        case 5:
+                            if ((_a.sent()).length == 0) {
+                                QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId));
+                                quest = new Question_1.Question();
+                                quest.setId(parseInt(data.questionId));
+                                quest["delete"]();
+                            }
+                            else {
+                                socket.emit('question is used');
+                            }
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
                 });
             }); });
             // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{

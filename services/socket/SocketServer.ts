@@ -608,12 +608,34 @@ export class ServerSocket{
         //console.log(await QuestionWithAnswersFinder.getIntance().findAll())
       })
   
-      socket.on('deleteQuestion', async(data:{id:string})=>{
+      socket.on('deleteQuestion', async(data:{questionId:string,id:string})=>{
         console.log('edituje')
-        QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.id))
-        let quest= new Question()
-        quest.setId(parseInt(data.id))
-        quest.delete()
+        let acc = AccountManager.getAccountByClientId(data.id)
+        let can = (await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0
+        let questionNumber = (await QuestionFinder.getIntance().findAllByAuthor(acc.getName()))!.length
+        let lastRandomQuestion = (await TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName()))!.length > 0
+        
+        //DOPLNIT AUTHORA
+      
+        console.log('can je:' + can)
+        console.log('questionNumber je' + questionNumber)
+        console.log('number of question for author'+ lastRandomQuestion)
+      
+        if(questionNumber == 1 && lastRandomQuestion){
+          socket.emit('random and 0')
+        }
+        else   if ((await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0){
+          QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId))
+          let quest= new Question()
+          quest.setId(parseInt(data.questionId))
+          quest.delete()
+        }
+        else{
+          socket.emit('question is used')
+        }
+
+
+       
         
       })
       // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{

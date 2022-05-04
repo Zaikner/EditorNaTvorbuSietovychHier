@@ -14,6 +14,7 @@ import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuest
 import { PawnStyle } from "./PawnStyle";
 
 import { editorSocket, isEditor,getCookie,texts } from "./clientSocket";
+import { Warning } from "./Warning";
 
 
 
@@ -42,16 +43,30 @@ function edit(){
 // })
 
 document.getElementById('randomQuestionID')?.addEventListener('click',function(){
-  editor.setEvents('random',{num:0,value:0})
-  $('#editEventModal').modal('hide')
+  if (Array.from(editor.getGame().getQuestions().entries()).length >0){
+    editor.setEvents('random',{num:0,value:0})
+    $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
     document.getElementById('pickedEventParagraph')!.textContent =texts[201]
     update()
+  }
+  else{
+    $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
+    Warning.show(texts[202])
+  }
+ 
+ 
 })
 document.getElementById('noneButton')!.addEventListener('click',function(){
 
     editor.setEvents('none',{num:0,value:0})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
     document.getElementById('pickedEventParagraph')!.textContent =texts[197]
     update()
@@ -63,6 +78,8 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[99] +' ' + nums +' ' + texts[100]
@@ -77,6 +94,8 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('backward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
   
     
@@ -93,6 +112,8 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[105] +' ' + nums +' ' + texts[100]
@@ -108,6 +129,8 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
     //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[107] +' ' + nums +' ' + texts[100]
@@ -131,6 +154,8 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     editor.setEvents('stop',{num:parseInt(nums),value:parseInt(freeInput.value)})
     $('#editEventModal').modal('hide')
+    $('#EventModal').modal('hide')
+    
     elementDeleter('askTheQuestionEventEdit')
    
     

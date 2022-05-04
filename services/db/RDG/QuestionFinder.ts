@@ -33,6 +33,29 @@ export class QuestionFinder{
               console.log("Connection failed")
             } 
           }
+   public async findAllByAuthor(author:string){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-all-questions-author',
+                    text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE author=$1;',
+                    values: [author],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Question> = []
+              
+                await results.rows.forEach((row:any) => {
+               
+                    ret.push(Question.load(row))
+                });
+               
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }
     public async findWithLastId(){
             let client = DbConnect.get()
             try {

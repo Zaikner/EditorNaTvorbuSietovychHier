@@ -138,6 +138,25 @@ var Game = /** @class */ (function () {
         });
         return ret;
     };
+    Game.prototype.containsQuestionId = function (id) {
+        var ret = false;
+        this.tiles.forEach(function (tile) {
+            if (tile.getQuestionId() == id) {
+                ret = true;
+            }
+        });
+        return ret;
+    };
+    Game.prototype.containsRandomQuestionAndQuestionNumberIs1 = function () {
+        var numOfQuestions = Array.from(canvas_js_1.editor.getGame().getQuestions().entries()).length;
+        var ret = false;
+        this.tiles.forEach(function (tile) {
+            if (tile.getRandomQuestion() && numOfQuestions == 1) {
+                ret = true;
+            }
+        });
+        return ret;
+    };
     Game.prototype.removeTile = function (tile) {
         this.tiles = this.tiles.filter(function (t) { return t != tile; });
     };

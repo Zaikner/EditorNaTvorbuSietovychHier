@@ -30,6 +30,8 @@ class GameEditor{
     private mustThrown = 0;
     private turnToSetFree = 0;
     private randomQuestion = false;
+
+   
     constructor(){
         this.initNewGame()
       
@@ -457,6 +459,7 @@ class GameEditor{
         reload(editor,ctx)
         
     }
+    
   getGame(){
     return this.game
 }
@@ -565,6 +568,7 @@ class GameEditor{
     public getRandomQuestion(){
         return this.randomQuestion
     }
+  
     
 }
 

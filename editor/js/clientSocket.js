@@ -449,6 +449,12 @@ editorSocket.on('add Opt', function (data) {
 editorSocket.on('reloaded waiting room', function (msg) {
     (0, Gameplay_1.changeWaitingRoom)(msg.names);
 });
+editorSocket.on('question is used', function () {
+    Warning_1.Warning.show(texts[203]);
+});
+editorSocket.on('random and 0', function () {
+    Warning_1.Warning.show(texts[204]);
+});
 editorSocket.on('player ended', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
     Warning_1.Warning.showInGame(msg.player + texts[190] + msg.place + texts[189]);

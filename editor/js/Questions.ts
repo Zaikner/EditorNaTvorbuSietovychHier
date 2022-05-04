@@ -356,12 +356,25 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(id);})
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
-        editorSocket.emit('deleteQuestion',{id:id})
-        
+      
+        deleteQuestion(id)
         editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
     
     
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
+    
+}
+
+function deleteQuestion(id:number){
+    if (editor.getGame().containsQuestionId(id)){
+        Warning.show(texts[205])
+    }
+    else if ( editor.getGame().containsRandomQuestionAndQuestionNumberIs1()){
+        Warning.show(texts[206])
+    }
+    else{
+        editorSocket.emit('deleteQuestion',{id:localStorage.getItem('id'),questionId:id})
+    }
     
 }
 function editOption(id:number,check:HTMLInputElement,text:HTMLInputElement){  

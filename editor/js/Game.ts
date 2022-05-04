@@ -163,7 +163,28 @@ class Game{
         return ret
         
     }
-        
+    
+    containsQuestionId(id:number){
+        let ret = false;
+        this.tiles.forEach((tile:Tile)=>{
+            if (tile.getQuestionId()==id){
+                ret = true
+            }
+        })
+
+        return ret
+    }
+    containsRandomQuestionAndQuestionNumberIs1(){
+        let numOfQuestions = Array.from(editor.getGame().getQuestions().entries()).length
+        let ret = false;
+        this.tiles.forEach((tile:Tile)=>{
+            if (tile.getRandomQuestion() && numOfQuestions == 1){
+                ret = true
+            }
+        })
+
+        return ret
+    }
     removeTile(tile:Tile){
         this.tiles = this.tiles.filter((t) => {return t != tile});
     }

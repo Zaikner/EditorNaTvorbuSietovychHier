@@ -10,6 +10,7 @@ var Pawn_1 = require("./Pawn");
 var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
 var clientSocket_1 = require("./clientSocket");
+var Warning_1 = require("./Warning");
 var editor = new GameEditor_js_1.GameEditor();
 exports.editor = editor;
 var params = new URLSearchParams(window.location.search);
@@ -25,15 +26,24 @@ function edit() {
     //   updateNextTileIds()
     // })
     (_a = document.getElementById('randomQuestionID')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        editor.setEvents('random', { num: 0, value: 0 });
-        $('#editEventModal').modal('hide');
-        elementDeleter('askTheQuestionEventEdit');
-        document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[201];
-        (0, TileEditor_js_1.update)();
+        if (Array.from(editor.getGame().getQuestions().entries()).length > 0) {
+            editor.setEvents('random', { num: 0, value: 0 });
+            $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
+            elementDeleter('askTheQuestionEventEdit');
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[201];
+            (0, TileEditor_js_1.update)();
+        }
+        else {
+            $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
+            Warning_1.Warning.show(clientSocket_1.texts[202]);
+        }
     });
     document.getElementById('noneButton').addEventListener('click', function () {
         editor.setEvents('none', { num: 0, value: 0 });
         $('#editEventModal').modal('hide');
+        $('#EventModal').modal('hide');
         elementDeleter('askTheQuestionEventEdit');
         document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[197];
         (0, TileEditor_js_1.update)();
@@ -45,6 +55,7 @@ function edit() {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('forward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[99] + ' ' + nums + ' ' + clientSocket_1.texts[100];
@@ -58,6 +69,7 @@ function edit() {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('backward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[103] + ' ' + nums + ' ' + clientSocket_1.texts[100];
@@ -71,6 +83,7 @@ function edit() {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('skip', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[105] + ' ' + nums + ' ' + clientSocket_1.texts[100];
@@ -84,6 +97,7 @@ function edit() {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[107] + ' ' + nums + ' ' + clientSocket_1.texts[100];
@@ -102,6 +116,7 @@ function edit() {
             var nums = document.getElementById('howManytimes').value;
             editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
             $('#editEventModal').modal('hide');
+            $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
             //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = clientSocket_1.texts[110] + freeInput.value + clientSocket_1.texts[111] + nums + clientSocket_1.texts[100];
