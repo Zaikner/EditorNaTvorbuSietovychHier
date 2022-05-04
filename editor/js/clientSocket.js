@@ -281,6 +281,10 @@ editorSocket.on('evaluate End', function (msg) {
     }
     editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
 });
+editorSocket.on('is online?', function () {
+    console.log('recievid is online and answered');
+    editorSocket.emit('is online', { id: localStorage.getItem('id') });
+});
 editorSocket.on('exit to main menu', function () {
     window.location.replace('/gamelobby');
 });

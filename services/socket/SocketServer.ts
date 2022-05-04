@@ -36,9 +36,17 @@ export class ServerSocket{
     
 
     static serverListen(){
+
+
         this.io.on('connection', (socket:any) => {
-            socket.emit('pipi')
-            
+            setInterval(function(){
+            console.log('emitol ohlas sa')
+            socket.emit('is online?')
+            },5000)
+            socket.on('is online',(msg:{id:string})=>{
+              let acc = AccountManager.getAccountByClientId(msg.id)
+              console.log('odhlasil sa:' + acc.getName())
+            })
             socket.on('load game',async (msg:{id:string,name:string,room:string,response:boolean}) => {
 
                     if (msg.response){
