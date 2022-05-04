@@ -39,13 +39,11 @@ export class ServerSocket{
 
 
         this.io.on('connection', (socket:any) => {
-            setInterval(function(){
-            console.log('emitol ohlas sa')
-            socket.emit('is online?')
-            },5000)
+           
             socket.on('is online',(msg:{id:string})=>{
               let acc = AccountManager.getAccountByClientId(msg.id)
-              console.log('odhlasil sa:' + acc.getName())
+              acc.setAnswered = 0;
+              console.log('ohlasil sa:' + acc.getName())
             })
             socket.on('load game',async (msg:{id:string,name:string,room:string,response:boolean}) => {
 

@@ -1,4 +1,5 @@
 import { Account_db } from "../../services/db/RDG/Account_db";
+import { ServerSocket } from "../../services/socket/SocketServer";
 
 export class Account{
     private name:string
@@ -10,6 +11,7 @@ export class Account{
     private score:number = 0
     private gameLost:number = 0;
     private gameWon:number = 0;
+    private answered:number = 0;
 
     constructor(name:string,password:string){
         this.name = name
@@ -24,6 +26,15 @@ export class Account{
         newAcc.setGameLost(this.gameLost)
         newAcc.update()
 
+    }
+    checkIfOnline(){
+        let id  = this.socketId
+        let acc = this
+        setInterval(function(){
+            console.log('emitol ohlas sa ' + acc.getAnswered())
+            ServerSocket.emitToSpecificSocket(id,'is online?',{})
+            acc.setAnswered(acc.getAnswered()+1)
+            },5000)
     }
     public getScore() : number {
         return this.score
@@ -65,7 +76,6 @@ export class Account{
         return this.socketId
     }
     public setSocketId(newId:string){
-        console.log('nastavil socket id')
         this.socketId = newId
     }
     public getGameWon() : number {
@@ -79,5 +89,11 @@ export class Account{
     }
     public setGameLost(newScore:number){
         this.gameLost  = newScore
+    }
+    public getAnswered() : number {
+        return this.answered
+    }
+    public setAnswered(newScore:number){
+        this.answered = newScore
     }
 }

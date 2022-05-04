@@ -132,6 +132,7 @@ var AccountManager = /** @class */ (function () {
         newAcc.setGameWon(acc.getGameWon());
         newAcc.setGameLost(acc.getGameLost());
         this.loggedAccounts.push(newAcc);
+        //newAcc.checkIfOnline()
         return newAcc;
     };
     AccountManager.logout = function (name) {
@@ -230,7 +231,6 @@ var AccountManager = /** @class */ (function () {
     AccountManager.checkLogedAccounts = function () {
         setInterval(function () {
             AccountManager.loggedAccounts.forEach(function (acc) {
-                //console.log(acc)
                 SocketServer_js_1.ServerSocket.emitToSpecificSocket(acc.getSocketId(), 'check if online', {});
             });
         }, 5000);

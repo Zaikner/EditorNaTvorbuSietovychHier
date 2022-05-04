@@ -65,13 +65,10 @@ var ServerSocket = /** @class */ (function () {
     ServerSocket.serverListen = function () {
         var _this = this;
         this.io.on('connection', function (socket) {
-            setInterval(function () {
-                console.log('emitol ohlas sa');
-                socket.emit('is online?');
-            }, 5000);
             socket.on('is online', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);
-                console.log('odhlasil sa:' + acc.getName());
+                acc.setAnswered = 0;
+                console.log('ohlasil sa:' + acc.getName());
             });
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
                 var game, acc, emit, r_1;

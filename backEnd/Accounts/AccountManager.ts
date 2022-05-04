@@ -70,6 +70,7 @@ export class AccountManager{
         newAcc.setGameWon(acc.getGameWon())
         newAcc.setGameLost(acc.getGameLost())
         this.loggedAccounts.push(newAcc)
+        //newAcc.checkIfOnline()
         return newAcc
     }
     public static logout(name:string){
