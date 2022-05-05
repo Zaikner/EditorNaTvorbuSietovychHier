@@ -12,13 +12,10 @@ export class Tile_db{
     private stroke:number = 0;
     private strokeColor:string ='';
     private shape:string = 'circle'
-    private isChoosen:boolean = false;
-    private backgroundFile?:string = '';
+    private image?:string = '';
     private tileNumber:number = 0;
     private isEndingFor:Array<String>=[]
     private isStartingFor:Array<String>=[]
-    private toggleNumber:boolean = true;
-    private numberOfFollowingTile:number = 0
     private gameId:number = 0;
     private questionId:number = -1;
     private cantBeEliminatedOnTile:Array<string> = []
@@ -48,13 +45,6 @@ export class Tile_db{
     }
     public getShape(){
         return this.shape
-    }
-
-    public setIsChoosen(isChosen:boolean){
-        this.isChoosen = isChosen
-    }
-    public getIsChoosen(){
-        return this.isChoosen
     }
 
     public setX1(newX1:number){
@@ -107,11 +97,11 @@ export class Tile_db{
     public getColor(){
         return this.color
     }
-    public getBackgroundFile(){
-        return this.backgroundFile
+    public getImage(){
+        return this.image
     }
-    public setBackgroundFile(newFile:string){
-         this.backgroundFile = newFile
+    public setImage(newFile:string){
+         this.image = newFile
     }
     public setIsEndingFor(newPlayers:Array<string>){
         this.isEndingFor = newPlayers
@@ -125,23 +115,12 @@ export class Tile_db{
     public getIsEndingFor(){
         return this.isEndingFor
     }
-    public setToogleNumber(is : boolean) {
-        this.toggleNumber = is;
-    }
-    public getToggleNumber(){
-        return this.toggleNumber}
   
     public getTileNumber(){
         return this.tileNumber
     }
     public setTileNumber(newNumber:number){
         this.tileNumber = newNumber
-    }
-    public getFollowingTileNumber(){
-        return this.numberOfFollowingTile
-    }
-    public setFollowingTileNumber(newNumber:number){
-        this.numberOfFollowingTile = newNumber
     }
       
     public getId() : number {
@@ -224,8 +203,8 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
-                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberOfFollowingTile,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,image,"tileNumber","isEndingFor","isStartingFor","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
+                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.image,this.tileNumber,this.isEndingFor,this.isStartingFor,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
               }
               client
               .query(query)
@@ -248,13 +227,9 @@ export class Tile_db{
         ret.setStroke(data.stroke)
         ret.setStrokeColor(data.strokeColor)
         ret.setShape(data.shape)
-        ret.setIsChoosen(data.isChoosen)
-        ret.setBackgroundFile(data.backgroundFile)
         ret.setTileNumber(data.tileNumber)
         ret.setIsEndingFor(data.isEndingFor)
         ret.setIsStartingFor(data.isStartingFor)
-        ret.setToogleNumber(data.toggleNumber)
-        ret.setFollowingTileNumber(data.numberOfFollowingTile)
         ret.setGameId(data.gameId)
         ret.setQuestionId(data.questionId)
         ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile)

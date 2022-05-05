@@ -598,7 +598,7 @@ function showActualState() {
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
-    tile.setBackgroundFile(canvas_js_1.editor.getImage());
+    tile.setImage(canvas_js_1.editor.getImage());
     cttttx.clearRect(0, 0, cs.width, cs.height);
     tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
     (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);

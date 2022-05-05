@@ -53,7 +53,7 @@ editorSocket.on('connected',(msg)=>{
         let image = new Image()
         image.src = tile.backgroundFile
         image.onload = function(){
-         addedTile.setBackgroundFile(image)
+         addedTile.setImage(image)
          reload(editor,ctx)
         }
        }
@@ -66,9 +66,9 @@ editorSocket.on('connected',(msg)=>{
       
        addedTile.setIsStartingFor(tile.isStartingFor)
      
-       addedTile.setToogleNumber(tile.toggleNumber)
   
-       addedTile.setFollowingTileNumber(tile.numberOfFollowingTile)
+  
+
        addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
   
        addedTile.setSkip(tile.skip)
@@ -170,6 +170,8 @@ editorSocket.on('connected',(msg)=>{
     initGameInfo(msg.game.name)
   
     let i = 0
+
+    //for (let i = 0; i < msg.game.num)
    
     msg.pawns.forEach((pawn:any) => {
       i++;

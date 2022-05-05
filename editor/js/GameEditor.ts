@@ -63,7 +63,7 @@ class GameEditor{
             
         }
         if (background!=undefined){
-            newTile.setBackgroundFile(background)
+            newTile.setImage(background)
         }
        
    
@@ -76,7 +76,7 @@ class GameEditor{
         newTile.drawTile(canvas,ctx,false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber)
-        newTile.setFollowingTileNumber(tileNumber+1)
+        //newTile.setFollowingTileNumber(tileNumber+1)
         
      
         newTile.setId(this.nextTileId)
@@ -158,7 +158,7 @@ class GameEditor{
         // this.choosenTile?.setY2(centerY+size)
         this.choosenTile?.setRadius(size)
         this.choosenTile?.setShape(shape)
-        this.choosenTile?.setBackgroundFile(image!)
+        this.choosenTile?.setImage(image!)
         this.choosenTile?.setStroke(stroke)
         this.choosenTile?.setStrokeColor(strokeColor)
         this.choosenTile?.setX1(this.choosenTile.getCenterX()-size)
@@ -308,7 +308,7 @@ class GameEditor{
         let tile = this.findTileById(pawn.tileId)
         tile.removePawn(pawn)
         for (let i = 0;i < value;i++){
-            console.log('Previous tile with id: '+tile.getFollowingTileNumber())
+            //console.log('Previous tile with id: '+tile.getFollowingTileNumber())
             console.log('Previous tile with id: '+tile.getNextTilesIds().get(pawn.player))
             tile = this.findTileByNextTileNumber(tile.getTileNumber()!,pawn.player)
             console.log('otocil')

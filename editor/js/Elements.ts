@@ -430,11 +430,11 @@ function spawnHeading(doc:HTMLDocument,parent:string,id:string,txt:string){
   doc.getElementById(parent)!.appendChild(heading);
   return heading
 }
-function spawnTextArea(doc:HTMLDocument,parent:string,id:string,txt:string){
+function spawnTextArea(doc:HTMLDocument,parent:string,id:string,txt:string,readonly:boolean){
   let textfield = doc.createElement('textarea')
   textfield.id = id
   textfield.classList.add('ruleField')
-  
+  textfield.readOnly = readonly
   doc.getElementById(parent)!.appendChild(textfield);
   return textfield
 }

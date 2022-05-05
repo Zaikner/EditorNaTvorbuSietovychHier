@@ -16,13 +16,10 @@ var Tile_db = /** @class */ (function () {
         this.stroke = 0;
         this.strokeColor = '';
         this.shape = 'circle';
-        this.isChoosen = false;
-        this.backgroundFile = '';
+        this.image = '';
         this.tileNumber = 0;
         this.isEndingFor = [];
         this.isStartingFor = [];
-        this.toggleNumber = true;
-        this.numberOfFollowingTile = 0;
         this.gameId = 0;
         this.questionId = -1;
         this.cantBeEliminatedOnTile = [];
@@ -52,12 +49,6 @@ var Tile_db = /** @class */ (function () {
     };
     Tile_db.prototype.getShape = function () {
         return this.shape;
-    };
-    Tile_db.prototype.setIsChoosen = function (isChosen) {
-        this.isChoosen = isChosen;
-    };
-    Tile_db.prototype.getIsChoosen = function () {
-        return this.isChoosen;
     };
     Tile_db.prototype.setX1 = function (newX1) {
         this.x1 = newX1;
@@ -107,11 +98,11 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.getColor = function () {
         return this.color;
     };
-    Tile_db.prototype.getBackgroundFile = function () {
-        return this.backgroundFile;
+    Tile_db.prototype.getImage = function () {
+        return this.image;
     };
-    Tile_db.prototype.setBackgroundFile = function (newFile) {
-        this.backgroundFile = newFile;
+    Tile_db.prototype.setImage = function (newFile) {
+        this.image = newFile;
     };
     Tile_db.prototype.setIsEndingFor = function (newPlayers) {
         this.isEndingFor = newPlayers;
@@ -125,23 +116,11 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.getIsEndingFor = function () {
         return this.isEndingFor;
     };
-    Tile_db.prototype.setToogleNumber = function (is) {
-        this.toggleNumber = is;
-    };
-    Tile_db.prototype.getToggleNumber = function () {
-        return this.toggleNumber;
-    };
     Tile_db.prototype.getTileNumber = function () {
         return this.tileNumber;
     };
     Tile_db.prototype.setTileNumber = function (newNumber) {
         this.tileNumber = newNumber;
-    };
-    Tile_db.prototype.getFollowingTileNumber = function () {
-        return this.numberOfFollowingTile;
-    };
-    Tile_db.prototype.setFollowingTileNumber = function (newNumber) {
-        this.numberOfFollowingTile = newNumber;
     };
     Tile_db.prototype.getId = function () {
         return this.id;
@@ -221,8 +200,8 @@ var Tile_db = /** @class */ (function () {
         console.log(this);
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
-            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameId, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
+            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,image,"tileNumber","isEndingFor","isStartingFor","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.image, this.tileNumber, this.isEndingFor, this.isStartingFor, this.gameId, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
         };
         client
             .query(query)
@@ -242,13 +221,9 @@ var Tile_db = /** @class */ (function () {
         ret.setStroke(data.stroke);
         ret.setStrokeColor(data.strokeColor);
         ret.setShape(data.shape);
-        ret.setIsChoosen(data.isChoosen);
-        ret.setBackgroundFile(data.backgroundFile);
         ret.setTileNumber(data.tileNumber);
         ret.setIsEndingFor(data.isEndingFor);
         ret.setIsStartingFor(data.isStartingFor);
-        ret.setToogleNumber(data.toggleNumber);
-        ret.setFollowingTileNumber(data.numberOfFollowingTile);
         ret.setGameId(data.gameId);
         ret.setQuestionId(data.questionId);
         ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile);

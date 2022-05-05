@@ -18,13 +18,12 @@ class Tile{
     private strokeColor:string ='';
     private shape:string = 'circle'
     private isChoosen:boolean = false;
-    private backgroundFile?:HTMLImageElement = undefined;
+    private image?:HTMLImageElement = undefined;
     private tileNumber:number;
     private isEndingFor:Array<string>=[]
     private isStartingFor:Array<string>=[]
     private cantBeEliminatedOnTile:Array<string> = []
-    private toggleNumber:boolean = true;
-    private numberOfFollowingTile:number;
+
     private pawns:Array<Pawn> = []
     private questionId:number = -1
     private skip = 0;
@@ -47,7 +46,7 @@ class Tile{
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
-        this.numberOfFollowingTile = tileNumber+1;
+       
     }
 
 
@@ -56,7 +55,7 @@ class Tile{
         console.log('nakreslil')
         ctx.beginPath();
         //obrazec bez outline -- nuluje
-        if (this.backgroundFile == undefined){
+        if (this.image == undefined){
             
             ctx.strokeStyle =this.color
             ctx.lineWidth = 0
@@ -75,7 +74,7 @@ class Tile{
             ctx.fill();
          
         }
-        else if (this.backgroundFile != undefined){
+        else if (this.image != undefined){
                 // //kresli image
             if (this.shape == 'circle'){
                 ctx.save()
@@ -88,7 +87,7 @@ class Tile{
                 //ctx.fill()
              
                 
-                ctx.drawImage(this.backgroundFile!,this.x1,this.y1,2*this.radius,2*this.radius)
+                ctx.drawImage(this.image!,this.x1,this.y1,2*this.radius,2*this.radius)
                 ctx.resetTransform();
                 ctx.restore()
                 //ctx.restore()
@@ -104,7 +103,7 @@ class Tile{
                 //ctx.fill()
                 ctx.stroke()
                 
-                ctx.drawImage(this.backgroundFile!,this.x1,this.y1,2*this.radius,2*this.radius)
+                ctx.drawImage(this.image!,this.x1,this.y1,2*this.radius,2*this.radius)
                 ctx.resetTransform();
                 ctx.restore()
             }
@@ -324,22 +323,14 @@ class Tile{
                 y1:this.y1,
                 y2:this.y2,
                 radius:this.radius,
-             
                 color:this.color,
                 stroke:this.stroke,
                 strokeColor:this.strokeColor,
                 shape:this.shape,
-                backgroundFile:this.backgroundFile === undefined?'none':getDataUrlFromImage(this.backgroundFile),
-                //patternFile:this.patternFile === undefined?'none':getDataUrlFromImage(this.patternFile),
-                tileNumber:this.tileNumber,
-              
-                isEndingFor:this.isEndingFor,   
-             
+                image:this.image === undefined?'none':getDataUrlFromImage(this.image),
+                tileNumber:this.tileNumber,   
+                isEndingFor:this.isEndingFor,           
                 isStartingFor:this.isStartingFor,
-          
-             
-                toggleNumber:this.toggleNumber,
-                numberOfFollowingTile:this.numberOfFollowingTile,
                 questionId:this.questionId,
                 cantBeEliminatedOnTile:this.cantBeEliminatedOnTile,
                 skip:this.skip,
@@ -375,15 +366,15 @@ class Tile{
         return ret
     }
     
-    findPreviousTile(){
-        let res:Array<Tile> = []
-        editor.getGame().getTiles().forEach((tile:Tile)=>{
-            if (tile.getFollowingTileNumber() == this.id){
-                res.push(tile)
-            }
-        })
-        return res
-    }
+    // findPreviousTile(){
+    //     let res:Array<Tile> = []
+    //     editor.getGame().getTiles().forEach((tile:Tile)=>{
+    //         if (tile.getFollowingTileNumber() == this.id){
+    //             res.push(tile)
+    //         }
+    //     })
+    //     return res
+    // }
     isSuccessfullyEnding(token:string){
         let ret = false
         if (!this.isEndingFor.includes(token)){
@@ -485,11 +476,11 @@ class Tile{
     public getColor(){
         return this.color
     }
-    public getBackgroundFile(){
-        return this.backgroundFile
+    public getImage(){
+        return this.image
     }
-    public setBackgroundFile(newFile:HTMLImageElement){
-         this.backgroundFile = newFile
+    public setImage(newFile:HTMLImageElement){
+         this.image= newFile
     }
 
     public setIsEndingFor(newPlayers:Array<string>){
@@ -505,29 +496,21 @@ class Tile{
         return this.isEndingFor
     }
    
-    public setToogleNumber(is : boolean) {
-        this.toggleNumber = is;
-    }
-    public getToggleNumber(){
-        return this.toggleNumber}
+   
     public getTileNumber(){
         return this.tileNumber
     }
     public setTileNumber(newNumber:number){
         this.tileNumber = newNumber
     }
-    public getFollowingTileNumber(){
-        return this.numberOfFollowingTile
-    }
+  
     public setQuestionId(newId:number){
         this.questionId = newId
     }
     public getQuestionId(){
         return this.questionId
     }
-    public setFollowingTileNumber(newNumber:number){
-        this.numberOfFollowingTile = newNumber
-    }
+  
     public setPawns(newPawns:Array<Pawn>){
         this.pawns = newPawns
     }

@@ -191,12 +191,10 @@ var ServerSocket = /** @class */ (function () {
                                 t.setStroke(tile.stroke);
                                 t.setStrokeColor(tile.strokeColor);
                                 t.setShape(tile.shape);
-                                t.setBackgroundFile(tile.backgroundFile);
+                                t.setImage(tile.image);
                                 t.setTileNumber(tile.tileNumber);
                                 t.setIsEndingFor(tile.isEndingFor);
                                 t.setIsStartingFor(tile.isStartingFor);
-                                t.setToogleNumber(tile.toggleNumber);
-                                t.setFollowingTileNumber(tile.numberOfFollowingTile);
                                 t.setGameId(id);
                                 t.setQuestionId(tile.questionId);
                                 t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);

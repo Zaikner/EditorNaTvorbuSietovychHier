@@ -51,7 +51,7 @@ var GameEditor = /** @class */ (function () {
             newTile.setStrokeColor(strokeColor);
         }
         if (background != undefined) {
-            newTile.setBackgroundFile(background);
+            newTile.setImage(background);
         }
         newTile.setShape(shape);
         if (add) {
@@ -61,7 +61,7 @@ var GameEditor = /** @class */ (function () {
         newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx, false);
         //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber);
-        newTile.setFollowingTileNumber(tileNumber + 1);
+        //newTile.setFollowingTileNumber(tileNumber+1)
         newTile.setId(this.nextTileId);
         return newTile;
     };
@@ -131,7 +131,7 @@ var GameEditor = /** @class */ (function () {
         // this.choosenTile?.setY2(centerY+size)
         (_b = this.choosenTile) === null || _b === void 0 ? void 0 : _b.setRadius(size);
         (_c = this.choosenTile) === null || _c === void 0 ? void 0 : _c.setShape(shape);
-        (_d = this.choosenTile) === null || _d === void 0 ? void 0 : _d.setBackgroundFile(image);
+        (_d = this.choosenTile) === null || _d === void 0 ? void 0 : _d.setImage(image);
         (_e = this.choosenTile) === null || _e === void 0 ? void 0 : _e.setStroke(stroke);
         (_f = this.choosenTile) === null || _f === void 0 ? void 0 : _f.setStrokeColor(strokeColor);
         (_g = this.choosenTile) === null || _g === void 0 ? void 0 : _g.setX1(this.choosenTile.getCenterX() - size);
@@ -265,7 +265,7 @@ var GameEditor = /** @class */ (function () {
         var tile = this.findTileById(pawn.tileId);
         tile.removePawn(pawn);
         for (var i = 0; i < value; i++) {
-            console.log('Previous tile with id: ' + tile.getFollowingTileNumber());
+            //console.log('Previous tile with id: '+tile.getFollowingTileNumber())
             console.log('Previous tile with id: ' + tile.getNextTilesIds().get(pawn.player));
             tile = this.findTileByNextTileNumber(tile.getTileNumber(), pawn.player);
             console.log('otocil');

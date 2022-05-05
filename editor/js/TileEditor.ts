@@ -763,7 +763,7 @@ function insertTilesMenu():void{
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
-    tile.setBackgroundFile(editor.getImage())
+    tile.setImage(editor.getImage())
   
     cttttx.clearRect(0,0,cs.width,cs.height)
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)

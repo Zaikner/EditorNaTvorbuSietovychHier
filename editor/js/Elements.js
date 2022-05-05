@@ -404,10 +404,11 @@ function spawnHeading(doc, parent, id, txt) {
     return heading;
 }
 exports.spawnHeading = spawnHeading;
-function spawnTextArea(doc, parent, id, txt) {
+function spawnTextArea(doc, parent, id, txt, readonly) {
     var textfield = doc.createElement('textarea');
     textfield.id = id;
     textfield.classList.add('ruleField');
+    textfield.readOnly = readonly;
     doc.getElementById(parent).appendChild(textfield);
     return textfield;
 }

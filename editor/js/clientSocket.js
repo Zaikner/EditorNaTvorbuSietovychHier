@@ -53,7 +53,7 @@ editorSocket.on('connected', function (msg) {
             var image_1 = new Image();
             image_1.src = tile.backgroundFile;
             image_1.onload = function () {
-                addedTile.setBackgroundFile(image_1);
+                addedTile.setImage(image_1);
                 (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
             };
         }
@@ -61,8 +61,6 @@ editorSocket.on('connected', function (msg) {
         //addedTile.setPatternFile(tile.patternFile)
         addedTile.setIsEndingFor(tile.isEndingFor);
         addedTile.setIsStartingFor(tile.isStartingFor);
-        addedTile.setToogleNumber(tile.toggleNumber);
-        addedTile.setFollowingTileNumber(tile.numberOfFollowingTile);
         addedTile.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
         addedTile.setSkip(tile.skip);
         addedTile.setRepeat(tile.repeat);
@@ -144,6 +142,7 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setPlayerTokens(tokens);
     (0, Gameplay_1.initGameInfo)(msg.game.name);
     var i = 0;
+    //for (let i = 0; i < msg.game.num)
     msg.pawns.forEach(function (pawn) {
         i++;
         var tile = canvas_1.editor.findTileById(newIds.get(pawn.tileId));

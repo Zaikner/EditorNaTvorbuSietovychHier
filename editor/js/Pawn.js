@@ -6,7 +6,6 @@ var clientSocket_js_1 = require("./clientSocket.js");
 var Pawn = /** @class */ (function () {
     function Pawn(player, tile) {
         this.id = 0;
-        this.color = '#000000';
         this.hasEnded = false;
         this.player = player;
         this.tile = tile;

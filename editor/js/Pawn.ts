@@ -11,7 +11,6 @@ export class Pawn{
     tile:Tile;
     tileId:number;
     startingTileId:number;
-    color:string = '#000000';
     hasEnded:boolean = false;
    
     constructor(player:string,tile:Tile){
