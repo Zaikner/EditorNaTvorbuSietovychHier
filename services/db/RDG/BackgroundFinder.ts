@@ -9,13 +9,13 @@ export class BackgroundFinder{
 
     }
    
-public async findByName(name:string){
+public async findById(id:number){
     let client = DbConnect.get()
     try {
         const query = {
             name: 'select-background',
-            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Background" as t on t."gameName" = g.name  WHERE g.name=$1;',
-            values: [name],
+            text: 'SELECT * FROM  "bachelorsThesis"."Background"  WHERE "gameId"=$1;',
+            values: [id],
           }
         var results = await  client.query(query)
         var ret:Array<Background_db> = []

@@ -8,6 +8,7 @@ import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
 import { PawnStyle } from './PawnStyle.js';
 class Game{
+    private id:number = 0
     private name:string = "";
     private author:string = "";
     private path:Path = new Path();
@@ -66,13 +67,13 @@ class Game{
             editorSocket.emit('saveGame',{name:this.name,
                                           author:this.author,
                                           background:this.background.save(),
-                                          
+                                          id:this.id,
                                           tiles:savedTiles,
                                           numOfPlayers:this.numOfPlayers,
                                           pawns:savedPawns,
                                           styles:savedPawnStyles,
                                           rules:this.rules,
-                                          id:getCookie('id'),
+                                          clientId:getCookie('id'),
                                           nextTilesIds:this.mapNextTiles(),
                                           initSizeX:this.initSizeX,
                                           initSizeY:this.initSizeY,
@@ -330,6 +331,12 @@ class Game{
     }
     getIsPublished(){
         return this.isPublished
+    }
+    setId(newId:number){
+        this.id = newId
+    }
+    getId(){
+        return this.id
     }
     // getHasStarted(){
     //     return  this.hasStarted

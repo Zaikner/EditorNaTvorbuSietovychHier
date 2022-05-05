@@ -10,6 +10,7 @@ var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
 var Game = /** @class */ (function () {
     function Game() {
+        this.id = 0;
         this.name = "";
         this.author = "";
         this.path = new Path_js_1.Path();
@@ -56,12 +57,13 @@ var Game = /** @class */ (function () {
             clientSocket_js_1.editorSocket.emit('saveGame', { name: this.name,
                 author: this.author,
                 background: this.background.save(),
+                id: this.id,
                 tiles: savedTiles_1,
                 numOfPlayers: this.numOfPlayers,
                 pawns: savedPawns_1,
                 styles: savedPawnStyles_1,
                 rules: this.rules,
-                id: (0, clientSocket_js_1.getCookie)('id'),
+                clientId: (0, clientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles(),
                 initSizeX: this.initSizeX,
                 initSizeY: this.initSizeY,
@@ -297,6 +299,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getIsPublished = function () {
         return this.isPublished;
+    };
+    Game.prototype.setId = function (newId) {
+        this.id = newId;
+    };
+    Game.prototype.getId = function () {
+        return this.id;
     };
     return Game;
 }());

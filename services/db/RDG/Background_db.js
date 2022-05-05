@@ -7,7 +7,7 @@ var Background_db = /** @class */ (function () {
         this.id = 0;
         this.color = '';
         this.image = '';
-        this.gameName = '';
+        this.gameId = 0;
     }
     Background_db.prototype.getId = function () {
         return this.id;
@@ -15,11 +15,11 @@ var Background_db = /** @class */ (function () {
     Background_db.prototype.setId = function (newId) {
         this.id = newId;
     };
-    Background_db.prototype.getGameName = function () {
-        return this.gameName;
+    Background_db.prototype.getGameId = function () {
+        return this.gameId;
     };
-    Background_db.prototype.setGameName = function (newName) {
-        this.gameName = newName;
+    Background_db.prototype.setGameId = function (newId) {
+        this.gameId = newId;
     };
     Background_db.prototype.getColor = function () {
         return this.color;
@@ -37,8 +37,8 @@ var Background_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-background',
-            text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3);',
-            values: [this.image, this.color, this.gameName]
+            text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3);',
+            values: [this.image, this.color, this.gameId]
         };
         client
             .query(query)
@@ -48,8 +48,8 @@ var Background_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-background',
-            text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3) ON CONFLICT("gameName") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameName" = EXCLUDED."gameName";',
-            values: [this.image, this.color, this.gameName]
+            text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3) ON CONFLICT("gameId") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameId" = EXCLUDED."gameId";',
+            values: [this.image, this.color, this.gameId]
         };
         client
             .query(query)
@@ -58,7 +58,7 @@ var Background_db = /** @class */ (function () {
     Background_db.load = function (data) {
         var ret = new Background_db();
         ret.setId(data.id);
-        ret.setGameName(data.gameName);
+        ret.setGameId(data.gameId);
         ret.setColor(data.color);
         ret.setImage(data.image);
         return ret;

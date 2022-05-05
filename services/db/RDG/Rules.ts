@@ -4,7 +4,7 @@ import { DbConnect } from "../DbConnect";
 export class Rules{
     private id:number = 0;
     private text:string = '';
-    private gameName:string = '';
+    private gameId:number = 0;
 
     constructor(){
 
@@ -24,11 +24,11 @@ export class Rules{
     public setText(newName:string){
         this.text  = newName
     }
-    public getGameName() : string {
-        return this.gameName
+    public getGameId() : number {
+        return this.gameId
     }
-    public setGameName(newName:string){
-        this.gameName  = newName
+    public setGameId(newId:number){
+        this.gameId  = newId
     }
        
     
@@ -36,8 +36,8 @@ export class Rules{
         let client = DbConnect.get()
             const query = {
                 name: 'upsert-rules',
-                text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameName") VALUES($1,$2) ON CONFLICT("gameName") DO UPDATE SET text = EXCLUDED.text,"gameName"=EXCLUDED."gameName";',
-                values: [this.text,this.gameName],
+                text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameId") VALUES($1,$2) ON CONFLICT("gameId") DO UPDATE SET text = EXCLUDED.text,"gameId"=EXCLUDED."gameId";',
+                values: [this.text,this.gameId],
               }
               client
               .query(query)
@@ -62,7 +62,7 @@ export class Rules{
                 let ret = new Rules()
                 ret.setId(data.id)
                 ret.setText(data.text)
-                ret.setGameName(data.gameName)
+                ret.setGameId(data.gameId)
                 return ret
                 }
     

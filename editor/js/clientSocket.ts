@@ -152,6 +152,7 @@ editorSocket.on('connected',(msg)=>{
     editor.getGame().setInitSizeY(msg.game.initSizeY)
     editor.getGame().setIsPublished(msg.game.isPublished)
     editor.getGame().setToogleNumber(msg.game.toogleNumber)
+    editor.getGame().setId(msg.game.id)
   
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
@@ -221,9 +222,9 @@ editorSocket.on('not author',()=>{
   Warning.show(texts[185])
  
 })
-// editorSocket.on('game saved',()=>{
-//   window.location.replace('/')
-// })
+editorSocket.on('game saved',(msg:{newId:number})=>{
+  editor.getGame().setId(msg.newId)
+})
 editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
   Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
 })

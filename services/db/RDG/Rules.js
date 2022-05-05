@@ -6,7 +6,7 @@ var Rules = /** @class */ (function () {
     function Rules() {
         this.id = 0;
         this.text = '';
-        this.gameName = '';
+        this.gameId = 0;
     }
     Rules.prototype.getId = function () {
         return this.id;
@@ -20,18 +20,18 @@ var Rules = /** @class */ (function () {
     Rules.prototype.setText = function (newName) {
         this.text = newName;
     };
-    Rules.prototype.getGameName = function () {
-        return this.gameName;
+    Rules.prototype.getGameId = function () {
+        return this.gameId;
     };
-    Rules.prototype.setGameName = function (newName) {
-        this.gameName = newName;
+    Rules.prototype.setGameId = function (newId) {
+        this.gameId = newId;
     };
     Rules.prototype.upsert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-rules',
-            text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameName") VALUES($1,$2) ON CONFLICT("gameName") DO UPDATE SET text = EXCLUDED.text,"gameName"=EXCLUDED."gameName";',
-            values: [this.text, this.gameName]
+            text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameId") VALUES($1,$2) ON CONFLICT("gameId") DO UPDATE SET text = EXCLUDED.text,"gameId"=EXCLUDED."gameId";',
+            values: [this.text, this.gameId]
         };
         client
             .query(query)
@@ -52,7 +52,7 @@ var Rules = /** @class */ (function () {
         var ret = new Rules();
         ret.setId(data.id);
         ret.setText(data.text);
-        ret.setGameName(data.gameName);
+        ret.setGameId(data.gameId);
         return ret;
     };
     return Rules;

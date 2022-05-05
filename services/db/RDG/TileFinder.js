@@ -43,7 +43,7 @@ var TileFinder = /** @class */ (function () {
     function TileFinder() {
     }
     TileFinder.getIntance = function () { return this.INSTANCE; };
-    TileFinder.prototype.findByName = function (name) {
+    TileFinder.prototype.findByGameId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -55,8 +55,8 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                            values: [name]
+                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.id=$1;',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:
@@ -89,7 +89,7 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.author=$1 AND t."randomQuestion" = true;',
+                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.author=$1 AND t."randomQuestion" = true;',
                             values: [author]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -185,7 +185,7 @@ var TileFinder = /** @class */ (function () {
             });
         });
     };
-    TileFinder.prototype.deleteByName = function (name) {
+    TileFinder.prototype.deleteByGameId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_5;
             return __generator(this, function (_a) {
@@ -197,8 +197,8 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'delete-gameTiles',
-                            text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameName"=$1;',
-                            values: [name]
+                            text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameId"=$1;',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

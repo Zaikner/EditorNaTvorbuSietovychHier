@@ -8,13 +8,13 @@ export class PawnStyleFinder{
     private constructor(){
 
     }
-    public async findByName(name:string){
+    public async findByGameId(id:number){
         let client = DbConnect.get()
         try {
             const query = {
                 name: 'select-pawn-style',
-                text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
-                values: [name],
+                text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                values: [id],
               }
             var results = await  client.query(query)
             var ret:Array<PawnStyles> = []
@@ -31,13 +31,13 @@ export class PawnStyleFinder{
           console.log("Connection failed")
         } 
       }
-  public async deleteByName(name:string){
+  public async deleteById(id:number){
         let client = DbConnect.get()
         try {
             const query = {
-                name: 'select-pawn-style',
-                text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
-                values: [name],
+                name: 'delete-pawn-style',
+                text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                values: [id],
               }
             var results = await  client.query(query)
             var ret:Array<PawnStyles> = []
@@ -51,6 +51,7 @@ export class PawnStyleFinder{
     
         }
         catch(err){
+          console.log(err)
           console.log("Connection failed Styles")
         } 
       }

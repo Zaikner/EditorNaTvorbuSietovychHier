@@ -12,13 +12,13 @@ export class RulesFinder{
     }
     
 
-    public async findByName(name:string){
+    public async findByGameId(id:number){
             let client = DbConnect.get()
             try {
                 const query = {
-                    name: 'select-question-id',
-                    text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameName"=$1;',
-                    values: [name],
+                    name: 'select-rule-id',
+                    text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameId"=$1;',
+                    values: [id],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Rules> = []

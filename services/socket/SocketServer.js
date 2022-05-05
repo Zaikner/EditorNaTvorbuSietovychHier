@@ -112,49 +112,63 @@ var ServerSocket = /** @class */ (function () {
                 GameManager.findRoomBySocketId(socket.id);
             });
             socket.on('saveGame', function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var acc, existingGames, last, lastId, g, b, rule;
+                var acc, existingGames, lastGame, id, last, lastId, g, b, rule;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             console.log('saved game:');
                             console.log(data);
-                            acc = AccountManager.getAccountByClientId(data.id);
+                            acc = AccountManager.getAccountByClientId(data.clientId);
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(data.name)];
                         case 1:
                             existingGames = _a.sent();
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findLast()];
+                        case 2:
+                            lastGame = _a.sent();
+                            console.log('prebehli vsetkz queries');
+                            console.log(acc);
+                            console.log(existingGames);
+                            console.log(lastGame);
+                            id = 0;
                             if (existingGames.length > 0) {
                                 if (existingGames[0].getAuthor() != acc.getName()) {
                                     socket.emit('not author');
-                                    console.log('not author');
                                     return [2 /*return*/];
                                 }
                                 else {
-                                    console.log('found game but authot');
-                                    console.log(existingGames[0]);
-                                    console.log(acc.getName());
+                                    console.log('je author a chce zmenit');
+                                    id = data.id;
                                 }
                             }
                             else {
+                                if (lastGame.length == 0) {
+                                    id = 1;
+                                }
+                                else {
+                                    id = lastGame[0].getId() + 1;
+                                }
                                 console.log('neexistuje taka hra');
                                 console.log(existingGames);
                             }
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
-                        case 2:
+                        case 3:
                             last = _a.sent();
                             lastId = last === null || last === void 0 ? void 0 : last.getId();
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByName(data.name)];
-                        case 3:
-                            _a.sent();
-                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)];
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByGameId(id)];
                         case 4:
                             _a.sent();
-                            return [4 /*yield*/, PawnFinder_1.PawnFinder.getIntance().deleteByName(data.name)];
+                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)];
                         case 5:
                             _a.sent();
-                            return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteByName(data.name)];
+                            return [4 /*yield*/, PawnFinder_1.PawnFinder.getIntance().deleteByName(data.name)];
                         case 6:
                             _a.sent();
+                            return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteById(id)];
+                        case 7:
+                            _a.sent();
+                            console.log('ucet je:' + acc);
                             g = new Game_db_1.Game_db();
+                            g.setId(id);
                             g.setAuthor(acc.getName());
                             g.setName(data.name);
                             g.setNumOfPlayers(data.numOfPlayers);
@@ -183,7 +197,7 @@ var ServerSocket = /** @class */ (function () {
                                 t.setIsStartingFor(tile.isStartingFor);
                                 t.setToogleNumber(tile.toggleNumber);
                                 t.setFollowingTileNumber(tile.numberOfFollowingTile);
-                                t.setGameName(data.name);
+                                t.setGameId(id);
                                 t.setQuestionId(tile.questionId);
                                 t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile);
                                 t.setNextTilesIds(tile.nextTilesIds);
@@ -198,7 +212,7 @@ var ServerSocket = /** @class */ (function () {
                             });
                             g.upsert();
                             b = new Background_db_1.Background_db();
-                            b.setGameName(data.name);
+                            b.setGameId(id);
                             b.setColor(data.background.color);
                             b.setImage(data.background.backgroundImage);
                             data.background.components.forEach(function (comp) {
@@ -232,7 +246,7 @@ var ServerSocket = /** @class */ (function () {
                             });
                             data.styles.forEach(function (style) {
                                 var s = new PawnStyle_1.PawnStyles();
-                                s.setGameName(data.name);
+                                s.setGameId(id);
                                 s.setColor(style.color);
                                 s.setImage(style.image);
                                 s.setType(style.type);
@@ -240,11 +254,11 @@ var ServerSocket = /** @class */ (function () {
                                 s.insert();
                             });
                             rule = new Rules_1.Rules();
-                            rule.setGameName(data.name);
+                            rule.setGameId(id);
                             rule.setText(data.rules);
                             rule.upsert();
                             this.io.emit('chat message');
-                            socket.emit('game saved');
+                            socket.emit('game saved', { newId: id });
                             return [2 /*return*/];
                     }
                 });

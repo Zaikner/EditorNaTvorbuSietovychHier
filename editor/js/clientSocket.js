@@ -130,6 +130,7 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);
     canvas_1.editor.getGame().setIsPublished(msg.game.isPublished);
     canvas_1.editor.getGame().setToogleNumber(msg.game.toogleNumber);
+    canvas_1.editor.getGame().setId(msg.game.id);
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
@@ -179,9 +180,9 @@ editorSocket.on('react to event: backward', function (msg) {
 editorSocket.on('not author', function () {
     Warning_1.Warning.show(texts[185]);
 });
-// editorSocket.on('game saved',()=>{
-//   window.location.replace('/')
-// })
+editorSocket.on('game saved', function (msg) {
+    canvas_1.editor.getGame().setId(msg.newId);
+});
 editorSocket.on('react to event: skip', function (msg) {
     Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
 });

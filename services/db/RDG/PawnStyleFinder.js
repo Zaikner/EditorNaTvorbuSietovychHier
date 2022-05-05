@@ -43,7 +43,7 @@ var PawnStyleFinder = /** @class */ (function () {
     function PawnStyleFinder() {
     }
     PawnStyleFinder.getIntance = function () { return this.INSTANCE; };
-    PawnStyleFinder.prototype.findByName = function (name) {
+    PawnStyleFinder.prototype.findByGameId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -55,8 +55,8 @@ var PawnStyleFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-pawn-style',
-                            text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
-                            values: [name]
+                            text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:
@@ -77,7 +77,7 @@ var PawnStyleFinder = /** @class */ (function () {
             });
         });
     };
-    PawnStyleFinder.prototype.deleteByName = function (name) {
+    PawnStyleFinder.prototype.deleteById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_2;
             return __generator(this, function (_a) {
@@ -88,9 +88,9 @@ var PawnStyleFinder = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 4, , 5]);
                         query = {
-                            name: 'select-pawn-style',
-                            text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameName" = $1',
-                            values: [name]
+                            name: 'delete-pawn-style',
+                            text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:
@@ -104,6 +104,7 @@ var PawnStyleFinder = /** @class */ (function () {
                         return [2 /*return*/, ret];
                     case 4:
                         err_2 = _a.sent();
+                        console.log(err_2);
                         console.log("Connection failed Styles");
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];

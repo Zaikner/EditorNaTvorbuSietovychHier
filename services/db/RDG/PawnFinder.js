@@ -43,7 +43,7 @@ var PawnFinder = /** @class */ (function () {
     function PawnFinder() {
     }
     PawnFinder.getIntance = function () { return this.INSTANCE; };
-    PawnFinder.prototype.findByName = function (name) {
+    PawnFinder.prototype.findByGameId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -55,8 +55,8 @@ var PawnFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-pawn-find-name',
-                            text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
-                            values: [name]
+                            text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameId" = $1',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

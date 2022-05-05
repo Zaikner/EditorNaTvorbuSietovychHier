@@ -8,13 +8,13 @@ export class PawnFinder{
     private constructor(){
 
     }
-    public async findByName(name:string){
+    public async findByGameId(id:number){
         let client = DbConnect.get()
         try {
             const query = {
                 name: 'select-pawn-find-name',
-                text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameName" = $1',
-                values: [name],
+                text: 'SELECT p."tileId",p.id,p.player,p.color,p.image FROM "bachelorsThesis"."Pawn" as p INNER JOIN "bachelorsThesis"."Tile" as t on t.id = p."tileId" WHERE t."gameId" = $1',
+                values: [id],
                
               }
             var results = await  client.query(query)

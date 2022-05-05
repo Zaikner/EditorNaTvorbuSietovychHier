@@ -24,6 +24,31 @@ export class GameFinder{
                    
                     ret.push(Game_db.load(row))
                 });
+                console.log('find by name vracia:')
+                console.log(ret)
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }
+
+    public async findLast(){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-game-last',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" ORDER BY id DESC LIMIT 1;',
+                    values: [],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Game_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                   
+                    ret.push(Game_db.load(row))
+                });
                
                 return ret
         

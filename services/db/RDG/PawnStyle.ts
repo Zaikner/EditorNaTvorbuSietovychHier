@@ -5,7 +5,7 @@ export class PawnStyles{
     player:string = '';
     color:string = '#000000';
     image:string = ''
-    gameName:string = ''
+    gameId:number = 0
     type:string = ''
   
 
@@ -30,11 +30,11 @@ export class PawnStyles{
     public getImage(){
         return this.image
     }
-    public setGameName(gameName:string){
-        this.gameName = gameName
+    public setGameId(newId:number){
+        this.gameId = newId
     }
-    public getGameName(){
-        return this.gameName
+    public getGameId(){
+        return this.gameId
     }
     public setId(id:number){
         this.id = id
@@ -55,8 +55,8 @@ export class PawnStyles{
        
             const query = {
                 name: 'insert-pawn-style',
-                text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameName",type) VALUES($1,$2,$3,$4,$5);',
-                values: [this.player,this.color,this.image,this.gameName,this.type],
+                text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameId",type) VALUES($1,$2,$3,$4,$5);',
+                values: [this.player,this.color,this.image,this.gameId,this.type],
               }
               client
               .query(query)
@@ -70,7 +70,7 @@ export class PawnStyles{
                 ret.setPlayer(data.player)
                 ret.setColor(data.color)
                 ret.setImage(data.image)
-                ret.setGameName(data.gameName)
+                ret.setGameId(data.gameId)
                 ret.setType(data.type)
                 return ret
                 }

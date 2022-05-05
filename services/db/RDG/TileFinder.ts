@@ -9,13 +9,13 @@ export class TileFinder{
     }
   
     
-    public async findByName(name:string){
+    public async findByGameId(id:number){
             let client = DbConnect.get()
             try {
                 const query = {
                     name: 'select-gameTiles',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                    values: [name],
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.id=$1;',
+                    values: [id],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Tile_db> = []
@@ -38,7 +38,7 @@ export class TileFinder{
             try {
                 const query = {
                     name: 'select-gameTiles',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameName" = g.name  WHERE g.author=$1 AND t."randomQuestion" = true;',
+                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.author=$1 AND t."randomQuestion" = true;',
                     values: [author],
                   }
                 var results = await  client.query(query)
@@ -112,13 +112,13 @@ export class TileFinder{
             } 
           }    
 
-  public async deleteByName(name:string){
+  public async deleteByGameId(id:number){
             let client = DbConnect.get()
             try {
                 const query = {
                     name: 'delete-gameTiles',
-                    text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameName"=$1;',
-                    values: [name],
+                    text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameId"=$1;',
+                    values: [id],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Tile_db> = []

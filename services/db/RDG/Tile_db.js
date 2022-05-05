@@ -23,7 +23,7 @@ var Tile_db = /** @class */ (function () {
         this.isStartingFor = [];
         this.toggleNumber = true;
         this.numberOfFollowingTile = 0;
-        this.gameName = '';
+        this.gameId = 0;
         this.questionId = -1;
         this.cantBeEliminatedOnTile = [];
         this.skip = 0;
@@ -155,11 +155,11 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.setQuestionId = function (newID) {
         this.questionId = newID;
     };
-    Tile_db.prototype.getGameName = function () {
-        return this.gameName;
+    Tile_db.prototype.getGameId = function () {
+        return this.gameId;
     };
-    Tile_db.prototype.setGameName = function (newName) {
-        this.gameName = newName;
+    Tile_db.prototype.setGameId = function (newId) {
+        this.gameId = newId;
     };
     Tile_db.prototype.setCantBeEliminatedOnTile = function (newPlayers) {
         this.cantBeEliminatedOnTile = newPlayers;
@@ -221,8 +221,8 @@ var Tile_db = /** @class */ (function () {
         console.log(this);
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
-            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameName, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
+            text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.isChoosen, this.backgroundFile, this.tileNumber, this.isEndingFor, this.isStartingFor, this.toggleNumber, this.numberOfFollowingTile, this.gameId, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
         };
         client
             .query(query)
@@ -249,7 +249,7 @@ var Tile_db = /** @class */ (function () {
         ret.setIsStartingFor(data.isStartingFor);
         ret.setToogleNumber(data.toggleNumber);
         ret.setFollowingTileNumber(data.numberOfFollowingTile);
-        ret.setGameName(data.gameName);
+        ret.setGameId(data.gameId);
         ret.setQuestionId(data.questionId);
         ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile);
         ret.setSkip(data.skip);

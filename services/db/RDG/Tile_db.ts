@@ -19,7 +19,7 @@ export class Tile_db{
     private isStartingFor:Array<String>=[]
     private toggleNumber:boolean = true;
     private numberOfFollowingTile:number = 0
-    private gameName:string = '';
+    private gameId:number = 0;
     private questionId:number = -1;
     private cantBeEliminatedOnTile:Array<string> = []
     private skip = 0;
@@ -157,11 +157,11 @@ export class Tile_db{
         this.questionId  = newID
     }
       
-    public getGameName() : string {
-        return this.gameName
+    public getGameId() : number {
+        return this.gameId
     }
-    public setGameName(newName:string){
-        this.gameName  = newName
+    public setGameId(newId:number){
+        this.gameId = newId
     }
     public setCantBeEliminatedOnTile(newPlayers:Array<string>){
         this.cantBeEliminatedOnTile = newPlayers
@@ -224,8 +224,8 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameName","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
-                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberOfFollowingTile,this.gameName,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
+                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,"isChoosen","backgroundFile","tileNumber","isEndingFor","isStartingFor","toggleNumber","numberOfFollowingTile","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);',
+                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.isChoosen,this.backgroundFile,this.tileNumber,this.isEndingFor,this.isStartingFor,this.toggleNumber,this.numberOfFollowingTile,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
               }
               client
               .query(query)
@@ -255,7 +255,7 @@ export class Tile_db{
         ret.setIsStartingFor(data.isStartingFor)
         ret.setToogleNumber(data.toggleNumber)
         ret.setFollowingTileNumber(data.numberOfFollowingTile)
-        ret.setGameName(data.gameName)
+        ret.setGameId(data.gameId)
         ret.setQuestionId(data.questionId)
         ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile)
         ret.setSkip(data.skip)

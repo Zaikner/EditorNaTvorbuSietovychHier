@@ -43,7 +43,7 @@ var BackgroundFinder = /** @class */ (function () {
     function BackgroundFinder() {
     }
     BackgroundFinder.getIntance = function () { return this.INSTANCE; };
-    BackgroundFinder.prototype.findByName = function (name) {
+    BackgroundFinder.prototype.findById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -55,8 +55,8 @@ var BackgroundFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-background',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Background" as t on t."gameName" = g.name  WHERE g.name=$1;',
-                            values: [name]
+                            text: 'SELECT * FROM  "bachelorsThesis"."Background"  WHERE "gameId"=$1;',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

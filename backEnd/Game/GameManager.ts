@@ -26,11 +26,11 @@ class GameManager{
     private static activeRooms:Map<number,Room> = new Map()
     public static async loadGame(name:string){
          let game = await GameFinder.getIntance().findByName(name)
-            let tiles =await TileFinder.getIntance().findByName(name)
-            let background = await BackgroundFinder.getIntance().findByName(name)
-            let pawns = await PawnFinder.getIntance().findByName(name)
-            let styles = await PawnStyleFinder.getIntance().findByName(name)
-            let rules = await RulesFinder.getIntance().findByName(name)
+            let tiles =await TileFinder.getIntance().findByGameId(game![0].getId())
+            let background = await BackgroundFinder.getIntance().findById(game![0].getId())
+            let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
+            let styles = await PawnStyleFinder.getIntance().findByGameId(game![0].getId())
+            let rules = await RulesFinder.getIntance().findByGameId(game![0].getId())
             let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
          
             
@@ -57,12 +57,13 @@ class GameManager{
         }
         
         let room = new Room(id,numOfPlayers,name)
-        room.setGameData(await GameManager.loadGame(name))
+        let gameData =  await GameManager.loadGame(name)
+        room.setGameData(gameData)
         
         console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
-          let pawns = await PawnFinder.getIntance().findByName(name)
+          let pawns = await PawnFinder.getIntance().findByGameId(gameData.game.getId())
 
         pawns!.forEach((pawn)=>{
            

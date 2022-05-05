@@ -3,7 +3,7 @@ export class Background_db{
     private id:number= 0;
     private color:string = '';
     private image:string = '';
-    private gameName:string = '';
+    private gameId:number = 0;
 
     public getId() : number {
         return this.id
@@ -12,11 +12,11 @@ export class Background_db{
         this.id  = newId
     }
       
-    public getGameName() : string {
-        return this.gameName
+    public getGameId() : number {
+        return this.gameId
     }
-    public setGameName(newName:string){
-        this.gameName  = newName
+    public setGameId(newId:number){
+        this.gameId  = newId
     }
     public getColor() : string {
         return this.color
@@ -35,8 +35,8 @@ export class Background_db{
         let client = DbConnect.get()
             const query = {
                 name: 'insert-background',
-                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3);',
-                values: [this.image,this.color,this.gameName],
+                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3);',
+                values: [this.image,this.color,this.gameId],
               }
               client
               .query(query)
@@ -47,8 +47,8 @@ export class Background_db{
         let client = DbConnect.get()
             const query = {
                 name: 'upsert-background',
-                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameName") Values($1,$2,$3) ON CONFLICT("gameName") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameName" = EXCLUDED."gameName";',
-                values: [this.image,this.color,this.gameName],
+                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3) ON CONFLICT("gameId") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameId" = EXCLUDED."gameId";',
+                values: [this.image,this.color,this.gameId],
               }
               client
               .query(query)
@@ -59,7 +59,7 @@ export class Background_db{
     public static load(data:any){
             let ret = new Background_db()
             ret.setId(data.id)
-            ret.setGameName(data.gameName)
+            ret.setGameId(data.gameId)
             ret.setColor(data.color)
             ret.setImage(data.image)
             return ret

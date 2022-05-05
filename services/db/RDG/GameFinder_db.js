@@ -67,6 +67,8 @@ var GameFinder = /** @class */ (function () {
                             })];
                     case 3:
                         _a.sent();
+                        console.log('find by name vracia:');
+                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_1 = _a.sent();
@@ -77,9 +79,43 @@ var GameFinder = /** @class */ (function () {
             });
         });
     };
-    GameFinder.prototype.findAll = function () {
+    GameFinder.prototype.findLast = function () {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        client = DbConnect_1.DbConnect.get();
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        query = {
+                            name: 'select-game-last',
+                            text: 'SELECT * FROM "bachelorsThesis"."Game" ORDER BY id DESC LIMIT 1;',
+                            values: []
+                        };
+                        return [4 /*yield*/, client.query(query)];
+                    case 2:
+                        results = _a.sent();
+                        ret = [];
+                        return [4 /*yield*/, results.rows.forEach(function (row) {
+                                ret.push(Game_db_1.Game_db.load(row));
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, ret];
+                    case 4:
+                        err_2 = _a.sent();
+                        console.log("Connection failed");
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    GameFinder.prototype.findAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, query, results, ret, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -103,8 +139,8 @@ var GameFinder = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, ret];
                     case 4:
-                        err_2 = _a.sent();
-                        console.log(err_2);
+                        err_3 = _a.sent();
+                        console.log(err_3);
                         console.log("Connection failed");
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
@@ -114,7 +150,7 @@ var GameFinder = /** @class */ (function () {
     };
     GameFinder.prototype.findAllPublished = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var client, query, results, ret, err_3;
+            var client, query, results, ret, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -138,8 +174,8 @@ var GameFinder = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, ret];
                     case 4:
-                        err_3 = _a.sent();
-                        console.log(err_3);
+                        err_4 = _a.sent();
+                        console.log(err_4);
                         console.log("Connection failed");
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];

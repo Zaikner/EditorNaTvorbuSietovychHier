@@ -43,7 +43,7 @@ var RulesFinder = /** @class */ (function () {
     function RulesFinder() {
     }
     RulesFinder.getIntance = function () { return this.INSTANCE; };
-    RulesFinder.prototype.findByName = function (name) {
+    RulesFinder.prototype.findByGameId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -54,9 +54,9 @@ var RulesFinder = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 4, , 5]);
                         query = {
-                            name: 'select-question-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameName"=$1;',
-                            values: [name]
+                            name: 'select-rule-id',
+                            text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameId"=$1;',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

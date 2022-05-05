@@ -8,7 +8,7 @@ var PawnStyles = /** @class */ (function () {
         this.player = '';
         this.color = '#000000';
         this.image = '';
-        this.gameName = '';
+        this.gameId = 0;
         this.type = '';
     }
     PawnStyles.prototype.setPlayer = function (player) {
@@ -29,11 +29,11 @@ var PawnStyles = /** @class */ (function () {
     PawnStyles.prototype.getImage = function () {
         return this.image;
     };
-    PawnStyles.prototype.setGameName = function (gameName) {
-        this.gameName = gameName;
+    PawnStyles.prototype.setGameId = function (newId) {
+        this.gameId = newId;
     };
-    PawnStyles.prototype.getGameName = function () {
-        return this.gameName;
+    PawnStyles.prototype.getGameId = function () {
+        return this.gameId;
     };
     PawnStyles.prototype.setId = function (id) {
         this.id = id;
@@ -51,8 +51,8 @@ var PawnStyles = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-pawn-style',
-            text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameName",type) VALUES($1,$2,$3,$4,$5);',
-            values: [this.player, this.color, this.image, this.gameName, this.type]
+            text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameId",type) VALUES($1,$2,$3,$4,$5);',
+            values: [this.player, this.color, this.image, this.gameId, this.type]
         };
         client
             .query(query)
@@ -64,7 +64,7 @@ var PawnStyles = /** @class */ (function () {
         ret.setPlayer(data.player);
         ret.setColor(data.color);
         ret.setImage(data.image);
-        ret.setGameName(data.gameName);
+        ret.setGameId(data.gameId);
         ret.setType(data.type);
         return ret;
     };

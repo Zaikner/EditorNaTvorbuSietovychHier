@@ -60,19 +60,19 @@ var GameManager = /** @class */ (function () {
                     case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
                     case 1:
                         game = _a.sent();
-                        return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByGameId(game[0].getId())];
                     case 2:
                         tiles = _a.sent();
-                        return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findById(game[0].getId())];
                     case 3:
                         background = _a.sent();
-                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByGameId(game[0].getId())];
                     case 4:
                         pawns = _a.sent();
-                        return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByGameId(game[0].getId())];
                     case 5:
                         styles = _a.sent();
-                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByGameId(game[0].getId())];
                     case 6:
                         rules = _a.sent();
                         return [4 /*yield*/, BackgroundComponentFinder_js_1.BackgroundComponentFinder.getIntance().findByName(name)];
@@ -98,9 +98,9 @@ var GameManager = /** @class */ (function () {
     };
     GameManager.createRoom = function (name, numOfPlayers) {
         return __awaiter(this, void 0, void 0, function () {
-            var stop, id, room, _a, _b, pawns;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var stop, id, room, gameData, pawns;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         console.log('aspon vyvroil room');
                         stop = false;
@@ -115,15 +115,15 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
-                        _b = (_a = room).setGameData;
                         return [4 /*yield*/, GameManager.loadGame(name)];
                     case 1:
-                        _b.apply(_a, [_c.sent()]);
+                        gameData = _a.sent();
+                        room.setGameData(gameData);
                         console.log(room);
                         this.activeRooms.set(id, room);
-                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByName(name)];
+                        return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByGameId(gameData.game.getId())];
                     case 2:
-                        pawns = _c.sent();
+                        pawns = _a.sent();
                         pawns.forEach(function (pawn) {
                             room.getPawnPositions().set(pawn.getId(), pawn.getTileId());
                         });
@@ -148,7 +148,9 @@ var GameManager = /** @class */ (function () {
         var _loop_1 = function (i) {
             rooms[i].getPlayers().forEach(function (player) {
                 console.log(acc);
-                ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () { rooms[i].join(new Player_js_1.Player(acc, '')); }]);
+                ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () {
+                        rooms[i].join(new Player_js_1.Player(acc, ''));
+                    }]);
             });
         };
         for (var i = 0; i < rooms.length; i++) {

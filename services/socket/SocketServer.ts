@@ -91,34 +91,47 @@ export class ServerSocket{
           
           console.log('saved game:')
           console.log(data)
-          let acc = AccountManager.getAccountByClientId(data.id)
+          let acc = AccountManager.getAccountByClientId(data.clientId)
           let existingGames = await GameFinder.getIntance().findByName(data.name)
+          let lastGame = await GameFinder.getIntance().findLast()
+          console.log('prebehli vsetkz queries')
+          console.log(acc)
+          console.log(existingGames)
+          console.log(lastGame)
+          let id =0
           if (existingGames!.length > 0){
             if (existingGames![0].getAuthor()!= acc.getName()){
               socket.emit('not author')
-              console.log('not author')
+
               return
             }
             else{
-              console.log('found game but authot')
-              console.log ( existingGames![0])
-              console.log(acc.getName())
+              console.log('je author a chce zmenit')
+             id = data.id
             }
            
           }
           else{
+            if (lastGame!.length == 0){
+              id = 1
+            }
+            else{
+              id = lastGame![0].getId()+1
+            }
             console.log('neexistuje taka hra')
             console.log(existingGames)
           }
         let last = await TileFinder.getIntance().findLast()
         let lastId = last?.getId()
       
-        await TileFinder.getIntance().deleteByName(data.name)
+        await TileFinder.getIntance().deleteByGameId(id)
         await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
         await PawnFinder.getIntance().deleteByName(data.name)
-        await PawnStyleFinder.getIntance().deleteByName(data.name)
+        await PawnStyleFinder.getIntance().deleteById(id)
 
+        console.log('ucet je:'+ acc)
         let g = new Game_db()
+        g.setId(id)
         g.setAuthor(acc.getName())
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
@@ -150,7 +163,7 @@ export class ServerSocket{
           t.setToogleNumber(tile.toggleNumber)
   
           t.setFollowingTileNumber(tile.numberOfFollowingTile)
-          t.setGameName(data.name)
+          t.setGameId(id)
           t.setQuestionId(tile.questionId)
           t.setCantBeEliminatedOnTile(tile.cantBeEliminatedOnTile)
           t.setNextTilesIds(tile.nextTilesIds)
@@ -167,7 +180,7 @@ export class ServerSocket{
       
 
         let b = new Background_db()
-        b.setGameName(data.name)
+        b.setGameId(id)
         b.setColor(data.background.color)
         b.setImage(data.background.backgroundImage)
         data.background.components.forEach((comp:any)=>{
@@ -206,7 +219,7 @@ export class ServerSocket{
         })
         data.styles.forEach((style:any) => {
           let s = new PawnStyles()
-          s.setGameName(data.name)
+          s.setGameId(id)
           s.setColor(style.color)
           s.setImage(style.image)
           s.setType(style.type)
@@ -214,12 +227,12 @@ export class ServerSocket{
           s.insert()
         });
         let rule = new Rules()
-        rule.setGameName(data.name)
+        rule.setGameId(id)
         rule.setText(data.rules)
         rule.upsert()
 
         this.io.emit('chat message');
-        socket.emit('game saved')
+        socket.emit('game saved',{newId:id})
       });
 
       socket.on('set Socket',(msg:{id:string,room:string})=>
