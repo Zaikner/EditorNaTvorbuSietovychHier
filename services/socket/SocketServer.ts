@@ -271,6 +271,9 @@ export class ServerSocket{
      
       socket.on('game has started',(msg:{room:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          return
+        }
         r.setHasStarted(true)
         
         this.io.in(msg.room).emit('game started',{msg:'Game has started!',tokens:r.getPlayers().map((p:any)=>p.getToken())})
@@ -286,12 +289,16 @@ export class ServerSocket{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
       })
       socket.on('move pawns back',(msg:{room:string,pawn:number,value:number})=>{
+        console.log('posunul dozadu o ' + msg.value)
         this.io.in(msg.room).emit('move Pawn back',{pawn:msg.pawn,value:msg.value})
       })
 
     
       socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          return
+        }
         if (r.getPlayerOnTurn().getMustThrown()!=0){
           if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
@@ -328,6 +335,9 @@ export class ServerSocket{
         console.log('recieved react to tile id: '+msg.id)
         console.log(msg)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          return
+        }
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
@@ -392,6 +402,8 @@ export class ServerSocket{
             socket.emit('react to event: forward',{value:msg.forward,pawnId:msg.pawnId})
           }
           else if(msg.backward > 0){
+            console.log('react to event: backward emitol')
+            console.log({value:msg.backward})
             socket.emit('react to event: backward',{value:msg.backward,pawnId:msg.pawnId})  
           }
           else if(msg.mustThrown > 0){
@@ -419,6 +431,9 @@ export class ServerSocket{
       })
       socket.on('change Pawn position',(msg:{room:string,tileId:number,pawnId:number,id:string})=>{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          return
+        }
         if (r.getPlayerOnTurn().getAccount() ==  AccountManager.getAccountByClientId(msg.id)){
           r.getPawnPositions().set(msg.pawnId,msg.tileId)
   
@@ -438,6 +453,9 @@ export class ServerSocket{
       socket.on('evaluated end',(msg:{is:boolean,room:string,token:string})=>{
         console.log('odchyil evaluetedEnd')
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
+        if (r == undefined){
+          return
+        }
         let player = r.findPlayerByToken(msg.token)
 
         if(msg.is == true &&  !r.getPlayersWhichEnded().includes(player)){

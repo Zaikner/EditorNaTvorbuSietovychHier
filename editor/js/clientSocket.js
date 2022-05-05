@@ -171,9 +171,12 @@ editorSocket.on('react to event: forward', function (msg) {
 });
 editorSocket.on('react to event: backward', function (msg) {
     console.log('recieved react to event: backward');
+    console.log({ value: msg.value });
     canvas_1.editor.getGame().setIsOnTurn(true);
     var ret = canvas_1.editor.getGame().howManyCanMoveBack(msg.pawnId, msg.value);
     Warning_1.Warning.showInGame('Event occured: Go backward!');
+    console.log('emitol:');
+    console.log({ pawn: msg.pawnId, value: ret, room: params.get('id') });
     editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('not author', function () {
@@ -267,6 +270,7 @@ editorSocket.on('move Pawn back', function (msg) {
 });
 editorSocket.on('return Pawn to place', function (msg) {
     console.log('obdrzal return Pawn to place');
+    console.log('sa value: ' + msg.value);
     canvas_1.editor.movePawnBack(msg.pawnId, msg.value, false);
 });
 editorSocket.on('loadAnswersToOthers', function (msg) {

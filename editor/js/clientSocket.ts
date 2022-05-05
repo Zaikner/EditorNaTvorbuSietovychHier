@@ -213,10 +213,12 @@ editorSocket.on('connected',(msg)=>{
 
 editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
   console.log('recieved react to event: backward')
+  console.log({value:msg.value})
   editor.getGame().setIsOnTurn(true)
   let ret = editor.getGame().howManyCanMoveBack(msg.pawnId,msg.value)
   Warning.showInGame('Event occured: Go backward!')
- 
+  console.log('emitol:')
+  console.log({pawn:msg.pawnId,value:ret,room:params.get('id')})
   editorSocket.emit('move pawns back',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
@@ -329,6 +331,7 @@ editorSocket.on('move Pawn back',(msg:{pawn:number,value:number})=>{
 })
 editorSocket.on('return Pawn to place',(msg:{pawnId:number,value:number})=>{
   console.log('obdrzal return Pawn to place')
+  console.log('sa value: '+msg.value)
   editor.movePawnBack(msg.pawnId,msg.value,false)
 })
 editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{

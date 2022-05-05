@@ -116,18 +116,30 @@ var Game = /** @class */ (function () {
         var originalTile = canvas_js_1.editor.findTileById(pawn.tileId);
         var tileId = originalTile.getTileNumber();
         var ret = 0;
-        while (value > 0) {
-            var tileId_1 = originalTile.getTileNumber();
-            for (var i = 0; i < value; i++) {
-                var tile = canvas_js_1.editor.findTileByNextTileNumber(tileId_1, pawn.player);
-                if (tile != undefined) {
-                    tileId_1 = tile.getTileNumber();
-                    if (i + 1 == value) {
-                        ret = value;
-                    }
-                }
+        // while (value > 0){
+        //     let tileId = originalTile.getTileNumber()
+        //     for (let i = 0;i < value;i++){
+        //         let tile = editor.findTileByNextTileNumber(tileId,pawn.player)
+        //         if (tile != undefined)
+        //         {
+        //             tileId = tile.getTileNumber()
+        //             console.log('posunul ale neprehodil hodnotu')
+        //             //if (i+1 == value){
+        //                 ret+=1
+        //             //}
+        //         }
+        //     }
+        //     value--;
+        // }
+        for (var i = 0; i < value; i++) {
+            var tile = canvas_js_1.editor.findTileByNextTileNumber(tileId, pawn.player);
+            if (tile != undefined) {
+                tileId = tile.getTileNumber();
+                console.log('posunul ale neprehodil hodnotu');
+                //if (i+1 == value){
+                ret += 1;
+                //}
             }
-            value--;
         }
         return ret;
     };

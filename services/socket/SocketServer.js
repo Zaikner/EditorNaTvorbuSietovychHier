@@ -291,6 +291,9 @@ var ServerSocket = /** @class */ (function () {
             });
             socket.on('game has started', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r == undefined) {
+                    return;
+                }
                 r.setHasStarted(true);
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!', tokens: r.getPlayers().map(function (p) { return p.getToken(); }) });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
@@ -300,10 +303,14 @@ var ServerSocket = /** @class */ (function () {
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('move pawns back', function (msg) {
+                console.log('posunul dozadu o ' + msg.value);
                 _this.io["in"](msg.room).emit('move Pawn back', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('player thrown', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r == undefined) {
+                    return;
+                }
                 if (r.getPlayerOnTurn().getMustThrown() != 0) {
                     if (r.getPlayerOnTurn().getMustThrown() != msg.value) {
                         socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
@@ -338,6 +345,9 @@ var ServerSocket = /** @class */ (function () {
                             console.log('recieved react to tile id: ' + msg.id);
                             console.log(msg);
                             r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                            if (r == undefined) {
+                                return [2 /*return*/];
+                            }
                             if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 8];
                             this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
@@ -406,6 +416,8 @@ var ServerSocket = /** @class */ (function () {
                                 socket.emit('react to event: forward', { value: msg.forward, pawnId: msg.pawnId });
                             }
                             else if (msg.backward > 0) {
+                                console.log('react to event: backward emitol');
+                                console.log({ value: msg.backward });
                                 socket.emit('react to event: backward', { value: msg.backward, pawnId: msg.pawnId });
                             }
                             else if (msg.mustThrown > 0) {
@@ -431,6 +443,9 @@ var ServerSocket = /** @class */ (function () {
             }); });
             socket.on('change Pawn position', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r == undefined) {
+                    return;
+                }
                 if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
                     r.getPawnPositions().set(msg.pawnId, msg.tileId);
                 }
@@ -444,6 +459,9 @@ var ServerSocket = /** @class */ (function () {
             socket.on('evaluated end', function (msg) {
                 console.log('odchyil evaluetedEnd');
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
+                if (r == undefined) {
+                    return;
+                }
                 var player = r.findPlayerByToken(msg.token);
                 if (msg.is == true && !r.getPlayersWhichEnded().includes(player)) {
                     r.getPlayersWhichEnded().push(player);

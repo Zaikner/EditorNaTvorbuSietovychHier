@@ -135,23 +135,39 @@ class Game{
         let originalTile = editor.findTileById(pawn.tileId)
         let tileId = originalTile.getTileNumber()
         let ret = 0
-        while (value > 0){
-            let tileId = originalTile.getTileNumber()
-            for (let i = 0;i < value;i++){
+        // while (value > 0){
+        //     let tileId = originalTile.getTileNumber()
+        //     for (let i = 0;i < value;i++){
                 
-                let tile = editor.findTileByNextTileNumber(tileId,pawn.player)
-                if (tile != undefined)
-                {
-                    tileId = tile.getTileNumber()
-                    if (i+1 == value){
-                        ret = value
-                    }
-                }
+        //         let tile = editor.findTileByNextTileNumber(tileId,pawn.player)
+        //         if (tile != undefined)
+        //         {
+        //             tileId = tile.getTileNumber()
+        //             console.log('posunul ale neprehodil hodnotu')
+        //             //if (i+1 == value){
+        //                 ret+=1
+        //             //}
+        //         }
                
         
               
+        //     }
+        //     value--;
+        // }
+        for (let i = 0;i < value;i++){
+                
+            let tile = editor.findTileByNextTileNumber(tileId,pawn.player)
+            if (tile != undefined)
+            {
+                tileId = tile.getTileNumber()
+                console.log('posunul ale neprehodil hodnotu')
+                //if (i+1 == value){
+                    ret+=1
+                //}
             }
-            value--;
+           
+    
+          
         }
         
         return ret
