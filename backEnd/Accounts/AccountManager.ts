@@ -69,6 +69,7 @@ export class AccountManager{
         newAcc.setScore(acc.getScore())
         newAcc.setGameWon(acc.getGameWon())
         newAcc.setGameLost(acc.getGameLost())
+        newAcc.setId(acc.getId())
         this.loggedAccounts.push(newAcc)
         //newAcc.checkIfOnline()
         return newAcc

@@ -131,7 +131,7 @@ var ServerSocket = /** @class */ (function () {
                             console.log(lastGame);
                             id = 0;
                             if (existingGames.length > 0) {
-                                if (existingGames[0].getAuthor() != acc.getName()) {
+                                if (existingGames[0].getAuthorId() != acc.getId()) {
                                     socket.emit('not author');
                                     return [2 /*return*/];
                                 }
@@ -169,7 +169,7 @@ var ServerSocket = /** @class */ (function () {
                             console.log('ucet je:' + acc);
                             g = new Game_db_1.Game_db();
                             g.setId(id);
-                            g.setAuthor(acc.getName());
+                            g.setAuthorId(acc.getId());
                             g.setName(data.name);
                             g.setNumOfPlayers(data.numOfPlayers);
                             g.setNextTilesIds(data.nextTilesIds);
@@ -358,7 +358,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getGameName())];
                         case 1:
                             author = (_a.sent());
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(author[0].getAuthor())];
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(author[0].getAuthorId())];
                         case 2:
                             allQuesstions = _a.sent();
                             randomId = allQuesstions[Math.floor(Math.random() * allQuesstions.length)].getQuestionId();
@@ -373,7 +373,7 @@ var ServerSocket = /** @class */ (function () {
                                     optionId: question.getOptionId(),
                                     questionText: question.getQuestionText(),
                                     optionText: question.getOptionText(),
-                                    author: question.getAuthor(),
+                                    authorId: question.getAuthorId(),
                                     isAnswer: question.getIsAnswer()
                                 });
                             });
@@ -396,7 +396,7 @@ var ServerSocket = /** @class */ (function () {
                                     optionId: question.getOptionId(),
                                     questionText: question.getQuestionText(),
                                     optionText: question.getOptionText(),
-                                    author: question.getAuthor(),
+                                    authorId: question.getAuthorId(),
                                     isAnswer: question.getIsAnswer()
                                 });
                             });
@@ -588,7 +588,7 @@ var ServerSocket = /** @class */ (function () {
                             }
                             quest.setText(data.question);
                             quest.setId(id);
-                            quest.setAuthor(acc.getName());
+                            quest.setAuthorId(acc.getId());
                             //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
                             quest.upsert();
                             return [4 /*yield*/, QuestionOptionFinder_1.QuestionOptionFinder.getIntance().findWithLastId()];
@@ -634,7 +634,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
                         case 1:
                             can = (_a.sent()).length == 0;
-                            return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findAllByAuthor(acc.getName())];
+                            return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findAllByAuthorId(acc.getId())];
                         case 2:
                             questionNumber = (_a.sent()).length;
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName())];
@@ -697,7 +697,7 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getName())];
+                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getId())];
                         case 1:
                             questions = _a.sent();
                             data = [];
@@ -707,7 +707,7 @@ var ServerSocket = /** @class */ (function () {
                                     optionId: question.getOptionId(),
                                     questionText: question.getQuestionText(),
                                     optionText: question.getOptionText(),
-                                    author: question.getAuthor(),
+                                    authorId: question.getAuthorId(),
                                     isAnswer: question.getIsAnswer()
                                 });
                             });
@@ -739,7 +739,7 @@ var ServerSocket = /** @class */ (function () {
                                     optionId: question.getOptionId(),
                                     questionText: question.getQuestionText(),
                                     optionText: question.getOptionText(),
-                                    author: question.getAuthor(),
+                                    authorId: question.getAuthorId(),
                                     isAnswer: question.getIsAnswer()
                                 });
                             });

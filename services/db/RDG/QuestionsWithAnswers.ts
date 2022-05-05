@@ -6,7 +6,7 @@ export class QuestionWithAnswers{
     private optionId:number = 0;
     private questionText:string = '';
     private optionText:string = '';
-    private author:string = '';
+    private authorId:number = 0;
     private isAnswer:boolean = false;
     constructor(){
 
@@ -38,11 +38,11 @@ export class QuestionWithAnswers{
     public setQuestionText(newText:string){
         this.questionText  = newText
     }
-    public getAuthor() : string {
-        return this.author
+    public getAuthorId() : number {
+        return this.authorId
     }
-    public setAuthor(newAuthor:string){
-        this.author  = newAuthor
+    public setAuthorId(newAuthor:number){
+        this.authorId  = newAuthor
     }
     public getIsAnswer() : boolean {
         return this.isAnswer
@@ -61,7 +61,7 @@ export class QuestionWithAnswers{
                 ret.setOptionId(data.optionId)
                 ret.setQuestionText(data.questionText)
                 ret.setOptionText(data.optionText)
-                ret.setAuthor(data.author)
+                ret.setAuthorId(data.authorId)
                 ret.setIsAnswer(data.isAnswer)
                 return ret
                 }

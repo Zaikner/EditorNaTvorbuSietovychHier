@@ -6,8 +6,9 @@ var Question = /** @class */ (function () {
     function Question() {
         this.id = 0;
         this.text = '';
-        this.author = '';
+        this.authorId = 0;
     }
+    ;
     Question.prototype.getId = function () {
         return this.id;
     };
@@ -20,18 +21,18 @@ var Question = /** @class */ (function () {
     Question.prototype.setText = function (newName) {
         this.text = newName;
     };
-    Question.prototype.getAuthor = function () {
-        return this.author;
+    Question.prototype.getAuthorId = function () {
+        return this.authorId;
     };
-    Question.prototype.setAuthor = function (newAuthor) {
-        this.author = newAuthor;
+    Question.prototype.setAuthorId = function (newAuthor) {
+        this.authorId = newAuthor;
     };
     Question.prototype.insert = function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-question',
-            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3);',
-            values: [this.id, this.text, this.author]
+            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3);',
+            values: [this.id, this.text, this.authorId]
         };
         client
             .query(query)
@@ -41,8 +42,8 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-question',
-            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, author = EXCLUDED.author',
-            values: [this.id, this.text, this.author]
+            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "authorId" = EXCLUDED."authorId"',
+            values: [this.id, this.text, this.authorId]
         };
         client
             .query(query)
@@ -52,8 +53,8 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'update-question',
-            text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,author = $2 WHERE id = $3;',
-            values: [this.text, this.author, this.id]
+            text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,"authorId" = $2 WHERE id = $3;',
+            values: [this.text, this.authorId, this.id]
         };
         client
             .query(query)
@@ -74,7 +75,7 @@ var Question = /** @class */ (function () {
         var ret = new Question();
         ret.setId(data.id);
         ret.setText(data.text);
-        ret.setAuthor(data.author);
+        ret.setAuthorId(data.authorId);
         return ret;
     };
     return Question;

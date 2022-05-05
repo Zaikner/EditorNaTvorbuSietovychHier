@@ -100,7 +100,7 @@ export class ServerSocket{
           console.log(lastGame)
           let id =0
           if (existingGames!.length > 0){
-            if (existingGames![0].getAuthor()!= acc.getName()){
+            if (existingGames![0].getAuthorId()!= acc.getId()){
               socket.emit('not author')
 
               return
@@ -132,7 +132,7 @@ export class ServerSocket{
         console.log('ucet je:'+ acc)
         let g = new Game_db()
         g.setId(id)
-        g.setAuthor(acc.getName())
+        g.setAuthorId(acc.getId())
         g.setName(data.name)
         g.setNumOfPlayers(data.numOfPlayers)
         g.setNextTilesIds(data.nextTilesIds)
@@ -347,10 +347,10 @@ export class ServerSocket{
             r.setChoosedPawnId(msg.pawnId)
             let author = (await GameFinder.getIntance().findByName(r.getGameName()))!
 
-            let allQuesstions = await QuestionWithAnswersFinder.getInstance().findByAuthor(author[0]!.getAuthor())
+            let allQuesstions = await QuestionWithAnswersFinder.getInstance().findByAuthor(author[0]!.getAuthorId())
             let randomId  = allQuesstions![Math.floor(Math.random()*allQuesstions!.length)]!.getQuestionId()
             let questions = await QuestionWithAnswersFinder.getInstance().findById(randomId)
-            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean;}[] = []
+            let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
             console.log(questions)
     
             questions?.forEach((question) => {
@@ -359,7 +359,7 @@ export class ServerSocket{
                 optionId: question.getOptionId(),
                 questionText: question.getQuestionText(),
                 optionText: question.getOptionText(),
-                author: question.getAuthor(),
+                authorId: question.getAuthorId(),
                 isAnswer: question.getIsAnswer()})
             })
             
@@ -371,7 +371,7 @@ export class ServerSocket{
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
             let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.questionId)
-            let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean;}[] = []
+            let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
             console.log(questions)
     
             questions?.forEach((question) => {
@@ -380,7 +380,7 @@ export class ServerSocket{
                 optionId: question.getOptionId(),
                 questionText: question.getQuestionText(),
                 optionText: question.getOptionText(),
-                author: question.getAuthor(),
+                authorId: question.getAuthorId(),
                 isAnswer: question.getIsAnswer()})
             })
             
@@ -599,7 +599,7 @@ export class ServerSocket{
        
         quest.setText(data.question)
         quest.setId(id)
-        quest.setAuthor(acc.getName())
+        quest.setAuthorId(acc.getId())
         //quest.setAuthor(AccountManager.getAccountByClientId(data.id).getName()) -->ked bude fungovat user
 
         quest.upsert()
@@ -640,7 +640,7 @@ export class ServerSocket{
         console.log('edituje')
         let acc = AccountManager.getAccountByClientId(data.id)
         let can = (await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0
-        let questionNumber = (await QuestionFinder.getIntance().findAllByAuthor(acc.getName()))!.length
+        let questionNumber = (await QuestionFinder.getIntance().findAllByAuthorId(acc.getId()))!.length
         let lastRandomQuestion = (await TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName()))!.length > 0
         
         //DOPLNIT AUTHORA
@@ -693,16 +693,16 @@ export class ServerSocket{
       socket.on('loadQuestions',async(msg:{id:string,pick:boolean})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
   
-        let questions = await QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getName())
+        let questions = await QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getId())
 
-        let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+        let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {
           data.push({
             questionId: question.getQuestionId(),
             optionId: question.getOptionId(),
             questionText: question.getQuestionText(),
             optionText: question.getOptionText(),
-            author: question.getAuthor(),
+            authorId: question.getAuthorId(),
             isAnswer: question.getIsAnswer()})
         })
         
@@ -720,7 +720,7 @@ export class ServerSocket{
         console.log('odchytil answerQuestion' )
         console.log(msg.id)
         let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.id)
-        let data: { questionId: number; optionId: number; questionText: string; optionText: string; author: string; isAnswer: boolean; }[] = []
+        let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
         console.log(questions)
 
         questions?.forEach((question) => {
@@ -729,7 +729,7 @@ export class ServerSocket{
             optionId: question.getOptionId(),
             questionText: question.getQuestionText(),
             optionText: question.getOptionText(),
-            author: question.getAuthor(),
+            authorId: question.getAuthorId(),
             isAnswer: question.getIsAnswer()})
         })
       

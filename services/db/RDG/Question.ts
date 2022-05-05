@@ -4,7 +4,7 @@ import { DbConnect } from "../DbConnect";
 export class Question{
     private id:number = 0;
     private text:string = '';
-    private author:string = '';
+    private authorId:number = 0;;
     constructor(){
 
     }
@@ -23,11 +23,11 @@ export class Question{
     public setText(newName:string){
         this.text  = newName
     }
-    public getAuthor() : string {
-        return this.author
+    public getAuthorId() : number {
+        return this.authorId
     }
-    public setAuthor(newAuthor:string){
-        this.author  = newAuthor
+    public setAuthorId(newAuthor:number){
+        this.authorId  = newAuthor
     }
        
     
@@ -35,8 +35,8 @@ export class Question{
         let client = DbConnect.get()
             const query = {
                 name: 'insert-question',
-                text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3);',
-                values: [this.id,this.text,this.author],
+                text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3);',
+                values: [this.id,this.text,this.authorId],
               }
               client
               .query(query)
@@ -46,8 +46,8 @@ export class Question{
                 let client = DbConnect.get()
                     const query = {
                         name: 'upsert-question',
-                        text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,author) VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, author = EXCLUDED.author',
-                        values: [this.id,this.text,this.author],
+                        text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "authorId" = EXCLUDED."authorId"',
+                        values: [this.id,this.text,this.authorId],
                       }
                       client
                       .query(query)
@@ -59,8 +59,8 @@ export class Question{
                     const query = {
                         name: 'update-question',
                         
-                        text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,author = $2 WHERE id = $3;',
-                        values: [this.text,this.author,this.id],
+                        text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,"authorId" = $2 WHERE id = $3;',
+                        values: [this.text,this.authorId,this.id],
                       }
                       client
                       .query(query)
@@ -84,7 +84,7 @@ export class Question{
                 let ret = new Question()
                 ret.setId(data.id)
                 ret.setText(data.text)
-                ret.setAuthor(data.author)
+                ret.setAuthorId(data.authorId)
                 return ret
                 }
     

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
@@ -52,7 +53,7 @@ var BackgroundComponentFinder_js_1 = require("../../services/db/RDG/BackgroundCo
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
-    GameManager.loadGame = function (name) {
+    GameManager.loadGame = function (name, author) {
         return __awaiter(this, void 0, void 0, function () {
             var game, tiles, background, pawns, styles, rules, backgroundComponents;
             return __generator(this, function (_a) {
@@ -78,7 +79,7 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, BackgroundComponentFinder_js_1.BackgroundComponentFinder.getIntance().findByName(name)];
                     case 7:
                         backgroundComponents = _a.sent();
-                        return [2 /*return*/, { game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText(), components: backgroundComponents }];
+                        return [2 /*return*/, { author: author, game: game[0], tiles: tiles, background: background[0], pawns: pawns, styles: styles, rules: rules[0].getText(), components: backgroundComponents }];
                 }
             });
         });
@@ -96,9 +97,9 @@ var GameManager = /** @class */ (function () {
             });
         });
     };
-    GameManager.createRoom = function (name, numOfPlayers) {
+    GameManager.createRoom = function (name, numOfPlayers, accId) {
         return __awaiter(this, void 0, void 0, function () {
-            var stop, id, room, gameData, pawns;
+            var stop, id, room, acc, gameData, pawns;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -115,14 +116,17 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
-                        return [4 /*yield*/, GameManager.loadGame(name)];
+                        return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findById(accId)];
                     case 1:
+                        acc = _a.sent();
+                        return [4 /*yield*/, GameManager.loadGame(name, acc[0].getName())];
+                    case 2:
                         gameData = _a.sent();
                         room.setGameData(gameData);
                         console.log(room);
                         this.activeRooms.set(id, room);
                         return [4 /*yield*/, PawnFinder_js_1.PawnFinder.getIntance().findByGameId(gameData.game.getId())];
-                    case 2:
+                    case 3:
                         pawns = _a.sent();
                         pawns.forEach(function (pawn) {
                             room.getPawnPositions().set(pawn.getId(), pawn.getTileId());

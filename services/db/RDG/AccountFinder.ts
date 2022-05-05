@@ -30,6 +30,29 @@ export class AccountFinder{
           console.log("Connection failed")
         } 
       }
+      public async findById(id:number){
+        let client = DbConnect.get()
+        try {
+            const query = {
+                name: 'select-account-id',
+                text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE id=$1;',
+                values: [id],
+              }
+            var results = await  client.query(query)
+            var ret:Array<Account_db> = []
+          
+            await results.rows.forEach((row:any) => {
+         
+                ret.push(Account_db.load(row))
+            });
+           
+            return ret
+    
+        }
+        catch(err){
+          console.log("Connection failed")
+        } 
+      }
       public async findByNameAndPassword(name:string,password:string){
         let client = DbConnect.get()
         try {

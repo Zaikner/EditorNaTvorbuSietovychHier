@@ -120,7 +120,7 @@ editorSocket.on('connected', function (msg) {
     });
     canvas_1.editor.getGame().setBackground(background);
     //editor.getGame().setBackground(msg.background)
-    canvas_1.editor.getGame().setAuthor(msg.game.author);
+    canvas_1.editor.getGame().setAuthor(msg.author);
     canvas_1.editor.getGame().setName(msg.game.name);
     canvas_1.editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
     canvas_1.editor.getGame().setRules(msg.rules);

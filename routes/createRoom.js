@@ -17,7 +17,7 @@ router
     let games =  await GameFinder.getIntance().findByName(request.params.name)
     let game = games[0]
     
-    let room = await GameManager.createRoom(request.params.name,game.getNumOfPlayers())
+    let room = await GameManager.createRoom(request.params.name,game.getNumOfPlayers(),acc.getId())
     //room.join(new Player(acc,'Player 1'))
   
     res.redirect("/room?id="+await room.getId()+"&name="+request.params.name)

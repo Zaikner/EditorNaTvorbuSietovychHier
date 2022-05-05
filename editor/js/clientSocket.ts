@@ -142,7 +142,7 @@ editorSocket.on('connected',(msg)=>{
     editor.getGame().setBackground(background)
     //editor.getGame().setBackground(msg.background)
   
-    editor.getGame().setAuthor(msg.game.author)
+    editor.getGame().setAuthor(msg.author)
     editor.getGame().setName(msg.game.name)
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
    

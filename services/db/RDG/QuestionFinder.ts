@@ -33,13 +33,13 @@ export class QuestionFinder{
               console.log("Connection failed")
             } 
           }
-   public async findAllByAuthor(author:string){
+   public async findAllByAuthorId(authorId:number){
             let client = DbConnect.get()
             try {
                 const query = {
                     name: 'select-all-questions-author',
-                    text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE author=$1;',
-                    values: [author],
+                    text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE authorId=$1;',
+                    values: [authorId],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Question> = []

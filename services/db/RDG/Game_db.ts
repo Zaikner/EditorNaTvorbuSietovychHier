@@ -5,7 +5,7 @@ import { DbConnect } from "../DbConnect";
 export class Game_db{
     private id:number = 0;
     private name:string = '';
-    private author:string = '';
+    private authorId:number = 0;
     private numOfPlayers:number = 0;
     private nextTilesIds:Array<string> = []
     private initSizeX:number = 0;
@@ -36,11 +36,11 @@ export class Game_db{
     public setName(newName:string){
         this.name  = newName
     }
-    public getAuthor() : string {
-        return this.author
+    public getAuthorId() : number {
+        return this.authorId
     }
-    public setAuthor(newAuthor:string){
-        this.author  = newAuthor
+    public setAuthorId(newAuthor:number){
+        this.authorId  = newAuthor
     }
     public setNextTilesIds(newIds:Array<string>){
         this.nextTilesIds= newIds
@@ -90,8 +90,8 @@ export class Game_db{
                     const query = {
                         name: 'upsert-game',
                         
-                        text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,author,"numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, author = EXCLUDED.author,"numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
-                        values: [this.id,this.name,this.author,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber],
+                        text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
+                        values: [this.id,this.name,this.authorId,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber],
                       }
                       client
                       .query(query)
@@ -104,7 +104,7 @@ export class Game_db{
                 let ret = new Game_db()
                 ret.setId(data.id)
                 ret.setName(data.name)
-                ret.setAuthor(data.author)
+                ret.setAuthorId(data.authorId)
                 ret.setNumOfPlayers(data.numOfPlayers)
                 ret.setNextTilesIds(data.nextTilesIds)
                 ret.setInitSizeX(data.initSizeX)

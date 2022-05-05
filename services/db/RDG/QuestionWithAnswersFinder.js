@@ -55,7 +55,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-all-id',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
+                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -89,7 +89,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-id',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
+                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -112,7 +112,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             });
         });
     };
-    QuestionWithAnswersFinder.prototype.findByAuthor = function (author) {
+    QuestionWithAnswersFinder.prototype.findByAuthor = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_3;
             return __generator(this, function (_a) {
@@ -124,8 +124,8 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-author',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.author = $1;',
-                            values: [author]
+                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q."authorId" = $1;',
+                            values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

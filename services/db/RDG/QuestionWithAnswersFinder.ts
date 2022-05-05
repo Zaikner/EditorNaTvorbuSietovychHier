@@ -18,7 +18,7 @@ export class QuestionWithAnswersFinder{
               
                 const query = {
                     name: 'select-question-with-answer-all-id',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
+                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
                     values: [],
                   }
                 var results = await  client.query(query)
@@ -44,7 +44,7 @@ export class QuestionWithAnswersFinder{
               
                 const query = {
                     name: 'select-question-with-answer-id',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
+                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -63,15 +63,15 @@ export class QuestionWithAnswersFinder{
               console.log("Connection failed")
             } 
           }
-          public async findByAuthor(author:string){
+          public async findByAuthor(id:number){
             
             let client = DbConnect.get()
             try {
               
                 const query = {
                     name: 'select-question-with-answer-author',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q.author FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.author = $1;',
-                    values: [author],
+                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q."authorId" = $1;',
+                    values: [id],
                   }
                 var results = await  client.query(query)
                 var ret:Array<QuestionWithAnswers> = []

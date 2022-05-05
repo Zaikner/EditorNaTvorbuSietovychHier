@@ -77,7 +77,7 @@ var QuestionFinder = /** @class */ (function () {
             });
         });
     };
-    QuestionFinder.prototype.findAllByAuthor = function (author) {
+    QuestionFinder.prototype.findAllByAuthorId = function (authorId) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_2;
             return __generator(this, function (_a) {
@@ -89,8 +89,8 @@ var QuestionFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-all-questions-author',
-                            text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE author=$1;',
-                            values: [author]
+                            text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE authorId=$1;',
+                            values: [authorId]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:

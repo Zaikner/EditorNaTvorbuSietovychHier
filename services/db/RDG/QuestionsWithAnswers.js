@@ -7,7 +7,7 @@ var QuestionWithAnswers = /** @class */ (function () {
         this.optionId = 0;
         this.questionText = '';
         this.optionText = '';
-        this.author = '';
+        this.authorId = 0;
         this.isAnswer = false;
     }
     QuestionWithAnswers.prototype.getQuestionId = function () {
@@ -34,11 +34,11 @@ var QuestionWithAnswers = /** @class */ (function () {
     QuestionWithAnswers.prototype.setQuestionText = function (newText) {
         this.questionText = newText;
     };
-    QuestionWithAnswers.prototype.getAuthor = function () {
-        return this.author;
+    QuestionWithAnswers.prototype.getAuthorId = function () {
+        return this.authorId;
     };
-    QuestionWithAnswers.prototype.setAuthor = function (newAuthor) {
-        this.author = newAuthor;
+    QuestionWithAnswers.prototype.setAuthorId = function (newAuthor) {
+        this.authorId = newAuthor;
     };
     QuestionWithAnswers.prototype.getIsAnswer = function () {
         return this.isAnswer;
@@ -52,7 +52,7 @@ var QuestionWithAnswers = /** @class */ (function () {
         ret.setOptionId(data.optionId);
         ret.setQuestionText(data.questionText);
         ret.setOptionText(data.optionText);
-        ret.setAuthor(data.author);
+        ret.setAuthorId(data.authorId);
         ret.setIsAnswer(data.isAnswer);
         return ret;
     };

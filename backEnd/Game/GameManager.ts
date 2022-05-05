@@ -24,7 +24,7 @@ import { BackgroundComponentFinder } from '../../services/db/RDG/BackgroundCompo
 
 class GameManager{
     private static activeRooms:Map<number,Room> = new Map()
-    public static async loadGame(name:string){
+    public static async loadGame(name:string,author:string){
          let game = await GameFinder.getIntance().findByName(name)
             let tiles =await TileFinder.getIntance().findByGameId(game![0].getId())
             let background = await BackgroundFinder.getIntance().findById(game![0].getId())
@@ -34,13 +34,13 @@ class GameManager{
             let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
          
             
-       return {game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText(),components:backgroundComponents}
+       return {author:author,game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText(),components:backgroundComponents}
     }
     
     public static async loadTexts(){
         return {texts:await TextsFinder.getIntance().findAll()}
     }
-    public static async createRoom(name:string,numOfPlayers:number){
+    public static async createRoom(name:string,numOfPlayers:number,accId:number){
         console.log('aspon vyvroil room')
         
         //let id = Math.floor(Math.random()*9000)+1000
@@ -57,7 +57,8 @@ class GameManager{
         }
         
         let room = new Room(id,numOfPlayers,name)
-        let gameData =  await GameManager.loadGame(name)
+        let acc = await AccountFinder.getIntance().findById(accId)
+        let gameData =  await GameManager.loadGame(name,acc![0]!.getName())
         room.setGameData(gameData)
         
         console.log(room)
