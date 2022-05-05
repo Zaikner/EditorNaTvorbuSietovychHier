@@ -177,6 +177,7 @@ var ServerSocket = /** @class */ (function () {
                             g.setInitSizeY(data.initSizeY);
                             g.setIsPublished(data.isPublished);
                             g.setToogleNumber(data.toogleNumber);
+                            g.setNumOfPawnsPerTile(data.numOfPawnsPerTile);
                             data.tiles.forEach(function (tile) {
                                 var t = new Tile_db_1.Tile_db();
                                 t.setId(tile.id + lastId);

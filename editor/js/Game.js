@@ -68,7 +68,8 @@ var Game = /** @class */ (function () {
                 initSizeX: this.initSizeX,
                 initSizeY: this.initSizeY,
                 isPublished: this.isPublished,
-                toogleNumber: this.toogleNumber
+                toogleNumber: this.toogleNumber,
+                numOfPawnsPerTile: this.numberOfStartingPawns
             });
         }
     };

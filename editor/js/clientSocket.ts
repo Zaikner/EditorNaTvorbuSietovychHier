@@ -145,7 +145,24 @@ editorSocket.on('connected',(msg)=>{
     editor.getGame().setAuthor(msg.author)
     editor.getGame().setName(msg.game.name)
     editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
-   
+    editor.getGame().setNumberOfStartingPawns(msg.game.numOfPawnsPerTile)
+
+
+    let numOfPlayer = <HTMLInputElement>document.getElementById('numOfPlayers')
+    let numOfPlayerShower = <HTMLParagraphElement>document.getElementById('numShower')
+    let numberOfStartingPawns  = <HTMLInputElement>document.getElementById('pawnNumberSlider')
+    let numberOfStartingPawnsShower  = <HTMLParagraphElement>document.getElementById('pawnNumberSliderShower')
+
+    if (numOfPlayer != undefined){
+      numOfPlayer.value = msg.game.numOfPlayers
+      console.log('numOfPlayerShower je')
+      console.log(numOfPlayerShower)
+      numOfPlayerShower.textContent = msg.game.numOfPlayers
+    }
+    if (numberOfStartingPawns != undefined){
+      numberOfStartingPawns.value = msg.game.numOfPawnsPerTile
+      numberOfStartingPawnsShower.textContent = msg.game.numOfPawnsPerTile
+    }
     editor.getGame().setRules(msg.rules)
 
     editor.getGame().setInitSizeX(msg.game.initSizeX)

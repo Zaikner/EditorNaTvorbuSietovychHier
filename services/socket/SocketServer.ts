@@ -140,6 +140,7 @@ export class ServerSocket{
         g.setInitSizeY(data.initSizeY)
         g.setIsPublished(data.isPublished)
         g.setToogleNumber(data.toogleNumber)
+        g.setNumOfPawnsPerTile(data.numOfPawnsPerTile)
         data.tiles.forEach((tile:any) =>{
           let t = new Tile_db()
           t.setId(tile.id+lastId)

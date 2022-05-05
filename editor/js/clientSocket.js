@@ -123,6 +123,21 @@ editorSocket.on('connected', function (msg) {
     canvas_1.editor.getGame().setAuthor(msg.author);
     canvas_1.editor.getGame().setName(msg.game.name);
     canvas_1.editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
+    canvas_1.editor.getGame().setNumberOfStartingPawns(msg.game.numOfPawnsPerTile);
+    var numOfPlayer = document.getElementById('numOfPlayers');
+    var numOfPlayerShower = document.getElementById('numShower');
+    var numberOfStartingPawns = document.getElementById('pawnNumberSlider');
+    var numberOfStartingPawnsShower = document.getElementById('pawnNumberSliderShower');
+    if (numOfPlayer != undefined) {
+        numOfPlayer.value = msg.game.numOfPlayers;
+        console.log('numOfPlayerShower je');
+        console.log(numOfPlayerShower);
+        numOfPlayerShower.textContent = msg.game.numOfPlayers;
+    }
+    if (numberOfStartingPawns != undefined) {
+        numberOfStartingPawns.value = msg.game.numOfPawnsPerTile;
+        numberOfStartingPawnsShower.textContent = msg.game.numOfPawnsPerTile;
+    }
     canvas_1.editor.getGame().setRules(msg.rules);
     canvas_1.editor.getGame().setInitSizeX(msg.game.initSizeX);
     canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);

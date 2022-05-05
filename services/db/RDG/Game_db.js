@@ -13,6 +13,7 @@ var Game_db = /** @class */ (function () {
         this.initSizeY = 0;
         this.isPublished = false;
         this.toogleNumber = false;
+        this.numOfPawnsPerTile = 0;
     }
     Game_db.prototype.getId = function () {
         return this.id;
@@ -68,6 +69,10 @@ var Game_db = /** @class */ (function () {
     Game_db.prototype.getToggleNumber = function () {
         return this.toogleNumber;
     };
+    Game_db.prototype.setNumOfPawnsPerTile = function (num) {
+        this.numOfPawnsPerTile = num;
+    };
+    Game_db.prototype.getNumOfPawnsPerTile = function () { return this.numOfPawnsPerTile; };
     // public insert(){
     //     let client = DbConnect.get()
     //         const query = {
@@ -83,8 +88,8 @@ var Game_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
-            values: [this.id, this.name, this.authorId, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished, this.toogleNumber]
+            text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber","numOfPawnsPerTile") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber", "numOfPawnsPerTile" = EXCLUDED."numOfPawnsPerTile";',
+            values: [this.id, this.name, this.authorId, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished, this.toogleNumber, this.numOfPawnsPerTile]
         };
         client
             .query(query)
@@ -101,6 +106,7 @@ var Game_db = /** @class */ (function () {
         ret.setInitSizeY(data.initSizeY);
         ret.setIsPublished(data.isPublished);
         ret.setToogleNumber(data.toogleNumber);
+        ret.setNumOfPawnsPerTile(data.numOfPawnsPerTile);
         return ret;
     };
     return Game_db;

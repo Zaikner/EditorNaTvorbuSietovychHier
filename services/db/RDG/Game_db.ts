@@ -12,6 +12,7 @@ export class Game_db{
     private initSizeY:number = 0;
     private isPublished:boolean = false;
     private toogleNumber:boolean = false
+    private numOfPawnsPerTile:number = 0
     constructor(){
 
     }
@@ -72,6 +73,11 @@ export class Game_db{
     public getToggleNumber(){
         return this.toogleNumber}
     
+    setNumOfPawnsPerTile(num:number){
+        this.numOfPawnsPerTile = num
+    }
+    getNumOfPawnsPerTile()
+    {return this.numOfPawnsPerTile}
     // public insert(){
     //     let client = DbConnect.get()
     //         const query = {
@@ -90,8 +96,8 @@ export class Game_db{
                     const query = {
                         name: 'upsert-game',
                         
-                        text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber";',
-                        values: [this.id,this.name,this.authorId,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber],
+                        text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber","numOfPawnsPerTile") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber", "numOfPawnsPerTile" = EXCLUDED."numOfPawnsPerTile";',
+                        values: [this.id,this.name,this.authorId,this.numOfPlayers,this.nextTilesIds,this.initSizeX,this.initSizeY,this.isPublished,this.toogleNumber,this.numOfPawnsPerTile],
                       }
                       client
                       .query(query)
@@ -111,6 +117,7 @@ export class Game_db{
                 ret.setInitSizeY(data.initSizeY)
                 ret.setIsPublished(data.isPublished)
                 ret.setToogleNumber(data.toogleNumber)
+                ret.setNumOfPawnsPerTile(data.numOfPawnsPerTile)
                 return ret
                 }
     
