@@ -77,6 +77,14 @@ editorSocket.on('connected', function (msg) {
         }
         addedTile.setNextTilesIds(add);
         canvas_1.editor.getGame().addTile(addedTile);
+        // let num = msg.game.numOfPawnsPerTile
+        // tile.isStartingFor.forEach((token:string)=>{
+        //   for(let i = 0; i < num;i++){
+        //     let p = new Pawn(token,addedTile)
+        //     editor.getGame().getPawns().push(p)
+        //     //addedTile.getPawns().push(p)
+        //   }
+        // })
         (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
     });
     canvas_1.editor.setNextTileId(newId + 1);
@@ -158,10 +166,12 @@ editorSocket.on('connected', function (msg) {
     (0, Gameplay_1.initGameInfo)(msg.game.name);
     var i = 0;
     //for (let i = 0; i < msg.game.num)
+    console.log('pawns su :');
+    console.log(msg.pawns);
     msg.pawns.forEach(function (pawn) {
         i++;
         var tile = canvas_1.editor.findTileById(newIds.get(pawn.tileId));
-        var p = new Pawn_1.Pawn(pawn.player, tile);
+        var p = new Pawn_1.Pawn(pawn.token, tile);
         p.id = pawn.id;
         canvas_1.editor.getGame().getPawns().push(p);
         //tile.getPawns().push(p)

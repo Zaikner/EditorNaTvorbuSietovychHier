@@ -31,6 +31,7 @@ const Player = require( "../../backEnd/Game/Player")
 const path = require('path');
 const AccountManager = require('../../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../../backEnd/Game/GameManager.js')
+
 export class ServerSocket{
     private static io:ioServer;
     
@@ -63,19 +64,59 @@ export class ServerSocket{
                    
                   
                    let emit;
+                  
                    if (msg.room!=undefined){
                      
                     let r = GameManager.getActiveRooms().get(parseInt(msg.room))
-                    emit  = r.getGameData()
-                    emit.pawns.forEach((pawn:Pawn)=>{
-                        pawn.tileId = r.getPawnPositions().get(pawn.getId())
+                     emit  = r.getGameData()
+                  //   console.log('tuna bude chyba')
+                  //   let numOfPawns =  emit.game.numOfPawnsPerTile
+                  //   emit.pawns = []
+                  //   let pawns:Array<Array<string>> = []
+                  //   emit.tile.forEach((tile:any)=>{
+                  //     tile.isStartingFor.forEach((token:string)=>{
+                  //       for(let i = 0; i < numOfPawns;i++){
+                  //        pawns.push([token, r.getPawnPositions().lenght,tile.id])
+                  //         //let p = new Pawn(token,addedTile)
+                  //         //editor.getGame().getPawns().push(p)
+                  //         //addedTile.getPawns().push(p)
+                
+                  //       }
+                  //     })
+                  //   })
+                    
+                    
+                   
+                    //emit.pawns = pawns
+                    //TOTO OPRAV MORE
+                    emit.pawns.forEach((pawn:{token:string,id:number,tileId:number})=>{
+                        pawn.tileId = r.getPawnPositions().get(pawn.id)
                     })
+                    console.log('nebola to ona')
                    }
                    else{
+                    console.log('isiel cez tento branch takze game over')
                     emit = await GameManager.loadGame(msg.name)
+                    let numOfPawns = emit.game.getNumOfPawnsPerTile()
+                    let pawnNumber = 1;
+                    let pawns:Array<{token:string,id:number,tileId:number}> = []
+                    emit.tiles!.forEach((tile:any)=>{
+                      tile.isStartingFor.forEach((token:string)=>{
+                        for(let i = 0; i < numOfPawns;i++){
+                         //room.getPawnPositions().set(pawnNumber,tile.id)
+                         pawns.push({token:token,id:pawnNumber,tileId:tile.id})
+                             
+                            //[token, pawnNumber,tile.id])
+                         pawnNumber++;
+                        }
+                      })
+                    })
+                    emit.pawns = pawns
+                    
                    }
                 
-              
+                    console.log('emited:')
+                    console.log(emit)
                     this.emitToSpecificSocket(socket.id,'connected', emit)
                  
             });
@@ -207,14 +248,14 @@ export class ServerSocket{
         b.upsert()
 
 
-        data.pawns.forEach((pawn:any)=>{
-           let p = new Pawn()
-          // p.setColor(pawn.color)
-           //p.setImage(pawn.image)
-           p.setPlayer(pawn.player)
-           p.setTileId(pawn.tileId +lastId)
-           p.insert()
-        })
+        // data.pawns.forEach((pawn:any)=>{
+        //    let p = new Pawn()
+        //   // p.setColor(pawn.color)
+        //    //p.setImage(pawn.image)
+        //    p.setPlayer(pawn.player)
+        //    p.setTileId(pawn.tileId +lastId)
+        //    p.insert()
+        // })
         data.styles.forEach((style:any) => {
           let s = new PawnStyles()
           s.setGameId(id)

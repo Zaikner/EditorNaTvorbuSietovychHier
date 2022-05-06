@@ -88,6 +88,20 @@ editorSocket.on('connected',(msg)=>{
      
       editor.getGame().addTile(addedTile)
       
+      // let num = msg.game.numOfPawnsPerTile
+      // tile.isStartingFor.forEach((token:string)=>{
+      //   for(let i = 0; i < num;i++){
+          
+      //     let p = new Pawn(token,addedTile)
+      //     editor.getGame().getPawns().push(p)
+      //     //addedTile.getPawns().push(p)
+
+      //   }
+      // })
+      
+
+
+      
       reload(editor,ctx)
     })
     editor.setNextTileId(newId+1)
@@ -189,13 +203,14 @@ editorSocket.on('connected',(msg)=>{
     let i = 0
 
     //for (let i = 0; i < msg.game.num)
-   
-    msg.pawns.forEach((pawn:any) => {
+    console.log('pawns su :')
+    console.log(msg.pawns)
+    msg.pawns.forEach((pawn: {token:string,id:number,tileId:number}) => {
       i++;
       let tile = editor.findTileById(newIds.get(pawn.tileId)!)!
     
      
-       let p = new Pawn(pawn.player,tile)
+       let p = new Pawn(pawn.token,tile)
        p.id = pawn.id
   
        editor.getGame().getPawns().push(p)
@@ -204,6 +219,8 @@ editorSocket.on('connected',(msg)=>{
       
       
     });
+
+   
     msg.styles.forEach((style:any) => {
       
       let p = new PawnStyle(style.player,style.color,style.type)

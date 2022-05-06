@@ -342,7 +342,7 @@ document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4',editor.getGame().getNumberOfStartingPawns().toString(),editor.getGame().getNumberOfStartingPawns().toString())
+let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4','1',editor.getGame().getNumberOfStartingPawns().toString())
 slid.style.width = '100%'
 slid.onchange = function(){
   let max = parseInt(slid!.value)

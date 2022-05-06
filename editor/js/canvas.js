@@ -276,7 +276,7 @@ function mainMenu() {
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
     //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', clientSocket_1.texts[112], '1', '4', editor.getGame().getNumberOfStartingPawns().toString(), editor.getGame().getNumberOfStartingPawns().toString());
+    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', clientSocket_1.texts[112], '1', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
     slid.style.width = '100%';
     slid.onchange = function () {
         var max = parseInt(slid.value);

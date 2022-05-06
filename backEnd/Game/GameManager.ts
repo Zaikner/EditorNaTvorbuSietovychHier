@@ -28,13 +28,13 @@ class GameManager{
          let game = await GameFinder.getIntance().findByName(name)
             let tiles =await TileFinder.getIntance().findByGameId(game![0].getId())
             let background = await BackgroundFinder.getIntance().findById(game![0].getId())
-            let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
+            //let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
             let styles = await PawnStyleFinder.getIntance().findByGameId(game![0].getId())
             let rules = await RulesFinder.getIntance().findByGameId(game![0].getId())
             let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
-         
+            let pawns:Array<{token:string,id:number,tileId:number}> = []
             
-       return {author:author,game:game![0],tiles:tiles,background:background![0],pawns:pawns,styles:styles,rules:rules![0].getText(),components:backgroundComponents}
+       return {author:author,pawns:pawns,game:game![0],tiles:tiles,background:background![0],styles:styles,rules:rules![0].getText(),components:backgroundComponents}
     }
     
     public static async loadTexts(){
@@ -59,19 +59,36 @@ class GameManager{
         let room = new Room(id,numOfPlayers,name)
         let acc = await AccountFinder.getIntance().findById(accId)
         let gameData =  await GameManager.loadGame(name,acc![0]!.getName())
-        room.setGameData(gameData)
+       
         
         console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
-          let pawns = await PawnFinder.getIntance().findByGameId(gameData.game.getId())
+        //   let pawns = await PawnFinder.getIntance().findByGameId(gameData.game.getId())
 
-        pawns!.forEach((pawn)=>{
+        // pawns!.forEach((pawn)=>{
            
-            room.getPawnPositions().set(pawn.getId(),pawn.getTileId())
+        //     room.getPawnPositions().set(pawn.getId(),pawn.getTileId())
            
+        // })
+        
+        let numOfPawns =  gameData.game.getNumOfPawnsPerTile()
+        let pawnNumber = 1;
+        let pawns:Array<{token:string,id:number,tileId:number}> = []
+        gameData.tiles!.forEach((tile:any)=>{
+          tile.isStartingFor.forEach((token:string)=>{
+            for(let i = 0; i < numOfPawns;i++){
+             room.getPawnPositions().set(pawnNumber,tile.id)
+             pawns.push({token:token,id:pawnNumber,tileId:tile.id})
+                 
+                //[token, pawnNumber,tile.id])
+             pawnNumber++;
+            }
+          })
         })
-       
+        gameData.pawns = pawns
+
+        room.setGameData(gameData)
         return room
     }
     

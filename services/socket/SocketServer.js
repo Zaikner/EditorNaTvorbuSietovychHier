@@ -46,7 +46,6 @@ var Question_1 = require("../db/RDG/Question");
 var QuestionOption_1 = require("../db/RDG/QuestionOption");
 var QuestionFinder_1 = require("../db/RDG/QuestionFinder");
 var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder");
-var Pawn_1 = require("../db/RDG/Pawn");
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
 var TextFinder_1 = require("../db/RDG/TextFinder");
@@ -71,7 +70,7 @@ var ServerSocket = /** @class */ (function () {
                 console.log('ohlasil sa:' + acc.getName());
             });
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
-                var game, acc, emit, r_1;
+                var game, acc, emit, r_1, numOfPawns_1, pawnNumber_1, pawns_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -90,15 +89,50 @@ var ServerSocket = /** @class */ (function () {
                             if (!(msg.room != undefined)) return [3 /*break*/, 3];
                             r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
                             emit = r_1.getGameData();
+                            //   console.log('tuna bude chyba')
+                            //   let numOfPawns =  emit.game.numOfPawnsPerTile
+                            //   emit.pawns = []
+                            //   let pawns:Array<Array<string>> = []
+                            //   emit.tile.forEach((tile:any)=>{
+                            //     tile.isStartingFor.forEach((token:string)=>{
+                            //       for(let i = 0; i < numOfPawns;i++){
+                            //        pawns.push([token, r.getPawnPositions().lenght,tile.id])
+                            //         //let p = new Pawn(token,addedTile)
+                            //         //editor.getGame().getPawns().push(p)
+                            //         //addedTile.getPawns().push(p)
+                            //       }
+                            //     })
+                            //   })
+                            //emit.pawns = pawns
+                            //TOTO OPRAV MORE
                             emit.pawns.forEach(function (pawn) {
-                                pawn.tileId = r_1.getPawnPositions().get(pawn.getId());
+                                pawn.tileId = r_1.getPawnPositions().get(pawn.id);
                             });
+                            console.log('nebola to ona');
                             return [3 /*break*/, 5];
-                        case 3: return [4 /*yield*/, GameManager.loadGame(msg.name)];
+                        case 3:
+                            console.log('isiel cez tento branch takze game over');
+                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 4:
                             emit = _a.sent();
+                            numOfPawns_1 = emit.game.getNumOfPawnsPerTile();
+                            pawnNumber_1 = 1;
+                            pawns_1 = [];
+                            emit.tiles.forEach(function (tile) {
+                                tile.isStartingFor.forEach(function (token) {
+                                    for (var i = 0; i < numOfPawns_1; i++) {
+                                        //room.getPawnPositions().set(pawnNumber,tile.id)
+                                        pawns_1.push({ token: token, id: pawnNumber_1, tileId: tile.id });
+                                        //[token, pawnNumber,tile.id])
+                                        pawnNumber_1++;
+                                    }
+                                });
+                            });
+                            emit.pawns = pawns_1;
                             _a.label = 5;
                         case 5:
+                            console.log('emited:');
+                            console.log(emit);
                             this.emitToSpecificSocket(socket.id, 'connected', emit);
                             return [2 /*return*/];
                     }
@@ -235,14 +269,14 @@ var ServerSocket = /** @class */ (function () {
                                 console.log(c);
                             });
                             b.upsert();
-                            data.pawns.forEach(function (pawn) {
-                                var p = new Pawn_1.Pawn();
-                                // p.setColor(pawn.color)
-                                //p.setImage(pawn.image)
-                                p.setPlayer(pawn.player);
-                                p.setTileId(pawn.tileId + lastId);
-                                p.insert();
-                            });
+                            // data.pawns.forEach((pawn:any)=>{
+                            //    let p = new Pawn()
+                            //   // p.setColor(pawn.color)
+                            //    //p.setImage(pawn.image)
+                            //    p.setPlayer(pawn.player)
+                            //    p.setTileId(pawn.tileId +lastId)
+                            //    p.insert()
+                            // })
                             data.styles.forEach(function (style) {
                                 var s = new PawnStyle_1.PawnStyles();
                                 s.setGameId(id);
