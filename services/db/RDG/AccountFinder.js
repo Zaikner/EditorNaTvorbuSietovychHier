@@ -55,7 +55,7 @@ var AccountFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-account-name',
-                            text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE name=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.accounts WHERE name=$1;',
                             values: [name]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -89,7 +89,7 @@ var AccountFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-account-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE id=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.accounts WHERE id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -123,7 +123,7 @@ var AccountFinder = /** @class */ (function () {
                         _a.trys.push([1, 3, , 4]);
                         query = {
                             name: 'select-account-name-password',
-                            text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE name=$1 AND password=$2;',
+                            text: 'SELECT * FROM bachelors_thesis.accounts WHERE name=$1 AND password=$2;',
                             values: [name, password]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -155,7 +155,7 @@ var AccountFinder = /** @class */ (function () {
                         _a.trys.push([1, 3, , 4]);
                         query = {
                             name: 'select-account-name-password',
-                            text: 'SELECT * FROM "bachelorsThesis"."Account" ORDER BY score DESC;',
+                            text: 'SELECT * FROM bachelors_thesis.accounts ORDER BY score DESC;',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];

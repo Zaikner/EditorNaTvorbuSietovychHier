@@ -31,7 +31,7 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-question',
-            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3);',
+            text: 'INSERT INTO bachelors_thesis.questions(id,text,author_id) VALUES($1,$2,$3);',
             values: [this.id, this.text, this.authorId]
         };
         client
@@ -42,7 +42,7 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-question',
-            text: 'INSERT INTO "bachelorsThesis"."Question"(id,text,"authorId") VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "authorId" = EXCLUDED."authorId"',
+            text: 'INSERT INTO bachelors_thesis.questions(id,text,author_id) VALUES($1,$2,$3)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, author_id = EXCLUDED.author_id',
             values: [this.id, this.text, this.authorId]
         };
         client
@@ -53,7 +53,7 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'update-question',
-            text: 'UPDATE "bachelorsThesis"."Question" SET text = $1 ,"authorId" = $2 WHERE id = $3;',
+            text: 'UPDATE bachelors_thesis.questions SET text = $1 ,author_id = $2 WHERE id = $3;',
             values: [this.text, this.authorId, this.id]
         };
         client
@@ -64,7 +64,7 @@ var Question = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'delete-question',
-            text: 'DELETE from "bachelorsThesis"."Question" WHERE id = $1;',
+            text: 'DELETE from bachelors_thesis.questions WHERE id = $1;',
             values: [this.id]
         };
         client
@@ -75,7 +75,7 @@ var Question = /** @class */ (function () {
         var ret = new Question();
         ret.setId(data.id);
         ret.setText(data.text);
-        ret.setAuthorId(data.authorId);
+        ret.setAuthorId(data.author_id);
         return ret;
     };
     return Question;

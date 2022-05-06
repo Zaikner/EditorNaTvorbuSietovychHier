@@ -56,7 +56,7 @@ export class Account_db{
         let client = DbConnect.get()
             const query = {
                 name: 'insert-account',
-                text: 'INSERT INTO "bachelorsThesis"."Account"(name,password,avatar,score,"gameWon","gameLost") Values($1,$2,$3,$4,$5,$6);',
+                text: 'INSERT INTO bachelors_thesis.accounts(name,password,avatar,score,games_won,games_lost) Values($1,$2,$3,$4,$5,$6);',
                 values: [this.name,this.password,this.avatar,this.score,this.gameWon,this.gameLost],
               }
               client
@@ -68,7 +68,7 @@ export class Account_db{
                 let client = DbConnect.get()
                     const query = {
                         name: 'update-account',
-                        text: 'UPDATE "bachelorsThesis"."Account" SET name = $1 ,password = $2 ,avatar = $3,score = $4,"gameWon" = $5,"gameLost" = $6 WHERE name = $1;',
+                        text: 'UPDATE bachelors_thesis.accounts SET name = $1 ,password = $2 ,avatar = $3,score = $4,games_won = $5, games_lost = $6 WHERE name = $1;',
                         values: [this.name,this.password,this.avatar,this.score,this.gameWon,this.gameLost],
                       }
                       client
@@ -83,8 +83,8 @@ export class Account_db{
         newAcc.setPassword(data.password)
         newAcc.setScore(data.score)
         newAcc.setAvatar(data.avatar)
-        newAcc.setGameWon(data.gameWon)
-        newAcc.setGameLost(data.gameLost)
+        newAcc.setGameWon(data.games_won)
+        newAcc.setGameLost(data.games_lost)
         return newAcc
     }
 }

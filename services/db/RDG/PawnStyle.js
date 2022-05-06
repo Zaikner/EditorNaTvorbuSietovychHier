@@ -51,7 +51,7 @@ var PawnStyles = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-pawn-style',
-            text: 'INSERT INTO "bachelorsThesis"."PawnStyle"(player,color,image,"gameId",type) VALUES($1,$2,$3,$4,$5);',
+            text: 'INSERT INTO bachelors_thesis.pawn_styles(player,color,image,game_id,type) VALUES($1,$2,$3,$4,$5);',
             values: [this.player, this.color, this.image, this.gameId, this.type]
         };
         client
@@ -64,7 +64,7 @@ var PawnStyles = /** @class */ (function () {
         ret.setPlayer(data.player);
         ret.setColor(data.color);
         ret.setImage(data.image);
-        ret.setGameId(data.gameId);
+        ret.setGameId(data.game_id);
         ret.setType(data.type);
         return ret;
     };

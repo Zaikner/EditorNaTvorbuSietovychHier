@@ -48,12 +48,12 @@ var QuestionWithAnswers = /** @class */ (function () {
     };
     QuestionWithAnswers.load = function (data) {
         var ret = new QuestionWithAnswers();
-        ret.setQuestionId(data.questionId);
-        ret.setOptionId(data.optionId);
-        ret.setQuestionText(data.questionText);
-        ret.setOptionText(data.optionText);
-        ret.setAuthorId(data.authorId);
-        ret.setIsAnswer(data.isAnswer);
+        ret.setQuestionId(data.question_id);
+        ret.setOptionId(data.option_id);
+        ret.setQuestionText(data.question_text);
+        ret.setOptionText(data.option_text);
+        ret.setAuthorId(data.author_id);
+        ret.setIsAnswer(data.is_answer);
         return ret;
     };
     return QuestionWithAnswers;

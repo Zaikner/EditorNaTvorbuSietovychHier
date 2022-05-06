@@ -203,7 +203,7 @@ export class Tile_db{
             console.log(this)
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO "bachelorsThesis"."Tile"(id,"centerX","centerY",x1,x2,y1,y2,radius,color,stroke,"strokeColor",shape,image,"tileNumber","isEndingFor","isStartingFor","gameId","questionId","cantBeEliminatedOnTile",skip,repeat,forward,backward,"mustThrown","turnToSetFree","nextTilesIds","randomQuestion") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
+                text: 'INSERT INTO bachelors_thesis.tiles(id,center_x,center_y,x_1,x_2,y_1,y_2,radius,color,stroke,stroke_color,shape,image,tile_number,is_ending_for,is_starting_for,game_id,question_id,cant_be_eliminated_on_tile,skip,repeat,forward,backward,must_thrown,turn_to_set_free,next_tiles_ids,random_question) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
                 values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.image,this.tileNumber,this.isEndingFor,this.isStartingFor,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
               }
               client
@@ -216,31 +216,31 @@ export class Tile_db{
     public static load(data:any){
         let ret = new Tile_db()
         ret.setId(data.id)
-        ret.setCenterX(data.centerX)
-        ret.setCenterY(data.centerY)
-        ret.setX1(data.x1)
-        ret.setX2(data.x2)
-        ret.setY1(data.y1)
-        ret.setY2(data.y2)
+        ret.setCenterX(data.center_x)
+        ret.setCenterY(data.center_y)
+        ret.setX1(data.x_1)
+        ret.setX2(data.x_2)
+        ret.setY1(data.y_1)
+        ret.setY2(data.y_2)
         ret.setRadius(data.radius)
         ret.setColor(data.color)
         ret.setStroke(data.stroke)
-        ret.setStrokeColor(data.strokeColor)
+        ret.setStrokeColor(data.stroke_color)
         ret.setShape(data.shape)
-        ret.setTileNumber(data.tileNumber)
-        ret.setIsEndingFor(data.isEndingFor)
-        ret.setIsStartingFor(data.isStartingFor)
-        ret.setGameId(data.gameId)
-        ret.setQuestionId(data.questionId)
-        ret.setCantBeEliminatedOnTile(data.cantBeEliminatedOnTile)
+        ret.setTileNumber(data.tile_number)
+        ret.setIsEndingFor(data.is_ending_for)
+        ret.setIsStartingFor(data.is_starting_for)
+        ret.setGameId(data.game_id)
+        ret.setQuestionId(data.question_id)
+        ret.setCantBeEliminatedOnTile(data.cant_be_eliminated_on_tile)
         ret.setSkip(data.skip)
         ret.setRepeat(data.repeat)
         ret.setForward(data.forward)
         ret.setBackward(data.backward)
-        ret.setMustThrown(data.mustThrown)
-        ret.setTurnsToSetFree(data.turnToSetFree)
-        ret.setNextTilesIds(data.nextTilesIds)
-        ret.setRandomQuestion(data.randomQuestion)
+        ret.setMustThrown(data.must_thrown)
+        ret.setTurnsToSetFree(data.turn_to_set_free)
+        ret.setNextTilesIds(data.next_tiles_ids)
+        ret.setRandomQuestion(data.random_question)
         return ret
         }
 }

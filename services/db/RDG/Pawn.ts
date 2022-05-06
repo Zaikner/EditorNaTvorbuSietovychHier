@@ -46,7 +46,7 @@ export class Pawn{
       
             const query = {
                 name: 'insert-pawn',
-                text: 'INSERT INTO "bachelorsThesis"."Pawn"(player,"tileId",color,image) VALUES($1,$2,$3,$4);',
+                text: 'INSERT INTO bachelors_thesis.pawn(player,tile_id,color,image) VALUES($1,$2,$3,$4);',
                 values: [this.player,this.tileId,this.color,this.image],
               }
               client

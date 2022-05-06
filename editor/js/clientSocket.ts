@@ -122,36 +122,36 @@ editorSocket.on('connected',(msg)=>{
         
       background.setBackgroundImage(backImage)
     }
-    msg.components.forEach((component:any)=>{
+    // msg.components.forEach((component:any)=>{
       
-      let newComponent = new BackgroundComponent()
-      if(component.image != 'none' || component.image != undefined){
-        let image = new Image()
-        image.src = component.image
-        image.onload = function(){
-         newComponent.setImage(image)
-         background.getComponents().push(newComponent)
-         reload(editor,ctx)
-        }
-       }
+    //   let newComponent = new BackgroundComponent()
+    //   if(component.image != 'none' || component.image != undefined){
+    //     let image = new Image()
+    //     image.src = component.image
+    //     image.onload = function(){
+    //      newComponent.setImage(image)
+    //      background.getComponents().push(newComponent)
+    //      reload(editor,ctx)
+    //     }
+    //    }
   
-      newComponent.setType(component.type)
-      newComponent.setColor(component.color)
-      newComponent.setImage(component.image)
-      newComponent.setImageHeight(component.imageHeigth)
-      newComponent.setImageWidth(component.imageWidth)
-      newComponent.setCenterX(component.centerX)
-      newComponent.setCenterY(component.centerY)
-      newComponent.setRadius(component.radius)
-      newComponent.setStroke(component.stroke)
-      newComponent.setStrokeColor(component.strokeColor)
-      newComponent.setX1(component.x1)
-      newComponent.setY1(component.y1)
-      newComponent.setX2(component.x2)
-      newComponent.setY2(component.y2)
+    //   newComponent.setType(component.type)
+    //   newComponent.setColor(component.color)
+    //   newComponent.setImage(component.image)
+    //   newComponent.setImageHeight(component.imageHeigth)
+    //   newComponent.setImageWidth(component.imageWidth)
+    //   newComponent.setCenterX(component.centerX)
+    //   newComponent.setCenterY(component.centerY)
+    //   newComponent.setRadius(component.radius)
+    //   newComponent.setStroke(component.stroke)
+    //   newComponent.setStrokeColor(component.strokeColor)
+    //   newComponent.setX1(component.x1)
+    //   newComponent.setY1(component.y1)
+    //   newComponent.setX2(component.x2)
+    //   newComponent.setY2(component.y2)
   
       
-    })
+    // })
       
     editor.getGame().setBackground(background)
     //editor.getGame().setBackground(msg.background)
@@ -224,8 +224,23 @@ editorSocket.on('connected',(msg)=>{
     msg.styles.forEach((style:any) => {
       
       let p = new PawnStyle(style.player,style.color,style.type)
-      //p.setImage(image)
-      editor.getGame().getPawnStyle().set(style.player,p)
+      if (style.image != 'none'){
+        p.setImage(style.image)
+        let backImage = new Image()
+        backImage.src = style.image
+        backImage.onload = function(){
+          p.setImage(backImage)
+          
+          //editor.getGame().setBackground(background)
+          editor.getGame().getPawnStyle().set(style.player,p)
+          reload(editor,ctx)
+        }
+      }
+      else{
+        editor.getGame().getPawnStyle().set(style.player,p)
+      }
+     
+      
   
   
     });

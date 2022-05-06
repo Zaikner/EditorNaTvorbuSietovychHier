@@ -55,7 +55,7 @@ var QuestionOptionFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-option-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Option" ORDER BY id DESC LIMIT 1;',
+                            text: 'SELECT * FROM bachelors_thesis.options ORDER BY id DESC LIMIT 1;',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];

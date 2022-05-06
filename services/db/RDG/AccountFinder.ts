@@ -12,7 +12,7 @@ export class AccountFinder{
         try {
             const query = {
                 name: 'select-account-name',
-                text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE name=$1;',
+                text: 'SELECT * FROM bachelors_thesis.accounts WHERE name=$1;',
                 values: [name],
               }
             var results = await  client.query(query)
@@ -35,7 +35,7 @@ export class AccountFinder{
         try {
             const query = {
                 name: 'select-account-id',
-                text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE id=$1;',
+                text: 'SELECT * FROM bachelors_thesis.accounts WHERE id=$1;',
                 values: [id],
               }
             var results = await  client.query(query)
@@ -58,7 +58,7 @@ export class AccountFinder{
         try {
             const query = {
                 name: 'select-account-name-password',
-                text: 'SELECT * FROM "bachelorsThesis"."Account" WHERE name=$1 AND password=$2;',
+                text: 'SELECT * FROM bachelors_thesis.accounts WHERE name=$1 AND password=$2;',
                 values: [name,password],
               }
             var results = await  client.query(query)
@@ -77,7 +77,7 @@ export class AccountFinder{
         try {
             const query = {
                 name: 'select-account-name-password',
-                text: 'SELECT * FROM "bachelorsThesis"."Account" ORDER BY score DESC;',
+                text: 'SELECT * FROM bachelors_thesis.accounts ORDER BY score DESC;',
                 values: [],
               }
             var results = await  client.query(query)

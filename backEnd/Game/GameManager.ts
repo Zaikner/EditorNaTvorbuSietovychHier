@@ -31,10 +31,10 @@ class GameManager{
             //let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
             let styles = await PawnStyleFinder.getIntance().findByGameId(game![0].getId())
             let rules = await RulesFinder.getIntance().findByGameId(game![0].getId())
-            let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
+            //let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
             let pawns:Array<{token:string,id:number,tileId:number}> = []
             
-       return {author:author,pawns:pawns,game:game![0],tiles:tiles,background:background![0],styles:styles,rules:rules![0].getText(),components:backgroundComponents}
+       return {author:author,pawns:pawns,game:game![0],tiles:tiles,background:background![0],styles:styles,rules:rules![0].getText()}
     }
     
     public static async loadTexts(){

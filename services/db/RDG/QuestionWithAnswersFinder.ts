@@ -1,6 +1,5 @@
 import { DbConnect } from "../DbConnect";
-import { Question } from "./Question";
-import { QuestionOption } from "./QuestionOption";
+
 import { QuestionWithAnswers } from "./QuestionsWithAnswers";
 
 
@@ -18,7 +17,7 @@ export class QuestionWithAnswersFinder{
               
                 const query = {
                     name: 'select-question-with-answer-all-id',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
+                    text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id;',
                     values: [],
                   }
                 var results = await  client.query(query)
@@ -44,7 +43,7 @@ export class QuestionWithAnswersFinder{
               
                 const query = {
                     name: 'select-question-with-answer-id',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
+                    text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id where q.id = $1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -70,7 +69,7 @@ export class QuestionWithAnswersFinder{
               
                 const query = {
                     name: 'select-question-with-answer-author',
-                    text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q."authorId" = $1;',
+                    text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id where q.author_id = $1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -93,7 +92,7 @@ export class QuestionWithAnswersFinder{
             let client = DbConnect.get()
                 const query = {
                     name: 'delete-option',
-                    text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
+                    text: 'DELETE FROM bachelors_thesis.options WHERE question_id = $1',
                     values: [questionId],
                   }
                   client

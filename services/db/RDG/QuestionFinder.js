@@ -55,7 +55,7 @@ var QuestionFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE id=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.questions WHERE id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -89,7 +89,7 @@ var QuestionFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-all-questions-author',
-                            text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE authorId=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.questions WHERE author_id=$1;',
                             values: [authorId]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -123,7 +123,7 @@ var QuestionFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Question" ORDER BY id DESC LIMIT 1;',
+                            text: 'SELECT * FROM bachelors_thesis.questions ORDER BY id DESC LIMIT 1;',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];

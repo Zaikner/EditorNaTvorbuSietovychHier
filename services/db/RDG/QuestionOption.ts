@@ -42,7 +42,7 @@ export class QuestionOption{
         let client = DbConnect.get()
             const query = {
                 name: 'insert-option',
-                text: 'INSERT INTO "bachelorsThesis"."Option"(text,"questionId","isAnswer") VALUES($1,$2,$3);',
+                text: 'INSERT INTO bachelors_thesis.options(text,question_id,is_answer) VALUES($1,$2,$3);',
                 values: [this.text,this.questionId,this.isAnswer],
               }
               client
@@ -58,7 +58,7 @@ export class QuestionOption{
                 console.log(this)
                 const query = {
                     name: 'insert-option',
-                    text: 'INSERT INTO "bachelorsThesis"."Option"(id,text,"questionId","isAnswer") VALUES($1,$2,$3,$4)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, "questionId" = EXCLUDED."questionId","isAnswer" = EXCLUDED."isAnswer"',
+                    text: 'INSERT INTO bachelors_thesis.options(id,text,question_id,is_answer) VALUES($1,$2,$3,$4)  ON CONFLICT(id) DO UPDATE SET id = EXCLUDED.id, text = EXCLUDED.text, question_id = EXCLUDED.question_id,is_answer = EXCLUDED.is_answer',
                     values: [this.id,this.text,this.questionId,this.isAnswer],
                   }
                   client
@@ -72,7 +72,7 @@ export class QuestionOption{
                     const query = {
                         name: 'update-option',
                         
-                        text: 'UPDATE "bachelorsThesis"."Option" SET text = $1, "isAnswer" = $2 WHERE id = $3;',
+                        text: 'UPDATE bachelors_thesis.options SET text = $1, is_answer = $2 WHERE id = $3;',
                         values: [this.text,this.isAnswer,this.id],
                       }
                       client
@@ -86,7 +86,7 @@ export class QuestionOption{
                             const query = {
                                 name: 'delete-option',
                                 
-                                text: 'DELETE FROM "bachelorsThesis"."Option" WHERE id = $1;',
+                                text: 'DELETE FROM bachelors_thesis.options WHERE id = $1;',
                                 values: [this.id],
                               }
                               client

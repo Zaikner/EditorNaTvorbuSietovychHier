@@ -49,9 +49,7 @@ var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder")
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
 var TextFinder_1 = require("../db/RDG/TextFinder");
-var BackgroundComponent_db_1 = require("../db/RDG/BackgroundComponent_db");
 var BackgroundComponentFinder_1 = require("../db/RDG/BackgroundComponentFinder");
-var PawnFinder_1 = require("../db/RDG/PawnFinder");
 var PawnStyleFinder_1 = require("../db/RDG/PawnStyleFinder");
 var QuestionOptionFinder_1 = require("../db/RDG/QuestionOptionFinder");
 var Player = require("../../backEnd/Game/Player");
@@ -191,14 +189,15 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByGameId(id)];
                         case 4:
                             _a.sent();
-                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)];
+                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
+                                //await PawnFinder.getIntance().deleteByName(data.name)
+                            ];
                         case 5:
                             _a.sent();
-                            return [4 /*yield*/, PawnFinder_1.PawnFinder.getIntance().deleteByName(data.name)];
-                        case 6:
-                            _a.sent();
+                            //await PawnFinder.getIntance().deleteByName(data.name)
                             return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteById(id)];
-                        case 7:
+                        case 6:
+                            //await PawnFinder.getIntance().deleteByName(data.name)
                             _a.sent();
                             console.log('ucet je:' + acc);
                             g = new Game_db_1.Game_db();
@@ -248,26 +247,26 @@ var ServerSocket = /** @class */ (function () {
                             b.setGameId(id);
                             b.setColor(data.background.color);
                             b.setImage(data.background.backgroundImage);
-                            data.background.components.forEach(function (comp) {
-                                var c = new BackgroundComponent_db_1.BackgroundComponent_db();
-                                c.setGameName(data.name);
-                                c.setImage(comp.image);
-                                c.setColor(comp.color);
-                                c.setType(comp.type);
-                                c.setCenterX(comp.centerX);
-                                c.setCenterY(comp.centerY);
-                                c.setX1(comp.x1);
-                                c.setX2(comp.x2);
-                                c.setY1(comp.y1);
-                                c.setY2(comp.y2);
-                                c.setRadius(comp.radius);
-                                c.setStroke(comp.stroke);
-                                c.setStrokeColor(comp.strokeColor);
-                                c.setImageWidth(comp.imageWidth);
-                                c.setImageHeight(comp.imageHeigth);
-                                c.insert();
-                                console.log(c);
-                            });
+                            // data.background.components.forEach((comp:any)=>{
+                            //   let c = new BackgroundComponent_db()
+                            //   c.setGameName(data.name)
+                            //   c.setImage(comp.image)
+                            //   c.setColor(comp.color)
+                            //   c.setType(comp.type)
+                            //   c.setCenterX(comp.centerX)
+                            //   c.setCenterY(comp.centerY)
+                            //   c.setX1(comp.x1)
+                            //   c.setX2(comp.x2)
+                            //   c.setY1(comp.y1)
+                            //   c.setY2(comp.y2)
+                            //   c.setRadius(comp.radius)
+                            //   c.setStroke(comp.stroke)
+                            //   c.setStrokeColor(comp.strokeColor)
+                            //   c.setImageWidth(comp.imageWidth)
+                            //   c.setImageHeight(comp.imageHeigth)
+                            //   c.insert()
+                            //   console.log(c)
+                            // })
                             b.upsert();
                             // data.pawns.forEach((pawn:any)=>{
                             //    let p = new Pawn()
@@ -672,7 +671,7 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, QuestionFinder_1.QuestionFinder.getIntance().findAllByAuthorId(acc.getId())];
                         case 2:
                             questionNumber = (_a.sent()).length;
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName())];
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getId())];
                         case 3:
                             lastRandomQuestion = (_a.sent()).length > 0;
                             //DOPLNIT AUTHORA

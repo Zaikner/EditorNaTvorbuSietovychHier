@@ -15,7 +15,7 @@ export class QuestionFinder{
             try {
                 const query = {
                     name: 'select-question-id',
-                    text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE id=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.questions WHERE id=$1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -38,7 +38,7 @@ export class QuestionFinder{
             try {
                 const query = {
                     name: 'select-all-questions-author',
-                    text: 'SELECT * FROM "bachelorsThesis"."Question" WHERE authorId=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.questions WHERE author_id=$1;',
                     values: [authorId],
                   }
                 var results = await  client.query(query)
@@ -61,7 +61,7 @@ export class QuestionFinder{
             try {
                 const query = {
                     name: 'select-question-id',
-                    text: 'SELECT * FROM "bachelorsThesis"."Question" ORDER BY id DESC LIMIT 1;',
+                    text: 'SELECT * FROM bachelors_thesis.questions ORDER BY id DESC LIMIT 1;',
                     values: [],
                   }
                 var results = await  client.query(query)

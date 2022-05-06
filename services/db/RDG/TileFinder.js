@@ -55,7 +55,7 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.id=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.games as g INNER JOIN bachelors_thesis.tiles as t on t.game_id = g.id  WHERE g.id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -77,7 +77,7 @@ var TileFinder = /** @class */ (function () {
             });
         });
     };
-    TileFinder.prototype.findByAuthorAndRandomQuestion = function (author) {
+    TileFinder.prototype.findByAuthorAndRandomQuestion = function (authorId) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_2;
             return __generator(this, function (_a) {
@@ -89,8 +89,8 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-gameTiles',
-                            text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.author=$1 AND t."randomQuestion" = true;',
-                            values: [author]
+                            text: 'SELECT * FROM bachelors_thesis.games as g INNER JOIN bachelors_thesis.tiles as t on t.game_id = g.id  WHERE g.author_id=$1 AND t.random_question = true;',
+                            values: [authorId]
                         };
                         return [4 /*yield*/, client.query(query)];
                     case 2:
@@ -123,7 +123,7 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-tile-by-questionId',
-                            text: 'SELECT * FROM "bachelorsThesis"."Tile" WHERE "questionId"=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.tiles WHERE question_id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -157,7 +157,7 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-last-gameTiles',
-                            text: 'SELECT * FROM  "bachelorsThesis"."Tile" ORDER BY id DESC LIMIT 1',
+                            text: 'SELECT * FROM  bachelors_thesis.tiles ORDER BY id DESC LIMIT 1',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -197,7 +197,7 @@ var TileFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'delete-gameTiles',
-                            text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameId"=$1;',
+                            text: 'DELETE FROM bachelors_thesis.tiles WHERE "gameId"=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];

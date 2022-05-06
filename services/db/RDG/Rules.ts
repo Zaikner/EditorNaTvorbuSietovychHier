@@ -36,7 +36,7 @@ export class Rules{
         let client = DbConnect.get()
             const query = {
                 name: 'upsert-rules',
-                text: 'INSERT INTO "bachelorsThesis"."Rule"(text,"gameId") VALUES($1,$2) ON CONFLICT("gameId") DO UPDATE SET text = EXCLUDED.text,"gameId"=EXCLUDED."gameId";',
+                text: 'INSERT INTO bachelors_thesis.rules(text,game_id) VALUES($1,$2) ON CONFLICT(game_id) DO UPDATE SET text = EXCLUDED.text,game_id=EXCLUDED.game_id;',
                 values: [this.text,this.gameId],
               }
               client
@@ -62,7 +62,7 @@ export class Rules{
                 let ret = new Rules()
                 ret.setId(data.id)
                 ret.setText(data.text)
-                ret.setGameId(data.gameId)
+                ret.setGameId(data.game_id)
                 return ret
                 }
     

@@ -14,7 +14,7 @@ export class TileFinder{
             try {
                 const query = {
                     name: 'select-gameTiles',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.id=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.games as g INNER JOIN bachelors_thesis.tiles as t on t.game_id = g.id  WHERE g.id=$1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -33,13 +33,13 @@ export class TileFinder{
             } 
           }
 
-    public async findByAuthorAndRandomQuestion(author:string){
+    public async findByAuthorAndRandomQuestion(authorId:number){
             let client = DbConnect.get()
             try {
                 const query = {
                     name: 'select-gameTiles',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" as g INNER JOIN "bachelorsThesis"."Tile" as t on t."gameId" = g.id  WHERE g.author=$1 AND t."randomQuestion" = true;',
-                    values: [author],
+                    text: 'SELECT * FROM bachelors_thesis.games as g INNER JOIN bachelors_thesis.tiles as t on t.game_id = g.id  WHERE g.author_id=$1 AND t.random_question = true;',
+                    values: [authorId],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Tile_db> = []
@@ -62,7 +62,7 @@ export class TileFinder{
             try {
                 const query = {
                     name: 'select-tile-by-questionId',
-                    text: 'SELECT * FROM "bachelorsThesis"."Tile" WHERE "questionId"=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.tiles WHERE question_id=$1;',
                     values: [id],
                   }
                 var results = await  client.query(query)
@@ -86,7 +86,7 @@ export class TileFinder{
             try {
                 const query = {
                     name: 'select-last-gameTiles',
-                    text: 'SELECT * FROM  "bachelorsThesis"."Tile" ORDER BY id DESC LIMIT 1',
+                    text: 'SELECT * FROM  bachelors_thesis.tiles ORDER BY id DESC LIMIT 1',
                     values: [],
                   }
                 var results = await  client.query(query)
@@ -117,7 +117,7 @@ export class TileFinder{
             try {
                 const query = {
                     name: 'delete-gameTiles',
-                    text: 'DELETE FROM "bachelorsThesis"."Tile" WHERE "gameId"=$1;',
+                    text: 'DELETE FROM bachelors_thesis.tiles WHERE "gameId"=$1;',
                     values: [id],
                   }
                 var results = await  client.query(query)

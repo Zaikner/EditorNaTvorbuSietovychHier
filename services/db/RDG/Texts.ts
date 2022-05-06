@@ -36,8 +36,8 @@ export class Texts{
     public static load(data:any){
                 let ret = new Texts()
                 ret.setId(data.id)
-                ret.setEN(data.EN)
-                ret.setSK(data.SK)
+                ret.setEN(data.en)
+                ret.setSK(data.sk)
                 return ret
                 }
     

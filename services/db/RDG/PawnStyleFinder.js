@@ -55,7 +55,7 @@ var PawnStyleFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-pawn-style',
-                            text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                            text: 'SELECT * FROM bachelors_thesis.pawn_styles WHERE game_id = $1',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -89,7 +89,7 @@ var PawnStyleFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'delete-pawn-style',
-                            text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                            text: 'DELETE FROM bachelors_thesis.pawn_styles WHERE game_id = $1',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];

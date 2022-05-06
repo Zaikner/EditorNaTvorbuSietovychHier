@@ -4,7 +4,6 @@ exports.__esModule = true;
 exports.texts = exports.getCookie = exports.clickFunction = exports.isEditor = exports.canMovePawnFunc = exports.editorSocket = void 0;
 var socket_io_client_1 = require("socket.io-client");
 var Background_1 = require("./Background");
-var BackgroundComponent_1 = require("./BackgroundComponent");
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
 var Game_1 = require("./Game");
@@ -100,32 +99,32 @@ editorSocket.on('connected', function (msg) {
         };
         background.setBackgroundImage(backImage_1);
     }
-    msg.components.forEach(function (component) {
-        var newComponent = new BackgroundComponent_1.BackgroundComponent();
-        if (component.image != 'none' || component.image != undefined) {
-            var image_2 = new Image();
-            image_2.src = component.image;
-            image_2.onload = function () {
-                newComponent.setImage(image_2);
-                background.getComponents().push(newComponent);
-                (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
-            };
-        }
-        newComponent.setType(component.type);
-        newComponent.setColor(component.color);
-        newComponent.setImage(component.image);
-        newComponent.setImageHeight(component.imageHeigth);
-        newComponent.setImageWidth(component.imageWidth);
-        newComponent.setCenterX(component.centerX);
-        newComponent.setCenterY(component.centerY);
-        newComponent.setRadius(component.radius);
-        newComponent.setStroke(component.stroke);
-        newComponent.setStrokeColor(component.strokeColor);
-        newComponent.setX1(component.x1);
-        newComponent.setY1(component.y1);
-        newComponent.setX2(component.x2);
-        newComponent.setY2(component.y2);
-    });
+    // msg.components.forEach((component:any)=>{
+    //   let newComponent = new BackgroundComponent()
+    //   if(component.image != 'none' || component.image != undefined){
+    //     let image = new Image()
+    //     image.src = component.image
+    //     image.onload = function(){
+    //      newComponent.setImage(image)
+    //      background.getComponents().push(newComponent)
+    //      reload(editor,ctx)
+    //     }
+    //    }
+    //   newComponent.setType(component.type)
+    //   newComponent.setColor(component.color)
+    //   newComponent.setImage(component.image)
+    //   newComponent.setImageHeight(component.imageHeigth)
+    //   newComponent.setImageWidth(component.imageWidth)
+    //   newComponent.setCenterX(component.centerX)
+    //   newComponent.setCenterY(component.centerY)
+    //   newComponent.setRadius(component.radius)
+    //   newComponent.setStroke(component.stroke)
+    //   newComponent.setStrokeColor(component.strokeColor)
+    //   newComponent.setX1(component.x1)
+    //   newComponent.setY1(component.y1)
+    //   newComponent.setX2(component.x2)
+    //   newComponent.setY2(component.y2)
+    // })
     canvas_1.editor.getGame().setBackground(background);
     //editor.getGame().setBackground(msg.background)
     canvas_1.editor.getGame().setAuthor(msg.author);
@@ -178,8 +177,20 @@ editorSocket.on('connected', function (msg) {
     });
     msg.styles.forEach(function (style) {
         var p = new PawnStyle_1.PawnStyle(style.player, style.color, style.type);
-        //p.setImage(image)
-        canvas_1.editor.getGame().getPawnStyle().set(style.player, p);
+        if (style.image != 'none') {
+            p.setImage(style.image);
+            var backImage_2 = new Image();
+            backImage_2.src = style.image;
+            backImage_2.onload = function () {
+                p.setImage(backImage_2);
+                //editor.getGame().setBackground(background)
+                canvas_1.editor.getGame().getPawnStyle().set(style.player, p);
+                (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+            };
+        }
+        else {
+            canvas_1.editor.getGame().getPawnStyle().set(style.player, p);
+        }
     });
     console.log('loaded game:');
     console.log(canvas_1.editor);

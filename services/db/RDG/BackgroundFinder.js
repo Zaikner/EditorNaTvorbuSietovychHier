@@ -55,7 +55,7 @@ var BackgroundFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-background',
-                            text: 'SELECT * FROM  "bachelorsThesis"."Background"  WHERE "gameId"=$1;',
+                            text: 'SELECT * FROM  bachelors_thesis.backgrounds  WHERE game_id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];

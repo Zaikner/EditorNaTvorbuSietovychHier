@@ -16,7 +16,7 @@ export class TextsFinder{
             try {
                 const query = {
                     name: 'select-allTexts',
-                    text: 'SELECT * FROM "bachelorsThesis"."Texts" ORDER BY id ASC ',
+                    text: 'SELECT * FROM bachelors_thesis.texts ORDER BY id ASC ',
                     values: [],
                   }
                 var results = await  client.query(query)

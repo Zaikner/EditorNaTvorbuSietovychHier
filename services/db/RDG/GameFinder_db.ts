@@ -14,7 +14,7 @@ export class GameFinder{
             try {
                 const query = {
                     name: 'select-game-name',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE name=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.games WHERE name=$1;',
                     values: [name],
                   }
                 var results = await  client.query(query)
@@ -39,7 +39,7 @@ export class GameFinder{
             try {
                 const query = {
                     name: 'select-game-last',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" ORDER BY id DESC LIMIT 1;',
+                    text: 'SELECT * FROM bachelors_thesis.games ORDER BY id DESC LIMIT 1;',
                     values: [],
                   }
                 var results = await  client.query(query)
@@ -63,7 +63,7 @@ export class GameFinder{
             try {
                 const query = {
                     name: 'select-game-all',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game";',
+                    text: 'SELECT * FROM bachelors_thesis.games;',
                     values: [],
                   }
                
@@ -90,7 +90,7 @@ export class GameFinder{
             try {
                 const query = {
                     name: 'select-game-all-published',
-                    text: 'SELECT * FROM "bachelorsThesis"."Game" WHERE "isPublished" = true;',
+                    text: 'SELECT * FROM bachelors_thesis.games WHERE is_published = true;',
                     values: [],
                   }
                

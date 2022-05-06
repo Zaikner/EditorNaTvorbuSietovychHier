@@ -55,7 +55,7 @@ var RulesFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-rule-id',
-                            text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameId"=$1;',
+                            text: 'SELECT * FROM bachelors_thesis.rules WHERE game_id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];

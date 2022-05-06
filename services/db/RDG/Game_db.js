@@ -88,7 +88,7 @@ var Game_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'upsert-game',
-            text: 'INSERT INTO "bachelorsThesis"."Game"(id,name,"authorId","numOfPlayers","nextTilesIds","initSizeX","initSizeY","isPublished","toogleNumber","numOfPawnsPerTile") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, "authorId" = EXCLUDED."authorId","numOfPlayers" = EXCLUDED."numOfPlayers","nextTilesIds"= EXCLUDED."nextTilesIds","initSizeX"=EXCLUDED."initSizeX","initSizeY"=EXCLUDED."initSizeY","isPublished"=EXCLUDED."isPublished","toogleNumber" = EXCLUDED."toogleNumber", "numOfPawnsPerTile" = EXCLUDED."numOfPawnsPerTile";',
+            text: 'INSERT INTO bachelors_thesis.games(id,name,author_id,num_of_players,next_tiles_ids,init_size_x,init_size_y,is_published,toogle_number,num_of_pawns_per_tile) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)  ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, author_id = EXCLUDED.author_id,num_of_players = EXCLUDED.num_of_players,next_tiles_ids= EXCLUDED.next_tiles_ids,init_size_x=EXCLUDED.init_size_x,init_size_y=EXCLUDED.init_size_y,is_published=EXCLUDED.is_published,toogle_number = EXCLUDED.toogle_number, num_of_pawns_per_tile = EXCLUDED.num_of_pawns_per_tile;',
             values: [this.id, this.name, this.authorId, this.numOfPlayers, this.nextTilesIds, this.initSizeX, this.initSizeY, this.isPublished, this.toogleNumber, this.numOfPawnsPerTile]
         };
         client
@@ -99,14 +99,14 @@ var Game_db = /** @class */ (function () {
         var ret = new Game_db();
         ret.setId(data.id);
         ret.setName(data.name);
-        ret.setAuthorId(data.authorId);
-        ret.setNumOfPlayers(data.numOfPlayers);
-        ret.setNextTilesIds(data.nextTilesIds);
-        ret.setInitSizeX(data.initSizeX);
-        ret.setInitSizeY(data.initSizeY);
-        ret.setIsPublished(data.isPublished);
-        ret.setToogleNumber(data.toogleNumber);
-        ret.setNumOfPawnsPerTile(data.numOfPawnsPerTile);
+        ret.setAuthorId(data.author_id);
+        ret.setNumOfPlayers(data.num_of_players);
+        ret.setNextTilesIds(data.next_tiles_ids);
+        ret.setInitSizeX(data.init_size_x);
+        ret.setInitSizeY(data.init_size_y);
+        ret.setIsPublished(data.is_published);
+        ret.setToogleNumber(data.toogle_number);
+        ret.setNumOfPawnsPerTile(data.num_of_pawns_per_tile);
         return ret;
     };
     return Game_db;

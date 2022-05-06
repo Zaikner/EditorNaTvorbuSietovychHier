@@ -47,14 +47,13 @@ var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
 var Room_js_1 = require("./Room.js");
 var Player_js_1 = require("./Player.js");
 var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
-var BackgroundComponentFinder_js_1 = require("../../services/db/RDG/BackgroundComponentFinder.js");
 //const Room = require('./Room.js')
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
     GameManager.loadGame = function (name, author) {
         return __awaiter(this, void 0, void 0, function () {
-            var game, tiles, background, styles, rules, backgroundComponents, pawns;
+            var game, tiles, background, styles, rules, pawns;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
@@ -71,14 +70,13 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByGameId(game[0].getId())];
                     case 4:
                         styles = _a.sent();
-                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByGameId(game[0].getId())];
+                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByGameId(game[0].getId())
+                            //let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
+                        ];
                     case 5:
                         rules = _a.sent();
-                        return [4 /*yield*/, BackgroundComponentFinder_js_1.BackgroundComponentFinder.getIntance().findByName(name)];
-                    case 6:
-                        backgroundComponents = _a.sent();
                         pawns = [];
-                        return [2 /*return*/, { author: author, pawns: pawns, game: game[0], tiles: tiles, background: background[0], styles: styles, rules: rules[0].getText(), components: backgroundComponents }];
+                        return [2 /*return*/, { author: author, pawns: pawns, game: game[0], tiles: tiles, background: background[0], styles: styles, rules: rules[0].getText() }];
                 }
             });
         });

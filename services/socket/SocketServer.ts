@@ -167,7 +167,7 @@ export class ServerSocket{
       
         await TileFinder.getIntance().deleteByGameId(id)
         await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
-        await PawnFinder.getIntance().deleteByName(data.name)
+        //await PawnFinder.getIntance().deleteByName(data.name)
         await PawnStyleFinder.getIntance().deleteById(id)
 
         console.log('ucet je:'+ acc)
@@ -222,29 +222,29 @@ export class ServerSocket{
         b.setGameId(id)
         b.setColor(data.background.color)
         b.setImage(data.background.backgroundImage)
-        data.background.components.forEach((comp:any)=>{
-          let c = new BackgroundComponent_db()
-          c.setGameName(data.name)
-          c.setImage(comp.image)
-          c.setColor(comp.color)
-          c.setType(comp.type)
-          c.setCenterX(comp.centerX)
-          c.setCenterY(comp.centerY)
-          c.setX1(comp.x1)
-          c.setX2(comp.x2)
-          c.setY1(comp.y1)
-          c.setY2(comp.y2)
-          c.setRadius(comp.radius)
+        // data.background.components.forEach((comp:any)=>{
+        //   let c = new BackgroundComponent_db()
+        //   c.setGameName(data.name)
+        //   c.setImage(comp.image)
+        //   c.setColor(comp.color)
+        //   c.setType(comp.type)
+        //   c.setCenterX(comp.centerX)
+        //   c.setCenterY(comp.centerY)
+        //   c.setX1(comp.x1)
+        //   c.setX2(comp.x2)
+        //   c.setY1(comp.y1)
+        //   c.setY2(comp.y2)
+        //   c.setRadius(comp.radius)
         
-          c.setStroke(comp.stroke)
-          c.setStrokeColor(comp.strokeColor)
+        //   c.setStroke(comp.stroke)
+        //   c.setStrokeColor(comp.strokeColor)
         
-          c.setImageWidth(comp.imageWidth)
-          c.setImageHeight(comp.imageHeigth)
-          c.insert()
-          console.log(c)
+        //   c.setImageWidth(comp.imageWidth)
+        //   c.setImageHeight(comp.imageHeigth)
+        //   c.insert()
+        //   console.log(c)
 
-        })
+        // })
         b.upsert()
 
 
@@ -683,7 +683,7 @@ export class ServerSocket{
         let acc = AccountManager.getAccountByClientId(data.id)
         let can = (await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0
         let questionNumber = (await QuestionFinder.getIntance().findAllByAuthorId(acc.getId()))!.length
-        let lastRandomQuestion = (await TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getName()))!.length > 0
+        let lastRandomQuestion = (await TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getId()))!.length > 0
         
         //DOPLNIT AUTHORA
       

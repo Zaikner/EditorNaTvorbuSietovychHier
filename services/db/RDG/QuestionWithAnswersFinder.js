@@ -55,7 +55,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-all-id',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId";',
+                            text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id;',
                             values: []
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -89,7 +89,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-id',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q.id = $1;',
+                            text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id where q.id = $1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -124,7 +124,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         _a.trys.push([1, 4, , 5]);
                         query = {
                             name: 'select-question-with-answer-author',
-                            text: 'SELECT o.id as "optionId",o.text as "optionText",o."questionId",o."isAnswer",q.text as "questionText",q."authorId" FROM "bachelorsThesis"."Question" as q inner join "bachelorsThesis"."Option" as o on q.id = o."questionId" where q."authorId" = $1;',
+                            text: 'SELECT o.id as option_id,o.text as option_text,o.question_id,o.is_answer,q.text as question_text,q.author_id FROM bachelors_thesis.questions as q inner join bachelors_thesis.options as o on q.id = o.question_id where q.author_id = $1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -151,7 +151,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'delete-option',
-            text: 'DELETE FROM "bachelorsThesis"."Option" WHERE "questionId" = $1',
+            text: 'DELETE FROM bachelors_thesis.options WHERE question_id = $1',
             values: [questionId]
         };
         client

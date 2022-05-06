@@ -1,3 +1,5 @@
+import { getDataUrlFromImage } from "./utilityFunctions";
+
 export class PawnStyle{
     private player:string = '';
     private color:string = '';
@@ -16,7 +18,7 @@ export class PawnStyle{
         return {player:this.player,
                 color:this.color,
                 type:this.type,
-                image:''}
+                image:this.image === undefined?'none':getDataUrlFromImage(this.image)}
     }
     public setColor(newColor:string){
         this.color = newColor

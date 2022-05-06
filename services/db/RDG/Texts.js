@@ -28,8 +28,8 @@ var Texts = /** @class */ (function () {
     Texts.load = function (data) {
         var ret = new Texts();
         ret.setId(data.id);
-        ret.setEN(data.EN);
-        ret.setSK(data.SK);
+        ret.setEN(data.en);
+        ret.setSK(data.sk);
         return ret;
     };
     return Texts;

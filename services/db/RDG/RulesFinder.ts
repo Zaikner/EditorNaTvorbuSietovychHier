@@ -17,7 +17,7 @@ export class RulesFinder{
             try {
                 const query = {
                     name: 'select-rule-id',
-                    text: 'SELECT * FROM "bachelorsThesis"."Rule" WHERE "gameId"=$1;',
+                    text: 'SELECT * FROM bachelors_thesis.rules WHERE game_id=$1;',
                     values: [id],
                   }
                 var results = await  client.query(query)

@@ -35,7 +35,7 @@ export class Background_db{
         let client = DbConnect.get()
             const query = {
                 name: 'insert-background',
-                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3);',
+                text: 'INSERT INTO bachelors_thesis.backgrounds(image,color,game_id) Values($1,$2,$3);',
                 values: [this.image,this.color,this.gameId],
               }
               client
@@ -47,7 +47,7 @@ export class Background_db{
         let client = DbConnect.get()
             const query = {
                 name: 'upsert-background',
-                text: 'INSERT INTO "bachelorsThesis"."Background"(image,color,"gameId") Values($1,$2,$3) ON CONFLICT("gameId") DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, "gameId" = EXCLUDED."gameId";',
+                text: 'INSERT INTO bachelors_thesis.backgrounds(image,color,game_id) Values($1,$2,$3) ON CONFLICT(game_id) DO UPDATE SET image = EXCLUDED.image, color = EXCLUDED.color, game_id = EXCLUDED.game_id;',
                 values: [this.image,this.color,this.gameId],
               }
               client
@@ -59,7 +59,7 @@ export class Background_db{
     public static load(data:any){
             let ret = new Background_db()
             ret.setId(data.id)
-            ret.setGameId(data.gameId)
+            ret.setGameId(data.game_id)
             ret.setColor(data.color)
             ret.setImage(data.image)
             return ret

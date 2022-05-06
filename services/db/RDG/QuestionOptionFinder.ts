@@ -14,7 +14,7 @@ export class QuestionOptionFinder{
         try {
             const query = {
                 name: 'select-option-id',
-                text: 'SELECT * FROM "bachelorsThesis"."Option" ORDER BY id DESC LIMIT 1;',
+                text: 'SELECT * FROM bachelors_thesis.options ORDER BY id DESC LIMIT 1;',
                 values: [],
               }
             var results = await  client.query(query)

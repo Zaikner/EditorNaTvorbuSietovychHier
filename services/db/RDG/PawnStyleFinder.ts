@@ -13,7 +13,7 @@ export class PawnStyleFinder{
         try {
             const query = {
                 name: 'select-pawn-style',
-                text: 'SELECT * FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                text: 'SELECT * FROM bachelors_thesis.pawn_styles WHERE game_id = $1',
                 values: [id],
               }
             var results = await  client.query(query)
@@ -36,7 +36,7 @@ export class PawnStyleFinder{
         try {
             const query = {
                 name: 'delete-pawn-style',
-                text: 'DELETE FROM "bachelorsThesis"."PawnStyle" WHERE "gameId" = $1',
+                text: 'DELETE FROM bachelors_thesis.pawn_styles WHERE game_id = $1',
                 values: [id],
               }
             var results = await  client.query(query)

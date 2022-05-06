@@ -14,7 +14,7 @@ public async findById(id:number){
     try {
         const query = {
             name: 'select-background',
-            text: 'SELECT * FROM  "bachelorsThesis"."Background"  WHERE "gameId"=$1;',
+            text: 'SELECT * FROM  bachelors_thesis.backgrounds  WHERE game_id=$1;',
             values: [id],
           }
         var results = await  client.query(query)
