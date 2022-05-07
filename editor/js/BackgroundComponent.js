@@ -28,7 +28,7 @@ var BackgroundComponent = /** @class */ (function () {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 0;
             ctx.fillStyle = this.color;
-            ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+            ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
             if (this.type == 'circle') {
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
             }
@@ -41,7 +41,7 @@ var BackgroundComponent = /** @class */ (function () {
         }
         else if (this.type == 'image' && this.image != undefined) {
             ctx.save();
-            ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+            ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
             ctx.fillStyle = 'black';
             //ctx.fill()
             ctx.drawImage(this.image, this.centerX - this.imageWidth / 2, this.centerY - this.imageHeigth / 2, this.imageWidth, this.imageHeigth);
@@ -49,7 +49,7 @@ var BackgroundComponent = /** @class */ (function () {
             //ctx.restore()
         }
         if (this.stroke > 0) {
-            ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+            ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;
             ctx.stroke();
@@ -64,7 +64,7 @@ var BackgroundComponent = /** @class */ (function () {
                 ctx.restore();
                 var num = ctx.lineWidth;
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
                 var grd = ctx.createRadialGradient(this.centerX, this.centerY, this.radius, this.centerX, this.centerY, this.radius + 15);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -76,7 +76,7 @@ var BackgroundComponent = /** @class */ (function () {
                 ctx.resetTransform();
             }
             else if (this.type == 'squire') {
-                ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
                 ctx.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
                 var grd = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
                 grd.addColorStop(0, "red");
@@ -89,7 +89,7 @@ var BackgroundComponent = /** @class */ (function () {
                 ctx.resetTransform();
             }
             else if (this.type == 'image') {
-                ctx.scale(canvas_1.editor.getGame().getScaleX(), canvas_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_1.game.getScaleX(), canvas_1.game.getScaleY());
                 ctx.rect(this.x1, this.y1, this.imageWidth, this.imageWidth);
                 var grd = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
                 grd.addColorStop(0, "red");

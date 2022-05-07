@@ -1,4 +1,4 @@
-import { ctx, editor, mainMenu, reload } from "./canvas";
+import { ctx, game, initNewGame, mainMenu, reload } from "./canvas";
 import { editorSocket, getCookie, texts } from "./clientSocket";
 import { spawnButton, spawnButtonWithLabel, spawnDiv, spawnHeading, spawnSelectMenu } from "./Elements";
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor";
@@ -21,8 +21,8 @@ function loadGameMenu(names:Array<string>){
     button.style.marginRight = '30%'
 
     button = spawnButtonWithLabel(document,'tileEditingPlace','',texts[199],['btn','btn-secondary'],texts[199],function(){
-        editor.initNewGame()
-        reload(editor,ctx)
+        initNewGame()
+        reload(game,ctx)
     })
     
 }

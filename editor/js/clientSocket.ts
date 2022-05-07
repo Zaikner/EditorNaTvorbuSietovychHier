@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { Background } from "./Background";
 import { BackgroundComponent } from "./BackgroundComponent";
-import { ctx, reload,editor, elementDeleter, canvas, edit, clear } from "./canvas";
+import { ctx, reload,game, elementDeleter, canvas, edit, clear,initNewGame } from "./canvas";
 import { spawnButton, spawnParagraph } from "./Elements";
 import { Game } from "./Game";
 import { loadGameMenu } from "./gameLoader";
@@ -35,7 +35,7 @@ function getCookie(name:string) {
 
 editorSocket.on('connected',(msg)=>{
    
-    editor.setGame(new Game())
+    initNewGame()
     clear()
     let newIds:Map<number,number> = new Map()
     let newId = 0
@@ -54,7 +54,7 @@ editorSocket.on('connected',(msg)=>{
         image.src = tile.backgroundFile
         image.onload = function(){
          addedTile.setImage(image)
-         reload(editor,ctx)
+         reload(game,ctx)
         }
        }
       
@@ -86,14 +86,14 @@ editorSocket.on('connected',(msg)=>{
         }
         addedTile.setNextTilesIds(add)
      
-      editor.getGame().addTile(addedTile)
+      game.addTile(addedTile)
       
       // let num = msg.game.numOfPawnsPerTile
       // tile.isStartingFor.forEach((token:string)=>{
       //   for(let i = 0; i < num;i++){
           
       //     let p = new Pawn(token,addedTile)
-      //     editor.getGame().getPawns().push(p)
+      //     game.getPawns().push(p)
       //     //addedTile.getPawns().push(p)
 
       //   }
@@ -102,9 +102,9 @@ editorSocket.on('connected',(msg)=>{
 
 
       
-      reload(editor,ctx)
+      reload(game,ctx)
     })
-    editor.setNextTileId(newId+1)
+    game.setNextTileId(newId+1)
     let background = new Background()
   
     background.setColor(msg.background.color)
@@ -115,9 +115,9 @@ editorSocket.on('connected',(msg)=>{
       backImage.onload = function(){
         background.setBackgroundImage(backImage)
         
-        editor.getGame().setBackground(background)
+        game.setBackground(background)
       
-        reload(editor,ctx)
+        reload(game,ctx)
       }
         
       background.setBackgroundImage(backImage)
@@ -131,7 +131,7 @@ editorSocket.on('connected',(msg)=>{
     //     image.onload = function(){
     //      newComponent.setImage(image)
     //      background.getComponents().push(newComponent)
-    //      reload(editor,ctx)
+    //      reload(game,ctx)
     //     }
     //    }
   
@@ -153,13 +153,13 @@ editorSocket.on('connected',(msg)=>{
       
     // })
       
-    editor.getGame().setBackground(background)
-    //editor.getGame().setBackground(msg.background)
+    game.setBackground(background)
+    //game.setBackground(msg.background)
   
-    editor.getGame().setAuthor(msg.author)
-    editor.getGame().setName(msg.game.name)
-    editor.getGame().setNumOfPlayers(msg.game.numOfPlayers)
-    editor.getGame().setNumberOfStartingPawns(msg.game.numOfPawnsPerTile)
+    game.setAuthor(msg.author)
+    game.setName(msg.game.name)
+    game.setNumOfPlayers(msg.game.numOfPlayers)
+    game.setNumberOfStartingPawns(msg.game.numOfPawnsPerTile)
 
 
     let numOfPlayer = <HTMLInputElement>document.getElementById('numOfPlayers')
@@ -169,51 +169,46 @@ editorSocket.on('connected',(msg)=>{
 
     if (numOfPlayer != undefined){
       numOfPlayer.value = msg.game.numOfPlayers
-      console.log('numOfPlayerShower je')
-      console.log(numOfPlayerShower)
       numOfPlayerShower.textContent = msg.game.numOfPlayers
     }
     if (numberOfStartingPawns != undefined){
       numberOfStartingPawns.value = msg.game.numOfPawnsPerTile
       numberOfStartingPawnsShower.textContent = msg.game.numOfPawnsPerTile
     }
-    editor.getGame().setRules(msg.rules)
+    game.setRules(msg.rules)
 
-    editor.getGame().setInitSizeX(msg.game.initSizeX)
-    editor.getGame().setInitSizeY(msg.game.initSizeY)
-    editor.getGame().setIsPublished(msg.game.isPublished)
-    editor.getGame().setToogleNumber(msg.game.toogleNumber)
-    editor.getGame().setId(msg.game.id)
+    game.setInitSizeX(msg.game.initSizeX)
+    game.setInitSizeY(msg.game.initSizeY)
+    game.setIsPublished(msg.game.isPublished)
+    game.setToogleNumber(msg.game.toogleNumber)
+    game.setId(msg.game.id)
   
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
     for (let i = 0; i*2 < gameNextTiles.length;i++){
       add.set(gameNextTiles[2*i],gameNextTiles[2*i+1])
     }
-    editor.getGame().setNextTilesIds(add)
+    game.setNextTilesIds(add)
     
     
     let tokens:Array<string> = []
-    for (let i = 1; i <= editor.getGame().getnumOfPlayers(); i++){
+    for (let i = 1; i <= game.getnumOfPlayers(); i++){
       tokens.push('Player '+i)
     }
-    editor.getGame().setPlayerTokens(tokens)
+    game.setPlayerTokens(tokens)
     initGameInfo(msg.game.name)
   
     let i = 0
 
-    //for (let i = 0; i < msg.game.num)
-    console.log('pawns su :')
-    console.log(msg.pawns)
     msg.pawns.forEach((pawn: {token:string,id:number,tileId:number}) => {
       i++;
-      let tile = editor.findTileById(newIds.get(pawn.tileId)!)!
+      let tile = game.findTileById(newIds.get(pawn.tileId)!)!
     
      
        let p = new Pawn(pawn.token,tile)
        p.id = pawn.id
   
-       editor.getGame().getPawns().push(p)
+       game.getPawns().push(p)
       
        //tile.getPawns().push(p)
       
@@ -231,13 +226,13 @@ editorSocket.on('connected',(msg)=>{
         backImage.onload = function(){
           p.setImage(backImage)
           
-          //editor.getGame().setBackground(background)
-          editor.getGame().getPawnStyle().set(style.player,p)
-          reload(editor,ctx)
+          //game.setBackground(background)
+          game.getPawnStyle().set(style.player,p)
+          reload(game,ctx)
         }
       }
       else{
-        editor.getGame().getPawnStyle().set(style.player,p)
+        game.getPawnStyle().set(style.player,p)
       }
      
       
@@ -245,29 +240,25 @@ editorSocket.on('connected',(msg)=>{
   
     });
     console.log('loaded game:')
-    console.log(editor)
+    console.log(game)
 
     let gm:HTMLInputElement = <HTMLInputElement>document.getElementById('gameName')
     if (gm!= undefined){
-      gm.value = editor.getGame().getName()
+      gm.value = game.getName()
     }
   })
 
   editorSocket.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
-    editor.getGame().setIsOnTurn(true)
-    let ret = editor.getGame().howManyCanMove(msg.pawnId,msg.value)
+    game.setIsOnTurn(true)
+    let ret = game.howManyCanMove(msg.pawnId,msg.value)
     Warning.showInGame('Event occured: Go forward!')
     editorSocket.emit('move pawns',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
 editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
-  console.log('recieved react to event: backward')
-  console.log({value:msg.value})
-  editor.getGame().setIsOnTurn(true)
-  let ret = editor.getGame().howManyCanMoveBack(msg.pawnId,msg.value)
+  game.setIsOnTurn(true)
+  let ret = game.howManyCanMoveBack(msg.pawnId,msg.value)
   Warning.showInGame('Event occured: Go backward!')
-  console.log('emitol:')
-  console.log({pawn:msg.pawnId,value:ret,room:params.get('id')})
   editorSocket.emit('move pawns back',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
@@ -276,7 +267,7 @@ editorSocket.on('not author',()=>{
  
 })
 editorSocket.on('game saved',(msg:{newId:number})=>{
-  editor.getGame().setId(msg.newId)
+  game.setId(msg.newId)
 })
 editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
   Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
@@ -286,12 +277,11 @@ editorSocket.on('react to event:must Thrown',(msg:{token:string,value:number,tur
 })
 editorSocket.on('return pawns to starting tile',(msg:{ids:Array<number>})=>{
   msg.ids.forEach((id:number)=>{
-    editor.findPawnById(id).returnToStart()
+    game.findPawnById(id).returnToStart()
   })
-  reload(editor,ctx)
+  reload(game,ctx)
 })
 editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
-  console.log('obdrzal join room')
  
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
 
@@ -299,7 +289,7 @@ editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
     $('#waitingModal').modal('show')
     
   }
-  reload(editor,ctx)
+  reload(game,ctx)
   
 
 
@@ -320,15 +310,15 @@ editorSocket.on('player joined',(msg:{msg:string})=>{
   else{
     chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
   }
-  reload(editor,ctx)
+  reload(game,ctx)
 })})
 editorSocket.on('player left',(msg:{msg:string})=>{
   editorSocket.emit('reload waiting room',{room:params.get('id')})
-  reload(editor,ctx)
+  reload(game,ctx)
 })
 
 editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
- // editor.getGame().setHasStarted(true)
+ // game.setHasStarted(true)
  $('#waitingModal').modal('hide')
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
@@ -346,17 +336,17 @@ editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
     chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
   }
   let rem:Array<Pawn> = []
-  editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+  game.getPawns().forEach((pawn:Pawn)=>{
       if (!msg.tokens.includes(pawn.player)){
         rem.push(pawn)
       }
   })
  
   rem.forEach((pawn:Pawn)=>{
-    editor.getGame().removePawn(pawn)
+    game.removePawn(pawn)
     pawn.tile.removePawn(pawn)
   })
-  reload(editor,ctx)
+  reload(game,ctx)
 })
 
 
@@ -366,41 +356,32 @@ editorSocket.on('move Pawn',(msg:{pawn:number,value:number})=>{
   //msg.pawn.move(msg.value)
   
  
- let pawn:any = (editor.getGame().movePawnById(msg.pawn,msg.value))!
-  editor.setChoosenTile(undefined!)
+ let pawn:any = (game.movePawnById(msg.pawn,msg.value))!
+  game.setChoosenTile(undefined!)
 
 })
 editorSocket.on('move Pawn back',(msg:{pawn:number,value:number})=>{
-  //msg.pawn.move(msg.value)
-  console.log('recieved move Pawn back')
+
  
- let pawn:any = (editor.movePawnBack(msg.pawn,msg.value,true))!
-  editor.setChoosenTile(undefined!)
+ let pawn:any = (game.movePawnBack(msg.pawn,msg.value,true))!
+  game.setChoosenTile(undefined!)
 
 })
 editorSocket.on('return Pawn to place',(msg:{pawnId:number,value:number})=>{
-  console.log('obdrzal return Pawn to place')
-  console.log('sa value: '+msg.value)
-  editor.movePawnBack(msg.pawnId,msg.value,false)
+  game.movePawnBack(msg.pawnId,msg.value,false)
 })
 editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<string>})=>{
   showResults(msg.right,msg.wrong)
 })
 
 editorSocket.on('evaluate End',(msg:{token:string})=>{
-  console.log('emitol evalued end')
-  let is = editor.playerEnded(msg.token)
-  if (is){
-    console.log('TENTO SKONCIL')
-    console.log('player')
-  
-   
-  }
+
+  let is = game.playerEnded(msg.token)
+ 
   editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
 })
 
 editorSocket.on('is online?',()=>{
-  console.log('recievid is online and answered')
   editorSocket.emit('is online',{id:localStorage.getItem('id')})
 })
            
@@ -435,13 +416,13 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
        
       })
       butt.onclick = function(){
-        editor.getGame().setRules( (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value)
+        game.setRules( (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value)
       }
       //document.getElementById('rulesButtons')!
      // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
       isEditor = true;
-      //editor.getGame().setInitSizeX(window.innerWidth)
-      //editor.getGame().setInitSizeY(window.innerHeight)
+      //game.setInitSizeX(window.innerWidth)
+      //game.setInitSizeY(window.innerHeight)
       
     }
     else {
@@ -459,7 +440,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
         
         editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name')})
       }
-      reload(editor,ctx)
+      reload(game,ctx)
       document.getElementById("leaveWaitinRoom")?.addEventListener('click',function(){
         window.location.replace('/gameLobby')
       })
@@ -496,7 +477,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   editorSocket.on('turn',(msg:{player:string,token:string})=>{
     console.log('recieved: turn')
-    console.log(editor.getGame().getIsOnturn())
+    console.log(game.getIsOnturn())
     //canvas.removeEventListener('click',pickTile)
     elementDeleter('onTurnPlace')
     spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player,true)
@@ -507,14 +488,14 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
  
   editorSocket.on('turnMove',(msg:{player:string,token:string})=>{
     console.log('recieved: turn move')
-    editor.getGame().setIsOnTurn(true)
-    editor.getGame().setCanThrow(true)
+    game.setIsOnTurn(true)
+    game.setCanThrow(true)
     
     document.getElementById('Dice')?.addEventListener('click',function()
-    {// let pawn = editor.getChoosenTile()!.havePawnOnTile(msg.token)
-     // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
+    {// let pawn = game.getChoosenTile()!.havePawnOnTile(msg.token)
+     // if (game.getChoosenTile()!=undefined && pawn!= undefined){
      // canvas.removeEventListener('click',pickTile)
-     if (editor.getGame().getCanThrow()){
+     if (game.getCanThrow()){
         throwDice(msg.token)
      }
     
@@ -528,9 +509,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   let canMovePawnFunc:(event: MouseEvent) => void;
   editorSocket.on('canMovePawn',(msg:{token:string,value:number})=>{
-    console.log('canMovePawn emitol token:' + msg.token)
     let can = false
-    editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+    game.getPawns().forEach((pawn:Pawn)=>{
       if (pawn.player == msg.token){
         if (pawn.canMove(msg.value)){
           can = true
@@ -579,7 +559,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
           newQuestions.set(elem.questionId,elem.questionText)
           //elem.questionId
         })
-        editor.getGame().setQuestions(newQuestions)
+        game.setQuestions(newQuestions)
                                              //pickQuestion(data)
                                             })
   editorSocket.on('loadedQuestions - pick',(data)=>{//showAllQuestions(data)
@@ -590,7 +570,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
                                                 newQuestions.set(elem.questionId,elem.questionText)
                                                 //elem.questionId
                                               })
-                                              editor.getGame().setQuestions(newQuestions)
+                                              game.setQuestions(newQuestions)
                                              })
                                            
   //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
@@ -618,8 +598,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   editorSocket.on('player ended',(msg:{player:string,place:number,token:string})=>{
     editorSocket.emit('reload waiting room',{room:params.get('id')})
     Warning.showInGame(msg.player + texts[190] + msg.place + texts[189])
-    console.log('zapol')
-    editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+    game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == msg.token){
             pawn.hasEnded = true
         }
@@ -629,14 +608,13 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
    
     //$('#rulesModal').modal('show');
     rulesMenu();
-    (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = editor.getGame().getRules()
+    (<HTMLTextAreaElement>document.getElementById("ruleInput"))!.value = game.getRules()
    
     
   })
 
 
   editorSocket.on('loadedGameNames',(msg:{names:Array<string>})=>{
-    console.log('socket odchytil loadedGameNames')
     loadGameMenu(msg.names)
   
   })

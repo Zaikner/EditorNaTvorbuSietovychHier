@@ -20,8 +20,8 @@ function loadGameMenu(names) {
     button.style.float = 'left';
     button.style.marginRight = '30%';
     button = (0, Elements_1.spawnButtonWithLabel)(document, 'tileEditingPlace', '', clientSocket_1.texts[199], ['btn', 'btn-secondary'], clientSocket_1.texts[199], function () {
-        canvas_1.editor.initNewGame();
-        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+        (0, canvas_1.initNewGame)();
+        (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     });
 }
 exports.loadGameMenu = loadGameMenu;

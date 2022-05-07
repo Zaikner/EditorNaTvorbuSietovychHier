@@ -1,5 +1,5 @@
 
-import { editor } from "./canvas"
+import { game } from "./canvas"
 import { isEditor, texts } from "./clientSocket"
 import { spawnButton, spawnHeading, spawnSelectMenu, spawnTextArea } from "./Elements"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
@@ -21,7 +21,7 @@ function rulesMenu(){
 
 
     field.onchange = function(){
-        editor.getGame().setRules(field.value)
+        game.setRules(field.value)
     }
 
 }

@@ -9,75 +9,75 @@ var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
 var BackgroundEditor_js_1 = require("./BackgroundEditor.js");
 var moveEventHandler = function (event) {
-    canvas_js_1.editor.findTile(event, true);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.findTile(event, true);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 exports.moveEventHandler = moveEventHandler;
 var onlyMoveHandler = function (event) {
-    canvas_js_1.editor.findTile(event, false);
-    console.log('zavolal only move');
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.findTile(event, false);
+    //console.log('zavolal only move')   
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 var pickTile = function (event, token, value) {
     var _a;
-    canvas_js_1.editor.findTile(event, false);
-    console.log('aspon spustil pickTile');
-    if (canvas_js_1.editor.getChoosenTile() != undefined) {
-        var pawn = canvas_js_1.editor.getChoosenTile().havePawnOnTile(token);
-        console.log('aspon vybral');
+    canvas_js_1.game.findTile(event, false);
+    //console.log('aspon spustil pickTile')
+    if (canvas_js_1.game.getChoosenTile() != undefined) {
+        var pawn = canvas_js_1.game.getChoosenTile().havePawnOnTile(token);
+        //console.log('aspon vybral')
         if (pawn != undefined) {
             //'TU RADSEJ EMITOVAT NA SERVER, NECH VSSETKYCH ODSTRANI'
             //'AAAA NEZABUDNI NA LISTERNER'
-            //editor.getGame().movePawnById(pawn.id,value)
+            //game.movePawnById(pawn.id,value)
             var params = new URLSearchParams(window.location.search);
             if (pawn.canMove(value)) {
-                console.log('can move, teda pohol');
+                // console.log('can move, teda pohol')
                 clientSocket_js_1.editorSocket.emit('move pawns', { pawn: pawn.id, value: value, room: params.get('id') });
                 canvas_js_1.canvas.removeEventListener('click', clientSocket_js_1.canMovePawnFunc);
             }
             else {
-                console.log('nepohol, teda odnuluje');
-                (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
-                canvas_js_1.editor.setChoosenTile(undefined);
+                //console.log('nepohol, teda odnuluje')
+                (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
+                canvas_js_1.game.setChoosenTile(undefined);
             }
             //(msg:{room:string,pawn:number,value:number})
-            console.log('pohol s panacikom');
+            // console.log('pohol s panacikom')
         }
     }
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 exports.pickTile = pickTile;
 var copyTile = function (event) {
     var _a;
     removeAllButtons();
     spawnElements();
-    canvas_js_1.editor.findTile(event, false);
+    canvas_js_1.game.findTile(event, false);
     setValues(undefined, false);
     showActualState();
-    (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
-    canvas_js_1.editor.setChoosenTile(undefined);
+    (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
+    canvas_js_1.game.setChoosenTile(undefined);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], clientSocket_js_1.texts[79], saveInsertingTiles);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], clientSocket_js_1.texts[121], insertTilesMenu);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], clientSocket_js_1.texts[122], undoTileInsert);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], clientSocket_js_1.texts[123], copyTileStyle);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     canvas_js_1.canvas.addEventListener('mousedown', insert);
 };
 var deleteHandler = function (event) {
-    canvas_js_1.editor.deleteTile();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.deleteTile();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 function spawnElements() {
     //$('#exampleModal').modal('toggle')
     var options = [clientSocket_js_1.texts[195]];
-    canvas_js_1.editor.getGame().getPlayerTokens().slice().forEach(function (player) {
+    canvas_js_1.game.getPlayerTokens().slice().forEach(function (player) {
         options.push(player);
     });
     (0, Elements_js_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[19]);
     var cs = (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker', clientSocket_js_1.texts[124]);
     colorPicker.onchange = function () {
-        canvas_js_1.editor.setImage(undefined);
+        canvas_js_1.game.setImage(undefined);
         showActualState();
     };
     //spawnParagraph(doc,"tileEditingPlace",'',texts[173],true)
@@ -103,14 +103,14 @@ function spawnElements() {
     //   patternChecker.onchange = showActualState
     // spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],texts[131],function(){
     //   if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
-    //     editor.setPattern(new Image())
-    //       editor.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
-    //       editor.getPattern().onload = function (){
+    //     game.setPattern(new Image())
+    //       game.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
+    //       game.getPattern().onload = function (){
     //         showActualState()
     //       }
     //     }
     //   else{
-    //     editor.setPattern(undefined!)
+    //     game.setPattern(undefined!)
     //   }
     // })
     //   spawnParagraph(doc,"tileEditingPlace",'',texts[133],true)
@@ -118,14 +118,14 @@ function spawnElements() {
     // backgroundChecker.onchange = showActualState
     (0, Elements_js_1.spawnImageInput)(canvas_js_1.doc, "tileEditingPlace", 'tileImage', clientSocket_js_1.texts[134], clientSocket_js_1.texts[134], function () {
         if (canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
-            canvas_js_1.editor.setImage(new Image());
-            canvas_js_1.editor.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
-            canvas_js_1.editor.getImage().onload = function () {
+            canvas_js_1.game.setImage(new Image());
+            canvas_js_1.game.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
+            canvas_js_1.game.getImage().onload = function () {
                 showActualState();
             };
         }
         else {
-            canvas_js_1.editor.setImage(undefined);
+            canvas_js_1.game.setImage(undefined);
         }
     });
     //spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
@@ -133,7 +133,7 @@ function spawnElements() {
     //spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
     (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[136], clientSocket_js_1.texts[192], options, 'end');
     // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
-    // spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
+    // spawnMultiSelect(doc,'tileEditingPlace','',game.getPlayerTokens(),'enabled')
     //spawnParagraph(doc,"tileEditingPlace",'',texts[138],true)
     // let numberingColorPicker =spawnColorPicker(doc,"tileEditingPlace",'numberingColorPicker',texts[138])
     // numberingColorPicker.onchange = showActualState
@@ -182,7 +182,7 @@ function spawnElements() {
     var p = (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedEventParagraph', clientSocket_js_1.texts[197], false);
     p.style.float = 'right';
     var button = (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
-        canvas_js_1.editor.deleteTile();
+        canvas_js_1.game.deleteTile();
     });
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
@@ -191,8 +191,8 @@ function insertTilesMenu() {
     //unchooseEverything()
     //doc.getElementById("canvasPlace")!.style.cursor = 'default'
     removeAllListenersAdded();
-    canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.makeAllTilesNotChoosen();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], clientSocket_js_1.texts[79], saveInsertingTiles);
@@ -201,7 +201,7 @@ function insertTilesMenu() {
 }
 exports.insertTilesMenu = insertTilesMenu;
 function startInsertingByOne() {
-    canvas_js_1.editor.nullEditor();
+    canvas_js_1.game.nullEditor();
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons();
     removeAllListenersAdded();
@@ -217,7 +217,7 @@ function startInsertingByOne() {
 }
 exports.startInsertingByOne = startInsertingByOne;
 function copyTileStyle() {
-    canvas_js_1.editor.nullEditor();
+    canvas_js_1.game.nullEditor();
     removeAllButtons();
     removeAllListenersAdded();
     (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[147], true);
@@ -230,22 +230,22 @@ function saveInsertingTiles() {
     removeAllButtons();
     removeAllListenersAdded();
     unchooseEverything();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
 exports.saveInsertingTiles = saveInsertingTiles;
 function editTiles() {
-    console.log('zavolal update');
-    canvas_js_1.editor.nullEditor();
+    // console.log('zavolal update')
+    canvas_js_1.game.nullEditor();
     removeAllListenersAdded();
     canvas_js_1.canvas.addEventListener('click', moveEventHandler);
     removeAllButtons();
-    canvas_js_1.editor.setIsMoving(false);
+    canvas_js_1.game.setIsMoving(false);
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
     //spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],texts[64],update)   
-    if (canvas_js_1.editor.getChoosenTile() != undefined) {
-        canvas_js_1.editor.setStartForPlayers(canvas_js_1.editor.getChoosenTile().getIsStartingFor().slice());
-        canvas_js_1.editor.setEndForPlayers(canvas_js_1.editor.getChoosenTile().getIsEndingFor().slice());
+    if (canvas_js_1.game.getChoosenTile() != undefined) {
+        canvas_js_1.game.setStartForPlayers(canvas_js_1.game.getChoosenTile().getIsStartingFor().slice());
+        canvas_js_1.game.setEndForPlayers(canvas_js_1.game.getChoosenTile().getIsEndingFor().slice());
     }
     spawnElements();
     setValues(undefined, true);
@@ -255,8 +255,8 @@ exports.editTiles = editTiles;
 function saveEditingTiles() {
     removeAllButtons();
     removeAllListenersAdded();
-    canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.makeAllTilesNotChoosen();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     (0, canvas_js_1.mainMenu)();
 }
 function moveTiles() {
@@ -264,9 +264,9 @@ function moveTiles() {
     removeAllListenersAdded();
     (0, PathEditor_js_1.endDrawingPath)();
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
-    canvas_js_1.editor.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
-    canvas_js_1.editor.setIsMoving(true);
+    canvas_js_1.game.makeAllTilesNotChoosen();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+    canvas_js_1.game.setIsMoving(true);
     removeAllButtons();
     canvas_js_1.canvas.addEventListener('click', onlyMoveHandler);
     addEventListener('mousemove', moveTile);
@@ -306,40 +306,40 @@ function removeAllListenersAdded() {
     //document.getElementById('wholeBody')!.style.cursor = 'default'
     canvas_js_1.canvas.style.cursor = 'default';
     //document.getElementById('optionPlace')!.style.cursor = 'default'
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 }
 exports.removeAllListenersAdded = removeAllListenersAdded;
 function unchooseEverything() {
-    canvas_js_1.editor.makeAllTilesNotChoosen();
-    canvas_js_1.editor.getGame().getBackground().makeAllComponentsNotChoosen();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.makeAllTilesNotChoosen();
+    canvas_js_1.game.getBackground().makeAllComponentsNotChoosen();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 }
 exports.unchooseEverything = unchooseEverything;
 function undoTileInsert() {
-    canvas_js_1.editor.removeLastFromUndoLog();
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.removeLastFromUndoLog();
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 }
 exports.undoTileInsert = undoTileInsert;
 var insert = function (event) {
     unchooseEverything();
-    canvas_js_1.editor.setChoosenTile(undefined);
+    canvas_js_1.game.setChoosenTile(undefined);
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
     var canSpawn = true;
     // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
-    //   if (!editor.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
+    //   if (!game.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
     //     canSpawn = false
     //     Warning.show("Following tile with that number doesn't exist")
     //   }
     // }
     if (canSpawn) {
         var addedTile = spawnTile(coords);
-        canvas_js_1.editor.addToUndoLog([addedTile]);
+        canvas_js_1.game.addToUndoLog([addedTile]);
         addedTile.getIsStartingFor().forEach(function (player) {
-            canvas_js_1.editor.getGame().insertPawns(player, addedTile);
+            canvas_js_1.game.insertPawns(player, addedTile);
         });
         showActualState();
     }
-    console.log(canvas_js_1.editor.getGame());
+    //  console.log(game)
 };
 exports.insert = insert;
 var spawnTile = function (coords) {
@@ -349,51 +349,51 @@ var spawnTile = function (coords) {
     var outlineColorPicker = canvas_js_1.doc.getElementById('outlineColorPicker');
     var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
     //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
-    var insertImage = canvas_js_1.editor.getImage();
+    var insertImage = canvas_js_1.game.getImage();
     // if (!backgroundChecker.checked){
     //   insertImage = undefined!
     // }
-    var addedTile = canvas_js_1.editor.initTile(true, coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
-    addedTile.setIsStartingFor(canvas_js_1.editor.getStartForPlayers().slice());
-    addedTile.setIsEndingFor(canvas_js_1.editor.getEndForPlayers().slice());
+    var addedTile = canvas_js_1.game.initTile(true, coords, colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
+    addedTile.setIsStartingFor(canvas_js_1.game.getStartForPlayers().slice());
+    addedTile.setIsEndingFor(canvas_js_1.game.getEndForPlayers().slice());
     //addedTile.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     //addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
-    addedTile.setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile().slice());
-    addedTile.setSkip(canvas_js_1.editor.getSkip());
-    addedTile.setRepeat(canvas_js_1.editor.getRepeat());
-    addedTile.setForward(canvas_js_1.editor.getForward());
-    addedTile.setBackward(canvas_js_1.editor.getBackward());
-    addedTile.setMustThrown(canvas_js_1.editor.getMustThrown());
-    addedTile.setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
-    addedTile.setQuestionId(canvas_js_1.editor.getQuestionId());
-    addedTile.setRandomQuestion(canvas_js_1.editor.getRandomQuestion());
+    addedTile.setCantBeEliminatedOnTile(canvas_js_1.game.getCantBeEliminatedOnTile().slice());
+    addedTile.setSkip(canvas_js_1.game.getSkip());
+    addedTile.setRepeat(canvas_js_1.game.getRepeat());
+    addedTile.setForward(canvas_js_1.game.getForward());
+    addedTile.setBackward(canvas_js_1.game.getBackward());
+    addedTile.setMustThrown(canvas_js_1.game.getMustThrown());
+    addedTile.setTurnsToSetFree(canvas_js_1.game.getTurnsToSetFree());
+    addedTile.setQuestionId(canvas_js_1.game.getQuestionId());
+    addedTile.setRandomQuestion(canvas_js_1.game.getRandomQuestion());
     // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
     //   addedTile.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
-    //   let tileWithSameNumber = editor.getGame().getTiles()
+    //   let tileWithSameNumber = game.getTiles()
     //   .filter((t:Tile) => {return t!= addedTile && t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
     //   if (tileWithSameNumber.length > 0){
-    //     tileWithSameNumber[0].setTileNumber(editor.nextTileNumber())
+    //     tileWithSameNumber[0].setTileNumber(game.nextTileNumber())
     //   }
     // }
     // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
     //   addedTile.setFollowingTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))    
     // }
     // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-    //   addedTile.setQuestionId(editor.getQuestionId())
+    //   addedTile.setQuestionId(game.getQuestionId())
     // }
     // else{
     //   addedTile.setQuestionId(-1)
     // }
     addedTile.setNextTilesIds(returnNextTileMap());
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
-    console.log(addedTile);
-    console.log(canvas_js_1.editor);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+    // console.log(addedTile)
+    //  console.log(game)
     return addedTile;
 };
 exports.spawnTile = spawnTile;
 var update = function () {
     var _a, _b;
-    console.log('zavolal update');
+    // console.log('zavolal update')
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -402,88 +402,88 @@ var update = function () {
     var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
     //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
     //let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
-    var insertImage = canvas_js_1.editor.getImage();
-    //let pattImage = editor.getPattern()
+    var insertImage = canvas_js_1.game.getImage();
+    //let pattImage = game.getPattern()
     // if (!backgroundChecker.checked){
     //   insertImage = undefined!
     // }
     // if (!patternChecker.checked){
     //   pattImage = undefined!
     // }
-    canvas_js_1.editor.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
-    (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
-    (_b = canvas_js_1.editor.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
-        for (var i = 0; i < canvas_js_1.editor.getGame().getNumberOfStartingPawns(); i++) {
-            canvas_js_1.editor.getGame().getPawns().push(new Pawn_js_1.Pawn(player, canvas_js_1.editor.getChoosenTile()));
+    canvas_js_1.game.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
+    (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
+    (_b = canvas_js_1.game.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
+        for (var i = 0; i < canvas_js_1.game.getNumberOfStartingPawns(); i++) {
+            canvas_js_1.game.getPawns().push(new Pawn_js_1.Pawn(player, canvas_js_1.game.getChoosenTile()));
         }
     });
-    console.log(canvas_js_1.editor.getChoosenTile());
-    console.log(canvas_js_1.editor.getStartForPlayers().slice());
-    canvas_js_1.editor.getChoosenTile().setIsStartingFor(canvas_js_1.editor.getStartForPlayers().slice());
-    canvas_js_1.editor.getChoosenTile().setIsEndingFor(canvas_js_1.editor.getEndForPlayers().slice());
-    //editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
-    //editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
-    canvas_js_1.editor.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.editor.getCantBeEliminatedOnTile().slice());
+    // console.log(game.getChoosenTile()!)
+    //  console.log(game.getStartForPlayers().slice())
+    canvas_js_1.game.getChoosenTile().setIsStartingFor(canvas_js_1.game.getStartForPlayers().slice());
+    canvas_js_1.game.getChoosenTile().setIsEndingFor(canvas_js_1.game.getEndForPlayers().slice());
+    //game.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
+    //game.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
+    canvas_js_1.game.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.game.getCantBeEliminatedOnTile().slice());
     // if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
-    canvas_js_1.editor.getChoosenTile().setSkip(canvas_js_1.editor.getSkip());
-    canvas_js_1.editor.getChoosenTile().setRepeat(canvas_js_1.editor.getRepeat());
-    canvas_js_1.editor.getChoosenTile().setForward(canvas_js_1.editor.getForward());
-    canvas_js_1.editor.getChoosenTile().setBackward(canvas_js_1.editor.getBackward());
-    canvas_js_1.editor.getChoosenTile().setMustThrown(canvas_js_1.editor.getMustThrown());
-    canvas_js_1.editor.getChoosenTile().setTurnsToSetFree(canvas_js_1.editor.getTurnsToSetFree());
-    canvas_js_1.editor.getChoosenTile().setQuestionId(canvas_js_1.editor.getQuestionId());
-    canvas_js_1.editor.getChoosenTile().setRandomQuestion(canvas_js_1.editor.getRandomQuestion());
+    canvas_js_1.game.getChoosenTile().setSkip(canvas_js_1.game.getSkip());
+    canvas_js_1.game.getChoosenTile().setRepeat(canvas_js_1.game.getRepeat());
+    canvas_js_1.game.getChoosenTile().setForward(canvas_js_1.game.getForward());
+    canvas_js_1.game.getChoosenTile().setBackward(canvas_js_1.game.getBackward());
+    canvas_js_1.game.getChoosenTile().setMustThrown(canvas_js_1.game.getMustThrown());
+    canvas_js_1.game.getChoosenTile().setTurnsToSetFree(canvas_js_1.game.getTurnsToSetFree());
+    canvas_js_1.game.getChoosenTile().setQuestionId(canvas_js_1.game.getQuestionId());
+    canvas_js_1.game.getChoosenTile().setRandomQuestion(canvas_js_1.game.getRandomQuestion());
     // }
     // else{
-    // editor.getChoosenTile()!.setSkip(0)
-    // editor.getChoosenTile()!.setRepeat(0)
-    // editor.getChoosenTile()!.setForward(0)
-    // editor.getChoosenTile()!.setBackward(0)
-    // editor.getChoosenTile()!.setMustThrown(0)
-    // editor.getChoosenTile()!.setTurnsToSetFree(0)
+    // game.getChoosenTile()!.setSkip(0)
+    // game.getChoosenTile()!.setRepeat(0)
+    // game.getChoosenTile()!.setForward(0)
+    // game.getChoosenTile()!.setBackward(0)
+    // game.getChoosenTile()!.setMustThrown(0)
+    // game.getChoosenTile()!.setTurnsToSetFree(0)
     // }
-    // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0  && editor.getChoosenTile()?.getTileNumber()!= parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)){
-    //   editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
-    //   let tileWithSameNumber = editor.getGame().getTiles()
+    // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0  && game.getChoosenTile()?.getTileNumber()!= parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)){
+    //   game.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
+    //   let tileWithSameNumber = game.getTiles()
     //   .filter((t:Tile) => {return t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
     //   if (tileWithSameNumber.length > 0){
-    //     tileWithSameNumber[0].setTileNumber(editor.nextTileNumber())
+    //     tileWithSameNumber[0].setTileNumber(game.nextTileNumber())
     //   }
     //}
-    canvas_js_1.editor.getChoosenTile().getPawns().forEach(function (pawn) {
+    canvas_js_1.game.getChoosenTile().getPawns().forEach(function (pawn) {
         var _a;
-        if (!canvas_js_1.editor.getChoosenTile().getIsStartingFor().includes(pawn.player)) {
-            (_a = canvas_js_1.editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.removePawn(pawn);
-            canvas_js_1.editor.getGame().removePawn(pawn);
+        if (!canvas_js_1.game.getChoosenTile().getIsStartingFor().includes(pawn.player)) {
+            (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.removePawn(pawn);
+            canvas_js_1.game.removePawn(pawn);
         }
     });
     // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-    //   editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
+    //   game.getChoosenTile()?.setQuestionId(game.getQuestionId())
     // }
     // else{
-    //   editor.getChoosenTile()?.setQuestionId(-1)
+    //   game.getChoosenTile()?.setQuestionId(-1)
     // }S
-    //editor.getChoosenTile()!.setNextTilesIds(returnNextTileMap())
-    console.log(canvas_js_1.editor.getChoosenTile());
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    //game.getChoosenTile()!.setNextTilesIds(returnNextTileMap())
+    //  console.log(game.getChoosenTile())
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 exports.update = update;
 var setValues = function (tile, copyNumber) {
     if (tile == undefined) {
-        tile = canvas_js_1.editor.getChoosenTile();
+        tile = canvas_js_1.game.getChoosenTile();
     }
     else { }
-    console.log('choosen tile je :');
-    console.log(tile);
+    //    console.log('choosen tile je :')
+    //  console.log(tile)
     if (tile != undefined) {
-        canvas_js_1.editor.setSkip(tile.getSkip());
-        canvas_js_1.editor.setRepeat(tile.getRepeat());
-        canvas_js_1.editor.setForward(tile.getForward());
-        canvas_js_1.editor.setBackward(tile.getBackward());
-        canvas_js_1.editor.setMustThrown(tile.getMustThrown());
-        canvas_js_1.editor.setTurnsToSetFree(tile.getTurnsToSetFree());
-        canvas_js_1.editor.setQuestionId(tile.getQuestionId());
-        canvas_js_1.editor.setRandomQuestion(tile.getRandomQuestion());
+        canvas_js_1.game.setSkip(tile.getSkip());
+        canvas_js_1.game.setRepeat(tile.getRepeat());
+        canvas_js_1.game.setForward(tile.getForward());
+        canvas_js_1.game.setBackward(tile.getBackward());
+        canvas_js_1.game.setMustThrown(tile.getMustThrown());
+        canvas_js_1.game.setTurnsToSetFree(tile.getTurnsToSetFree());
+        canvas_js_1.game.setQuestionId(tile.getQuestionId());
+        canvas_js_1.game.setRandomQuestion(tile.getRandomQuestion());
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
         //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
@@ -496,7 +496,7 @@ var setValues = function (tile, copyNumber) {
         var toogleNumberingChecker = canvas_js_1.doc.getElementById('toogleNumberingChecker');
         var tileNumberSetter = canvas_js_1.doc.getElementById('tileNumberSetter');
         //let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
-        //let choosenTile = editor.getChoosenTile()
+        //let choosenTile = game.getChoosenTile()
         colorPicker.value = tile.getColor();
         //numberingColor.value = tile!.getNumberingColor()
         sizeOfTileSlider.value = tile.getRadius().toString();
@@ -532,11 +532,11 @@ var setValues = function (tile, copyNumber) {
             document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[110] + tile.getMustThrown() + clientSocket_js_1.texts[111] + tile.getTurnsToSetFree() + clientSocket_js_1.texts[100];
         }
         else if (tile.getQuestionId() != -1) {
-            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + canvas_js_1.editor.getGame().getQuestions().get(tile.getQuestionId());
+            document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + canvas_js_1.game.getQuestions().get(tile.getQuestionId());
         }
         else if (tile.getRandomQuestion()) {
-            console.log('chooooooooooooooooooooooosen tile:');
-            console.log(canvas_js_1.editor.getChoosenTile());
+            //console.log('chooooooooooooooooooooooosen tile:')
+            // console.log(game.getChoosenTile())
             document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[201];
         }
         else {
@@ -550,7 +550,7 @@ var setValues = function (tile, copyNumber) {
         // else{
         //   doc.getElementById("toogleNumberingCheckerShower")!.textContent = texts[93]
         // }
-        // Array.from(editor.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
+        // Array.from(game.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
         //   console.log(key)
         //   console.log(value)
         //   console.log('nextTile'+key)
@@ -570,16 +570,16 @@ var setValues = function (tile, copyNumber) {
     return tile;
 };
 var moveTile = function (event) {
-    canvas_js_1.editor.moveTile(event);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.moveTile(event);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 function showActualState() {
-    if (canvas_js_1.editor.getChoosenTile()) {
+    if (canvas_js_1.game.getChoosenTile()) {
         update();
     }
     var cs = document.getElementById('changeCanvas');
     var cttttx = cs.getContext("2d");
-    (0, canvas_js_1.reload)(canvas_js_1.editor, cttttx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, cttttx);
     var width = cs.width;
     var height = cs.height;
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
@@ -593,39 +593,38 @@ function showActualState() {
     //let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
     //let toogleNumberingChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('toogleNumberingChecker')!
     var stroke = parseInt(sizeOfOutlineSlider.value);
-    var tile = canvas_js_1.editor.initTile(false, { x: width / 2, y: height / 2 }, colorPicker.value, parseInt(sizeOfTileSlider.value), stroke, outlineColorPicker.value, shapeMenu.value, undefined);
+    var tile = canvas_js_1.game.initTile(false, { x: width / 2, y: height / 2 }, colorPicker.value, parseInt(sizeOfTileSlider.value), stroke, outlineColorPicker.value, shapeMenu.value, undefined);
     //tile.setNumberingColor(numberingColor.value)
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
-    tile.setImage(canvas_js_1.editor.getImage());
+    tile.setImage(canvas_js_1.game.getImage());
     cttttx.clearRect(0, 0, cs.width, cs.height);
     tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 }
 exports.showActualState = showActualState;
 function generateNextTiles() {
     (0, canvas_js_1.elementDeleter)('nextTileModalBody');
-    // if (editor.getChoosenTile() == undefined){
-    canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (token) {
-        console.log('pridal' + token);
+    // if (game.getChoosenTile() == undefined){
+    canvas_js_1.game.getPlayerTokens().forEach(function (token) {
         var div = document.createElement('div');
         div.id = 'div' + token;
         //div.style.width = '100%'
         var input = document.createElement('input');
         input.type = 'number';
         input.id = 'nextTile' + token;
-        if (canvas_js_1.editor.getChoosenTile() != undefined) {
-            input.value = canvas_js_1.editor.getChoosenTile().getNextTilesIds().get(token).toString();
-            console.log('generate nextTile nastavil pre ' + 'nextTile' + token + 'hodnotu ' + canvas_js_1.editor.getChoosenTile().getNextTilesIds().get(token).toString());
+        if (canvas_js_1.game.getChoosenTile() != undefined) {
+            input.value = canvas_js_1.game.getChoosenTile().getNextTilesIds().get(token).toString();
+            //console.log('generate nextTile nastavil pre ' + 'nextTile'+token + 'hodnotu ' +game.getChoosenTile()!.getNextTilesIds().get(token)!.toString())
         }
         else {
-            input.value = canvas_js_1.editor.getGame().getNextTilesIds().get(token).toString();
+            input.value = canvas_js_1.game.getNextTilesIds().get(token).toString();
         }
         // input.onchange = function(){
-        //     editor.getGame().getNextTilesIds().set(token,parseInt(input.value))
-        //     if (editor.getChoosenTile()!= undefined){
-        //       editor.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
+        //     game.getNextTilesIds().set(token,parseInt(input.value))
+        //     if (game.getChoosenTile()!= undefined){
+        //       game.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
         //       console.log('prestavil')
         //     }
         // }
@@ -633,8 +632,8 @@ function generateNextTiles() {
         (0, Elements_js_1.spawnParagraph)(document, 'div' + token, '', clientSocket_js_1.texts[148] + token + clientSocket_js_1.texts[149], true);
         div.appendChild(input);
     });
-    // }else if (editor.getChoosenTile() !=undefined){
-    //   Array.from(editor.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
+    // }else if (game.getChoosenTile() !=undefined){
+    //   Array.from(game.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
     //     console.log(key)
     //     console.log(value)
     //     console.log('nextTile'+key)
@@ -653,16 +652,16 @@ function generateNextTiles() {
 }
 function returnNextTileMap() {
     var ret = new Map();
-    Array.from(canvas_js_1.editor.getGame().getNextTilesIds().entries()).forEach(function (_a) {
+    Array.from(canvas_js_1.game.getNextTilesIds().entries()).forEach(function (_a) {
         var key = _a[0], value = _a[1];
         ret.set(key, value);
-        canvas_js_1.editor.getGame().getNextTilesIds().set(key, value + 1);
+        canvas_js_1.game.getNextTilesIds().set(key, value + 1);
     });
     return ret;
 }
 function copyNextTileMap() {
     var ret = new Map();
-    Array.from(canvas_js_1.editor.getGame().getNextTilesIds().entries()).forEach(function (_a) {
+    Array.from(canvas_js_1.game.getNextTilesIds().entries()).forEach(function (_a) {
         var key = _a[0], value = _a[1];
         ret.set(key, value);
     });
@@ -670,7 +669,7 @@ function copyNextTileMap() {
 }
 exports.copyNextTileMap = copyNextTileMap;
 function updateNextTileIds() {
-    Array.from(canvas_js_1.editor.getGame().getNextTilesIds().keys()).forEach(function (token) {
-        canvas_js_1.editor.getGame().getNextTilesIds().set(token, parseInt(document.getElementById('nextTile' + token).value));
+    Array.from(canvas_js_1.game.getNextTilesIds().keys()).forEach(function (token) {
+        canvas_js_1.game.getNextTilesIds().set(token, parseInt(document.getElementById('nextTile' + token).value));
     });
 }

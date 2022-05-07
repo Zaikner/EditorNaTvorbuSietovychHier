@@ -3,7 +3,6 @@ import { Point } from "./Point";
 import {Tile} from './Tile.js'
 import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
 import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
-import {GameEditor} from './GameEditor.js'
 
 import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
 
@@ -15,10 +14,11 @@ import { PawnStyle } from "./PawnStyle";
 
 import { editorSocket, isEditor,getCookie,texts } from "./clientSocket";
 import { Warning } from "./Warning";
+import { Game } from "./Game";
 
 
 
-const editor = new GameEditor()
+let game = new Game()
 const params = new URLSearchParams(window.location.search);
 
 
@@ -30,8 +30,13 @@ const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
 
 
 
-
-
+function initNewGame(){
+        game = new Game()
+        
+        game.getPlayerTokens().forEach((token:string)=>{
+            game.getNextTilesIds().set(token,2)
+        })
+    }   
 
 
 
@@ -43,8 +48,8 @@ function edit(){
 // })
 
 document.getElementById('randomQuestionID')?.addEventListener('click',function(){
-  if (Array.from(editor.getGame().getQuestions().entries()).length >0){
-    editor.setEvents('random',{num:0,value:0})
+  if (Array.from(game.getQuestions().entries()).length >0){
+    game.setEvents('random',{num:0,value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -63,7 +68,7 @@ document.getElementById('randomQuestionID')?.addEventListener('click',function()
 })
 document.getElementById('noneButton')!.addEventListener('click',function(){
 
-    editor.setEvents('none',{num:0,value:0})
+    game.setEvents('none',{num:0,value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -76,7 +81,7 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
   spawnParagraph(document,'askTheQuestionEventEdit','',texts[97],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    editor.setEvents('forward',{num:parseInt(nums),value:0})
+    game.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -92,7 +97,7 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
   spawnParagraph(document,'askTheQuestionEventEdit','',texts[102],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    editor.setEvents('backward',{num:parseInt(nums),value:0})
+    game.setEvents('backward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -110,7 +115,7 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
   spawnParagraph(document,'askTheQuestionEventEdit','',texts[104],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    editor.setEvents('skip',{num:parseInt(nums),value:0})
+    game.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -127,7 +132,7 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
   spawnParagraph(document,'askTheQuestionEventEdit','',texts[106],true)
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    editor.setEvents('repeat',{num:parseInt(nums),value:0})
+    game.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -152,7 +157,7 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
   
   spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    editor.setEvents('stop',{num:parseInt(nums),value:parseInt(freeInput.value)})
+    game.setEvents('stop',{num:parseInt(nums),value:parseInt(freeInput.value)})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -205,13 +210,13 @@ document.getElementById('createQuestionButtonModal')!.addEventListener('click',f
 //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
-  editor.getGame().getPlayerTokens().forEach((token:string)=>{
+  game.getPlayerTokens().forEach((token:string)=>{
     let input =(<HTMLInputElement>document.getElementById('nextTile'+token))!.value
-    // if (editor.getChoosenTile()!=undefined){
-    editor.getGame().getNextTilesIds().set(token,parseInt(input))
+    // if (game.getChoosenTile()!=undefined){
+    game.getNextTilesIds().set(token,parseInt(input))
   })
-  if (editor.getChoosenTile()!= undefined){
-    editor.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
+  if (game.getChoosenTile()!= undefined){
+    game.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
   }
 
 })
@@ -230,14 +235,14 @@ document.getElementById('loadCreatedGameModal')?.addEventListener('click',functi
   
 })
 document.getElementById('loadGameButton')?.addEventListener('click',function(){
-  editorSocket.emit('loadGameNames')
+  editorSocket.emit('loadGameNames',{id:localStorage.getItem('id')})
 })
 
 
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
 
 // document.getElementById("resetQuestionID")!.addEventListener('click',function(){
-//   editor.setQuestionId(-1);
+//   game.setQuestionId(-1);
 //   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
  
 // })
@@ -262,7 +267,7 @@ spawnHeading(document,'buttonPlace','',texts[21])
 let numOfPlayersSlider:HTMLInputElement = document.createElement('input')
 numOfPlayersSlider.type = 'range'
 numOfPlayersSlider.id = 'numOfPlayers';
-numOfPlayersSlider.value = editor.getGame().getnumOfPlayers().toString()
+numOfPlayersSlider.value = game.getnumOfPlayers().toString()
 numOfPlayersSlider.min = '1';
 numOfPlayersSlider.max = '6';
 numOfPlayersSlider.step = '1';
@@ -270,7 +275,7 @@ numOfPlayersSlider.step = '1';
 
 let numShower = document.createElement('paragraph');
 numShower.id = 'numShower'
-numShower.textContent = editor.getGame().getnumOfPlayers().toString()
+numShower.textContent = game.getnumOfPlayers().toString()
 let text = document.createElement('p')
 text.textContent = texts[22]
 document.getElementById("numOfPlayersPlace")!.appendChild(text);
@@ -278,23 +283,23 @@ document.getElementById("numOfPlayersPlace")!.appendChild(numShower);
 
 numOfPlayersSlider.onclick =function(){
   document.getElementById("numShower")!.textContent =numOfPlayersSlider.value ;
-  editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value))
+  game.setNumOfPlayers(parseInt(numOfPlayersSlider.value))
   let number =  parseInt(numOfPlayersSlider.value)
-  let playerTokens = editor.getGame().getPlayerTokens()
+  let playerTokens = game.getPlayerTokens()
   if (number < playerTokens.length){
   
     for (let i = number; i <= 6;i++){
       playerTokens.pop()
-      editor.getGame().getPawnStyle().delete('Player '+i)
-      editor.getGame().getNextTilesIds().delete('Player '+i)
+      game.getPawnStyle().delete('Player '+i)
+      game.getNextTilesIds().delete('Player '+i)
       let rem:Array<Pawn> = []
-      editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+      game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == ('Player '+i)){
           rem.push(pawn)
         }
       })
       rem.forEach((pawn:Pawn)=>{
-        editor.getGame().removePawn(pawn)
+        game.removePawn(pawn)
         pawn.tile.removePawn(pawn)
       })
     }
@@ -303,32 +308,30 @@ numOfPlayersSlider.onclick =function(){
     for (let i = 1; i <= number;i++){
       if (!playerTokens.includes('Player '+i)){
         playerTokens.push('Player '+ (playerTokens.length+1))
-        editor.getGame().getNextTilesIds().set('Player '+i,editor.getGame().getTiles().length+1)
-        editor.getGame().getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
+        game.getNextTilesIds().set('Player '+i,game.getTiles().length+1)
+        game.getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
        
       }
      
-      //editor.getGame().getPawnStyle().Player
+      //game.getPawnStyle().Player
     }
   }
   //spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
   //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
   
-  editor.getGame().setPlayerTokens(playerTokens)
-  console.log(playerTokens)
-  console.log(editor.getGame().getNextTilesIds())
-  reload(editor,ctx)
+  game.setPlayerTokens(playerTokens)
+  reload(game,ctx)
 }
 document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
 
 let gameName:HTMLInputElement = document.createElement('input')
 gameName.id = 'gameName'
-gameName.value = editor.getGame().getName()
+gameName.value = game.getName()
 text = document.createElement('p')
 text.textContent = texts[23]
 document.getElementById("gameNamePlace")!.appendChild(text);
 gameName.oninput =function(){
-  editor.getGame().setName(gameName.value)
+  game.setName(gameName.value)
   
 }
 document.getElementById("gameNamePlace")!.appendChild(gameName);
@@ -342,18 +345,18 @@ document.getElementById("gameTypePlace")!.appendChild(text);
 document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4','1',editor.getGame().getNumberOfStartingPawns().toString())
+let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4','1',game.getNumberOfStartingPawns().toString())
 slid.style.width = '100%'
 slid.onchange = function(){
   let max = parseInt(slid!.value)
-  if (max > editor.getGame().getNumberOfStartingPawns()){
-    editor.getGame().getPlayerTokens().forEach((player:string) => {
-      for (let i = 0;i<(max-editor.getGame().getNumberOfStartingPawns());i++){
-        editor.getGame().getTiles().forEach((tile:Tile)=>{
+  if (max > game.getNumberOfStartingPawns()){
+    game.getPlayerTokens().forEach((player:string) => {
+      for (let i = 0;i<(max-game.getNumberOfStartingPawns());i++){
+        game.getTiles().forEach((tile:Tile)=>{
           if (tile.getIsStartingFor().includes(player)){
             let newPawn = new Pawn(player,tile)
     
-            editor.getGame().getPawns().push(newPawn)
+            game.getPawns().push(newPawn)
           }
         })
       }
@@ -361,11 +364,11 @@ slid.onchange = function(){
     
   }
   else{
-    editor.getGame().getPlayerTokens().forEach((player:string) => {
+    game.getPlayerTokens().forEach((player:string) => {
       let num = 0
       let rem:Array<Pawn> = []
       //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
-      editor.getGame().getTiles().forEach((tile:Tile)=>{
+      game.getTiles().forEach((tile:Tile)=>{
         num = 0
         tile.getPawns().forEach((pawn:Pawn)=>{
           if (pawn.player == player){
@@ -375,13 +378,13 @@ slid.onchange = function(){
                     }
                   }
                   rem.forEach((pawn:Pawn)=>{
-                          editor.getGame().removePawn(pawn)
+                          game.removePawn(pawn)
                           pawn.tile.removePawn(pawn)
                         })
         })
       })
       
-  //     editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+  //     game.getPawns().forEach((pawn:Pawn)=>{
   //       if (pawn.player == player){
   //         num++;
   //         if (num > max){
@@ -390,53 +393,53 @@ slid.onchange = function(){
   //       }
   //     })
   //     rem.forEach((pawn:Pawn)=>{
-  //       editor.getGame().removePawn(pawn)
+  //       game.removePawn(pawn)
   //       pawn.tile.removePawn(pawn)
   //     })
      });
    }
-  editor.getGame().setNumberOfStartingPawns(max)
+  game.setNumberOfStartingPawns(max)
   
 
  
-  reload(editor,ctx)
+  reload(game,ctx)
 }
-let numbering = spawnCheckerWithLabel(doc,'tileEditingPlace','toogleNumberingChecker',texts[137],editor.getGame().getToogleNumber(),[texts[92],texts[93]])
+let numbering = spawnCheckerWithLabel(doc,'tileEditingPlace','toogleNumberingChecker',texts[137],game.getToogleNumber(),[texts[92],texts[93]])
 numbering.onchange = function(){
   if (numbering.checked){
-    editor.getGame().setToogleNumber(true)
+    game.setToogleNumber(true)
   }
   else{
-    editor.getGame().setToogleNumber(false)
+    game.setToogleNumber(false)
   }
 }
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
-  // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+  // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
   //   Warning.show(texts[183])
   // }
-  // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+  // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
   //   Warning.show(texts[184])
   // }
   // else{
 
-    editor.getGame().saveGame()
+    game.saveGame()
   //}
   
   //window.location.replace('/')
 })
 spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],function(){
-  // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+  // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
   //   Warning.show(texts[183])
   // }
-  // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+  // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
   //   Warning.show(texts[184])
   // }
   // else{
-  //   editor.getGame().setIsPublished(true)
-  //   editor.getGame().saveGame()
+  //   game.setIsPublished(true)
+  //   game.saveGame()
   // }
-  editor.getGame().setIsPublished(true)
-  editor.getGame().saveGame()
+  game.setIsPublished(true)
+  game.saveGame()
 })
 }
 
@@ -446,30 +449,30 @@ spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],functio
  var length:number =0;
 
 ctx.scale(2, -2);
-resize(editor,ctx);
+resize(game,ctx);
 
  
-window.addEventListener('resize', function(){resize(editor,ctx)});
+window.addEventListener('resize', function(){resize(game,ctx)});
 
 
 
 // // resize canvas
-function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
+function resize(editor:Game,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   //console.log('initSizeX:'+editor.getGame().getInitSizeX() )
-   //console.log('initSizeY:'+editor.getGame().getInitSizeY() )
+   //console.log('initSizeX:'+game.getInitSizeX() )
+   //console.log('initSizeY:'+game.getInitSizeY() )
    context.canvas.width = window.innerWidth / 3 * 2-30;
    context.canvas.height = window.innerHeight;
    if(!isEditor){
-    if(editor.getGame().getInitSizeX() == 0){
-      editor.getGame().setInitSizeX(canvas.width)
+    if(game.getInitSizeX() == 0){
+      game.setInitSizeX(canvas.width)
      }
-     if(editor.getGame().getInitSizeY() == 0){
-      editor.getGame().setInitSizeY(canvas.height)
+     if(game.getInitSizeY() == 0){
+      game.setInitSizeY(canvas.height)
      }
-     editor.getGame().setScaleX((window.innerWidth/ 3 * 2-30)/editor.getGame().getInitSizeX())
+     game.setScaleX((window.innerWidth/ 3 * 2-30)/game.getInitSizeX())
    
-     editor.getGame().setScaleY(window.innerHeight/editor.getGame().getInitSizeY())
+     game.setScaleY(window.innerHeight/game.getInitSizeY())
      
    }
    
@@ -481,21 +484,21 @@ function resize(editor:GameEditor,context:CanvasRenderingContext2D) {
 
 
 
-function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
+function reload(editor:Game,ctx:CanvasRenderingContext2D)
 { 
   
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (editor.getGame().getBackground() != undefined){
-    editor.getGame().getBackground().draw()
+  if (game.getBackground() != undefined){
+    game.getBackground().draw()
   }
  
   let num = 0
-  let size = editor.getGame().getPath().getPath().length;
+  let size = game.getPath().getPath().length;
   while(num < size-1){
   
-    let from:Point = editor.getGame().getPath().getPath()[num];
-    let to:Point  = editor.getGame().getPath().getPath()[num+1];
+    let from:Point = game.getPath().getPath()[num];
+    let to:Point  = game.getPath().getPath()[num+1];
     
     if (from.getEnd()){
       num++;
@@ -516,14 +519,14 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
     num++;
   }
   ctx.closePath()
-  let tiles = editor.getGame().getTiles()
+  let tiles = game.getTiles()
   tiles.forEach((tile:Tile) => {
     tile.drawTile(canvas,ctx,false)
     tile.drawPawns(ctx)
   })
   ctx.closePath()
   ctx.restore()
-  // let pawns = editor.getGame().getPawns()
+  // let pawns = game.getPawns()
   // pawns.forEach((pawn:Pawn) =>{
   //     pawn.draw(ctx)
   // })
@@ -532,7 +535,7 @@ function reload(editor:GameEditor,ctx:CanvasRenderingContext2D)
 }
 
 function clear(){ //toto este prerobit
-  editor.getGame().getPath().setPath([]);
+  game.getPath().setPath([]);
   //sessionStorage.points = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -544,7 +547,7 @@ function elementDeleter(parent:string){
   }
 }
 function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
-  //console.log({x:event.offsetX*editor.getGame().getScaleX(),y:event.offsetY*editor.getGame().getScaleY()})
+  //console.log({x:event.offsetX*game.getScaleX(),y:event.offsetY*game.getScaleY()})
   //console.log({x:event.offsetX,y:event.offsetY})
   return {x:event.offsetX,y:event.offsetY}
 }
@@ -559,5 +562,5 @@ window.onload = function(){
 
 
 
-setInterval(function(){resize(editor,ctx)},500)
-export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,editor,reload,resize};
+setInterval(function(){resize(game,ctx)},500)
+export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,game,reload,resize,initNewGame};

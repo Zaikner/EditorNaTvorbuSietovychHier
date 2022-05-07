@@ -20,7 +20,7 @@ function rulesMenu() {
     field.style.width = '120%;';
     field.style.height = '50%;';
     field.onchange = function () {
-        canvas_1.editor.getGame().setRules(field.value);
+        canvas_1.game.setRules(field.value);
     };
 }
 exports.rulesMenu = rulesMenu;

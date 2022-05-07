@@ -1,5 +1,5 @@
 import { spawnParagraph } from "./Elements";
-import {canvas, doc,editor,elementDeleter} from './canvas'
+import {canvas, doc,game,elementDeleter} from './canvas'
 import { editorSocket, texts} from './clientSocket.js'
 import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
@@ -46,8 +46,8 @@ function initDice(){
     }
 }
 function throwDice(token:string){
-    console.log('hodin throw dice')
-    editor.getGame().setCanThrow(false)
+ 
+    game.setCanThrow(false)
     const params = new URLSearchParams(window.location.search);
     let t = 0
     let times = 0
@@ -56,10 +56,9 @@ function throwDice(token:string){
         if (times == 10){
             const params = new URLSearchParams(window.location.search);
             clearInterval(interval)
-            console.log('player emitol takyto hod:')
-            console.log({room:params.get('id'),value:n,tileId:editor.getChoosenTile()?.getId()})
+          
             
-            editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:editor.getChoosenTile()?.getId()})
+            editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId()})
             //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
         }
         else{
@@ -87,7 +86,7 @@ function throwDice(token:string){
 }
 
 function changeWaitingRoom(accs:any){
-    console.log(accs)
+   
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
     let divPlaying = <HTMLDivElement>document.getElementById('playingContainer')
     let divending = <HTMLDivElement>document.getElementById('endContainer')
@@ -101,7 +100,7 @@ function changeWaitingRoom(accs:any){
         let quest = document.createElement('button')
         quest.type = 'button';
         quest.classList.add("list-group-item","list-group-item-action","active")
-        quest.style.backgroundColor = editor.getGame().getPawnStyle().get(accs[i].token)!.getColor()
+        quest.style.backgroundColor = game.getPawnStyle().get(accs[i].token)!.getColor()
         quest.style.textAlign =  'center';
         quest.textContent =accs[i].name
         div.appendChild(quest)

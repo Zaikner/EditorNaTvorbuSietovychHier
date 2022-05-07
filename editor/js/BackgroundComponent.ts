@@ -1,5 +1,5 @@
 import { throws } from "assert";
-import { canvas,ctx, editor } from "./canvas"
+import { canvas,ctx, game } from "./canvas"
 import { getDataUrlFromImage } from "./utilityFunctions";
 
 
@@ -34,7 +34,7 @@ class BackgroundComponent{
             ctx.strokeStyle =this.color
             ctx.lineWidth = 0
             ctx.fillStyle = this.color
-            ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+            ctx.scale(game.getScaleX(),game.getScaleY())
             
         
             if (this.type == 'circle'){
@@ -51,7 +51,7 @@ class BackgroundComponent{
         else if(this.type == 'image' && this.image!=undefined){
           
             ctx.save()
-            ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+            ctx.scale(game.getScaleX(),game.getScaleY())
             ctx.fillStyle = 'black'
             
             //ctx.fill()
@@ -66,7 +66,7 @@ class BackgroundComponent{
        
 
         if (this.stroke > 0){
-            ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+            ctx.scale(game.getScaleX(),game.getScaleY())
              ctx.strokeStyle =this.strokeColor
              ctx.lineWidth = this.stroke
              ctx.stroke();
@@ -82,7 +82,7 @@ class BackgroundComponent{
         ctx.restore()
         let num = ctx.lineWidth
         ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-        ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+        ctx.scale(game.getScaleX(),game.getScaleY())
         
         var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+15);
        
@@ -97,7 +97,7 @@ class BackgroundComponent{
         ctx.resetTransform();
             }
             else if (this.type == 'squire'){
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                 ctx.rect(this.x1,this.y1,this.radius*2,this.radius*2)
                 var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
 
@@ -111,7 +111,7 @@ class BackgroundComponent{
                 ctx.resetTransform();
             }
             else if (this.type == 'image'){
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                 ctx.rect(this.x1,this.y1,this.imageWidth,this.imageWidth)
                 var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
 

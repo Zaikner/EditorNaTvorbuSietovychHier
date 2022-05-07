@@ -15,7 +15,7 @@ var Warning = /** @class */ (function () {
         (0, canvas_1.elementDeleter)('InGameModalBody');
         var p = (0, Elements_js_1.spawnParagraph)(canvas_1.doc, 'InGameModalBody', '', txt, false);
         $('#InGameModal').modal('toggle');
-        console.log('ukazal InGameModal');
+        //console.log('ukazal InGameModal')
     };
     return Warning;
 }());

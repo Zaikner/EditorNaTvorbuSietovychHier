@@ -1,4 +1,4 @@
-import { editor } from "./canvas";
+import { game } from "./canvas";
 import { showActualState, update } from "./TileEditor";
 
 
@@ -288,16 +288,16 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
         option.style.backgroundColor = 'white'
         option.classList.add("dropdown-item",'btn')
         
-        if (type == 'start' && editor.getStartForPlayers().includes(types[i])){
+        if (type == 'start' && game.getStartForPlayers().includes(types[i])){
           option.style.backgroundColor = 'yellow'
         }
-        if (type == 'end' && editor.getEndForPlayers().includes(types[i])){
+        if (type == 'end' && game.getEndForPlayers().includes(types[i])){
           option.style.backgroundColor = 'yellow'
         }
-        if (type == 'enabled' && editor.getEnabledForPlayers().includes(types[i])){
+        if (type == 'enabled' && game.getEnabledForPlayers().includes(types[i])){
           option.style.backgroundColor = 'yellow'
         }
-        if (type == 'immune' && editor.getCantBeEliminatedOnTile().includes(types[i])){
+        if (type == 'immune' && game.getCantBeEliminatedOnTile().includes(types[i])){
           option.style.backgroundColor = 'yellow'
         }
 
@@ -307,92 +307,92 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
         option.addEventListener('click',function(e){
           if (type == 'start'){
             if (i == 0){
-              if (editor.getStartForPlayers().length < editor.getGame().getPlayerTokens().length){
-                  editor.setStartForPlayers(editor.getGame().getPlayerTokens().slice())
-                  editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != 'all'}));
+              if (game.getStartForPlayers().length < game.getPlayerTokens().length){
+                  game.setStartForPlayers(game.getPlayerTokens().slice())
+                  game.setStartForPlayers(game.getStartForPlayers().filter((t) => {return t != 'all'}));
                   option.style.backgroundColor = 'yellow'
                   for (let j = 0; j < types.length; j ++){
                     document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
                   }
               }
               else{
-                editor.setStartForPlayers([])
+                game.setStartForPlayers([])
                 option.style.backgroundColor = 'white'
                 for (let j = 0; j < types.length; j ++){
                   document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
                 }
               }
             }
-            // if (editor.getStartForPlayers().includes(types[i])){
-            //   editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != types[i]}));
+            // if (game.getStartForPlayers().includes(types[i])){
+            //   game.setStartForPlayers(game.getStartForPlayers().filter((t) => {return t != types[i]}));
             // }
             // else{
-            //   editor.getStartForPlayers().push(types[i])
+            //   game.getStartForPlayers().push(types[i])
             // }
           }
           else if(type == 'end'){
             if (i == 0){
-              if (editor.getEndForPlayers().length < editor.getGame().getPlayerTokens().length){
-                console.log('aspon kliklo')
-                  editor.setEndForPlayers(editor.getGame().getPlayerTokens().slice())
-                  editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != 'all'}));
+              if (game.getEndForPlayers().length < game.getPlayerTokens().length){
+             
+                  game.setEndForPlayers(game.getPlayerTokens().slice())
+                  game.setEndForPlayers(game.getEndForPlayers().filter((t) => {return t != 'all'}));
                   option.style.backgroundColor = 'yellow'
                   for (let j = 0; j < types.length; j ++){
-                    console.log('nafarbil na yeelow')
+            
                     document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
                   }
               }
               else{
-                editor.setEndForPlayers([])
+                game.setEndForPlayers([])
                 option.style.backgroundColor = 'white'
                 for (let j = 0; j < types.length; j ++){
                   document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
                 }
               }
             }
-            // if (editor.getEndForPlayers().includes(types[i])){
-            //   editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != types[i]}));
-            //   console.log(editor.getEndForPlayers())
+            // if (game.getEndForPlayers().includes(types[i])){
+            //   game.setEndForPlayers(game.getEndForPlayers().filter((t) => {return t != types[i]}));
+            //   console.log(game.getEndForPlayers())
             // }
             // else{
-            //   editor.getEndForPlayers().push(types[i])
-            //   console.log(editor.getEndForPlayers())
+            //   game.getEndForPlayers().push(types[i])
+            //   console.log(game.getEndForPlayers())
             // }
           }
           else if (type == 'enabled'){
-            if (editor.getEnabledForPlayers().includes(types[i])){
-              editor.setEnabledForPlayers(editor.getEnabledForPlayers().filter((t) => {return t != types[i]}));
+            if (game.getEnabledForPlayers().includes(types[i])){
+              game.setEnabledForPlayers(game.getEnabledForPlayers().filter((t) => {return t != types[i]}));
             }
             else{
-              editor.getEnabledForPlayers().push(types[i])
+              game.getEnabledForPlayers().push(types[i])
             }
           }
           else if (type == 'immune'){
             if (i == 0){
-              if (editor.getCantBeEliminatedOnTile().length < editor.getGame().getPlayerTokens().length){
-                  editor.setCantBeEliminatedOnTile(editor.getGame().getPlayerTokens().slice())
-                  editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != 'all'}));
+              if (game.getCantBeEliminatedOnTile().length < game.getPlayerTokens().length){
+                  game.setCantBeEliminatedOnTile(game.getPlayerTokens().slice())
+                  game.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().filter((t) => {return t != 'all'}));
                   option.style.backgroundColor = 'yellow'
                   for (let j = 0; j < types.length; j ++){
                     document.getElementById(types[j]+type)!.style.backgroundColor = 'yellow'
                   }
               }
               else{
-                editor.setCantBeEliminatedOnTile([])
+                game.setCantBeEliminatedOnTile([])
                 option.style.backgroundColor = 'white'
                 for (let j = 0; j < types.length; j ++){
                   document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
                 }
               }}
-            // if (editor.getCantBeEliminatedOnTile().includes(types[i])){
-            //   editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
+            // if (game.getCantBeEliminatedOnTile().includes(types[i])){
+            //   game.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
             // }
             // else{
-            //   editor.getCantBeEliminatedOnTile().push(types[i])
+            //   game.getCantBeEliminatedOnTile().push(types[i])
             // }
           }
-          console.log(editor.getStartForPlayers())
-          if (editor.getChoosenTile()!=undefined){
+     
+          if (game.getChoosenTile()!=undefined){
             update()
           }
           

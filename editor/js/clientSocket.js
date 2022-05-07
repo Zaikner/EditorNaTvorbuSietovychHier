@@ -6,7 +6,6 @@ var socket_io_client_1 = require("socket.io-client");
 var Background_1 = require("./Background");
 var canvas_1 = require("./canvas");
 var Elements_1 = require("./Elements");
-var Game_1 = require("./Game");
 var gameLoader_1 = require("./gameLoader");
 var Gameplay_1 = require("./Gameplay");
 var Pawn_1 = require("./Pawn");
@@ -35,7 +34,7 @@ function getCookie(name) {
 exports.getCookie = getCookie;
 editorSocket.emit('get texts', { language: getCookie('language') });
 editorSocket.on('connected', function (msg) {
-    canvas_1.editor.setGame(new Game_1.Game());
+    (0, canvas_1.initNewGame)();
     (0, canvas_1.clear)();
     var newIds = new Map();
     var newId = 0;
@@ -53,7 +52,7 @@ editorSocket.on('connected', function (msg) {
             image_1.src = tile.backgroundFile;
             image_1.onload = function () {
                 addedTile.setImage(image_1);
-                (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+                (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
             };
         }
         //addedTile.setBackgroundFile(tile.backgroundFile)
@@ -75,18 +74,18 @@ editorSocket.on('connected', function (msg) {
             add.set(t[2 * i_1], t[2 * i_1 + 1]);
         }
         addedTile.setNextTilesIds(add);
-        canvas_1.editor.getGame().addTile(addedTile);
+        canvas_1.game.addTile(addedTile);
         // let num = msg.game.numOfPawnsPerTile
         // tile.isStartingFor.forEach((token:string)=>{
         //   for(let i = 0; i < num;i++){
         //     let p = new Pawn(token,addedTile)
-        //     editor.getGame().getPawns().push(p)
+        //     game.getPawns().push(p)
         //     //addedTile.getPawns().push(p)
         //   }
         // })
-        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+        (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     });
-    canvas_1.editor.setNextTileId(newId + 1);
+    canvas_1.game.setNextTileId(newId + 1);
     var background = new Background_1.Background();
     background.setColor(msg.background.color);
     if (msg.background.image != 'none') {
@@ -94,8 +93,8 @@ editorSocket.on('connected', function (msg) {
         backImage_1.src = msg.background.image;
         backImage_1.onload = function () {
             background.setBackgroundImage(backImage_1);
-            canvas_1.editor.getGame().setBackground(background);
-            (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+            canvas_1.game.setBackground(background);
+            (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
         };
         background.setBackgroundImage(backImage_1);
     }
@@ -107,7 +106,7 @@ editorSocket.on('connected', function (msg) {
     //     image.onload = function(){
     //      newComponent.setImage(image)
     //      background.getComponents().push(newComponent)
-    //      reload(editor,ctx)
+    //      reload(game,ctx)
     //     }
     //    }
     //   newComponent.setType(component.type)
@@ -125,54 +124,49 @@ editorSocket.on('connected', function (msg) {
     //   newComponent.setX2(component.x2)
     //   newComponent.setY2(component.y2)
     // })
-    canvas_1.editor.getGame().setBackground(background);
-    //editor.getGame().setBackground(msg.background)
-    canvas_1.editor.getGame().setAuthor(msg.author);
-    canvas_1.editor.getGame().setName(msg.game.name);
-    canvas_1.editor.getGame().setNumOfPlayers(msg.game.numOfPlayers);
-    canvas_1.editor.getGame().setNumberOfStartingPawns(msg.game.numOfPawnsPerTile);
+    canvas_1.game.setBackground(background);
+    //game.setBackground(msg.background)
+    canvas_1.game.setAuthor(msg.author);
+    canvas_1.game.setName(msg.game.name);
+    canvas_1.game.setNumOfPlayers(msg.game.numOfPlayers);
+    canvas_1.game.setNumberOfStartingPawns(msg.game.numOfPawnsPerTile);
     var numOfPlayer = document.getElementById('numOfPlayers');
     var numOfPlayerShower = document.getElementById('numShower');
     var numberOfStartingPawns = document.getElementById('pawnNumberSlider');
     var numberOfStartingPawnsShower = document.getElementById('pawnNumberSliderShower');
     if (numOfPlayer != undefined) {
         numOfPlayer.value = msg.game.numOfPlayers;
-        console.log('numOfPlayerShower je');
-        console.log(numOfPlayerShower);
         numOfPlayerShower.textContent = msg.game.numOfPlayers;
     }
     if (numberOfStartingPawns != undefined) {
         numberOfStartingPawns.value = msg.game.numOfPawnsPerTile;
         numberOfStartingPawnsShower.textContent = msg.game.numOfPawnsPerTile;
     }
-    canvas_1.editor.getGame().setRules(msg.rules);
-    canvas_1.editor.getGame().setInitSizeX(msg.game.initSizeX);
-    canvas_1.editor.getGame().setInitSizeY(msg.game.initSizeY);
-    canvas_1.editor.getGame().setIsPublished(msg.game.isPublished);
-    canvas_1.editor.getGame().setToogleNumber(msg.game.toogleNumber);
-    canvas_1.editor.getGame().setId(msg.game.id);
+    canvas_1.game.setRules(msg.rules);
+    canvas_1.game.setInitSizeX(msg.game.initSizeX);
+    canvas_1.game.setInitSizeY(msg.game.initSizeY);
+    canvas_1.game.setIsPublished(msg.game.isPublished);
+    canvas_1.game.setToogleNumber(msg.game.toogleNumber);
+    canvas_1.game.setId(msg.game.id);
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
         add.set(gameNextTiles[2 * i_2], gameNextTiles[2 * i_2 + 1]);
     }
-    canvas_1.editor.getGame().setNextTilesIds(add);
+    canvas_1.game.setNextTilesIds(add);
     var tokens = [];
-    for (var i_3 = 1; i_3 <= canvas_1.editor.getGame().getnumOfPlayers(); i_3++) {
+    for (var i_3 = 1; i_3 <= canvas_1.game.getnumOfPlayers(); i_3++) {
         tokens.push('Player ' + i_3);
     }
-    canvas_1.editor.getGame().setPlayerTokens(tokens);
+    canvas_1.game.setPlayerTokens(tokens);
     (0, Gameplay_1.initGameInfo)(msg.game.name);
     var i = 0;
-    //for (let i = 0; i < msg.game.num)
-    console.log('pawns su :');
-    console.log(msg.pawns);
     msg.pawns.forEach(function (pawn) {
         i++;
-        var tile = canvas_1.editor.findTileById(newIds.get(pawn.tileId));
+        var tile = canvas_1.game.findTileById(newIds.get(pawn.tileId));
         var p = new Pawn_1.Pawn(pawn.token, tile);
         p.id = pawn.id;
-        canvas_1.editor.getGame().getPawns().push(p);
+        canvas_1.game.getPawns().push(p);
         //tile.getPawns().push(p)
     });
     msg.styles.forEach(function (style) {
@@ -183,43 +177,39 @@ editorSocket.on('connected', function (msg) {
             backImage_2.src = style.image;
             backImage_2.onload = function () {
                 p.setImage(backImage_2);
-                //editor.getGame().setBackground(background)
-                canvas_1.editor.getGame().getPawnStyle().set(style.player, p);
-                (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+                //game.setBackground(background)
+                canvas_1.game.getPawnStyle().set(style.player, p);
+                (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
             };
         }
         else {
-            canvas_1.editor.getGame().getPawnStyle().set(style.player, p);
+            canvas_1.game.getPawnStyle().set(style.player, p);
         }
     });
     console.log('loaded game:');
-    console.log(canvas_1.editor);
+    console.log(canvas_1.game);
     var gm = document.getElementById('gameName');
     if (gm != undefined) {
-        gm.value = canvas_1.editor.getGame().getName();
+        gm.value = canvas_1.game.getName();
     }
 });
 editorSocket.on('react to event: forward', function (msg) {
-    canvas_1.editor.getGame().setIsOnTurn(true);
-    var ret = canvas_1.editor.getGame().howManyCanMove(msg.pawnId, msg.value);
+    canvas_1.game.setIsOnTurn(true);
+    var ret = canvas_1.game.howManyCanMove(msg.pawnId, msg.value);
     Warning_1.Warning.showInGame('Event occured: Go forward!');
     editorSocket.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('react to event: backward', function (msg) {
-    console.log('recieved react to event: backward');
-    console.log({ value: msg.value });
-    canvas_1.editor.getGame().setIsOnTurn(true);
-    var ret = canvas_1.editor.getGame().howManyCanMoveBack(msg.pawnId, msg.value);
+    canvas_1.game.setIsOnTurn(true);
+    var ret = canvas_1.game.howManyCanMoveBack(msg.pawnId, msg.value);
     Warning_1.Warning.showInGame('Event occured: Go backward!');
-    console.log('emitol:');
-    console.log({ pawn: msg.pawnId, value: ret, room: params.get('id') });
     editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('not author', function () {
     Warning_1.Warning.show(texts[185]);
 });
 editorSocket.on('game saved', function (msg) {
-    canvas_1.editor.getGame().setId(msg.newId);
+    canvas_1.game.setId(msg.newId);
 });
 editorSocket.on('react to event: skip', function (msg) {
     Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
@@ -229,17 +219,16 @@ editorSocket.on('react to event:must Thrown', function (msg) {
 });
 editorSocket.on('return pawns to starting tile', function (msg) {
     msg.ids.forEach(function (id) {
-        canvas_1.editor.findPawnById(id).returnToStart();
+        canvas_1.game.findPawnById(id).returnToStart();
     });
-    (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+    (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
 });
 editorSocket.on('join Room', function (msg) {
-    console.log('obdrzal join room');
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
     if (!msg.started) {
         $('#waitingModal').modal('show');
     }
-    (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+    (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     editorSocket.on('player joined', function (msg) {
         editorSocket.emit('reload waiting room', { room: params.get('id') });
         var chat = document.getElementById('chat');
@@ -256,15 +245,15 @@ editorSocket.on('join Room', function (msg) {
         else {
             chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
         }
-        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+        (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     });
 });
 editorSocket.on('player left', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
-    (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+    (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
 });
 editorSocket.on('game started', function (msg) {
-    // editor.getGame().setHasStarted(true)
+    // game.setHasStarted(true)
     $('#waitingModal').modal('hide');
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
@@ -281,48 +270,38 @@ editorSocket.on('game started', function (msg) {
         chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
     }
     var rem = [];
-    canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
+    canvas_1.game.getPawns().forEach(function (pawn) {
         if (!msg.tokens.includes(pawn.player)) {
             rem.push(pawn);
         }
     });
     rem.forEach(function (pawn) {
-        canvas_1.editor.getGame().removePawn(pawn);
+        canvas_1.game.removePawn(pawn);
         pawn.tile.removePawn(pawn);
     });
-    (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+    (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
 });
 //editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
 editorSocket.on('move Pawn', function (msg) {
     //msg.pawn.move(msg.value)
-    var pawn = (canvas_1.editor.getGame().movePawnById(msg.pawn, msg.value));
-    canvas_1.editor.setChoosenTile(undefined);
+    var pawn = (canvas_1.game.movePawnById(msg.pawn, msg.value));
+    canvas_1.game.setChoosenTile(undefined);
 });
 editorSocket.on('move Pawn back', function (msg) {
-    //msg.pawn.move(msg.value)
-    console.log('recieved move Pawn back');
-    var pawn = (canvas_1.editor.movePawnBack(msg.pawn, msg.value, true));
-    canvas_1.editor.setChoosenTile(undefined);
+    var pawn = (canvas_1.game.movePawnBack(msg.pawn, msg.value, true));
+    canvas_1.game.setChoosenTile(undefined);
 });
 editorSocket.on('return Pawn to place', function (msg) {
-    console.log('obdrzal return Pawn to place');
-    console.log('sa value: ' + msg.value);
-    canvas_1.editor.movePawnBack(msg.pawnId, msg.value, false);
+    canvas_1.game.movePawnBack(msg.pawnId, msg.value, false);
 });
 editorSocket.on('loadAnswersToOthers', function (msg) {
     (0, Questions_1.showResults)(msg.right, msg.wrong);
 });
 editorSocket.on('evaluate End', function (msg) {
-    console.log('emitol evalued end');
-    var is = canvas_1.editor.playerEnded(msg.token);
-    if (is) {
-        console.log('TENTO SKONCIL');
-        console.log('player');
-    }
+    var is = canvas_1.game.playerEnded(msg.token);
     editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
 });
 editorSocket.on('is online?', function () {
-    console.log('recievid is online and answered');
     editorSocket.emit('is online', { id: localStorage.getItem('id') });
 });
 editorSocket.on('exit to main menu', function () {
@@ -351,13 +330,13 @@ editorSocket.on('got texts', function (msg) {
             $('#rulesModal').modal('hide');
         });
         butt.onclick = function () {
-            canvas_1.editor.getGame().setRules(document.getElementById("ruleInput").value);
+            canvas_1.game.setRules(document.getElementById("ruleInput").value);
         };
         //document.getElementById('rulesButtons')!
         // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
         exports.isEditor = isEditor = true;
-        //editor.getGame().setInitSizeX(window.innerWidth)
-        //editor.getGame().setInitSizeY(window.innerHeight)
+        //game.setInitSizeX(window.innerWidth)
+        //game.setInitSizeY(window.innerHeight)
     }
     else {
         //
@@ -370,7 +349,7 @@ editorSocket.on('got texts', function (msg) {
         else {
             editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
         }
-        (0, canvas_1.reload)(canvas_1.editor, canvas_1.ctx);
+        (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
         (_a = document.getElementById("leaveWaitinRoom")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
             window.location.replace('/gameLobby');
         });
@@ -395,7 +374,7 @@ editorSocket.on('wrong game name', function () {
 });
 editorSocket.on('turn', function (msg) {
     console.log('recieved: turn');
-    console.log(canvas_1.editor.getGame().getIsOnturn());
+    console.log(canvas_1.game.getIsOnturn());
     //canvas.removeEventListener('click',pickTile)
     (0, canvas_1.elementDeleter)('onTurnPlace');
     (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, true);
@@ -403,12 +382,12 @@ editorSocket.on('turn', function (msg) {
 editorSocket.on('turnMove', function (msg) {
     var _a;
     console.log('recieved: turn move');
-    canvas_1.editor.getGame().setIsOnTurn(true);
-    canvas_1.editor.getGame().setCanThrow(true);
+    canvas_1.game.setIsOnTurn(true);
+    canvas_1.game.setCanThrow(true);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        // if (editor.getChoosenTile()!=undefined && pawn!= undefined){
+        // if (game.getChoosenTile()!=undefined && pawn!= undefined){
         // canvas.removeEventListener('click',pickTile)
-        if (canvas_1.editor.getGame().getCanThrow()) {
+        if (canvas_1.game.getCanThrow()) {
             (0, Gameplay_1.throwDice)(msg.token);
         }
     }
@@ -418,9 +397,8 @@ editorSocket.on('turnMove', function (msg) {
 var canMovePawnFunc;
 exports.canMovePawnFunc = canMovePawnFunc;
 editorSocket.on('canMovePawn', function (msg) {
-    console.log('canMovePawn emitol token:' + msg.token);
     var can = false;
-    canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
+    canvas_1.game.getPawns().forEach(function (pawn) {
         if (pawn.player == msg.token) {
             if (pawn.canMove(msg.value)) {
                 can = true;
@@ -462,7 +440,7 @@ editorSocket.on('loadedQuestions', function (data) {
         newQuestions.set(elem.questionId, elem.questionText);
         //elem.questionId
     });
-    canvas_1.editor.getGame().setQuestions(newQuestions);
+    canvas_1.game.setQuestions(newQuestions);
     //pickQuestion(data)
 });
 editorSocket.on('loadedQuestions - pick', function (data) {
@@ -472,7 +450,7 @@ editorSocket.on('loadedQuestions - pick', function (data) {
         newQuestions.set(elem.questionId, elem.questionText);
         //elem.questionId
     });
-    canvas_1.editor.getGame().setQuestions(newQuestions);
+    canvas_1.game.setQuestions(newQuestions);
 });
 //editorSocket.on('pickQuestions',(data)=>{pickQuestion(data)})
 editorSocket.on('loadedAnswerQuestions', function (data) {
@@ -498,8 +476,7 @@ editorSocket.on('random and 0', function () {
 editorSocket.on('player ended', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
     Warning_1.Warning.showInGame(msg.player + texts[190] + msg.place + texts[189]);
-    console.log('zapol');
-    canvas_1.editor.getGame().getPawns().forEach(function (pawn) {
+    canvas_1.game.getPawns().forEach(function (pawn) {
         if (pawn.player == msg.token) {
             pawn.hasEnded = true;
         }
@@ -508,10 +485,9 @@ editorSocket.on('player ended', function (msg) {
 (_a = document.getElementById("showRulesButton")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
     //$('#rulesModal').modal('show');
     (0, Rules_1.rulesMenu)();
-    document.getElementById("ruleInput").value = canvas_1.editor.getGame().getRules();
+    document.getElementById("ruleInput").value = canvas_1.game.getRules();
 });
 editorSocket.on('loadedGameNames', function (msg) {
-    console.log('socket odchytil loadedGameNames');
     (0, gameLoader_1.loadGameMenu)(msg.names);
 });
 editorSocket.on('room is full', function () {

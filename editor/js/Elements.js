@@ -262,108 +262,105 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
         option.id = types[i] + type;
         option.style.backgroundColor = 'white';
         option.classList.add("dropdown-item", 'btn');
-        if (type == 'start' && canvas_1.editor.getStartForPlayers().includes(types[i])) {
+        if (type == 'start' && canvas_1.game.getStartForPlayers().includes(types[i])) {
             option.style.backgroundColor = 'yellow';
         }
-        if (type == 'end' && canvas_1.editor.getEndForPlayers().includes(types[i])) {
+        if (type == 'end' && canvas_1.game.getEndForPlayers().includes(types[i])) {
             option.style.backgroundColor = 'yellow';
         }
-        if (type == 'enabled' && canvas_1.editor.getEnabledForPlayers().includes(types[i])) {
+        if (type == 'enabled' && canvas_1.game.getEnabledForPlayers().includes(types[i])) {
             option.style.backgroundColor = 'yellow';
         }
-        if (type == 'immune' && canvas_1.editor.getCantBeEliminatedOnTile().includes(types[i])) {
+        if (type == 'immune' && canvas_1.game.getCantBeEliminatedOnTile().includes(types[i])) {
             option.style.backgroundColor = 'yellow';
         }
         option.addEventListener('click', function (e) {
             if (type == 'start') {
                 if (i == 0) {
-                    if (canvas_1.editor.getStartForPlayers().length < canvas_1.editor.getGame().getPlayerTokens().length) {
-                        canvas_1.editor.setStartForPlayers(canvas_1.editor.getGame().getPlayerTokens().slice());
-                        canvas_1.editor.setStartForPlayers(canvas_1.editor.getStartForPlayers().filter(function (t) { return t != 'all'; }));
+                    if (canvas_1.game.getStartForPlayers().length < canvas_1.game.getPlayerTokens().length) {
+                        canvas_1.game.setStartForPlayers(canvas_1.game.getPlayerTokens().slice());
+                        canvas_1.game.setStartForPlayers(canvas_1.game.getStartForPlayers().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.editor.setStartForPlayers([]);
+                        canvas_1.game.setStartForPlayers([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
                         }
                     }
                 }
-                // if (editor.getStartForPlayers().includes(types[i])){
-                //   editor.setStartForPlayers(editor.getStartForPlayers().filter((t) => {return t != types[i]}));
+                // if (game.getStartForPlayers().includes(types[i])){
+                //   game.setStartForPlayers(game.getStartForPlayers().filter((t) => {return t != types[i]}));
                 // }
                 // else{
-                //   editor.getStartForPlayers().push(types[i])
+                //   game.getStartForPlayers().push(types[i])
                 // }
             }
             else if (type == 'end') {
                 if (i == 0) {
-                    if (canvas_1.editor.getEndForPlayers().length < canvas_1.editor.getGame().getPlayerTokens().length) {
-                        console.log('aspon kliklo');
-                        canvas_1.editor.setEndForPlayers(canvas_1.editor.getGame().getPlayerTokens().slice());
-                        canvas_1.editor.setEndForPlayers(canvas_1.editor.getEndForPlayers().filter(function (t) { return t != 'all'; }));
+                    if (canvas_1.game.getEndForPlayers().length < canvas_1.game.getPlayerTokens().length) {
+                        canvas_1.game.setEndForPlayers(canvas_1.game.getPlayerTokens().slice());
+                        canvas_1.game.setEndForPlayers(canvas_1.game.getEndForPlayers().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
-                            console.log('nafarbil na yeelow');
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.editor.setEndForPlayers([]);
+                        canvas_1.game.setEndForPlayers([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
                         }
                     }
                 }
-                // if (editor.getEndForPlayers().includes(types[i])){
-                //   editor.setEndForPlayers(editor.getEndForPlayers().filter((t) => {return t != types[i]}));
-                //   console.log(editor.getEndForPlayers())
+                // if (game.getEndForPlayers().includes(types[i])){
+                //   game.setEndForPlayers(game.getEndForPlayers().filter((t) => {return t != types[i]}));
+                //   console.log(game.getEndForPlayers())
                 // }
                 // else{
-                //   editor.getEndForPlayers().push(types[i])
-                //   console.log(editor.getEndForPlayers())
+                //   game.getEndForPlayers().push(types[i])
+                //   console.log(game.getEndForPlayers())
                 // }
             }
             else if (type == 'enabled') {
-                if (canvas_1.editor.getEnabledForPlayers().includes(types[i])) {
-                    canvas_1.editor.setEnabledForPlayers(canvas_1.editor.getEnabledForPlayers().filter(function (t) { return t != types[i]; }));
+                if (canvas_1.game.getEnabledForPlayers().includes(types[i])) {
+                    canvas_1.game.setEnabledForPlayers(canvas_1.game.getEnabledForPlayers().filter(function (t) { return t != types[i]; }));
                 }
                 else {
-                    canvas_1.editor.getEnabledForPlayers().push(types[i]);
+                    canvas_1.game.getEnabledForPlayers().push(types[i]);
                 }
             }
             else if (type == 'immune') {
                 if (i == 0) {
-                    if (canvas_1.editor.getCantBeEliminatedOnTile().length < canvas_1.editor.getGame().getPlayerTokens().length) {
-                        canvas_1.editor.setCantBeEliminatedOnTile(canvas_1.editor.getGame().getPlayerTokens().slice());
-                        canvas_1.editor.setCantBeEliminatedOnTile(canvas_1.editor.getCantBeEliminatedOnTile().filter(function (t) { return t != 'all'; }));
+                    if (canvas_1.game.getCantBeEliminatedOnTile().length < canvas_1.game.getPlayerTokens().length) {
+                        canvas_1.game.setCantBeEliminatedOnTile(canvas_1.game.getPlayerTokens().slice());
+                        canvas_1.game.setCantBeEliminatedOnTile(canvas_1.game.getCantBeEliminatedOnTile().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.editor.setCantBeEliminatedOnTile([]);
+                        canvas_1.game.setCantBeEliminatedOnTile([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
                         }
                     }
                 }
-                // if (editor.getCantBeEliminatedOnTile().includes(types[i])){
-                //   editor.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
+                // if (game.getCantBeEliminatedOnTile().includes(types[i])){
+                //   game.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
                 // }
                 // else{
-                //   editor.getCantBeEliminatedOnTile().push(types[i])
+                //   game.getCantBeEliminatedOnTile().push(types[i])
                 // }
             }
-            console.log(canvas_1.editor.getStartForPlayers());
-            if (canvas_1.editor.getChoosenTile() != undefined) {
+            if (canvas_1.game.getChoosenTile() != undefined) {
                 (0, TileEditor_1.update)();
             }
             e.stopPropagation();

@@ -1,4 +1,4 @@
-import {doc,ctx, editor,reload, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
+import {doc,ctx, game,reload, elementDeleter, canvas, mainMenu, calibreEventCoords} from './canvas.js'
 import { texts } from './clientSocket.js'
 import { spawnButton, spawnColorPicker, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu, spawnSliderWithValueShower } from './Elements.js'
 import {removeAllButtons,removeAllListenersAdded, saveInsertingTiles, unchooseEverything} from './TileEditor.js'
@@ -16,38 +16,38 @@ function editBackground(){
         background = new Image()
         background!.src =URL.createObjectURL(backgroundImage!.files![0]!)
         background.onload = function(){
-          editor.getGame().getBackground().setBackgroundImage(background)
-          reload(editor,ctx)
+          game.getBackground().setBackgroundImage(background)
+          reload(game,ctx)
         }}})
  
 
   spawnColorPicker(document,'tileEditingPlace','colorPicker',texts[95],function(){
-    editor.getGame().getBackground().setColor((<HTMLInputElement>document.getElementById('colorPicker')).value)
-    editor.getGame().getBackground().setBackgroundImage(undefined!)
-   reload(editor,ctx)
+    game.getBackground().setColor((<HTMLInputElement>document.getElementById('colorPicker')).value)
+    game.getBackground().setBackgroundImage(undefined!)
+   reload(game,ctx)
 })
 
  }
 
 let moveComponentHandler = function(event:MouseEvent){
-  editor.getGame().getBackground().findComponent(event,false)
-  reload(editor,ctx)
+  game.getBackground().findComponent(event,false)
+  reload(game,ctx)
 }
 let moveComponent = function(event:MouseEvent){
-  editor.getGame().getBackground().moveComponent(event)
-  reload(editor,ctx)
+  game.getBackground().moveComponent(event)
+  reload(game,ctx)
 }
 let deleteComponent = function(event:MouseEvent){
-  editor.getGame().getBackground().deleteComponent(event)
-  reload(editor,ctx)
+  game.getBackground().deleteComponent(event)
+  reload(game,ctx)
 }
 function moveComponents(){
   removeAllListenersAdded()
   
   doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
-  //editor.makeAllTilesNotChoosen()
-  reload(editor,ctx)
-  editor.setIsMoving(true)
+  //game.makeAllTilesNotChoosen()
+  reload(game,ctx)
+  game.setIsMoving(true)
   removeAllButtons()
   canvas.addEventListener('click',moveComponentHandler)
   canvas.addEventListener('mousemove',moveComponent)
@@ -60,7 +60,7 @@ function spawnComponentElements(edit:boolean){
     spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[64],function(){
       updateComponent()
       unchooseEverything()
-      reload(editor,ctx)
+      reload(game,ctx)
     })
   }
   spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[79],function(){
@@ -68,8 +68,8 @@ function spawnComponentElements(edit:boolean){
     removeAllListenersAdded()
     mainMenu()})
   spawnButton(document,'buttonPlace','',['btn','btn-secondary'],texts[80],function(){
-    editor.getGame().getBackground().deleteFromUndoLog()
-    reload(editor,ctx)
+    game.getBackground().deleteFromUndoLog()
+    reload(game,ctx)
   })
 
 
@@ -92,15 +92,15 @@ function spawnComponentElements(edit:boolean){
   spawnImageInput(document,'tileEditingPlace','componentImage',texts[86],texts[86],function(){
 
     if ((<HTMLInputElement>document.getElementById('componentImage')!).files!.length > 0){
-      editor.getGame().getBackground().setNextComponentImage(new Image())
-        editor.getGame().getBackground().getNextComponentImage()!.src =URL.createObjectURL((<HTMLInputElement>document.getElementById('componentImage')!).files![0]!)    
-        editor.getGame().getBackground().getNextComponentImage().onload = function (){
+      game.getBackground().setNextComponentImage(new Image())
+        game.getBackground().getNextComponentImage()!.src =URL.createObjectURL((<HTMLInputElement>document.getElementById('componentImage')!).files![0]!)    
+        game.getBackground().getNextComponentImage().onload = function (){
           //showActualState()
         }
         
       }
     else{
-      editor.getGame().getBackground().setNextComponentImage(undefined!)
+      game.getBackground().setNextComponentImage(undefined!)
     }
   })
 
@@ -121,11 +121,11 @@ let insertComponent = function(event:MouseEvent){
   let stroke = (<HTMLInputElement>doc.getElementById('componentOutlineSlider')!).value.slice()
   let colorStroke = (<HTMLInputElement>doc.getElementById('componentOutlineColorPicker')!).value.slice()
   let type= (<HTMLSelectElement>doc.getElementById('componentTypeMenu')!).value.slice()
-  let image = editor.getGame().getBackground().getNextComponentImage()
+  let image = game.getBackground().getNextComponentImage()
   let imageWidth = (<HTMLInputElement>doc.getElementById('componentWidthSlider')!).value.slice()
   let imageHeight = (<HTMLInputElement>doc.getElementById('componentHeightSlider')!).value.slice()
 
-  let createdComponent = editor.getGame().getBackground().createComponent(event,type,parseInt(size),color,parseInt(stroke),colorStroke,image,parseInt(imageWidth),parseInt(imageHeight))
+  let createdComponent = game.getBackground().createComponent(event,type,parseInt(size),color,parseInt(stroke),colorStroke,image,parseInt(imageWidth),parseInt(imageHeight))
 
   return createdComponent
 }
@@ -142,27 +142,27 @@ let updateComponent = function(){
   let imageWidth = (<HTMLInputElement>doc.getElementById('componentWidthSlider')!).value.slice()
   let imageHeight = (<HTMLInputElement>doc.getElementById('componentHeightSlider')!).value.slice()
 
-  let component = editor.getGame().getBackground().getChoosenComponent()
+  let component = game.getBackground().getChoosenComponent()
   component?.setRadius(parseInt(size))
   component?.setColor(color)
   component?.setStroke(parseInt(stroke))
   component?.setStrokeColor(colorStroke)
   component?.setType(type)
-  component?.setImage(editor.getGame().getBackground().getNextComponentImage())
+  component?.setImage(game.getBackground().getNextComponentImage())
   component?.setImageWidth(parseInt(imageWidth))
   component?.setImageHeight(parseInt(imageHeight))
 
-  reload(editor,ctx)
+  reload(game,ctx)
 }
 
 function setElements(){
-  (<HTMLInputElement>doc.getElementById('componentSizeSlider')!).value = editor.getGame().getBackground().getChoosenComponent()?.getRadius().toString()!;
- (<HTMLInputElement>doc.getElementById('componentColorPicker')!).value= editor.getGame().getBackground().getChoosenComponent()?.getColor()!;
-  (<HTMLInputElement>doc.getElementById('componentOutlineSlider')!).value= editor.getGame().getBackground().getChoosenComponent()?.getStroke().toString()!;
-  (<HTMLInputElement>doc.getElementById('componentOutlineColorPicker')!).value= editor.getGame().getBackground().getChoosenComponent()?.getStrokeColor()!;
-  (<HTMLSelectElement>doc.getElementById('componentTypeMenu')!).value= editor.getGame().getBackground().getChoosenComponent()?.getType()!;
-  (<HTMLInputElement>doc.getElementById('componentWidthSlider')!).value= editor.getGame().getBackground().getChoosenComponent()?.getImageWidth()!.toString()!;
-  (<HTMLInputElement>doc.getElementById('componentHeightSlider')!).value= editor.getGame().getBackground().getChoosenComponent()?.getImageHeight()!.toString()!;
+  (<HTMLInputElement>doc.getElementById('componentSizeSlider')!).value = game.getBackground().getChoosenComponent()?.getRadius().toString()!;
+ (<HTMLInputElement>doc.getElementById('componentColorPicker')!).value= game.getBackground().getChoosenComponent()?.getColor()!;
+  (<HTMLInputElement>doc.getElementById('componentOutlineSlider')!).value= game.getBackground().getChoosenComponent()?.getStroke().toString()!;
+  (<HTMLInputElement>doc.getElementById('componentOutlineColorPicker')!).value= game.getBackground().getChoosenComponent()?.getStrokeColor()!;
+  (<HTMLSelectElement>doc.getElementById('componentTypeMenu')!).value= game.getBackground().getChoosenComponent()?.getType()!;
+  (<HTMLInputElement>doc.getElementById('componentWidthSlider')!).value= game.getBackground().getChoosenComponent()?.getImageWidth()!.toString()!;
+  (<HTMLInputElement>doc.getElementById('componentHeightSlider')!).value= game.getBackground().getChoosenComponent()?.getImageHeight()!.toString()!;
 
 }
 function addComponentMenu(){
@@ -184,7 +184,7 @@ function editComponentMenu(){
   
  spawnComponentElements(true)
  canvas.addEventListener('click',function(event:MouseEvent){
-   editor.getGame().getBackground().findComponent(event,false)
+   game.getBackground().findComponent(event,false)
   setElements()
  })
 }

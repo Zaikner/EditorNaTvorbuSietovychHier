@@ -72,10 +72,16 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            console.log('prisiel k load game');
+                            console.log('prisla sprava:');
+                            console.log(msg);
                             if (!msg.response) return [3 /*break*/, 2];
+                            console.log('sem prisiel');
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
                         case 1:
                             game = _a.sent();
+                            console.log(game);
+                            console.log('sem neprisiel');
                             if (game.length == 0) {
                                 socket.emit('wrong game name');
                                 return [2 /*return*/];
@@ -84,6 +90,10 @@ var ServerSocket = /** @class */ (function () {
                         case 2:
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(socket.id);
+                            // let game = await GameFinder.getIntance().findByName(msg.name)
+                            // let tt =await TileFinder.getIntance().findByName(msg.name)
+                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
+                            console.log('nacital aspon meno');
                             if (!(msg.room != undefined)) return [3 /*break*/, 3];
                             r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
                             emit = r_1.getGameData();
@@ -820,13 +830,24 @@ var ServerSocket = /** @class */ (function () {
                 console.log('emitol reload waiting');
                 _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });
             });
-            socket.on('loadGameNames', function () { return __awaiter(_this, void 0, void 0, function () {
-                var names;
+            socket.on('loadGameNames', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var acc, names, authorNames, _i, authorNames_1, i;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findAll()];
+                        case 0:
+                            acc = AccountManager.getAccountByClientId(msg.id);
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findAllPublished()];
                         case 1:
                             names = (_a.sent()).map(function (game) { return game.getName(); });
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByAuthorId(acc.getId())];
+                        case 2:
+                            authorNames = (_a.sent()).map(function (game) { return game.getName(); });
+                            for (_i = 0, authorNames_1 = authorNames; _i < authorNames_1.length; _i++) {
+                                i = authorNames_1[_i];
+                                if (!names.includes(i)) {
+                                    names.push(i);
+                                }
+                            }
                             socket.emit('loadedGameNames', { names: names });
                             return [2 /*return*/];
                     }

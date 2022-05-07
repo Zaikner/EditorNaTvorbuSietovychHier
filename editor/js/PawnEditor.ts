@@ -1,4 +1,4 @@
-import { calibreEventCoords, canvas, ctx, doc, editor, reload } from "./canvas"
+import { calibreEventCoords, canvas, ctx, doc, game, reload } from "./canvas"
 import { texts } from "./clientSocket"
 import { spawnButton, spawnCanvas, spawnColorPicker, spawnDiv, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
@@ -19,14 +19,14 @@ function pawnInsertMenu(){
     // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
     // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
     //spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
-    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[73],['btn','btn-secondary'],editor.getGame().getPlayerTokens())
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[73],['btn','btn-secondary'],game.getPlayerTokens())
     canvas.addEventListener('click',insertPawn)
 }
 
 function insertPawn(event:MouseEvent){
     let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('pawnColorPicker')!
     console.log('skusil nakreslit')
-    let tiles = editor.getGame().getTiles()
+    let tiles = game.getTiles()
     let tile = undefined
     let coords = calibreEventCoords(event)
     for (let i = tiles.length-1; i >= 0;i--){
@@ -39,16 +39,16 @@ function insertPawn(event:MouseEvent){
         let player:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('playerSelect')!
         let newPawn = new Pawn(player!.value,tile)
         //newPawn.color = colorPicker!.value
-        editor.getGame().getPawns().push(newPawn)
+        game.getPawns().push(newPawn)
         tile.getPawns().push(newPawn)
         //removeAllListenersAdded()
-        reload(editor,ctx)
+        reload(game,ctx)
         console.log(newPawn)
     }
 }
 function deletePawn(event:MouseEvent){
     console.log('deleteto')
-    let tiles = editor.getGame().getTiles()
+    let tiles = game.getTiles()
     let tile:Tile = undefined!
     let coords = calibreEventCoords(event)
     for (let i = tiles.length-1; i >= 0;i--){
@@ -66,12 +66,12 @@ function deletePawn(event:MouseEvent){
             if (pawn.player == player.value && !stop){
                 console.log('nasiel pawn')
                 stop = true
-                editor.getGame().removePawn(pawn)
+                game.removePawn(pawn)
                 tile.removePawn(pawn)
             }
         })
        
-        reload(editor,ctx)
+        reload(game,ctx)
       
     }
 }
@@ -81,14 +81,14 @@ function pawnEditMenu(){
 
     spawnHeading(document,'tileEditingPlace','',texts[18])
    
-    let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[74],['btn','btn-secondary'],editor.getGame().getPlayerTokens())
+    let playerPicker = spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[74],['btn','btn-secondary'],game.getPlayerTokens())
     playerPicker.onchange = function(){
         drawActualPawnLook(playerPicker.value)
 
         for (let i = 1; i <= 8; i++){
             document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
         }
-        let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
+        let type = game.getPawnStyle().get(playerPicker.value)?.getType()
         document.getElementById('canvasPawn'+type!.charAt(type!.length - 1))!.style.borderColor = 'red'
        
     }
@@ -101,8 +101,8 @@ function pawnEditMenu(){
    
     let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker',texts[75])
     colorPicker.onchange = function(){
-        editor.getGame().getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
-        editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
+        game.getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
+        game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
         drawActualPawnLook(playerPicker.value)
         drawStyles(colorPicker.value)
     }
@@ -113,10 +113,10 @@ function pawnEditMenu(){
     spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[78],texts[78],function(){
 
         if ((<HTMLInputElement>document.getElementById('imagePicker')!).files!.length > 0){
-            editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(new Image())
-            editor.getGame().getPawnStyle().get(playerPicker.value)?.setType('type 8')
-            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
-            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
+            game.getPawnStyle().get(playerPicker.value)?.setImage(new Image())
+            game.getPawnStyle().get(playerPicker.value)?.setType('type 8')
+            game.getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
+            game.getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
                 drawActualPawnLook(playerPicker.value)
           
             }
@@ -126,7 +126,7 @@ function pawnEditMenu(){
             document.getElementById('canvasPawn'+8)!.style.borderColor = 'red'
             }
           else{
-            editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
+            game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
           }
 
     })
@@ -140,16 +140,16 @@ function pawnEditMenu(){
         c.classList.add('pawnType')
         c.style.width = '50px';
         c.style.height = '50px'
-        let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
-        let image = editor.getGame().getPawnStyle().get(playerPicker.value)?.getImage()
+        let type = game.getPawnStyle().get(playerPicker.value)?.getType()
+        let image = game.getPawnStyle().get(playerPicker.value)?.getImage()
         if (i.toString()  ==type!.charAt(type!.length - 1) && image == undefined){
             c.style.borderColor = 'red'
         }
         // button.onclick = function(){
         //     let player = playerPicker.value
-        //     editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
-        //     editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
-        //     console.log(editor.getGame().getPawnStyle())
+        //     game.getPawnStyle().get(player)?.setType('type'+i)
+        //     game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
+        //     console.log(game.getPawnStyle())
         //     drawActualPawnLook(player)
         // }
         c.onclick = function(){
@@ -159,9 +159,9 @@ function pawnEditMenu(){
             }
             let player = playerPicker.value
             c.style.borderColor = 'red'
-            editor.getGame().getPawnStyle().get(player)?.setType('type'+i)
-            editor.getGame().getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
-            console.log(editor.getGame().getPawnStyle())
+            game.getPawnStyle().get(player)?.setType('type'+i)
+            game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
+        
             drawActualPawnLook(player)
         }
 
@@ -171,7 +171,7 @@ function pawnEditMenu(){
     c.classList.add('pawnType')
     c.style.width = '50px';
     c.style.height = '50px'
-    let type = editor.getGame().getPawnStyle().get(playerPicker.value)?.getType()
+    let type = game.getPawnStyle().get(playerPicker.value)?.getType()
     if (type!.charAt(type!.length - 1) == '8'){
         c.style.borderColor = 'red'
     }
@@ -182,9 +182,9 @@ function pawnEditMenu(){
             }
             let player = playerPicker.value
             c.style.borderColor = 'red'
-            editor.getGame().getPawnStyle().get(player)?.setType('type'+8)
-            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
-            editor.getGame().getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
+            game.getPawnStyle().get(player)?.setType('type'+8)
+            game.getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
+            game.getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
                 drawActualPawnLook(playerPicker.value)
           
             }
@@ -203,7 +203,7 @@ function pawnDeleteMenu(){
     removeAllListenersAdded()
     removeAllButtons()
     spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
-    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[129],[],editor.getGame().getPlayerTokens())
+    spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[129],[],game.getPlayerTokens())
     canvas.addEventListener('click',deletePawn)
 
 }
@@ -309,13 +309,13 @@ function drawStyles(color:string){
     contextik.resetTransform()
     width = cs.width
     height = cs.height
-    let image =  editor.getGame().getPawnStyle().get((<HTMLSelectElement>document.getElementById('playerSelect'))!.value)?.getImage()
+    let image =  game.getPawnStyle().get((<HTMLSelectElement>document.getElementById('playerSelect'))!.value)?.getImage()
     if (image!= undefined){
         drawPawnImage(contextik,50,30,30,100,100,image!)
-        console.log('kreslil')
+      
     }
     else{
-        console.log('je undefined')
+       
     }
     }
     
@@ -422,7 +422,7 @@ function drawPawnType7(contextik:CanvasRenderingContext2D,headCenterX:number,hea
 function drawPawnImage(contextik:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,width:number,height:number,image:HTMLImageElement)
 {
     contextik.beginPath()
-    console.log(headCenterX,headCenterY,radius)
+   
     contextik.drawImage(image,headCenterX-radius,headCenterY-radius,radius*2,radius*3)
 
 }
@@ -431,7 +431,7 @@ function drawActualPawnLook(player:string){
     // let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
     // let context = <CanvasRenderingContext2D> cs.getContext("2d")
     // context.clearRect(0,0,cs.width,cs.height)
-    let style = editor.getGame().getPawnStyle().get(player)
+    let style = game.getPawnStyle().get(player)
     drawStyles(style!.getColor())
     // if (style?.getImage()!= undefined){
     //     drawPawnImage(context,cs.width/2,40,40,100,100,style?.getImage())

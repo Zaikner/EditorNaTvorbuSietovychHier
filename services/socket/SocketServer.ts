@@ -47,9 +47,14 @@ export class ServerSocket{
               console.log('ohlasil sa:' + acc.getName())
             })
             socket.on('load game',async (msg:{id:string,name:string,room:string,response:boolean}) => {
-
+                    console.log('prisiel k load game')
+                    console.log('prisla sprava:')
+                    console.log(msg)
                     if (msg.response){
+                        console.log('sem prisiel')
                         let game = await GameFinder.getIntance().findByName(msg.name)
+                        console.log(game)
+                        console.log('sem neprisiel')
                         if (game!.length == 0){
                           socket.emit('wrong game name')
                           return
@@ -60,7 +65,7 @@ export class ServerSocket{
                     // let game = await GameFinder.getIntance().findByName(msg.name)
                     // let tt =await TileFinder.getIntance().findByName(msg.name)
                     // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                
+                  console.log('nacital aspon meno')
                    
                   
                    let emit;
@@ -808,8 +813,16 @@ export class ServerSocket{
         console.log('emitol reload waiting')
         this.io.in(msg.room).emit('reloaded waiting room',{names:names})
       })
-      socket.on('loadGameNames',async()=>{
-        let names = (await GameFinder.getIntance().findAll())!.map((game) => game.getName())
+      socket.on('loadGameNames',async(msg:{id:string})=>{
+        let acc = AccountManager.getAccountByClientId(msg.id)
+        let names = (await GameFinder.getIntance().findAllPublished())!.map((game) => game.getName())
+        let authorNames = (await GameFinder.getIntance().findByAuthorId(acc.getId()))!.map((game) => game.getName())
+
+        for ( let i of authorNames){
+          if (!names.includes(i)){
+            names.push(i)
+          }
+        }
         socket.emit('loadedGameNames',{names:names})
       })
 

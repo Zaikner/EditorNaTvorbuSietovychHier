@@ -1,5 +1,5 @@
 
-import { editor } from './canvas.js';
+import { game } from './canvas.js';
 import { isEditor } from './clientSocket.js';
 import { Pawn } from './Pawn.js';
 import { drawPawnImage, drawPawnType1, drawPawnType2, drawPawnType3, drawPawnType4, drawPawnType5, drawPawnType6, drawPawnType7 } from './PawnEditor.js';
@@ -52,7 +52,6 @@ class Tile{
 
     public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
      
-        console.log('nakreslil')
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.image == undefined){
@@ -60,7 +59,7 @@ class Tile{
             ctx.strokeStyle =this.color
             ctx.lineWidth = 0
             ctx.fillStyle = this.color
-            ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+            ctx.scale(game.getScaleX(),game.getScaleY())
             
         
             if (this.shape == 'circle'){
@@ -78,7 +77,7 @@ class Tile{
                 // //kresli image
             if (this.shape == 'circle'){
                 ctx.save()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                 var clipPath = new Path2D()
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
@@ -94,7 +93,7 @@ class Tile{
             }
             else{
                 ctx.save()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                 var clipPath = new Path2D()
                 clipPath.rect(this.x1,this.y1,this.radius*2,this.radius*2)
                 ctx.clip(clipPath);
@@ -115,7 +114,7 @@ class Tile{
              if (this.stroke > 0){
                 ctx.resetTransform();
                 ctx.restore()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                  ctx.strokeStyle =this.strokeColor
                  ctx.lineWidth = this.stroke
                  ctx.stroke();
@@ -132,7 +131,7 @@ class Tile{
                 // ctx.setLineDash([0]);
                 ctx.resetTransform();
                 ctx.restore()
-                ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                ctx.scale(game.getScaleX(),game.getScaleY())
                 var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+8);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -146,7 +145,7 @@ class Tile{
                     else{
                         ctx.resetTransform();
                         ctx.restore()
-                        ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                        ctx.scale(game.getScaleX(),game.getScaleY())
                         var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
     
                         grd.addColorStop(0, "red");
@@ -159,9 +158,9 @@ class Tile{
                         ctx.resetTransform();
                     }
             }
-            if (editor.getGame().getToogleNumber() || isEditor){
+            if (game.getToogleNumber() || isEditor){
                 //ctx.save() 
-                //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+                //ctx.scale(game.getScaleX(),game.getScaleY())
                 ctx.font = "bold 30px Arial";
                 if (this.strokeColor != this.color){
                     ctx.fillStyle =  this.strokeColor
@@ -200,9 +199,9 @@ class Tile{
         ctx.restore()
         ctx.beginPath()
         ctx.closePath()
-        ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+        ctx.scale(game.getScaleX(),game.getScaleY())
       
-        editor.getGame().getPlayerTokens().forEach((player)=>{
+        game.getPlayerTokens().forEach((player)=>{
           
             drawn = 0
            
@@ -211,7 +210,7 @@ class Tile{
                 if(pawn.player == player){
                 
                     num++;
-                    let style = editor.getGame().getPawnStyle().get(pawn.player)
+                    let style = game.getPawnStyle().get(pawn.player)
             
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (this.pawns.length == 2 && num == 2){
@@ -298,11 +297,11 @@ class Tile{
 
     isPointedAt(x:number,y:number){
         if (this.shape == 'circle'){
-            if (Math.sqrt( Math.pow((this.centerX*editor.getGame().getScaleX()-x), 2) + Math.pow((this.centerY*editor.getGame().getScaleY()-y), 2)) <= this.radius)
+            if (Math.sqrt( Math.pow((this.centerX*game.getScaleX()-x), 2) + Math.pow((this.centerY*game.getScaleY()-y), 2)) <= this.radius)
            {   
                return true
            }
-           //if (((Math.pow(x-this.centerX*editor.getGame().getScaleX(),2)/Math.pow(this.radius*editor.getGame().getScaleX(),2))+(Math.pow(y-this.centerY*editor.getGame().getScaleY(),2)/Math.pow(this.radius*editor.getGame().getScaleY(),2))<=1)
+           //if (((Math.pow(x-this.centerX*game.getScaleX(),2)/Math.pow(this.radius*game.getScaleX(),2))+(Math.pow(y-this.centerY*game.getScaleY(),2)/Math.pow(this.radius*game.getScaleY(),2))<=1)
         }
         if (this.shape == 'square'){
             if (this.x1 <= x && x <= this.x2 && this.y1 <= y && y <= this.y2){
@@ -356,9 +355,7 @@ class Tile{
                 ret = pawn
             }
             else{
-                console.log(pawn)
-                console.log(player)
-                console.log(ret)
+           
             }
          
         })
@@ -368,7 +365,7 @@ class Tile{
     
     // findPreviousTile(){
     //     let res:Array<Tile> = []
-    //     editor.getGame().getTiles().forEach((tile:Tile)=>{
+    //     game.getTiles().forEach((tile:Tile)=>{
     //         if (tile.getFollowingTileNumber() == this.id){
     //             res.push(tile)
     //         }

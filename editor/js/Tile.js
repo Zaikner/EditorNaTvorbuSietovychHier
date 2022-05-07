@@ -38,14 +38,13 @@ var Tile = /** @class */ (function () {
         this.tileNumber = tileNumber;
     }
     Tile.prototype.drawTile = function (canvas, ctx, showOnlyChange) {
-        console.log('nakreslil');
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.image == undefined) {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 0;
             ctx.fillStyle = this.color;
-            ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
             if (this.shape == 'circle') {
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
             }
@@ -59,7 +58,7 @@ var Tile = /** @class */ (function () {
             // //kresli image
             if (this.shape == 'circle') {
                 ctx.save();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
                 var clipPath = new Path2D();
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
@@ -73,7 +72,7 @@ var Tile = /** @class */ (function () {
             }
             else {
                 ctx.save();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
                 var clipPath = new Path2D();
                 clipPath.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
                 ctx.clip(clipPath);
@@ -92,7 +91,7 @@ var Tile = /** @class */ (function () {
         if (this.stroke > 0) {
             ctx.resetTransform();
             ctx.restore();
-            ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;
             ctx.stroke();
@@ -107,7 +106,7 @@ var Tile = /** @class */ (function () {
                 // ctx.setLineDash([0]);
                 ctx.resetTransform();
                 ctx.restore();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
                 var grd = ctx.createRadialGradient(this.centerX, this.centerY, this.radius, this.centerX, this.centerY, this.radius + 8);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -121,7 +120,7 @@ var Tile = /** @class */ (function () {
             else {
                 ctx.resetTransform();
                 ctx.restore();
-                ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
+                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
                 var grd = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -133,9 +132,9 @@ var Tile = /** @class */ (function () {
                 ctx.resetTransform();
             }
         }
-        if (canvas_js_1.editor.getGame().getToogleNumber() || clientSocket_js_1.isEditor) {
+        if (canvas_js_1.game.getToogleNumber() || clientSocket_js_1.isEditor) {
             //ctx.save() 
-            //ctx.scale(editor.getGame().getScaleX(),editor.getGame().getScaleY())
+            //ctx.scale(game.getScaleX(),game.getScaleY())
             ctx.font = "bold 30px Arial";
             if (this.strokeColor != this.color) {
                 ctx.fillStyle = this.strokeColor;
@@ -170,13 +169,13 @@ var Tile = /** @class */ (function () {
         ctx.restore();
         ctx.beginPath();
         ctx.closePath();
-        ctx.scale(canvas_js_1.editor.getGame().getScaleX(), canvas_js_1.editor.getGame().getScaleY());
-        canvas_js_1.editor.getGame().getPlayerTokens().forEach(function (player) {
+        ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+        canvas_js_1.game.getPlayerTokens().forEach(function (player) {
             drawn = 0;
             _this.pawns.forEach(function (pawn) {
                 if (pawn.player == player) {
                     num++;
-                    var style = canvas_js_1.editor.getGame().getPawnStyle().get(pawn.player);
+                    var style = canvas_js_1.game.getPawnStyle().get(pawn.player);
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (_this.pawns.length == 2 && num == 2) {
                         diff = 30 * _this.radius / 50;
@@ -252,10 +251,10 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {
-            if (Math.sqrt(Math.pow((this.centerX * canvas_js_1.editor.getGame().getScaleX() - x), 2) + Math.pow((this.centerY * canvas_js_1.editor.getGame().getScaleY() - y), 2)) <= this.radius) {
+            if (Math.sqrt(Math.pow((this.centerX * canvas_js_1.game.getScaleX() - x), 2) + Math.pow((this.centerY * canvas_js_1.game.getScaleY() - y), 2)) <= this.radius) {
                 return true;
             }
-            //if (((Math.pow(x-this.centerX*editor.getGame().getScaleX(),2)/Math.pow(this.radius*editor.getGame().getScaleX(),2))+(Math.pow(y-this.centerY*editor.getGame().getScaleY(),2)/Math.pow(this.radius*editor.getGame().getScaleY(),2))<=1)
+            //if (((Math.pow(x-this.centerX*game.getScaleX(),2)/Math.pow(this.radius*game.getScaleX(),2))+(Math.pow(y-this.centerY*game.getScaleY(),2)/Math.pow(this.radius*game.getScaleY(),2))<=1)
         }
         if (this.shape == 'square') {
             if (this.x1 <= x && x <= this.x2 && this.y1 <= y && y <= this.y2) {
@@ -304,16 +303,13 @@ var Tile = /** @class */ (function () {
                 ret = pawn;
             }
             else {
-                console.log(pawn);
-                console.log(player);
-                console.log(ret);
             }
         });
         return ret;
     };
     // findPreviousTile(){
     //     let res:Array<Tile> = []
-    //     editor.getGame().getTiles().forEach((tile:Tile)=>{
+    //     game.getTiles().forEach((tile:Tile)=>{
     //         if (tile.getFollowingTileNumber() == this.id){
     //             res.push(tile)
     //         }

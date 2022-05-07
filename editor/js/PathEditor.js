@@ -8,7 +8,7 @@ var Elements_js_1 = require("./Elements.js");
 var clientSocket_js_1 = require("./clientSocket.js");
 var can = false;
 function editTrack() {
-    canvas_js_1.editor.nullEditor();
+    canvas_js_1.game.nullEditor();
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'start', ["btn", "btn-dark"], clientSocket_js_1.texts[119], startDrawingPath);
@@ -23,23 +23,23 @@ exports.editTrack = editTrack;
 function saveEditingTrack() {
     endDrawingPath();
     //if (sessionStorage.points === '' || sessionStorage.points == null){
-    if (canvas_js_1.editor.getGame().getPath().getPath() == []) {
-        //socket.emit('saveEditingTrack',{lenght:length,points:editor.getGame().getPath().getPath(),type:(<HTMLSelectElement>document.getElementById('Select')).value})
+    if (canvas_js_1.game.getPath().getPath() == []) {
+        //socket.emit('saveEditingTrack',{lenght:length,points:game.getPath().getPath(),type:(<HTMLSelectElement>document.getElementById('Select')).value})
     }
     (0, canvas_js_1.elementDeleter)('buttonPlace');
     (0, canvas_js_1.mainMenu)();
 }
 exports.saveEditingTrack = saveEditingTrack;
 function startDrawingPath() {
-    canvas_js_1.editor.getGame().getPath().setPath([]);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.getPath().setPath([]);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     canvas_js_1.canvas.addEventListener('mousemove', draw);
     canvas_js_1.canvas.addEventListener('mousedown', setPosition);
     canvas_js_1.canvas.addEventListener('mouseenter', setPosition);
 }
 function endDrawingPath() {
-    canvas_js_1.editor.getGame().getPath().setPath([]);
-    (0, canvas_js_1.reload)(canvas_js_1.editor, canvas_js_1.ctx);
+    canvas_js_1.game.getPath().setPath([]);
+    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     canvas_js_1.canvas.removeEventListener('mousemove', draw);
     canvas_js_1.canvas.removeEventListener('mousedown', setPosition);
     canvas_js_1.canvas.removeEventListener('mouseenter', setPosition);
@@ -71,8 +71,8 @@ function draw(event) {
     if (event.buttons !== 1)
         return;
     var coords = (0, canvas_js_1.calibreEventCoords)(event);
-    canvas_js_1.editor.getGame().getPath().add(new Point_js_1.Point(coords.x, coords.y, pos.end));
-    if (canvas_js_1.editor.getGame().getPath().getPath().length == 1) {
+    canvas_js_1.game.getPath().add(new Point_js_1.Point(coords.x, coords.y, pos.end));
+    if (canvas_js_1.game.getPath().getPath().length == 1) {
         canvas_js_1.ctx.moveTo(coords.x, coords.y);
         return;
     }
@@ -88,19 +88,19 @@ function draw(event) {
 }
 function spawnTiles() {
     var spawnedTiles = [];
-    canvas_js_1.editor.getGame().getPath().getPath().forEach(function (point) {
+    canvas_js_1.game.getPath().getPath().forEach(function (point) {
         canSpawn(point.getX(), point.getY());
         if (can == true) {
             spawnedTiles.push((0, TileEditor_js_1.spawnTile)({ x: point.getX(), y: point.getY() }));
-            console.log(canvas_js_1.editor.getGame().getTiles().length);
+            console.log(canvas_js_1.game.getTiles().length);
         }
     });
     endDrawingPath();
-    canvas_js_1.editor.addToUndoLog(spawnedTiles);
+    canvas_js_1.game.addToUndoLog(spawnedTiles);
 }
 function canSpawn(x, y) {
     can = true;
-    canvas_js_1.editor.getGame().getTiles().forEach(function (tile) {
+    canvas_js_1.game.getTiles().forEach(function (tile) {
         if (Math.sqrt(Math.pow((x - tile.getCenterX()), 2) + Math.pow((y - tile.getCenterY()), 2)) <= 2 * tile.getRadius()) {
             can = false;
         }

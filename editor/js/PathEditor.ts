@@ -1,4 +1,4 @@
-import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, editor, reload} from './canvas.js'
+import {mainMenu,elementDeleter,doc,canvas,ctx,calibreEventCoords, game, reload} from './canvas.js'
 
 import { Tile } from './Tile.js';
 import { Point } from './Point.js';
@@ -8,7 +8,7 @@ import { texts } from './clientSocket.js';
 
 var can = false
 function editTrack(){
-  editor.nullEditor()
+  game.nullEditor()
   removeAllButtons()
   removeAllListenersAdded()
     spawnButton(doc,"buttonPlace",'start',["btn","btn-dark"],texts[119],startDrawingPath) 
@@ -24,8 +24,8 @@ function editTrack(){
 function saveEditingTrack(){
     endDrawingPath()
     //if (sessionStorage.points === '' || sessionStorage.points == null){
-      if (editor.getGame().getPath().getPath()== []){
-    //socket.emit('saveEditingTrack',{lenght:length,points:editor.getGame().getPath().getPath(),type:(<HTMLSelectElement>document.getElementById('Select')).value})
+      if (game.getPath().getPath()== []){
+    //socket.emit('saveEditingTrack',{lenght:length,points:game.getPath().getPath(),type:(<HTMLSelectElement>document.getElementById('Select')).value})
     
     }
     elementDeleter('buttonPlace')
@@ -34,16 +34,16 @@ function saveEditingTrack(){
   }
 
   function startDrawingPath():void{
-    editor.getGame().getPath().setPath([]);
-    reload(editor,ctx)
+    game.getPath().setPath([]);
+    reload(game,ctx)
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mousedown', setPosition);
     canvas.addEventListener('mouseenter', setPosition);
    
   }
   function endDrawingPath():void{
-    editor.getGame().getPath().setPath([]);
-    reload(editor,ctx)
+    game.getPath().setPath([]);
+    reload(game,ctx)
     canvas.removeEventListener('mousemove', draw);
     canvas.removeEventListener('mousedown', setPosition);
     canvas.removeEventListener('mouseenter', setPosition);
@@ -77,9 +77,9 @@ function saveEditingTrack(){
     if (event.buttons !== 1) return;
     let coords = calibreEventCoords(event);
    
-    editor.getGame().getPath().add(new Point(coords.x,coords.y,pos.end))
+    game.getPath().add(new Point(coords.x,coords.y,pos.end))
   
-    if (editor.getGame().getPath().getPath().length == 1){
+    if (game.getPath().getPath().length == 1){
       ctx.moveTo(coords.x,coords.y);
       return;
     } 
@@ -98,20 +98,20 @@ function saveEditingTrack(){
   }
   function spawnTiles(){
     let spawnedTiles:Array<Tile> = []
-    editor.getGame().getPath().getPath().forEach((point:Point) => {
+    game.getPath().getPath().forEach((point:Point) => {
       canSpawn(point.getX(),point.getY())
       if (can == true){
         spawnedTiles.push(spawnTile({x:point.getX(),y:point.getY()}))
-        console.log(editor.getGame().getTiles().length)
+        console.log(game.getTiles().length)
       }})
     endDrawingPath()
-    editor.addToUndoLog(spawnedTiles)
+    game.addToUndoLog(spawnedTiles)
     }
 
 
   function canSpawn(x:number,y:number){
     can = true
-    editor.getGame().getTiles().forEach((tile:Tile) => {
+    game.getTiles().forEach((tile:Tile) => {
       if (Math.sqrt( Math.pow((x-tile.getCenterX()), 2) + Math.pow((y-tile.getCenterY()), 2)) <= 2*tile.getRadius()){
         can = false
       }

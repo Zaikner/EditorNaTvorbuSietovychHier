@@ -1,4 +1,4 @@
-import { doc, editor,  elementDeleter, mainMenu} from './canvas'
+import { doc, game,  elementDeleter, mainMenu} from './canvas'
 import { editorSocket,clickFunction,texts} from './clientSocket.js'
 import { spawnButton, spawnDiv, spawnHeading } from './Elements';
 import { removeAllButtons, removeAllListenersAdded, update } from './TileEditor';
@@ -8,7 +8,7 @@ let num = 0
 let newQuestions:Array<number> = []
 let givenOptions = 0
 
-console.log('zapol aspon subor')
+
 function initCreation(){
     removeAllButtons()
 
@@ -36,18 +36,17 @@ function initCreation(){
     label.htmlFor = text.id
     label.textContent = texts[66] 
     
-    console.log('preslo uz')
-    console.log(div)
+   
     div.appendChild(label)
     div.appendChild(text)
-    console.log('preslo uz')
+    
     div.style.marginBottom = '5px'
     div.style.width = '100%'
     document.getElementById('questionPlace')!.appendChild(div)
 
     addOption('questionPlace','',false)
     addOption('questionPlace','',false)
-    console.log('preslo uz')
+  
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     let but = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[67],function(){addOption('questionPlace','',false)})
     //but.style.float = 'left'
@@ -79,13 +78,12 @@ function renumOptions(){
        
         i++;
         n++
-        console.log(text)
-        console.log(n)
+       
     }
    
 }
 function addOption(parent:string,txt:string,is:boolean,id:number=-1){
-    console.log('pridal option')
+   
 
   
      num++;
@@ -105,7 +103,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.style.float = 'left'
      text.placeholder = 'Zadaj odpoveď číslo: '+num
      if (id > 0){
-         console.log('nastavil v add option id:' + id)
+       
         text.setAttribute('optionId',id.toString())
      }
      
@@ -131,8 +129,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
 
         
  newQuestions.push(num.valueOf())
- console.log('new quest su:')
- console.log(newQuestions)
+
  let deleteButton = document.createElement('button')
  deleteButton.textContent = texts[70]
  deleteButton.type = 'button'
@@ -166,13 +163,10 @@ function removeLastOption(parent:string){
 function createQuestion(id:number){
     let options = []
     let can = false
-    console.log('CLICKOL')
-    console.log(newQuestions)
+    
     for (let i = 1; i <= num;i++){
        
         if(<HTMLInputElement>document.getElementById('check'+i)!=undefined ){
-            console.log('pridal pri create question')
-            console.log({isAnswer:(<HTMLInputElement>document.getElementById('check'+i)!).checked,txt:(<HTMLInputElement>document.getElementById('ans'+i)!).value,id:(<HTMLInputElement>document.getElementById('ans'+i)!).getAttribute('optionId')})
             if ((<HTMLInputElement>document.getElementById('ans'+i)!).value!=''){
                 let isAnswer = (<HTMLInputElement>document.getElementById('check'+i)!).checked
                 if (isAnswer){
@@ -183,12 +177,7 @@ function createQuestion(id:number){
           
         }
         else{
-            console.log('undefined bol')
-            console.log(<HTMLInputElement>document.getElementById('check'+i))
-            console.log(<HTMLInputElement>document.getElementById('ans'+i))
-
-          
-            console.log(i)
+         
         }
        
     
@@ -197,8 +186,7 @@ function createQuestion(id:number){
         let data = {question:'',options:options,id:localStorage.getItem('id'),questionId:id}
         data.question = (<HTMLInputElement>document.getElementById('question')!).value
         num  = 0;
-        console.log('vklada otazky')
-        console.log(data)
+      
         editorSocket.emit('newQuestion',data)
     }
     else{
@@ -221,7 +209,7 @@ function showAllQuestions(data:any){
     
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
-        console.log('vykonal')
+     
         if (questions.get(elem.questionId) === undefined){
             let list = document.createElement('div')
             list.classList.add("list-group")
@@ -266,7 +254,7 @@ function pickQuestion(data:any){
 
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
-        console.log('vykonal')
+      
         if (questions.get(elem.questionId) === undefined){
             let list = document.createElement('div')
             list.classList.add("list-group")
@@ -280,10 +268,10 @@ function pickQuestion(data:any){
             quest.textContent = elem.questionText
             quest.onclick =function(){ 
                                      $('#pickQuestionModal').modal('hide')
-                                     editor.setQuestionId(elem.questionId)
-                                     console.log('Question id je teraz:'+editor.getQuestionId());
+                                     game.setQuestionId(elem.questionId)
+                                  
                                      document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
-                                     editor.setEvents('question',{num:elem.questionId,value:0})
+                                     game.setEvents('question',{num:elem.questionId,value:0})
                                      update()
                                      //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
@@ -348,8 +336,6 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     document.getElementById('questionPlace')?.appendChild(div)
 
     elem.forEach((e:any)=>{
-        console.log('pred pridanim')
-        console.log(e)
         addOption('questionPlace',e[1].optionText,e[1].isAnswer,e[0])
     })
     spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
@@ -366,10 +352,10 @@ function editQuestionMenu(id:number,txt:string,elem:any){
 }
 
 function deleteQuestion(id:number){
-    if (editor.getGame().containsQuestionId(id)){
+    if (game.containsQuestionId(id)){
         Warning.show(texts[205])
     }
-    else if ( editor.getGame().containsRandomQuestionAndQuestionNumberIs1()){
+    else if ( game.containsRandomQuestionAndQuestionNumberIs1()){
         Warning.show(texts[206])
     }
     else{
@@ -378,8 +364,7 @@ function deleteQuestion(id:number){
     
 }
 function editOption(id:number,check:HTMLInputElement,text:HTMLInputElement){  
-    console.log('emitol edit option')
-    console.log({id:id,isAnswer:check.checked,text:text.value})
+  
     editorSocket.emit('editOption',{id:id,isAnswer:check.checked,text:text.value})
     //$('#editModal').modal('show')
 }
@@ -394,7 +379,7 @@ function askQuestion(data:any){
     let i = 0
     data.forEach((elem:any) =>{
         i++;
-        console.log('vykonal')
+    
         if (questions.get(elem.questionId) === undefined){
             let list = document.createElement('div')
             list.classList.add("list-group")

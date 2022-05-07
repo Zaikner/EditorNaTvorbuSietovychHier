@@ -15,7 +15,7 @@ class Warning{
         
         let p = spawnParagraph(doc,'InGameModalBody','',txt,false)
         $('#InGameModal').modal('toggle')
-        console.log('ukazal InGameModal')
+        //console.log('ukazal InGameModal')
         
     }
 }

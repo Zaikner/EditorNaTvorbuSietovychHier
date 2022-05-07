@@ -1,9 +1,8 @@
 "use strict";
 exports.__esModule = true;
-exports.resize = exports.reload = exports.editor = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.initNewGame = exports.resize = exports.reload = exports.game = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
-var GameEditor_js_1 = require("./GameEditor.js");
 var Elements_1 = require("./Elements");
 var PawnEditor_1 = require("./PawnEditor");
 var Pawn_1 = require("./Pawn");
@@ -11,14 +10,22 @@ var Questions_1 = require("./Questions");
 var PawnStyle_1 = require("./PawnStyle");
 var clientSocket_1 = require("./clientSocket");
 var Warning_1 = require("./Warning");
-var editor = new GameEditor_js_1.GameEditor();
-exports.editor = editor;
+var Game_1 = require("./Game");
+var game = new Game_1.Game();
+exports.game = game;
 var params = new URLSearchParams(window.location.search);
 //socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');
 exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
 exports.ctx = ctx;
+function initNewGame() {
+    exports.game = game = new Game_1.Game();
+    game.getPlayerTokens().forEach(function (token) {
+        game.getNextTilesIds().set(token, 2);
+    });
+}
+exports.initNewGame = initNewGame;
 function edit() {
     var _a, _b, _c, _d;
     mainMenu();
@@ -26,8 +33,8 @@ function edit() {
     //   updateNextTileIds()
     // })
     (_a = document.getElementById('randomQuestionID')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
-        if (Array.from(editor.getGame().getQuestions().entries()).length > 0) {
-            editor.setEvents('random', { num: 0, value: 0 });
+        if (Array.from(game.getQuestions().entries()).length > 0) {
+            game.setEvents('random', { num: 0, value: 0 });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -41,7 +48,7 @@ function edit() {
         }
     });
     document.getElementById('noneButton').addEventListener('click', function () {
-        editor.setEvents('none', { num: 0, value: 0 });
+        game.setEvents('none', { num: 0, value: 0 });
         $('#editEventModal').modal('hide');
         $('#EventModal').modal('hide');
         elementDeleter('askTheQuestionEventEdit');
@@ -53,7 +60,7 @@ function edit() {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[97], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
-            editor.setEvents('forward', { num: parseInt(nums), value: 0 });
+            game.setEvents('forward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -67,7 +74,7 @@ function edit() {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[102], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
-            editor.setEvents('backward', { num: parseInt(nums), value: 0 });
+            game.setEvents('backward', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -81,7 +88,7 @@ function edit() {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[104], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
-            editor.setEvents('skip', { num: parseInt(nums), value: 0 });
+            game.setEvents('skip', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -95,7 +102,7 @@ function edit() {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[106], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
-            editor.setEvents('repeat', { num: parseInt(nums), value: 0 });
+            game.setEvents('repeat', { num: parseInt(nums), value: 0 });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -114,7 +121,7 @@ function edit() {
         (0, Elements_1.spawnParagraph)(document, 'askTheQuestionEventEdit', '', clientSocket_1.texts[109], true);
         (0, Elements_1.spawnButton)(document, 'askTheQuestionEventEdit', '', ['btn', 'btn-secondary'], clientSocket_1.texts[101], function () {
             var nums = document.getElementById('howManytimes').value;
-            editor.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
+            game.setEvents('stop', { num: parseInt(nums), value: parseInt(freeInput.value) });
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
@@ -165,13 +172,13 @@ function edit() {
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     (_b = document.getElementById('nextTileButtonSet')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
         var _a;
-        editor.getGame().getPlayerTokens().forEach(function (token) {
+        game.getPlayerTokens().forEach(function (token) {
             var input = document.getElementById('nextTile' + token).value;
-            // if (editor.getChoosenTile()!=undefined){
-            editor.getGame().getNextTilesIds().set(token, parseInt(input));
+            // if (game.getChoosenTile()!=undefined){
+            game.getNextTilesIds().set(token, parseInt(input));
         });
-        if (editor.getChoosenTile() != undefined) {
-            (_a = editor.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setNextTilesIds((0, TileEditor_js_1.copyNextTileMap)());
+        if (game.getChoosenTile() != undefined) {
+            (_a = game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setNextTilesIds((0, TileEditor_js_1.copyNextTileMap)());
         }
     });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
@@ -186,11 +193,11 @@ function edit() {
         mainMenu();
     });
     (_d = document.getElementById('loadGameButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
-        clientSocket_1.editorSocket.emit('loadGameNames');
+        clientSocket_1.editorSocket.emit('loadGameNames', { id: localStorage.getItem('id') });
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
     // document.getElementById("resetQuestionID")!.addEventListener('click',function(){
-    //   editor.setQuestionId(-1);
+    //   game.setQuestionId(-1);
     //   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
     // })
 }
@@ -205,35 +212,35 @@ function mainMenu() {
     var numOfPlayersSlider = document.createElement('input');
     numOfPlayersSlider.type = 'range';
     numOfPlayersSlider.id = 'numOfPlayers';
-    numOfPlayersSlider.value = editor.getGame().getnumOfPlayers().toString();
+    numOfPlayersSlider.value = game.getnumOfPlayers().toString();
     numOfPlayersSlider.min = '1';
     numOfPlayersSlider.max = '6';
     numOfPlayersSlider.step = '1';
     var numShower = document.createElement('paragraph');
     numShower.id = 'numShower';
-    numShower.textContent = editor.getGame().getnumOfPlayers().toString();
+    numShower.textContent = game.getnumOfPlayers().toString();
     var text = document.createElement('p');
     text.textContent = clientSocket_1.texts[22];
     document.getElementById("numOfPlayersPlace").appendChild(text);
     document.getElementById("numOfPlayersPlace").appendChild(numShower);
     numOfPlayersSlider.onclick = function () {
         document.getElementById("numShower").textContent = numOfPlayersSlider.value;
-        editor.getGame().setNumOfPlayers(parseInt(numOfPlayersSlider.value));
+        game.setNumOfPlayers(parseInt(numOfPlayersSlider.value));
         var number = parseInt(numOfPlayersSlider.value);
-        var playerTokens = editor.getGame().getPlayerTokens();
+        var playerTokens = game.getPlayerTokens();
         if (number < playerTokens.length) {
             var _loop_1 = function (i) {
                 playerTokens.pop();
-                editor.getGame().getPawnStyle()["delete"]('Player ' + i);
-                editor.getGame().getNextTilesIds()["delete"]('Player ' + i);
+                game.getPawnStyle()["delete"]('Player ' + i);
+                game.getNextTilesIds()["delete"]('Player ' + i);
                 var rem = [];
-                editor.getGame().getPawns().forEach(function (pawn) {
+                game.getPawns().forEach(function (pawn) {
                     if (pawn.player == ('Player ' + i)) {
                         rem.push(pawn);
                     }
                 });
                 rem.forEach(function (pawn) {
-                    editor.getGame().removePawn(pawn);
+                    game.removePawn(pawn);
                     pawn.tile.removePawn(pawn);
                 });
             };
@@ -245,28 +252,26 @@ function mainMenu() {
             for (var i = 1; i <= number; i++) {
                 if (!playerTokens.includes('Player ' + i)) {
                     playerTokens.push('Player ' + (playerTokens.length + 1));
-                    editor.getGame().getNextTilesIds().set('Player ' + i, editor.getGame().getTiles().length + 1);
-                    editor.getGame().getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
+                    game.getNextTilesIds().set('Player ' + i, game.getTiles().length + 1);
+                    game.getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
                 }
-                //editor.getGame().getPawnStyle().Player
+                //game.getPawnStyle().Player
             }
         }
         //spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
         //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
-        editor.getGame().setPlayerTokens(playerTokens);
-        console.log(playerTokens);
-        console.log(editor.getGame().getNextTilesIds());
-        reload(editor, ctx);
+        game.setPlayerTokens(playerTokens);
+        reload(game, ctx);
     };
     document.getElementById("numOfPlayersPlace").appendChild(numOfPlayersSlider);
     var gameName = document.createElement('input');
     gameName.id = 'gameName';
-    gameName.value = editor.getGame().getName();
+    gameName.value = game.getName();
     text = document.createElement('p');
     text.textContent = clientSocket_1.texts[23];
     document.getElementById("gameNamePlace").appendChild(text);
     gameName.oninput = function () {
-        editor.getGame().setName(gameName.value);
+        game.setName(gameName.value);
     };
     document.getElementById("gameNamePlace").appendChild(gameName);
     var gameType = document.createElement('select');
@@ -276,28 +281,28 @@ function mainMenu() {
     document.getElementById("gameTypePlace").appendChild(text);
     document.getElementById("gameTypePlace").appendChild(gameType);
     //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
-    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', clientSocket_1.texts[112], '1', '4', '1', editor.getGame().getNumberOfStartingPawns().toString());
+    var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', clientSocket_1.texts[112], '1', '4', '1', game.getNumberOfStartingPawns().toString());
     slid.style.width = '100%';
     slid.onchange = function () {
         var max = parseInt(slid.value);
-        if (max > editor.getGame().getNumberOfStartingPawns()) {
-            editor.getGame().getPlayerTokens().forEach(function (player) {
-                for (var i = 0; i < (max - editor.getGame().getNumberOfStartingPawns()); i++) {
-                    editor.getGame().getTiles().forEach(function (tile) {
+        if (max > game.getNumberOfStartingPawns()) {
+            game.getPlayerTokens().forEach(function (player) {
+                for (var i = 0; i < (max - game.getNumberOfStartingPawns()); i++) {
+                    game.getTiles().forEach(function (tile) {
                         if (tile.getIsStartingFor().includes(player)) {
                             var newPawn = new Pawn_1.Pawn(player, tile);
-                            editor.getGame().getPawns().push(newPawn);
+                            game.getPawns().push(newPawn);
                         }
                     });
                 }
             });
         }
         else {
-            editor.getGame().getPlayerTokens().forEach(function (player) {
+            game.getPlayerTokens().forEach(function (player) {
                 var num = 0;
                 var rem = [];
                 //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
-                editor.getGame().getTiles().forEach(function (tile) {
+                game.getTiles().forEach(function (tile) {
                     num = 0;
                     tile.getPawns().forEach(function (pawn) {
                         if (pawn.player == player) {
@@ -307,12 +312,12 @@ function mainMenu() {
                             }
                         }
                         rem.forEach(function (pawn) {
-                            editor.getGame().removePawn(pawn);
+                            game.removePawn(pawn);
                             pawn.tile.removePawn(pawn);
                         });
                     });
                 });
-                //     editor.getGame().getPawns().forEach((pawn:Pawn)=>{
+                //     game.getPawns().forEach((pawn:Pawn)=>{
                 //       if (pawn.player == player){
                 //         num++;
                 //         if (num > max){
@@ -321,71 +326,71 @@ function mainMenu() {
                 //       }
                 //     })
                 //     rem.forEach((pawn:Pawn)=>{
-                //       editor.getGame().removePawn(pawn)
+                //       game.removePawn(pawn)
                 //       pawn.tile.removePawn(pawn)
                 //     })
             });
         }
-        editor.getGame().setNumberOfStartingPawns(max);
-        reload(editor, ctx);
+        game.setNumberOfStartingPawns(max);
+        reload(game, ctx);
     };
-    var numbering = (0, Elements_1.spawnCheckerWithLabel)(doc, 'tileEditingPlace', 'toogleNumberingChecker', clientSocket_1.texts[137], editor.getGame().getToogleNumber(), [clientSocket_1.texts[92], clientSocket_1.texts[93]]);
+    var numbering = (0, Elements_1.spawnCheckerWithLabel)(doc, 'tileEditingPlace', 'toogleNumberingChecker', clientSocket_1.texts[137], game.getToogleNumber(), [clientSocket_1.texts[92], clientSocket_1.texts[93]]);
     numbering.onchange = function () {
         if (numbering.checked) {
-            editor.getGame().setToogleNumber(true);
+            game.setToogleNumber(true);
         }
         else {
-            editor.getGame().setToogleNumber(false);
+            game.setToogleNumber(false);
         }
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
-        // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+        // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
         //   Warning.show(texts[183])
         // }
-        // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+        // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
         //   Warning.show(texts[184])
         // }
         // else{
-        editor.getGame().saveGame();
+        game.saveGame();
         //}
         //window.location.replace('/')
     });
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
-        // if (editor.checkIfAllPlayersHaveFinishTile().length > 0){
+        // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
         //   Warning.show(texts[183])
         // }
-        // else if (editor.checkIfAllPlayersHaveStartingTile().length >0){
+        // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
         //   Warning.show(texts[184])
         // }
         // else{
-        //   editor.getGame().setIsPublished(true)
-        //   editor.getGame().saveGame()
+        //   game.setIsPublished(true)
+        //   game.saveGame()
         // }
-        editor.getGame().setIsPublished(true);
-        editor.getGame().saveGame();
+        game.setIsPublished(true);
+        game.saveGame();
     });
 }
 exports.mainMenu = mainMenu;
 var length = 0;
 ctx.scale(2, -2);
-resize(editor, ctx);
-window.addEventListener('resize', function () { resize(editor, ctx); });
+resize(game, ctx);
+window.addEventListener('resize', function () { resize(game, ctx); });
 // // resize canvas
 function resize(editor, context) {
     //endDrawingPath()
-    //console.log('initSizeX:'+editor.getGame().getInitSizeX() )
-    //console.log('initSizeY:'+editor.getGame().getInitSizeY() )
+    //console.log('initSizeX:'+game.getInitSizeX() )
+    //console.log('initSizeY:'+game.getInitSizeY() )
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
     if (!clientSocket_1.isEditor) {
-        if (editor.getGame().getInitSizeX() == 0) {
-            editor.getGame().setInitSizeX(canvas.width);
+        if (game.getInitSizeX() == 0) {
+            game.setInitSizeX(canvas.width);
         }
-        if (editor.getGame().getInitSizeY() == 0) {
-            editor.getGame().setInitSizeY(canvas.height);
+        if (game.getInitSizeY() == 0) {
+            game.setInitSizeY(canvas.height);
         }
-        editor.getGame().setScaleX((window.innerWidth / 3 * 2 - 30) / editor.getGame().getInitSizeX());
-        editor.getGame().setScaleY(window.innerHeight / editor.getGame().getInitSizeY());
+        game.setScaleX((window.innerWidth / 3 * 2 - 30) / game.getInitSizeX());
+        game.setScaleY(window.innerHeight / game.getInitSizeY());
     }
     reload(editor, context);
     //if (started) startDrawingPath();
@@ -394,14 +399,14 @@ function resize(editor, context) {
 exports.resize = resize;
 function reload(editor, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (editor.getGame().getBackground() != undefined) {
-        editor.getGame().getBackground().draw();
+    if (game.getBackground() != undefined) {
+        game.getBackground().draw();
     }
     var num = 0;
-    var size = editor.getGame().getPath().getPath().length;
+    var size = game.getPath().getPath().length;
     while (num < size - 1) {
-        var from = editor.getGame().getPath().getPath()[num];
-        var to = editor.getGame().getPath().getPath()[num + 1];
+        var from = game.getPath().getPath()[num];
+        var to = game.getPath().getPath()[num + 1];
         if (from.getEnd()) {
             num++;
             continue;
@@ -417,21 +422,21 @@ function reload(editor, ctx) {
         num++;
     }
     ctx.closePath();
-    var tiles = editor.getGame().getTiles();
+    var tiles = game.getTiles();
     tiles.forEach(function (tile) {
         tile.drawTile(canvas, ctx, false);
         tile.drawPawns(ctx);
     });
     ctx.closePath();
     ctx.restore();
-    // let pawns = editor.getGame().getPawns()
+    // let pawns = game.getPawns()
     // pawns.forEach((pawn:Pawn) =>{
     //     pawn.draw(ctx)
     // })
 }
 exports.reload = reload;
 function clear() {
-    editor.getGame().getPath().setPath([]);
+    game.getPath().setPath([]);
     //sessionStorage.points = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -444,7 +449,7 @@ function elementDeleter(parent) {
 }
 exports.elementDeleter = elementDeleter;
 function calibreEventCoords(event) {
-    //console.log({x:event.offsetX*editor.getGame().getScaleX(),y:event.offsetY*editor.getGame().getScaleY()})
+    //console.log({x:event.offsetX*game.getScaleX(),y:event.offsetY*game.getScaleY()})
     //console.log({x:event.offsetX,y:event.offsetY})
     return { x: event.offsetX, y: event.offsetY };
 }
@@ -454,4 +459,4 @@ window.onload = function () {
         clientSocket_1.editorSocket.emit('reload waiting room', { room: params.get('id') });
     }
 };
-setInterval(function () { resize(editor, ctx); }, 500);
+setInterval(function () { resize(game, ctx); }, 500);

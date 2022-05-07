@@ -9,7 +9,6 @@ var Warning_1 = require("./Warning");
 var num = 0;
 var newQuestions = [];
 var givenOptions = 0;
-console.log('zapol aspon subor');
 function initCreation() {
     (0, TileEditor_1.removeAllButtons)();
     (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[58]);
@@ -31,17 +30,13 @@ function initCreation() {
     label.style.color = 'white';
     label.htmlFor = text.id;
     label.textContent = clientSocket_js_1.texts[66];
-    console.log('preslo uz');
-    console.log(div);
     div.appendChild(label);
     div.appendChild(text);
-    console.log('preslo uz');
     div.style.marginBottom = '5px';
     div.style.width = '100%';
     document.getElementById('questionPlace').appendChild(div);
     addOption('questionPlace', '', false);
     addOption('questionPlace', '', false);
-    console.log('preslo uz');
     div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
     var but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[67], function () { addOption('questionPlace', '', false); });
     //but.style.float = 'left'
@@ -67,14 +62,11 @@ function renumOptions() {
         }
         i++;
         n++;
-        console.log(text);
-        console.log(n);
     }
 }
 function addOption(parent, txt, is, id) {
     var _a;
     if (id === void 0) { id = -1; }
-    console.log('pridal option');
     num++;
     var div = canvas_1.doc.createElement('div');
     div.classList.add("form-group", 'inline');
@@ -90,7 +82,6 @@ function addOption(parent, txt, is, id) {
     text.style.float = 'left';
     text.placeholder = 'Zadaj odpoveď číslo: ' + num;
     if (id > 0) {
-        console.log('nastavil v add option id:' + id);
         text.setAttribute('optionId', id.toString());
     }
     var check = canvas_1.doc.createElement('input');
@@ -109,8 +100,6 @@ function addOption(parent, txt, is, id) {
     labelCheck.style.fontSize = '20px';
     div.appendChild(text);
     newQuestions.push(num.valueOf());
-    console.log('new quest su:');
-    console.log(newQuestions);
     var deleteButton = document.createElement('button');
     deleteButton.textContent = clientSocket_js_1.texts[70];
     deleteButton.type = 'button';
@@ -146,12 +135,8 @@ exports.removeLastOption = removeLastOption;
 function createQuestion(id) {
     var options = [];
     var can = false;
-    console.log('CLICKOL');
-    console.log(newQuestions);
     for (var i = 1; i <= num; i++) {
         if (document.getElementById('check' + i) != undefined) {
-            console.log('pridal pri create question');
-            console.log({ isAnswer: document.getElementById('check' + i).checked, txt: document.getElementById('ans' + i).value, id: document.getElementById('ans' + i).getAttribute('optionId') });
             if (document.getElementById('ans' + i).value != '') {
                 var isAnswer = document.getElementById('check' + i).checked;
                 if (isAnswer) {
@@ -161,18 +146,12 @@ function createQuestion(id) {
             }
         }
         else {
-            console.log('undefined bol');
-            console.log(document.getElementById('check' + i));
-            console.log(document.getElementById('ans' + i));
-            console.log(i);
         }
     }
     if (can) {
         var data = { question: '', options: options, id: localStorage.getItem('id'), questionId: id };
         data.question = document.getElementById('question').value;
         num = 0;
-        console.log('vklada otazky');
-        console.log(data);
         clientSocket_js_1.editorSocket.emit('newQuestion', data);
     }
     else {
@@ -189,7 +168,6 @@ function showAllQuestions(data) {
     var questions = new Map();
     data.forEach(function (elem) {
         var _a, _b;
-        console.log('vykonal');
         if (questions.get(elem.questionId) === undefined) {
             var list = document.createElement('div');
             list.classList.add("list-group");
@@ -229,7 +207,6 @@ function pickQuestion(data) {
     var questions = new Map();
     data.forEach(function (elem) {
         var _a, _b;
-        console.log('vykonal');
         if (questions.get(elem.questionId) === undefined) {
             var list = document.createElement('div');
             list.classList.add("list-group");
@@ -242,10 +219,9 @@ function pickQuestion(data) {
             quest.textContent = elem.questionText;
             quest.onclick = function () {
                 $('#pickQuestionModal').modal('hide');
-                canvas_1.editor.setQuestionId(elem.questionId);
-                console.log('Question id je teraz:' + canvas_1.editor.getQuestionId());
+                canvas_1.game.setQuestionId(elem.questionId);
                 document.getElementById('pickedEventParagraph').textContent = clientSocket_js_1.texts[71] + elem.questionText;
-                canvas_1.editor.setEvents('question', { num: elem.questionId, value: 0 });
+                canvas_1.game.setEvents('question', { num: elem.questionId, value: 0 });
                 (0, TileEditor_1.update)();
                 //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
             };
@@ -300,8 +276,6 @@ function editQuestionMenu(id, txt, elem) {
     div.style.marginBottom = '5px';
     (_b = document.getElementById('questionPlace')) === null || _b === void 0 ? void 0 : _b.appendChild(div);
     elem.forEach(function (e) {
-        console.log('pred pridanim');
-        console.log(e);
         addOption('questionPlace', e[1].optionText, e[1].isAnswer, e[0]);
     });
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Add option', function () { addOption('questionPlace', '', false); });
@@ -314,10 +288,10 @@ function editQuestionMenu(id, txt, elem) {
     //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
 }
 function deleteQuestion(id) {
-    if (canvas_1.editor.getGame().containsQuestionId(id)) {
+    if (canvas_1.game.containsQuestionId(id)) {
         Warning_1.Warning.show(clientSocket_js_1.texts[205]);
     }
-    else if (canvas_1.editor.getGame().containsRandomQuestionAndQuestionNumberIs1()) {
+    else if (canvas_1.game.containsRandomQuestionAndQuestionNumberIs1()) {
         Warning_1.Warning.show(clientSocket_js_1.texts[206]);
     }
     else {
@@ -325,8 +299,6 @@ function deleteQuestion(id) {
     }
 }
 function editOption(id, check, text) {
-    console.log('emitol edit option');
-    console.log({ id: id, isAnswer: check.checked, text: text.value });
     clientSocket_js_1.editorSocket.emit('editOption', { id: id, isAnswer: check.checked, text: text.value });
     //$('#editModal').modal('show')
 }
@@ -342,7 +314,6 @@ function askQuestion(data) {
     data.forEach(function (elem) {
         var _a, _b;
         i++;
-        console.log('vykonal');
         if (questions.get(elem.questionId) === undefined) {
             var list = document.createElement('div');
             list.classList.add("list-group");

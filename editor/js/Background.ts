@@ -1,6 +1,6 @@
 import { BackgroundComponent } from "./BackgroundComponent"
 import { editComponent } from "./BackgroundEditor"
-import { calibreEventCoords, canvas,ctx, editor } from "./canvas"
+import { calibreEventCoords, canvas,ctx, game } from "./canvas"
 import { getDataUrlFromImage } from "./utilityFunctions"
 
 

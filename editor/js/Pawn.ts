@@ -1,6 +1,6 @@
 
 import { BlobOptions } from "buffer";
-import { ctx, editor,  reload } from "./canvas";
+import { ctx, game,  reload } from "./canvas";
 import { editorSocket, getCookie} from './clientSocket.js'
 import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
 import { Tile } from "./Tile";
@@ -26,7 +26,7 @@ export class Pawn{
       
 
         for (let i = 0;i < numOfTiles ; i++){
-            actuallTile = editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(this.player)!)!
+            actuallTile = game.findTileByTileId(actuallTile.getNextTilesIds().get(this.player)!)!
                 
                 
             if (actuallTile == undefined){
@@ -50,7 +50,7 @@ export class Pawn{
         
                 setTimeout(function(){   
                 actuallTile.removePawn(p)
-                actuallTile = editor.getGame().findTileByTileId(actuallTile.getNextTilesIds().get(p.player)!)!
+                actuallTile = game.findTileByTileId(actuallTile.getNextTilesIds().get(p.player)!)!
                 
 
                 actuallTile.getPawns().push(p)
@@ -58,34 +58,31 @@ export class Pawn{
                 p.tileId = actuallTile.getId()
                 p.tile = actuallTile
           
-            reload(editor,ctx)
+            reload(game,ctx)
             }, 500*i)
         }
      
         const params = new URLSearchParams(window.location.search);
-        if (editor.getGame().getIsOnturn()){
+        if (game.getIsOnturn()){
             setTimeout(function(){
                 editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id'),id:getCookie('id')})
                 startTile.setIsChoosen(false)
-                editor.setChoosenTile(undefined!)
-                editor.reactToTile(actuallTile,numOfTiles,p)
-                console.log(actuallTile)
-                console.log(editor)
-                reload(editor,ctx)
+                game.setChoosenTile(undefined!)
+                game.reactToTile(actuallTile,numOfTiles,p)
+               
+                reload(game,ctx)
           
             }, 550*numOfTiles)
         }
-        console.log('vykonal move pawn')
-        console.log(editor.getGame().getIsOnturn())
-        console.log(numOfTiles)
+     
         
     }
     returnToStart(){
         this.tile.removePawn(this)
         this.tileId = this.startingTileId
-        this.tile = editor.findTileById(this.tileId)
+        this.tile = game.findTileById(this.tileId)
         this.tile.getPawns().push(this)
-        reload(editor,ctx)
+        reload(game,ctx)
     }
     JSONfyPawn(){
         return{player:this.player,

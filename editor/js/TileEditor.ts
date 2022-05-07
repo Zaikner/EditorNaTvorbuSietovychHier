@@ -1,5 +1,5 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,editor,reload} from './canvas.js'
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,game,reload} from './canvas.js'
 import { editorSocket,canMovePawnFunc,texts} from './clientSocket.js'
 import { editTrack, endDrawingPath } from './PathEditor.js'
 
@@ -12,53 +12,53 @@ import { spawn } from 'child_process'
 import { removeAllComponentListeners } from './BackgroundEditor.js'
 import { text } from 'body-parser'
 
-let moveEventHandler = function(event:MouseEvent) {editor.findTile(event,true)   
-reload(editor,ctx)
+let moveEventHandler = function(event:MouseEvent) {game.findTile(event,true)   
+reload(game,ctx)
 }
-let onlyMoveHandler = function(event:MouseEvent) {editor.findTile(event,false)
-  console.log('zavolal only move')   
-  reload(editor,ctx)
+let onlyMoveHandler = function(event:MouseEvent) {game.findTile(event,false)
+  //console.log('zavolal only move')   
+  reload(game,ctx)
   }
-let pickTile = function(event:MouseEvent,token:string,value:number) {editor.findTile(event,false)
-  console.log('aspon spustil pickTile')
-  if (editor.getChoosenTile()!=undefined){
-    let pawn:any = editor.getChoosenTile()!.havePawnOnTile(token)
-    console.log('aspon vybral')
+let pickTile = function(event:MouseEvent,token:string,value:number) {game.findTile(event,false)
+  //console.log('aspon spustil pickTile')
+  if (game.getChoosenTile()!=undefined){
+    let pawn:any = game.getChoosenTile()!.havePawnOnTile(token)
+    //console.log('aspon vybral')
     if (pawn!= undefined){
       //'TU RADSEJ EMITOVAT NA SERVER, NECH VSSETKYCH ODSTRANI'
       //'AAAA NEZABUDNI NA LISTERNER'
-      //editor.getGame().movePawnById(pawn.id,value)
+      //game.movePawnById(pawn.id,value)
       const params = new URLSearchParams(window.location.search);
       if (pawn.canMove(value))
       {
-        console.log('can move, teda pohol')
+       // console.log('can move, teda pohol')
         
         editorSocket.emit('move pawns',{pawn:pawn.id,value:value,room:params.get('id')})
         canvas.removeEventListener('click',canMovePawnFunc)
       }
       else{
-        console.log('nepohol, teda odnuluje')
-        editor.getChoosenTile()?.setIsChoosen(false)
-        editor.setChoosenTile(undefined!)
+//console.log('nepohol, teda odnuluje')
+        game.getChoosenTile()?.setIsChoosen(false)
+        game.setChoosenTile(undefined!)
       }
     
       //(msg:{room:string,pawn:number,value:number})
-      console.log('pohol s panacikom')
+     // console.log('pohol s panacikom')
     }
   }
   
  
-  reload(editor,ctx)
+  reload(game,ctx)
   }
 
 let copyTile = function(event:MouseEvent) {
   removeAllButtons()
   spawnElements()
-  editor.findTile(event,false)
+  game.findTile(event,false)
   setValues(undefined!,false)
   showActualState()
-  editor.getChoosenTile()?.setIsChoosen(false)
-  editor.setChoosenTile(undefined!)   
+  game.getChoosenTile()?.setIsChoosen(false)
+  game.setChoosenTile(undefined!)   
 
   spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
     spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[121],insertTilesMenu)   
@@ -67,18 +67,18 @@ let copyTile = function(event:MouseEvent) {
     spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],texts[122],undoTileInsert)
     spawnButton(doc,"buttonPlace",'copyStyleButton',["btn","btn-dark"],texts[123],copyTileStyle)
   
-    reload(editor,ctx)
+    reload(game,ctx)
     canvas.addEventListener('mousedown', insert);
     }
 let deleteHandler = function(event:MouseEvent){
-  editor.deleteTile()
-  reload(editor,ctx)}
+  game.deleteTile()
+  reload(game,ctx)}
 
 
 function spawnElements(){
     //$('#exampleModal').modal('toggle')
     let options = [texts[195]]
-    editor.getGame().getPlayerTokens().slice().forEach((player:string)=>{
+    game.getPlayerTokens().slice().forEach((player:string)=>{
       options.push(player)
     })
 
@@ -89,7 +89,7 @@ function spawnElements(){
    
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker',texts[124])
     colorPicker.onchange = function(){
-      editor.setImage(undefined!)
+      game.setImage(undefined!)
       showActualState();
 
     }
@@ -130,15 +130,15 @@ function spawnElements(){
   // spawnImageInput(doc,"tileEditingPlace",'tilePattern',texts[131],texts[131],function(){
   
   //   if ((<HTMLInputElement>doc.getElementById('tilePattern')!).files!.length > 0){
-  //     editor.setPattern(new Image())
-  //       editor.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
-  //       editor.getPattern().onload = function (){
+  //     game.setPattern(new Image())
+  //       game.getPattern()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tilePattern')!).files![0]!)    
+  //       game.getPattern().onload = function (){
   //         showActualState()
   //       }
         
   //     }
   //   else{
-  //     editor.setPattern(undefined!)
+  //     game.setPattern(undefined!)
   //   }
   // })
   
@@ -151,15 +151,15 @@ function spawnElements(){
     spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],texts[134],function(){
   
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
-        editor.setImage(new Image())
-          editor.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
-          editor.getImage().onload = function(){
+        game.setImage(new Image())
+          game.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
+          game.getImage().onload = function(){
             showActualState()
           }
           
         }
       else{
-        editor.setImage(undefined!)
+        game.setImage(undefined!)
       }
     })
 
@@ -170,7 +170,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[135],texts[192],options,'start'
 spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
 
 // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
-// spawnMultiSelect(doc,'tileEditingPlace','',editor.getGame().getPlayerTokens(),'enabled')
+// spawnMultiSelect(doc,'tileEditingPlace','',game.getPlayerTokens(),'enabled')
 
   
    
@@ -245,7 +245,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     let p = spawnParagraph(document,'tileEditingPlace','pickedEventParagraph',texts[197],false)
     p.style.float ='right'
     let button = spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[70],function(){
-      editor.deleteTile()
+      game.deleteTile()
       
     })
     
@@ -256,8 +256,8 @@ function insertTilesMenu():void{
   //unchooseEverything()
   //doc.getElementById("canvasPlace")!.style.cursor = 'default'
   removeAllListenersAdded()
-  editor.makeAllTilesNotChoosen()
-  reload(editor,ctx)
+  game.makeAllTilesNotChoosen()
+  reload(game,ctx)
   removeAllButtons()  
   canvas.addEventListener('click',moveEventHandler)
     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
@@ -268,7 +268,7 @@ function insertTilesMenu():void{
 
 
   function startInsertingByOne(){
-    editor.nullEditor()
+    game.nullEditor()
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons()
     removeAllListenersAdded()
@@ -287,7 +287,7 @@ function insertTilesMenu():void{
   }
 
   function copyTileStyle(){
-    editor.nullEditor()
+    game.nullEditor()
     removeAllButtons()
     removeAllListenersAdded()
     spawnParagraph(document,'tileEditingPlace','',texts[147],true)
@@ -300,25 +300,25 @@ function insertTilesMenu():void{
     removeAllButtons()
     removeAllListenersAdded()
     unchooseEverything()
-    reload(editor,ctx)
+    reload(game,ctx)
     mainMenu();
   }
 
   function editTiles():void{
-    console.log('zavolal update')
-    editor.nullEditor()
+   // console.log('zavolal update')
+    game.nullEditor()
     
     
     removeAllListenersAdded()
     canvas.addEventListener('click',moveEventHandler)
     removeAllButtons()
-    editor.setIsMoving(false)
+    game.setIsMoving(false)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
     //spawnButton(doc,"buttonPlace",'Update',["btn","btn-dark"],texts[64],update)   
 
-    if ( editor.getChoosenTile()!= undefined){
-      editor.setStartForPlayers(editor.getChoosenTile()!.getIsStartingFor().slice())
-      editor.setEndForPlayers(editor.getChoosenTile()!.getIsEndingFor().slice())
+    if ( game.getChoosenTile()!= undefined){
+      game.setStartForPlayers(game.getChoosenTile()!.getIsStartingFor().slice())
+      game.setEndForPlayers(game.getChoosenTile()!.getIsEndingFor().slice())
      
      
     }
@@ -333,8 +333,8 @@ function insertTilesMenu():void{
     function saveEditingTiles(){
       removeAllButtons()
       removeAllListenersAdded()
-      editor.makeAllTilesNotChoosen()
-      reload(editor,ctx)
+      game.makeAllTilesNotChoosen()
+      reload(game,ctx)
       mainMenu();
     }
   
@@ -343,9 +343,9 @@ function insertTilesMenu():void{
     removeAllListenersAdded()
     endDrawingPath()
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
-    editor.makeAllTilesNotChoosen()
-    reload(editor,ctx)
-    editor.setIsMoving(true)
+    game.makeAllTilesNotChoosen()
+    reload(game,ctx)
+    game.setIsMoving(true)
     removeAllButtons()
     canvas.addEventListener('click',onlyMoveHandler)
     addEventListener('mousemove',moveTile)
@@ -388,39 +388,39 @@ function insertTilesMenu():void{
     //document.getElementById('wholeBody')!.style.cursor = 'default'
     canvas.style.cursor = 'default'
     //document.getElementById('optionPlace')!.style.cursor = 'default'
-    reload(editor,ctx)
+    reload(game,ctx)
   }
   function unchooseEverything(){
-    editor.makeAllTilesNotChoosen()
-    editor.getGame().getBackground().makeAllComponentsNotChoosen()
-    reload(editor,ctx)
+    game.makeAllTilesNotChoosen()
+    game.getBackground().makeAllComponentsNotChoosen()
+    reload(game,ctx)
   }
 
   function undoTileInsert(){
-      editor.removeLastFromUndoLog()
-      reload(editor,ctx)
+      game.removeLastFromUndoLog()
+      reload(game,ctx)
   }
 
   let  insert = function(event:MouseEvent){
     unchooseEverything()
-    editor.setChoosenTile( undefined!)
+    game.setChoosenTile( undefined!)
     let coords = calibreEventCoords(event)
     let canSpawn = true
     // if ((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value.length > 0){
-    //   if (!editor.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
+    //   if (!game.tileWithNumberExists(parseInt((<HTMLInputElement>document.getElementById('tileFollowingSetter')).value))){
     //     canSpawn = false
     //     Warning.show("Following tile with that number doesn't exist")
     //   }
     // }
     if (canSpawn){
       var addedTile = spawnTile(coords)
-      editor.addToUndoLog([addedTile])
+      game.addToUndoLog([addedTile])
       addedTile.getIsStartingFor().forEach((player:string)=>{
-        editor.getGame().insertPawns(player,addedTile)
+        game.insertPawns(player,addedTile)
       })
       showActualState()
     }
-    console.log(editor.getGame())
+  //  console.log(game)
     
   }
 
@@ -432,41 +432,41 @@ function insertTilesMenu():void{
     let shapeMenu:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('shapeMenu')!
     //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
     
-    var insertImage = editor.getImage()
+    var insertImage = game.getImage()
   
     // if (!backgroundChecker.checked){
     //   insertImage = undefined!
     // }
   
 
-    let addedTile = editor.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
-    addedTile.setIsStartingFor(editor.getStartForPlayers().slice())
-    addedTile.setIsEndingFor(editor.getEndForPlayers().slice())
+    let addedTile = game.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
+    addedTile.setIsStartingFor(game.getStartForPlayers().slice())
+    addedTile.setIsEndingFor(game.getEndForPlayers().slice())
 
     //addedTile.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     //addedTile.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
-    addedTile.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().slice())
+    addedTile.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().slice())
 
-    addedTile.setSkip(editor.getSkip())
-    addedTile.setRepeat(editor.getRepeat())
-    addedTile.setForward(editor.getForward())
-    addedTile.setBackward(editor.getBackward())
-    addedTile.setMustThrown(editor.getMustThrown())
-    addedTile.setTurnsToSetFree(editor.getTurnsToSetFree())
-    addedTile.setQuestionId(editor.getQuestionId())
-    addedTile.setRandomQuestion(editor.getRandomQuestion())
+    addedTile.setSkip(game.getSkip())
+    addedTile.setRepeat(game.getRepeat())
+    addedTile.setForward(game.getForward())
+    addedTile.setBackward(game.getBackward())
+    addedTile.setMustThrown(game.getMustThrown())
+    addedTile.setTurnsToSetFree(game.getTurnsToSetFree())
+    addedTile.setQuestionId(game.getQuestionId())
+    addedTile.setRandomQuestion(game.getRandomQuestion())
    
     
     // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){
       
     //   addedTile.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
       
-    //   let tileWithSameNumber = editor.getGame().getTiles()
+    //   let tileWithSameNumber = game.getTiles()
     //   .filter((t:Tile) => {return t!= addedTile && t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
     //   if (tileWithSameNumber.length > 0){
 
-    //     tileWithSameNumber[0].setTileNumber(editor.nextTileNumber())
+    //     tileWithSameNumber[0].setTileNumber(game.nextTileNumber())
     //   }
        
     // }
@@ -475,20 +475,20 @@ function insertTilesMenu():void{
     // }
     
     // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-    //   addedTile.setQuestionId(editor.getQuestionId())
+    //   addedTile.setQuestionId(game.getQuestionId())
     // }
     // else{
     //   addedTile.setQuestionId(-1)
     // }
 
     addedTile.setNextTilesIds(returnNextTileMap())
-    reload(editor,ctx)
-    console.log(addedTile)
-    console.log(editor)
+    reload(game,ctx)
+   // console.log(addedTile)
+  //  console.log(game)
     return addedTile    
   }
   let update = function(){
-    console.log('zavolal update')
+   // console.log('zavolal update')
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -497,8 +497,8 @@ function insertTilesMenu():void{
       let shapeMenu:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('shapeMenu')!
       //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
       //let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
-      let insertImage = editor.getImage()
-      //let pattImage = editor.getPattern()
+      let insertImage = game.getImage()
+      //let pattImage = game.getPattern()
       // if (!backgroundChecker.checked){
       //   insertImage = undefined!
       // }
@@ -506,95 +506,95 @@ function insertTilesMenu():void{
       //   pattImage = undefined!
       // }
      
-    editor.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
+    game.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
     
 
-    editor.getChoosenTile()?.setPawns([])
+    game.getChoosenTile()?.setPawns([])
 
-    editor.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
-         for (let i = 0;i<editor.getGame().getNumberOfStartingPawns();i++){
-        editor.getGame().getPawns().push(new Pawn(player,editor.getChoosenTile()!))
+    game.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
+         for (let i = 0;i<game.getNumberOfStartingPawns();i++){
+        game.getPawns().push(new Pawn(player,game.getChoosenTile()!))
       }
     })
 
-    console.log(editor.getChoosenTile()!)
-    console.log(editor.getStartForPlayers().slice())
-    editor.getChoosenTile()!.setIsStartingFor(editor.getStartForPlayers().slice())
-    editor.getChoosenTile()!.setIsEndingFor(editor.getEndForPlayers().slice())
+   // console.log(game.getChoosenTile()!)
+  //  console.log(game.getStartForPlayers().slice())
+    game.getChoosenTile()!.setIsStartingFor(game.getStartForPlayers().slice())
+    game.getChoosenTile()!.setIsEndingFor(game.getEndForPlayers().slice())
     
     
-    //editor.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
-    //editor.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
+    //game.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
+    //game.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     
    
-    editor.getChoosenTile()!.setCantBeEliminatedOnTile(editor.getCantBeEliminatedOnTile().slice())
+    game.getChoosenTile()!.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().slice())
   
     // if ((<HTMLInputElement>document.getElementById('eventChecker')).checked){
      
-    editor.getChoosenTile()!.setSkip(editor.getSkip())
-    editor.getChoosenTile()!.setRepeat(editor.getRepeat())
-    editor.getChoosenTile()!.setForward(editor.getForward())
-    editor.getChoosenTile()!.setBackward(editor.getBackward())
-    editor.getChoosenTile()!.setMustThrown(editor.getMustThrown())
-    editor.getChoosenTile()!.setTurnsToSetFree(editor.getTurnsToSetFree())
-    editor.getChoosenTile()!.setQuestionId(editor.getQuestionId())
-    editor.getChoosenTile()!.setRandomQuestion(editor.getRandomQuestion())
+    game.getChoosenTile()!.setSkip(game.getSkip())
+    game.getChoosenTile()!.setRepeat(game.getRepeat())
+    game.getChoosenTile()!.setForward(game.getForward())
+    game.getChoosenTile()!.setBackward(game.getBackward())
+    game.getChoosenTile()!.setMustThrown(game.getMustThrown())
+    game.getChoosenTile()!.setTurnsToSetFree(game.getTurnsToSetFree())
+    game.getChoosenTile()!.setQuestionId(game.getQuestionId())
+    game.getChoosenTile()!.setRandomQuestion(game.getRandomQuestion())
     // }
     // else{
-      // editor.getChoosenTile()!.setSkip(0)
-      // editor.getChoosenTile()!.setRepeat(0)
-      // editor.getChoosenTile()!.setForward(0)
-      // editor.getChoosenTile()!.setBackward(0)
-      // editor.getChoosenTile()!.setMustThrown(0)
-      // editor.getChoosenTile()!.setTurnsToSetFree(0)
+      // game.getChoosenTile()!.setSkip(0)
+      // game.getChoosenTile()!.setRepeat(0)
+      // game.getChoosenTile()!.setForward(0)
+      // game.getChoosenTile()!.setBackward(0)
+      // game.getChoosenTile()!.setMustThrown(0)
+      // game.getChoosenTile()!.setTurnsToSetFree(0)
     // }
-    // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0  && editor.getChoosenTile()?.getTileNumber()!= parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)){
-    //   editor.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
+    // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0  && game.getChoosenTile()?.getTileNumber()!= parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)){
+    //   game.getChoosenTile()!.setTileNumber(parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value))
     
-    //   let tileWithSameNumber = editor.getGame().getTiles()
+    //   let tileWithSameNumber = game.getTiles()
     //   .filter((t:Tile) => {return t.getTileNumber() === parseInt((<HTMLInputElement>document.getElementById('tileNumberSetter')).value)});
     //   if (tileWithSameNumber.length > 0){
-    //     tileWithSameNumber[0].setTileNumber(editor.nextTileNumber())
+    //     tileWithSameNumber[0].setTileNumber(game.nextTileNumber())
     //   }
        
     //}
-    editor.getChoosenTile()!.getPawns().forEach((pawn:Pawn)=>{
-      if (!editor.getChoosenTile()!.getIsStartingFor().includes(pawn.player)){
-        editor.getChoosenTile()?.removePawn(pawn)
-        editor.getGame().removePawn(pawn)
+    game.getChoosenTile()!.getPawns().forEach((pawn:Pawn)=>{
+      if (!game.getChoosenTile()!.getIsStartingFor().includes(pawn.player)){
+        game.getChoosenTile()?.removePawn(pawn)
+        game.removePawn(pawn)
       }})
 
       // if ((<HTMLInputElement>document.getElementById('askQuestionChecker')).checked){
-      //   editor.getChoosenTile()?.setQuestionId(editor.getQuestionId())
+      //   game.getChoosenTile()?.setQuestionId(game.getQuestionId())
       // }
       // else{
-      //   editor.getChoosenTile()?.setQuestionId(-1)
+      //   game.getChoosenTile()?.setQuestionId(-1)
       // }S
 
 
-      //editor.getChoosenTile()!.setNextTilesIds(returnNextTileMap())
-    console.log(editor.getChoosenTile())
-    reload(editor,ctx)
+      //game.getChoosenTile()!.setNextTilesIds(returnNextTileMap())
+  //  console.log(game.getChoosenTile())
+    reload(game,ctx)
   }
   let setValues = function(tile:Tile,copyNumber:boolean){
     if (tile == undefined){
-      tile = editor.getChoosenTile()!
+      tile = game.getChoosenTile()!
     
     }
     else{}
      
-    console.log('choosen tile je :')
-    console.log(tile)
+//    console.log('choosen tile je :')
+  //  console.log(tile)
     if (tile!=undefined){
      
-      editor.setSkip(tile.getSkip())
-      editor.setRepeat(tile.getRepeat())
-      editor.setForward(tile.getForward())
-      editor.setBackward(tile.getBackward())
-      editor.setMustThrown(tile.getMustThrown())
-      editor.setTurnsToSetFree(tile.getTurnsToSetFree())
-      editor.setQuestionId(tile.getQuestionId())
-      editor.setRandomQuestion(tile.getRandomQuestion())
+      game.setSkip(tile.getSkip())
+      game.setRepeat(tile.getRepeat())
+      game.setForward(tile.getForward())
+      game.setBackward(tile.getBackward())
+      game.setMustThrown(tile.getMustThrown())
+      game.setTurnsToSetFree(tile.getTurnsToSetFree())
+      game.setQuestionId(tile.getQuestionId())
+      game.setRandomQuestion(tile.getRandomQuestion())
       let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
@@ -608,7 +608,7 @@ function insertTilesMenu():void{
       
       let tileNumberSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileNumberSetter')!
       //let tileFollowingSetter:HTMLInputElement = <HTMLInputElement>doc.getElementById('tileFollowingSetter')!
-      //let choosenTile = editor.getChoosenTile()
+      //let choosenTile = game.getChoosenTile()
       
 
       colorPicker.value = tile!.getColor()
@@ -666,11 +666,11 @@ function insertTilesMenu():void{
         document.getElementById('pickedEventParagraph')!.textContent =texts[110] + tile.getMustThrown() +texts[111] + tile.getTurnsToSetFree() + texts[100];
       }
       else if (tile.getQuestionId()!=-1){
-        document.getElementById('pickedEventParagraph')!.textContent = texts[71] + editor.getGame().getQuestions().get(tile.getQuestionId());
+        document.getElementById('pickedEventParagraph')!.textContent = texts[71] + game.getQuestions().get(tile.getQuestionId());
       }
       else if (tile.getRandomQuestion()){
-        console.log('chooooooooooooooooooooooosen tile:')
-        console.log(editor.getChoosenTile())
+        //console.log('chooooooooooooooooooooooosen tile:')
+       // console.log(game.getChoosenTile())
         document.getElementById('pickedEventParagraph')!.textContent = texts[201]
       }
       else{
@@ -703,7 +703,7 @@ function insertTilesMenu():void{
 
 
 
-      // Array.from(editor.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
+      // Array.from(game.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
       //   console.log(key)
       //   console.log(value)
       //   console.log('nextTile'+key)
@@ -732,17 +732,17 @@ function insertTilesMenu():void{
  
 
   let moveTile = function(event:MouseEvent){
-      editor.moveTile(event)
-      reload(editor,ctx)
+      game.moveTile(event)
+      reload(game,ctx)
   }
 
   function showActualState(){
-    if (editor.getChoosenTile()!){
+    if (game.getChoosenTile()!){
       update()
     }
     let cs = <HTMLCanvasElement>document.getElementById('changeCanvas')!
     let cttttx = <CanvasRenderingContext2D> cs.getContext("2d");
-    reload(editor,cttttx)
+    reload(game,cttttx)
     let width = cs.width
     let height = cs.height
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
@@ -758,25 +758,25 @@ function insertTilesMenu():void{
   
 
     let stroke = parseInt(sizeOfOutlineSlider!.value)
-    let tile = editor.initTile(false,{x:width/2,y:height/2},colorPicker!.value,parseInt(sizeOfTileSlider!.value),stroke,outlineColorPicker!.value,shapeMenu!.value,undefined)
+    let tile = game.initTile(false,{x:width/2,y:height/2},colorPicker!.value,parseInt(sizeOfTileSlider!.value),stroke,outlineColorPicker!.value,shapeMenu!.value,undefined)
     //tile.setNumberingColor(numberingColor.value)
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
-    tile.setImage(editor.getImage())
+    tile.setImage(game.getImage())
   
     cttttx.clearRect(0,0,cs.width,cs.height)
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
     
-    reload(editor,ctx)
+    reload(game,ctx)
    
     
   }
   function generateNextTiles(){
     elementDeleter('nextTileModalBody')
-   // if (editor.getChoosenTile() == undefined){
-      editor.getGame().getPlayerTokens().forEach((token:string)=>{
-        console.log('pridal'+token)
+   // if (game.getChoosenTile() == undefined){
+      game.getPlayerTokens().forEach((token:string)=>{
+       
         let div = document.createElement('div')
         div.id = 'div' + token
         //div.style.width = '100%'
@@ -786,19 +786,19 @@ function insertTilesMenu():void{
         let input = document.createElement('input')
         input.type = 'number'
         input.id ='nextTile'+token
-        if (editor.getChoosenTile()!=undefined){
-          input.value = editor.getChoosenTile()!.getNextTilesIds().get(token)!.toString()
-          console.log('generate nextTile nastavil pre ' + 'nextTile'+token + 'hodnotu ' +editor.getChoosenTile()!.getNextTilesIds().get(token)!.toString())
+        if (game.getChoosenTile()!=undefined){
+          input.value = game.getChoosenTile()!.getNextTilesIds().get(token)!.toString()
+          //console.log('generate nextTile nastavil pre ' + 'nextTile'+token + 'hodnotu ' +game.getChoosenTile()!.getNextTilesIds().get(token)!.toString())
         }
         else{
-          input.value = editor.getGame().getNextTilesIds().get(token)!.toString()
+          input.value = game.getNextTilesIds().get(token)!.toString()
         }
        
         // input.onchange = function(){
           
-        //     editor.getGame().getNextTilesIds().set(token,parseInt(input.value))
-        //     if (editor.getChoosenTile()!= undefined){
-        //       editor.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
+        //     game.getNextTilesIds().set(token,parseInt(input.value))
+        //     if (game.getChoosenTile()!= undefined){
+        //       game.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
         //       console.log('prestavil')
         //     }
         // }
@@ -809,8 +809,8 @@ function insertTilesMenu():void{
         spawnParagraph(document,'div' + token,'',texts[148]+token+texts[149],true)
         div.appendChild(input)
   })
-    // }else if (editor.getChoosenTile() !=undefined){
-    //   Array.from(editor.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
+    // }else if (game.getChoosenTile() !=undefined){
+    //   Array.from(game.getChoosenTile()!.getNextTilesIds().entries()).forEach(([key,value])=>{
     //     console.log(key)
     //     console.log(value)
     //     console.log('nextTile'+key)
@@ -831,23 +831,23 @@ function insertTilesMenu():void{
 
   function returnNextTileMap(){
     let ret = new Map()
-    Array.from(editor.getGame().getNextTilesIds().entries()).forEach(([key,value])=>{
+    Array.from(game.getNextTilesIds().entries()).forEach(([key,value])=>{
       ret.set(key,value)
-      editor.getGame().getNextTilesIds().set(key,value+1)
+      game.getNextTilesIds().set(key,value+1)
     })
     return ret
   }
   function copyNextTileMap(){
     let ret = new Map()
-    Array.from(editor.getGame().getNextTilesIds().entries()).forEach(([key,value])=>{
+    Array.from(game.getNextTilesIds().entries()).forEach(([key,value])=>{
       ret.set(key,value)
     })
     return ret
   }
   function updateNextTileIds(){
-    Array.from(editor.getGame().getNextTilesIds().keys()).forEach((token:string)=>{
+    Array.from(game.getNextTilesIds().keys()).forEach((token:string)=>{
       
-      editor.getGame().getNextTilesIds().set(token,parseInt((<HTMLInputElement>document.getElementById('nextTile'+token)).value))
+      game.getNextTilesIds().set(token,parseInt((<HTMLInputElement>document.getElementById('nextTile'+token)).value))
     })
   }
   
