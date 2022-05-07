@@ -607,6 +607,8 @@ exports.showActualState = showActualState;
 function generateNextTiles() {
     (0, canvas_js_1.elementDeleter)('nextTileModalBody');
     // if (game.getChoosenTile() == undefined){
+    console.log(canvas_js_1.game.getPlayerTokens());
+    console.log(canvas_js_1.game.getNextTilesIds());
     canvas_js_1.game.getPlayerTokens().forEach(function (token) {
         var div = document.createElement('div');
         div.id = 'div' + token;
@@ -614,11 +616,15 @@ function generateNextTiles() {
         var input = document.createElement('input');
         input.type = 'number';
         input.id = 'nextTile' + token;
+        console.log('vygeneroval');
+        console.log('input');
         if (canvas_js_1.game.getChoosenTile() != undefined) {
+            console.log('neundefined');
             input.value = canvas_js_1.game.getChoosenTile().getNextTilesIds().get(token).toString();
             //console.log('generate nextTile nastavil pre ' + 'nextTile'+token + 'hodnotu ' +game.getChoosenTile()!.getNextTilesIds().get(token)!.toString())
         }
         else {
+            console.log('undefined');
             input.value = canvas_js_1.game.getNextTilesIds().get(token).toString();
         }
         // input.onchange = function(){

@@ -775,6 +775,8 @@ function insertTilesMenu():void{
   function generateNextTiles(){
     elementDeleter('nextTileModalBody')
    // if (game.getChoosenTile() == undefined){
+     console.log( game.getPlayerTokens())
+     console.log(game.getNextTilesIds())
       game.getPlayerTokens().forEach((token:string)=>{
        
         let div = document.createElement('div')
@@ -786,11 +788,15 @@ function insertTilesMenu():void{
         let input = document.createElement('input')
         input.type = 'number'
         input.id ='nextTile'+token
+        console.log('vygeneroval')
+        console.log('input')
         if (game.getChoosenTile()!=undefined){
+          console.log('neundefined')
           input.value = game.getChoosenTile()!.getNextTilesIds().get(token)!.toString()
           //console.log('generate nextTile nastavil pre ' + 'nextTile'+token + 'hodnotu ' +game.getChoosenTile()!.getNextTilesIds().get(token)!.toString())
         }
         else{
+          console.log('undefined')
           input.value = game.getNextTilesIds().get(token)!.toString()
         }
        

@@ -13,6 +13,7 @@ var Warning_1 = require("./Warning");
 var Game_1 = require("./Game");
 var game = new Game_1.Game();
 exports.game = game;
+initNewGame();
 var params = new URLSearchParams(window.location.search);
 //socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');

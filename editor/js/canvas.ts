@@ -19,6 +19,7 @@ import { Game } from "./Game";
 
 
 let game = new Game()
+initNewGame()
 const params = new URLSearchParams(window.location.search);
 
 
