@@ -321,7 +321,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
-        r.setHasStarted(true)
+        r.startGame()
         
         this.io.in(msg.room).emit('game started',{msg:'Game has started!',tokens:r.getPlayers().map((p:any)=>p.getToken())})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -346,6 +346,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
+        r.setTimeLeft(10)
         if (r.getPlayerOnTurn().getMustThrown()!=0){
           if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
@@ -374,7 +375,12 @@ export class ServerSocket{
       })
       
       socket.on('show Dice',(msg:{id:string,value:number})=>{
-        
+        let r = GameManager.getActiveRooms().get(parseInt(msg.id))
+        if (r == undefined){
+          return
+        }
+        r.setLastDiceValue(msg.value)
+
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
       socket.on('react to tile',async (msg:{room:string,questionId:number,randomQuestion:boolean,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,turnsToSetFree:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
@@ -385,6 +391,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
+        r.setTimeLeft(10)
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
@@ -503,6 +510,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
+        r.setTimeLeft(10)
         let player = r.findPlayerByToken(msg.token)
 
         if(msg.is == true &&  !r.getPlayersWhichEnded().includes(player)){

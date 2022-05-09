@@ -139,8 +139,10 @@ var AccountManager = /** @class */ (function () {
     AccountManager.logout = function (acc) {
         this.loggedAccounts = this.loggedAccounts.filter(function (a) { return a != acc; });
         this.clientIds = this.clientIds.filter(function (id) { return id != acc.getClientId(); });
-        console.log(this.loggedAccounts);
-        console.log(this.clientIds);
+        var room = acc.getActiveInRoom();
+        if (room != undefined) {
+            room.leave(room.findPlayerOnAccount(acc));
+        }
     };
     AccountManager.logGuest = function () {
         var newAcc = new Account_js_1.Account((this.numberOfGuests + 1).toString(), 'guestHaveNoPassword');

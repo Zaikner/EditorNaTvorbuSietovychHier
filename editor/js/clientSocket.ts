@@ -313,6 +313,23 @@ editorSocket.on('player joined',(msg:{msg:string})=>{
   reload(game,ctx)
 })})
 editorSocket.on('player left',(msg:{msg:string})=>{
+  console.log(msg.msg)
+  
+  let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
+  let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
+  if (chat.value == ''){
+    chat.value =  'Player '+msg.msg +' has left the room.'
+  }
+  else{
+    chat.value = chat.value +  '\n' + 'Player '+msg.msg +' has left the room.'}
+
+  
+  if (chatPlaying.value == ''){
+    chatPlaying.value =  'Player '+msg.msg +' has left the room.'
+  }
+  else{
+    chatPlaying.value = chatPlaying.value +  '\n' + 'Player '+msg.msg +' has left the room.';
+  }
   editorSocket.emit('reload waiting room',{room:params.get('id')})
   reload(game,ctx)
 })
@@ -401,6 +418,7 @@ editorSocket.on('show Dice value',(msg:{value:number})=>{
       elementDeleter('dicePlace')
       document.getElementById('dicePlace')?.append(image)
   }
+  console.log('nastavil Dice value' + msg.value)
 })
 editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     
@@ -529,7 +547,12 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     
     
   })
-  
+  editorSocket.on('end turn',()=>{
+    game.setIsOnTurn(false)
+    game.setCanThrow(false)
+    canvas.removeEventListener('click',canMovePawnFunc)
+    console.log('recived end turn')
+  })
   
   // editorSocket.on('can throw',()=>{
   //   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})

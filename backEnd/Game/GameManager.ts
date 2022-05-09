@@ -97,7 +97,7 @@ export class GameManager{
             room.getPlayers().forEach((player:Player)=>{
                 if (player.getAccount().getSocketId() == socketId){
                     room.leave(player)
-                    ServerSocket.getIo().to(room.getId().toString()).emit('player left',{msg:'Player '+player.getAccount().getName()+' has left the room.'})
+                    //ServerSocket.getIo().to(room.getId().toString()).emit('player left',{msg:'Player '+player.getAccount().getName()+' has left the room.'})
                  
                 }
             })

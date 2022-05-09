@@ -17,9 +17,13 @@ export class Room{
         private choosedPawnId:number = -1
         private playersWhichEnded:Array<Player> = []
         private spectators:Array<Player>=[]
+        private static activeInRoom:Room = undefined!;
+        private timeLeft:number = 0;
+        private lastDiceValue:number = 0
 
        
         private pawnPositions:Map<number,number> = new Map()
+ 
 
         constructor(id:number,numOfPlayers:number,gameName:string){
             this.id = id;
@@ -52,6 +56,7 @@ export class Room{
                 }
                 else{
                     this.players.push(player)
+                    player.getAccount().setActiveInRoom(this)
                     player.setToken('Player '+ (this.numOfPresentPlayers+1))
                   
                     this.numOfPresentPlayers++;
@@ -75,14 +80,62 @@ export class Room{
             if (player.getToken() != 'spectator'){
                 this.players = this.players.filter((t) => {return t != player});
                 this.numOfPresentPlayers--;
+                player.getAccount().setActiveInRoom(undefined!)
             }
             else{
                 this.spectators = this.spectators.filter((t) => {return t != player});
             }
             if (this.numOfPresentPlayers == 0){
+
                 GameManager.getActiveRooms().delete(this.id)
             
             }
+            ServerSocket.emitToRoom(this.id.toString(),'player left',{msg:player.getAccount().getName()})
+            //'player left',(msg:{msg:string})
+        }
+
+        public startGame(){
+            this.setHasStarted(true)
+            let r = this
+            this.timeLeft = 10
+            setInterval(function(){r.timeLeft--;
+                
+                if (r.timeLeft == 0){
+                    r.timeLeft = 10
+                    console.log('ended turn')
+                    ServerSocket.emitToRoom(r.id.toString(),'end turn',{})
+                    r.nextTurn()
+                    let stop = true
+                    if (r.getPlayerOnTurn().getSkip() !=0){
+                      //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                      ServerSocket.emitToRoom(r.id.toString(),'react to event: skip',{token: r.getPlayerOnTurn().getAccount().getName(),left:r.getPlayerOnTurn().getSkip()-1})
+                      stop = false
+                    }
+                    while(!stop){
+                      //console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+                      //console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+                      
+                      
+                      if (r.getPlayerOnTurn().getSkip() ==0){
+                           stop = true
+                      }
+                      else{
+                        r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                        r.nextTurn()
+                        //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
+                      }
+                    }
+                    //console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+                    ////console.log(r)
+               
+                    ServerSocket.emitToRoom(r.id.toString(),'turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                    ServerSocket.emitToRoom(r.getPlayerOnTurn().getAccount().getSocketId(),'turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                    
+                    r.setReturnValue(-1)
+                    r.setChoosedPawnId(-1)
+                    //ServerSocket.emitToRoom(r.id.toString(),'show Dice value',{value:r.getLastDiceValue()})
+                }
+            },1000)
         }
         public broadcast(msg:string){
 
@@ -241,6 +294,18 @@ export class Room{
         public setChoosedPawnId(newValue:any){
             this.choosedPawnId = newValue!
         }
-            
+     
+        public  getTimeLeft(){
+            return this.timeLeft
+        }
+        public setTimeLeft(newTime:number){
+            this.timeLeft = newTime
+        }
+        public  getLastDiceValue(){
+            return this.lastDiceValue
+        }
+        public setLastDiceValue(newValue:number){
+            this.lastDiceValue= newValue
+        }
         
     }

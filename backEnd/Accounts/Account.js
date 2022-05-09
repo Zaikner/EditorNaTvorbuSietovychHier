@@ -13,6 +13,7 @@ var Account = /** @class */ (function () {
         this.gameLost = 0;
         this.gameWon = 0;
         this.ping = 0;
+        this.activeInRoom = undefined;
         this.name = name;
         this.password = password;
     }
@@ -96,6 +97,12 @@ var Account = /** @class */ (function () {
     };
     Account.prototype.setId = function (newId) {
         this.id = newId;
+    };
+    Account.prototype.getActiveInRoom = function () {
+        return this.activeInRoom;
+    };
+    Account.prototype.setActiveInRoom = function (room) {
+        this.activeInRoom = room;
     };
     return Account;
 }());

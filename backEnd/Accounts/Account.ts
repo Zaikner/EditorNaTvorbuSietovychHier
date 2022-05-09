@@ -1,5 +1,6 @@
 import { Account_db } from "../../services/db/RDG/Account_db";
 import { ServerSocket } from "../../services/socket/SocketServer";
+import { Room } from "../Game/Room";
 import { AccountManager } from "./AccountManager";
 
 export class Account{
@@ -14,6 +15,7 @@ export class Account{
     private gameLost:number = 0;
     private gameWon:number = 0;
     private ping:number = 0;
+    private activeInRoom:Room = undefined!
 
     constructor(name:string,password:string){
         this.name = name
@@ -101,5 +103,11 @@ export class Account{
     }
     public setId(newId:number){
         this.id = newId
+    }
+    public  getActiveInRoom(){
+        return this.activeInRoom
+    }
+    public setActiveInRoom(room:Room){
+        this.activeInRoom = room
     }
 }

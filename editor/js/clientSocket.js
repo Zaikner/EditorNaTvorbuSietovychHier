@@ -250,6 +250,21 @@ editorSocket.on('join Room', function (msg) {
     });
 });
 editorSocket.on('player left', function (msg) {
+    console.log(msg.msg);
+    var chat = document.getElementById('chat');
+    var chatPlaying = document.getElementById("chatPlaying");
+    if (chat.value == '') {
+        chat.value = 'Player ' + msg.msg + ' has left the room.';
+    }
+    else {
+        chat.value = chat.value + '\n' + 'Player ' + msg.msg + ' has left the room.';
+    }
+    if (chatPlaying.value == '') {
+        chatPlaying.value = 'Player ' + msg.msg + ' has left the room.';
+    }
+    else {
+        chatPlaying.value = chatPlaying.value + '\n' + 'Player ' + msg.msg + ' has left the room.';
+    }
     editorSocket.emit('reload waiting room', { room: params.get('id') });
     (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
 });
@@ -320,6 +335,7 @@ editorSocket.on('show Dice value', function (msg) {
         (0, canvas_1.elementDeleter)('dicePlace');
         (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image);
     };
+    console.log('nastavil Dice value' + msg.value);
 });
 editorSocket.on('got texts', function (msg) {
     var _a, _b, _c, _d, _e;
@@ -415,6 +431,12 @@ editorSocket.on('canMovePawn', function (msg) {
         Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
         editorSocket.emit('evaluated end', { is: false, room: params.get('id') });
     }
+});
+editorSocket.on('end turn', function () {
+    canvas_1.game.setIsOnTurn(false);
+    canvas_1.game.setCanThrow(false);
+    canvas_1.canvas.removeEventListener('click', canMovePawnFunc);
+    console.log('recived end turn');
 });
 // editorSocket.on('can throw',()=>{
 //   document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})

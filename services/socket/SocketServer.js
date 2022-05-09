@@ -331,7 +331,7 @@ var ServerSocket = /** @class */ (function () {
                 if (r == undefined) {
                     return;
                 }
-                r.setHasStarted(true);
+                r.startGame();
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!', tokens: r.getPlayers().map(function (p) { return p.getToken(); }) });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
@@ -348,6 +348,7 @@ var ServerSocket = /** @class */ (function () {
                 if (r == undefined) {
                     return;
                 }
+                r.setTimeLeft(10);
                 if (r.getPlayerOnTurn().getMustThrown() != 0) {
                     if (r.getPlayerOnTurn().getMustThrown() != msg.value) {
                         socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
@@ -371,6 +372,11 @@ var ServerSocket = /** @class */ (function () {
                 //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
             });
             socket.on('show Dice', function (msg) {
+                var r = GameManager.getActiveRooms().get(parseInt(msg.id));
+                if (r == undefined) {
+                    return;
+                }
+                r.setLastDiceValue(msg.value);
                 socket.to(msg.id).emit('show Dice value', { value: msg.value });
             });
             socket.on('react to tile', function (msg) { return __awaiter(_this, void 0, void 0, function () {
@@ -382,6 +388,7 @@ var ServerSocket = /** @class */ (function () {
                             if (r == undefined) {
                                 return [2 /*return*/];
                             }
+                            r.setTimeLeft(10);
                             if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 8];
                             this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
@@ -493,6 +500,7 @@ var ServerSocket = /** @class */ (function () {
                 if (r == undefined) {
                     return;
                 }
+                r.setTimeLeft(10);
                 var player = r.findPlayerByToken(msg.token);
                 if (msg.is == true && !r.getPlayersWhichEnded().includes(player)) {
                     r.getPlayersWhichEnded().push(player);

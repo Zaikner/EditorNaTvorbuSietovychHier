@@ -2,6 +2,7 @@ import {Account_db} from '../../services/db/RDG/Account_db.js'
 import { AccountFinder } from '../../services/db/RDG/AccountFinder.js';
 import{Account} from './Account.js'
 import { ServerSocket } from '../../services/socket/SocketServer.js';
+import { Room } from '../Game/Room.js';
 
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env')
@@ -10,6 +11,7 @@ export class AccountManager{
     private static loggedAccounts:Array<Account> = []
     private static clientIds:Array<String> = []
     private static numberOfGuests:number = 0
+   
 
     // implementuj funkciu, ktora bude kontrolovat, ci sa uzivatel neodlogol, bud nejake cey request, alebo prebehne vsetky uzivatelov
     public static isValidRegistration(name:string,password:string,confirm:string){
@@ -78,8 +80,11 @@ export class AccountManager{
     public static logout(acc:Account){
         this.loggedAccounts = this.loggedAccounts.filter((a:Account) => a!=acc)
         this.clientIds = this.clientIds.filter((id) => id != acc.getClientId())
-        console.log(this.loggedAccounts)
-        console.log(this.clientIds)
+        let room = acc.getActiveInRoom()
+        if (room!=undefined){
+            room.leave(room.findPlayerOnAccount(acc)!)
+        }
+
      
     }
     public static logGuest(){
@@ -166,6 +171,7 @@ export class AccountManager{
     public static getLogedAccounts(){
         return this.loggedAccounts
     }
+  
     
     
 

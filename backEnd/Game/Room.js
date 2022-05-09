@@ -19,6 +19,8 @@ var Room = /** @class */ (function () {
         this.choosedPawnId = -1;
         this.playersWhichEnded = [];
         this.spectators = [];
+        this.timeLeft = 0;
+        this.lastDiceValue = 0;
         this.pawnPositions = new Map();
         this.id = id;
         this.maxPlayers = numOfPlayers;
@@ -47,6 +49,7 @@ var Room = /** @class */ (function () {
             }
             else {
                 this.players.push(player);
+                player.getAccount().setActiveInRoom(this);
                 player.setToken('Player ' + (this.numOfPresentPlayers + 1));
                 this.numOfPresentPlayers++;
             }
@@ -64,6 +67,7 @@ var Room = /** @class */ (function () {
         if (player.getToken() != 'spectator') {
             this.players = this.players.filter(function (t) { return t != player; });
             this.numOfPresentPlayers--;
+            player.getAccount().setActiveInRoom(undefined);
         }
         else {
             this.spectators = this.spectators.filter(function (t) { return t != player; });
@@ -71,6 +75,47 @@ var Room = /** @class */ (function () {
         if (this.numOfPresentPlayers == 0) {
             GameManager_1.GameManager.getActiveRooms()["delete"](this.id);
         }
+        SocketServer_1.ServerSocket.emitToRoom(this.id.toString(), 'player left', { msg: player.getAccount().getName() });
+        //'player left',(msg:{msg:string})
+    };
+    Room.prototype.startGame = function () {
+        this.setHasStarted(true);
+        var r = this;
+        this.timeLeft = 10;
+        setInterval(function () {
+            r.timeLeft--;
+            if (r.timeLeft == 0) {
+                r.timeLeft = 10;
+                console.log('ended turn');
+                SocketServer_1.ServerSocket.emitToRoom(r.id.toString(), 'end turn', {});
+                r.nextTurn();
+                var stop_1 = true;
+                if (r.getPlayerOnTurn().getSkip() != 0) {
+                    //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                    SocketServer_1.ServerSocket.emitToRoom(r.id.toString(), 'react to event: skip', { token: r.getPlayerOnTurn().getAccount().getName(), left: r.getPlayerOnTurn().getSkip() - 1 });
+                    stop_1 = false;
+                }
+                while (!stop_1) {
+                    //console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+                    //console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+                    if (r.getPlayerOnTurn().getSkip() == 0) {
+                        stop_1 = true;
+                    }
+                    else {
+                        r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip() - 1);
+                        r.nextTurn();
+                        //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
+                    }
+                }
+                //console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+                ////console.log(r)
+                SocketServer_1.ServerSocket.emitToRoom(r.id.toString(), 'turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                SocketServer_1.ServerSocket.emitToRoom(r.getPlayerOnTurn().getAccount().getSocketId(), 'turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
+                r.setReturnValue(-1);
+                r.setChoosedPawnId(-1);
+                //ServerSocket.emitToRoom(r.id.toString(),'show Dice value',{value:r.getLastDiceValue()})
+            }
+        }, 1000);
     };
     Room.prototype.broadcast = function (msg) {
     };
@@ -216,6 +261,19 @@ var Room = /** @class */ (function () {
     Room.prototype.setChoosedPawnId = function (newValue) {
         this.choosedPawnId = newValue;
     };
+    Room.prototype.getTimeLeft = function () {
+        return this.timeLeft;
+    };
+    Room.prototype.setTimeLeft = function (newTime) {
+        this.timeLeft = newTime;
+    };
+    Room.prototype.getLastDiceValue = function () {
+        return this.lastDiceValue;
+    };
+    Room.prototype.setLastDiceValue = function (newValue) {
+        this.lastDiceValue = newValue;
+    };
+    Room.activeInRoom = undefined;
     return Room;
 }());
 exports.Room = Room;
