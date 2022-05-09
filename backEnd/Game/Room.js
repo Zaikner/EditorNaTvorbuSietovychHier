@@ -2,7 +2,7 @@
 exports.__esModule = true;
 exports.Room = void 0;
 var SocketServer_1 = require("../../services/socket/SocketServer");
-var GameManager = require('./GameManager');
+var GameManager_1 = require("./GameManager");
 var Room = /** @class */ (function () {
     function Room(id, numOfPlayers, gameName) {
         this.id = 0;
@@ -67,6 +67,9 @@ var Room = /** @class */ (function () {
         }
         else {
             this.spectators = this.spectators.filter(function (t) { return t != player; });
+        }
+        if (this.numOfPresentPlayers == 0) {
+            GameManager_1.GameManager.getActiveRooms()["delete"](this.id);
         }
     };
     Room.prototype.broadcast = function (msg) {

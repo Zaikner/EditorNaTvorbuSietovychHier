@@ -2,7 +2,6 @@
 exports.__esModule = true;
 exports.Account = void 0;
 var Account_db_1 = require("../../services/db/RDG/Account_db");
-var SocketServer_1 = require("../../services/socket/SocketServer");
 var Account = /** @class */ (function () {
     function Account(name, password) {
         this.id = 0;
@@ -13,7 +12,7 @@ var Account = /** @class */ (function () {
         this.score = 0;
         this.gameLost = 0;
         this.gameWon = 0;
-        this.answered = 0;
+        this.ping = 0;
         this.name = name;
         this.password = password;
     }
@@ -26,13 +25,10 @@ var Account = /** @class */ (function () {
         newAcc.setGameLost(this.gameLost);
         newAcc.update();
     };
-    Account.prototype.checkIfOnline = function () {
-        var id = this.socketId;
+    Account.prototype.addPing = function () {
         var acc = this;
         setInterval(function () {
-            console.log('emitol ohlas sa ' + acc.getAnswered());
-            SocketServer_1.ServerSocket.emitToSpecificSocket(id, 'is online?', {});
-            acc.setAnswered(acc.getAnswered() + 1);
+            acc.setPing(acc.getPing() + 1);
         }, 5000);
     };
     Account.prototype.getScore = function () {
@@ -89,11 +85,11 @@ var Account = /** @class */ (function () {
     Account.prototype.setGameLost = function (newScore) {
         this.gameLost = newScore;
     };
-    Account.prototype.getAnswered = function () {
-        return this.answered;
+    Account.prototype.getPing = function () {
+        return this.ping;
     };
-    Account.prototype.setAnswered = function (newScore) {
-        this.answered = newScore;
+    Account.prototype.setPing = function (newScore) {
+        this.ping = newScore;
     };
     Account.prototype.getId = function () {
         return this.id;

@@ -15,6 +15,7 @@ var cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload');
 const SocketServer = require('./services/socket/SocketServer.js')
 const AccountManager = require('./backEnd/Accounts/AccountManager.js')
+const GameManager = require('./backEnd/Game/GameManager.js')
 //const GameManager = require('./backEnd/Game/GameManager.js')
 //const multer  = require('multer')
 //import {Socket} from './services/socket/Socket.js';
@@ -75,4 +76,5 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 SocketServer.setIo(io)
 SocketServer.serverListen()
-//AccountManager.checkLogedAccounts()
+AccountManager.checkLogedAccounts()
+

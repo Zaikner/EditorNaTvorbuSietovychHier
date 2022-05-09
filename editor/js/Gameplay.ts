@@ -6,30 +6,37 @@ import { Pawn } from "./Pawn";
 import { Socket } from "socket.io";
 
 
-const diceImages:Array<HTMLImageElement> = []
-let dice:HTMLImageElement;
-
-
-
-
-for (let i = 1; i <=6; i++){
-    let image = new Image()
-    image.src = '../../src/Dice1.png'
-    image.onload = function(){
-        diceImages.push(image)
+export class Gameplay{
+    private static diceImages:Array<HTMLImageElement> = []
+    private static dice:HTMLImageElement;
+    public static init(){
+         this.dice = new Image()
+        let  diceImages:Array<HTMLImageElement> = []
+        for (let i = 1; i <=6; i++){
+            let image = new Image()
+            image.src = '../../src/Dice1.png'
+            image.onload = function(){
+                diceImages.push(image)
+            }
+        }
+        this.diceImages = diceImages
     }
-}
-function initGameInfo(name:string){
-    spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name,true)
-}
+   
 
 
-function initDice(){
-  
-    let dice = new Image()
-    dice.src = '../../src/Dice1.png'
-    dice.id = 'Dice'
-    dice.onload = function(){
+    public static initGameInfo(name:string){
+        spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name,true)
+    }
+
+
+    
+    public static initDice(){
+    let  diceImages:Array<HTMLImageElement> = []
+    this.dice = new Image()
+    this.dice.src = '../../src/Dice1.png'
+    this.dice.id = 'Dice'
+    let dice = this.dice
+    this.dice.onload = function(){
         document.getElementById('dicePlace')?.append(dice)
         
     }
@@ -45,47 +52,7 @@ function initDice(){
         }
     }
 }
-function throwDice(token:string){
- 
-    game.setCanThrow(false)
-    const params = new URLSearchParams(window.location.search);
-    let t = 0
-    let times = 0
-    let n  = 0
-    let interval = setInterval(function () {
-        if (times == 10){
-            const params = new URLSearchParams(window.location.search);
-            clearInterval(interval)
-          
-            
-            editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId()})
-            //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
-        }
-        else{
-            times++;
-           
-            n  = Math.floor(Math.random()*6)+1
-            if (t!=n){
-                t=n
-                editorSocket.emit('show Dice',{id:params.get('id'),value:t})
-            }
-            let image = new Image()
-            image.src = '../../src/Dice'+t+'.png'
-            image.id = 'Dice'
-           
-            image.onload = function(){
-                let rem  = document.getElementById('Dice')
-                elementDeleter('dicePlace')
-                document.getElementById('dicePlace')?.append(image)
-            }
-        }
-    
-        //.getElementById('dicePlace')?.append(dice)
-    }, 200);
-
-}
-
-function changeWaitingRoom(accs:any){
+public static changeWaitingRoom(accs:any){
    
     let div = <HTMLDivElement>document.getElementById('waitingContainer')
     let divPlaying = <HTMLDivElement>document.getElementById('playingContainer')
@@ -151,10 +118,55 @@ function changeWaitingRoom(accs:any){
         //}
        
         i++;
+    }}
+    public static throwDice(token:string){
+ 
+        game.setCanThrow(false)
+        const params = new URLSearchParams(window.location.search);
+        let t = 0
+        let times = 0
+        let n  = 0
+        let interval = setInterval(function () {
+            if (times == 10){
+                const params = new URLSearchParams(window.location.search);
+                clearInterval(interval)
+              
+                
+                editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId()})
+                //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
+            }
+            else{
+                times++;
+               
+                n  = Math.floor(Math.random()*6)+1
+                if (t!=n){
+                    t=n
+                    editorSocket.emit('show Dice',{id:params.get('id'),value:t})
+                }
+                let image = new Image()
+                image.src = '../../src/Dice'+t+'.png'
+                image.id = 'Dice'
+               
+                image.onload = function(){
+                    let rem  = document.getElementById('Dice')
+                    elementDeleter('dicePlace')
+                    document.getElementById('dicePlace')?.append(image)
+                }
+            }
+        
+            //.getElementById('dicePlace')?.append(dice)
+        }, 200);
+    
     }
+    
+}
 
 
     
    
-}
-export{initGameInfo,initDice,changeWaitingRoom,throwDice}
+
+
+
+
+
+

@@ -5,7 +5,7 @@ import { ctx, reload,game, elementDeleter, canvas, edit, clear,initNewGame } fro
 import { spawnButton, spawnParagraph } from "./Elements";
 import { Game } from "./Game";
 import { loadGameMenu } from "./gameLoader";
-import { changeWaitingRoom, initDice, initGameInfo, throwDice } from "./Gameplay";
+import { Gameplay } from "./Gameplay";
 import { Pawn } from "./Pawn";
 import { PawnStyle } from "./PawnStyle";
 import { addOption, askQuestion, evaluateQuestion, pickQuestion, showAllQuestions, showResults } from "./Questions";
@@ -18,7 +18,7 @@ let texts:Array<string> = []
 let isEditor = false;
 const params = new URLSearchParams(window.location.search);
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
-
+setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
 
 
 function getCookie(name:string) {
@@ -196,7 +196,7 @@ editorSocket.on('connected',(msg)=>{
       tokens.push('Player '+i)
     }
     game.setPlayerTokens(tokens)
-    initGameInfo(msg.game.name)
+    Gameplay.initGameInfo(msg.game.name)
   
     let i = 0
 
@@ -428,12 +428,12 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     else {
       
       //
-      
+      Gameplay.init()
       if (params.get('id') != null){
         document.getElementById('leaveEndRoom')!.addEventListener('click',function(){window.location.replace('/gamelobby')})
         editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
         editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name'),room:params.get('id')})
-        initDice()
+        Gameplay.initDice()
         
       }
       else{
@@ -496,7 +496,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
      // if (game.getChoosenTile()!=undefined && pawn!= undefined){
      // canvas.removeEventListener('click',pickTile)
      if (game.getCanThrow()){
-        throwDice(msg.token)
+        Gameplay.throwDice(msg.token)
      }
     
     
@@ -586,7 +586,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   
   editorSocket.on('reloaded waiting room',(msg)=>{
-    changeWaitingRoom(msg.names)
+    Gameplay.changeWaitingRoom(msg.names)
    
   })
   editorSocket.on('question is used',()=>{

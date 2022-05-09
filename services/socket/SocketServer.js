@@ -65,23 +65,22 @@ var ServerSocket = /** @class */ (function () {
             socket.on('is online', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);
                 acc.setAnswered = 0;
-                console.log('ohlasil sa:' + acc.getName());
+                //console.log('ohlasil sa:' + acc.getName())
             });
             socket.on('load game', function (msg) { return __awaiter(_this, void 0, void 0, function () {
                 var game, acc, emit, r_1, numOfPawns_1, pawnNumber_1, pawns_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log('prisiel k load game');
-                            console.log('prisla sprava:');
-                            console.log(msg);
                             if (!msg.response) return [3 /*break*/, 2];
-                            console.log('sem prisiel');
-                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)
+                                //console.log(game)
+                                //console.log('sem neprisiel')
+                            ];
                         case 1:
                             game = _a.sent();
-                            console.log(game);
-                            console.log('sem neprisiel');
+                            //console.log(game)
+                            //console.log('sem neprisiel')
                             if (game.length == 0) {
                                 socket.emit('wrong game name');
                                 return [2 /*return*/];
@@ -90,14 +89,10 @@ var ServerSocket = /** @class */ (function () {
                         case 2:
                             acc = AccountManager.getAccountByClientId(msg.id);
                             acc.setSocketId(socket.id);
-                            // let game = await GameFinder.getIntance().findByName(msg.name)
-                            // let tt =await TileFinder.getIntance().findByName(msg.name)
-                            // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                            console.log('nacital aspon meno');
                             if (!(msg.room != undefined)) return [3 /*break*/, 3];
                             r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
                             emit = r_1.getGameData();
-                            //   console.log('tuna bude chyba')
+                            //   //console.log('tuna bude chyba')
                             //   let numOfPawns =  emit.game.numOfPawnsPerTile
                             //   emit.pawns = []
                             //   let pawns:Array<Array<string>> = []
@@ -116,12 +111,10 @@ var ServerSocket = /** @class */ (function () {
                             emit.pawns.forEach(function (pawn) {
                                 pawn.tileId = r_1.getPawnPositions().get(pawn.id);
                             });
-                            console.log('nebola to ona');
                             return [3 /*break*/, 5];
-                        case 3:
-                            console.log('isiel cez tento branch takze game over');
-                            return [4 /*yield*/, GameManager.loadGame(msg.name)];
+                        case 3: return [4 /*yield*/, GameManager.loadGame(msg.name)];
                         case 4:
+                            //console.log('isiel cez tento branch takze game over')
                             emit = _a.sent();
                             numOfPawns_1 = emit.game.getNumOfPawnsPerTile();
                             pawnNumber_1 = 1;
@@ -139,8 +132,8 @@ var ServerSocket = /** @class */ (function () {
                             emit.pawns = pawns_1;
                             _a.label = 5;
                         case 5:
-                            console.log('emited:');
-                            console.log(emit);
+                            //console.log('emited:')
+                            //console.log(emit)
                             this.emitToSpecificSocket(socket.id, 'connected', emit);
                             return [2 /*return*/];
                     }
@@ -158,19 +151,18 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log('saved game:');
-                            console.log(data);
                             acc = AccountManager.getAccountByClientId(data.clientId);
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(data.name)];
                         case 1:
                             existingGames = _a.sent();
-                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findLast()];
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findLast()
+                                //console.log('prebehli vsetkz queries')
+                                //console.log(acc)
+                                //console.log(existingGames)
+                                //console.log(lastGame)
+                            ];
                         case 2:
                             lastGame = _a.sent();
-                            console.log('prebehli vsetkz queries');
-                            console.log(acc);
-                            console.log(existingGames);
-                            console.log(lastGame);
                             id = 0;
                             if (existingGames.length > 0) {
                                 if (existingGames[0].getAuthorId() != acc.getId()) {
@@ -178,7 +170,7 @@ var ServerSocket = /** @class */ (function () {
                                     return [2 /*return*/];
                                 }
                                 else {
-                                    console.log('je author a chce zmenit');
+                                    //console.log('je author a chce zmenit')
                                     id = data.id;
                                 }
                             }
@@ -189,8 +181,8 @@ var ServerSocket = /** @class */ (function () {
                                 else {
                                     id = lastGame[0].getId() + 1;
                                 }
-                                console.log('neexistuje taka hra');
-                                console.log(existingGames);
+                                //console.log('neexistuje taka hra')
+                                //console.log(existingGames)
                             }
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findLast()];
                         case 3:
@@ -205,11 +197,12 @@ var ServerSocket = /** @class */ (function () {
                         case 5:
                             _a.sent();
                             //await PawnFinder.getIntance().deleteByName(data.name)
-                            return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteById(id)];
+                            return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteById(id)
+                                //console.log('ucet je:'+ acc)
+                            ];
                         case 6:
                             //await PawnFinder.getIntance().deleteByName(data.name)
                             _a.sent();
-                            console.log('ucet je:' + acc);
                             g = new Game_db_1.Game_db();
                             g.setId(id);
                             g.setAuthorId(acc.getId());
@@ -275,7 +268,7 @@ var ServerSocket = /** @class */ (function () {
                             //   c.setImageWidth(comp.imageWidth)
                             //   c.setImageHeight(comp.imageHeigth)
                             //   c.insert()
-                            //   console.log(c)
+                            //   //console.log(c)
                             // })
                             b.upsert();
                             // data.pawns.forEach((pawn:any)=>{
@@ -306,8 +299,8 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('set Socket', function (msg) {
-                console.log('dostal set Socket');
-                console.log(msg);
+                //console.log('dostal set Socket')
+                //console.log(msg)
                 var acc = AccountManager.getAccountByClientId(msg.id);
                 if (acc === undefined) {
                     return;
@@ -320,8 +313,8 @@ var ServerSocket = /** @class */ (function () {
                 //     cont = false
                 //   }
                 //   else{
-                //     console.log(player.getAccount().getName())
-                //     console.log(pl)
+                //     //console.log(player.getAccount().getName())
+                //     //console.log(pl)
                 //   }
                 // })
                 if (!r.getHasStarted() && cont) {
@@ -347,7 +340,7 @@ var ServerSocket = /** @class */ (function () {
                 _this.io["in"](msg.room).emit('move Pawn', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('move pawns back', function (msg) {
-                console.log('posunul dozadu o ' + msg.value);
+                //console.log('posunul dozadu o ' + msg.value)
                 _this.io["in"](msg.room).emit('move Pawn back', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('player thrown', function (msg) {
@@ -373,8 +366,8 @@ var ServerSocket = /** @class */ (function () {
                 else {
                     socket.emit('canMovePawn', { value: msg.value, token: msg.token });
                 }
-                console.log('recieved player thrown' + msg.token);
-                console.log('emited movePawn');
+                //console.log('recieved player thrown' +msg.token)
+                //console.log('emited movePawn')
                 //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
             });
             socket.on('show Dice', function (msg) {
@@ -385,9 +378,6 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            //returnValue
-                            console.log('recieved react to tile id: ' + msg.id);
-                            console.log(msg);
                             r = GameManager.getActiveRooms().get(parseInt(msg.room));
                             if (r == undefined) {
                                 return [2 /*return*/];
@@ -396,7 +386,7 @@ var ServerSocket = /** @class */ (function () {
                             this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
                             if (!msg.randomQuestion) return [3 /*break*/, 4];
-                            console.log('nasiel otazku');
+                            //console.log('nasiel otazku')
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getGameName())];
@@ -410,7 +400,7 @@ var ServerSocket = /** @class */ (function () {
                         case 3:
                             questions = _a.sent();
                             data_1 = [];
-                            console.log(questions);
+                            //console.log(questions)
                             questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
                                 data_1.push({
                                     questionId: question.getQuestionId(),
@@ -426,14 +416,14 @@ var ServerSocket = /** @class */ (function () {
                             return [3 /*break*/, 7];
                         case 4:
                             if (!(msg.questionId >= 0)) return [3 /*break*/, 6];
-                            console.log('nasiel otazku');
+                            //console.log('nasiel otazku')
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
                             return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.questionId)];
                         case 5:
                             questions = _a.sent();
                             data_2 = [];
-                            console.log(questions);
+                            //console.log(questions)
                             questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
                                 data_2.push({
                                     questionId: question.getQuestionId(),
@@ -460,8 +450,8 @@ var ServerSocket = /** @class */ (function () {
                                 socket.emit('react to event: forward', { value: msg.forward, pawnId: msg.pawnId });
                             }
                             else if (msg.backward > 0) {
-                                console.log('react to event: backward emitol');
-                                console.log({ value: msg.backward });
+                                //console.log('react to event: backward emitol')
+                                //console.log({value:msg.backward})
                                 socket.emit('react to event: backward', { value: msg.backward, pawnId: msg.pawnId });
                             }
                             else if (msg.mustThrown > 0) {
@@ -472,16 +462,13 @@ var ServerSocket = /** @class */ (function () {
                             else {
                                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                                 // r.nextTurn()
-                                // //console.log(r)
+                                // ////console.log(r)
                                 // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
                                 // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
                             }
                             _a.label = 7;
-                        case 7: return [3 /*break*/, 9];
-                        case 8:
-                            console.log([r.getPlayerOnTurn().getAccount().getSocketId(), socket.id]);
-                            _a.label = 9;
-                        case 9: return [2 /*return*/];
+                        case 7: return [3 /*break*/, 8];
+                        case 8: return [2 /*return*/];
                     }
                 });
             }); });
@@ -494,14 +481,14 @@ var ServerSocket = /** @class */ (function () {
                     r.getPawnPositions().set(msg.pawnId, msg.tileId);
                 }
                 else {
-                    //console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
+                    ////console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
                 }
             });
             socket.on('showAnswersToOthers', function (msg) {
                 socket.to(msg.room).emit('loadAnswersToOthers', { wrong: msg.wrong, right: msg.right });
             });
             socket.on('evaluated end', function (msg) {
-                console.log('odchyil evaluetedEnd');
+                //console.log('odchyil evaluetedEnd')
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (r == undefined) {
                     return;
@@ -511,10 +498,10 @@ var ServerSocket = /** @class */ (function () {
                     r.getPlayersWhichEnded().push(player);
                     var place = r.getPlayersWhichEnded().length;
                     r;
-                    console.log(r.getPlayersWhichEnded());
-                    console.log(msg.is, msg.token, place);
+                    //console.log(r.getPlayersWhichEnded())
+                    //console.log(msg.is,msg.token,place)
                     player.setPlace(place);
-                    console.log('prisiel aspon po emit');
+                    //console.log('prisiel aspon po emit')
                     _this.io["in"](msg.room).emit('player ended', { player: player.getAccount().getName(), place: place, token: player.token });
                 }
                 if (r.gameEnded()) {
@@ -542,8 +529,8 @@ var ServerSocket = /** @class */ (function () {
                         stop_1 = false;
                     }
                     while (!stop_1) {
-                        console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName());
-                        console.log('skipped:' + r.getPlayerOnTurn().getSkip());
+                        //console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+                        //console.log('skipped:' + r.getPlayerOnTurn().getSkip())
                         if (r.getPlayerOnTurn().getSkip() == 0) {
                             stop_1 = true;
                         }
@@ -553,8 +540,8 @@ var ServerSocket = /** @class */ (function () {
                             //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
                         }
                     }
-                    console.log('ide:' + r.getPlayerOnTurn().getAccount().getName());
-                    //console.log(r)
+                    //console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+                    ////console.log(r)
                     _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                     _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                     r.setReturnValue(-1);
@@ -564,14 +551,14 @@ var ServerSocket = /** @class */ (function () {
             socket.on('wasRightAnswer', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (!msg.is) {
-                    console.log('vratil spat figurku ,lebo bol false');
+                    //console.log('vratil spat figurku ,lebo bol false')
                     _this.io["in"](msg.room).emit('return Pawn to place', { pawnId: r.getChoosedPawnId(), value: r.getReturnValue() });
                     r.getPawnPositions().set(r.getChoosedPawnId(), r.getReturnValue());
                 }
                 else {
-                    console.log('bol true');
+                    //console.log('bol true')
                 }
-                //console.log(r)
+                ////console.log(r)
                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                 // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
                 // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -587,7 +574,7 @@ var ServerSocket = /** @class */ (function () {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.roomId));
                 var isSpectator = r.isSpectator(acc);
                 // if (r.getHasStarted() || isSpectator){
-                //   console.log('emitol spravne')
+                //   //console.log('emitol spravne')
                 //   this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
                 // }
                 // else{
@@ -595,17 +582,17 @@ var ServerSocket = /** @class */ (function () {
                 //}
             });
             // socket.on('relog',async(msg:{id:string})=>{
-            //   console.log('skusil relognut'+msg.id)
-            //   //console.log(msg.id)
+            //   //console.log('skusil relognut'+msg.id)
+            //   ////console.log(msg.id)
             //   let acc = AccountManager.getAccountByClientId(msg.id)
             //   if(acc === undefined){
             //     return
             //   }
             //   AccountManager.login(acc)
             //   socket.emit('set cookie')
-            //   console.log('pripojil'+acc)
+            //   //console.log('pripojil'+acc)
             // })
-            socket.on('newQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
+            socket.on('upsertQuestion', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var quest, lastQuest, acc, id, lastOption, lastId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -616,8 +603,6 @@ var ServerSocket = /** @class */ (function () {
                             lastQuest = _a.sent();
                             acc = AccountManager.getAccountByClientId(data.id);
                             QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
-                            console.log('options na servery su:');
-                            console.log(data.options);
                             id = 0;
                             if (data.questionId < 0) {
                                 try {
@@ -647,21 +632,21 @@ var ServerSocket = /** @class */ (function () {
                                 var option = new QuestionOption_1.QuestionOption();
                                 option.setId(lastId);
                                 lastId++;
-                                console.log('posunul' + lastId);
+                                //console.log('posunul'+lastId)
                                 // if (elem.id == undefined){
                                 //     option.setId(<number>lastId)
                                 //     lastId++;
-                                //     console.log('posunul'+lastId)
+                                //     //console.log('posunul'+lastId)
                                 // }
                                 // else{
                                 //   option.setId(parseInt(elem.id))
-                                //   console.log(elem.id)
-                                //   console.log('nastavil id:' + elem.id)
+                                //   //console.log(elem.id)
+                                //   //console.log('nastavil id:' + elem.id)
                                 // }
                                 option.setText(elem.txt);
                                 option.setQuestionId(id);
                                 option.setIsAnswer(elem.isAnswer);
-                                console.log(option);
+                                //console.log(option)
                                 option.insert();
                             });
                             return [2 /*return*/];
@@ -673,7 +658,6 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log('edituje');
                             acc = AccountManager.getAccountByClientId(data.id);
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
                         case 1:
@@ -684,10 +668,6 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getId())];
                         case 3:
                             lastRandomQuestion = (_a.sent()).length > 0;
-                            //DOPLNIT AUTHORA
-                            console.log('can je:' + can);
-                            console.log('questionNumber je' + questionNumber);
-                            console.log('number of question for author' + lastRandomQuestion);
                             if (!(questionNumber == 1 && lastRandomQuestion)) return [3 /*break*/, 4];
                             socket.emit('random and 0');
                             return [3 /*break*/, 6];
@@ -708,7 +688,7 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{
-            //   console.log('upsertuje Rule')
+            //   //console.log('upsertuje Rule')
             //   let find = await  RulesFinder.getIntance().findByName(data.gameName)
             //   let rule = new Rules()
             //   rule.setGameName(data.gameName)
@@ -722,7 +702,6 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log('edituje');
                             opt = new QuestionOption_1.QuestionOption();
                             opt.setText(data.text);
                             opt.setIsAnswer(data.isAnswer);
@@ -769,14 +748,11 @@ var ServerSocket = /** @class */ (function () {
                 var questions, data;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            console.log('odchytil answerQuestion');
-                            console.log(msg.id);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.id)];
+                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.id)];
                         case 1:
                             questions = _a.sent();
                             data = [];
-                            console.log(questions);
+                            //console.log(questions)
                             questions === null || questions === void 0 ? void 0 : questions.forEach(function (question) {
                                 data.push({
                                     questionId: question.getQuestionId(),
@@ -820,14 +796,14 @@ var ServerSocket = /** @class */ (function () {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (r == undefined) {
                     socket.emit('exit to main menu');
-                    console.log('exitol bo nebola roomka');
+                    //console.log('exitol bo nebola roomka')
                     return;
                 }
                 var names = [];
                 r.getPlayers().forEach(function (player) {
                     names.push({ name: player.getAccount().getName(), avatar: player.getAccount().getAvatar(), place: player.getPlace(), token: player.getToken() });
                 });
-                console.log('emitol reload waiting');
+                //console.log('emitol reload waiting')
                 _this.io["in"](msg.room).emit('reloaded waiting room', { names: names });
             });
             socket.on('loadGameNames', function (msg) { return __awaiter(_this, void 0, void 0, function () {
@@ -853,6 +829,12 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
+            socket.on('ping', function (msg) {
+                var acc = AccountManager.getAccountByClientId(msg.id);
+                if (acc != undefined) {
+                    acc.setPing(0);
+                }
+            });
         });
     };
     ServerSocket.getIo = function () {

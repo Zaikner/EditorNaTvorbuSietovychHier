@@ -187,7 +187,7 @@ function createQuestion(id:number){
         data.question = (<HTMLInputElement>document.getElementById('question')!).value
         num  = 0;
       
-        editorSocket.emit('newQuestion',data)
+        editorSocket.emit('upsertQuestion',data)
     }
     else{
         Warning.show(texts[191])

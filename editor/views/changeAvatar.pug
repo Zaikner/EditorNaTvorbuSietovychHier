@@ -64,3 +64,6 @@ script.
   Cookies.set('avatar','')
   }
   }
+   const params = new URLSearchParams(window.location.search);
+  //const editorSocket = io();
+  setInterval(function(){ socket.emit('ping',{id:localStorage.getItem('id')})},5000)

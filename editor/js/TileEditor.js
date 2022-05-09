@@ -141,7 +141,7 @@ function spawnElements() {
     // let tileNumberSetter = spawnNumberInput(doc,"tileEditingPlace",'tileNumberSetter')
     // tileNumberSetter.onchange = showActualState
     //spawnParagraph(doc,"tileEditingPlace",'',texts[140],true)
-    (0, Elements_js_1.spawnButtonWithLabel)(canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[141], function () {
+    (0, Elements_js_1.spawnButtonWithLabel)(canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', clientSocket_js_1.texts[141], ['btn', 'btn-dark'], clientSocket_js_1.texts[208], function () {
         $('#nextTileModal').modal('show');
         generateNextTiles();
     });
@@ -184,6 +184,8 @@ function spawnElements() {
     var button = (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
         canvas_js_1.game.deleteTile();
     });
+    button.style.marginTop = '10%';
+    button.style.textAlign = 'center';
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 exports.spawnElements = spawnElements;

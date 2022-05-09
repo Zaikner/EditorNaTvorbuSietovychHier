@@ -183,7 +183,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     // tileNumberSetter.onchange = showActualState
 
     //spawnParagraph(doc,"tileEditingPlace",'',texts[140],true)
-    spawnButtonWithLabel(doc,"tileEditingPlace",'setNextTileButton','',['btn','btn-dark'],texts[141],function(){
+    spawnButtonWithLabel(doc,"tileEditingPlace",'setNextTileButton',texts[141],['btn','btn-dark'],texts[208],function(){
       
       $('#nextTileModal').modal('show');
       generateNextTiles()
@@ -248,6 +248,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       game.deleteTile()
       
     })
+    button.style.marginTop = '10%'
+    button.style.textAlign = 'center'
     
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }

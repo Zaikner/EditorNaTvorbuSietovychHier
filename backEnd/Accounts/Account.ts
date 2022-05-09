@@ -1,5 +1,6 @@
 import { Account_db } from "../../services/db/RDG/Account_db";
 import { ServerSocket } from "../../services/socket/SocketServer";
+import { AccountManager } from "./AccountManager";
 
 export class Account{
     private id:number = 0
@@ -12,7 +13,7 @@ export class Account{
     private score:number = 0
     private gameLost:number = 0;
     private gameWon:number = 0;
-    private answered:number = 0;
+    private ping:number = 0;
 
     constructor(name:string,password:string){
         this.name = name
@@ -28,13 +29,11 @@ export class Account{
         newAcc.update()
 
     }
-    checkIfOnline(){
-        let id  = this.socketId
+    
+    addPing(){
         let acc = this
         setInterval(function(){
-            console.log('emitol ohlas sa ' + acc.getAnswered())
-            ServerSocket.emitToSpecificSocket(id,'is online?',{})
-            acc.setAnswered(acc.getAnswered()+1)
+            acc.setPing(acc.getPing()+1)
             },5000)
     }
     public getScore() : number {
@@ -91,11 +90,11 @@ export class Account{
     public setGameLost(newScore:number){
         this.gameLost  = newScore
     }
-    public getAnswered() : number {
-        return this.answered
+    public getPing() : number {
+        return this.ping
     }
-    public setAnswered(newScore:number){
-        this.answered = newScore
+    public setPing(newScore:number){
+        this.ping = newScore
     }
     public getId(){
         return this.id

@@ -11,6 +11,7 @@ var cookieParser = require('cookie-parser');
 var fileUpload = require('express-fileupload');
 var SocketServer = require('./services/socket/SocketServer.js');
 var AccountManager = require('./backEnd/Accounts/AccountManager.js');
+var GameManager = require('./backEnd/Game/GameManager.js');
 //const GameManager = require('./backEnd/Game/GameManager.js')
 //const multer  = require('multer')
 //import {Socket} from './services/socket/Socket.js';
@@ -59,4 +60,5 @@ var PORT = process.env.PORT || 8001;
 server.listen(PORT, function () { return console.log("Server running on port ".concat(PORT)); });
 SocketServer.setIo(io);
 SocketServer.serverListen();
-//AccountManager.checkLogedAccounts()
+AccountManager.checkLogedAccounts();
+GameManager.closeInactiveRooms();

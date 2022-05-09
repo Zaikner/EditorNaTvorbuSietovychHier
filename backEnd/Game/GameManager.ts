@@ -22,7 +22,7 @@ import { BackgroundComponentFinder } from '../../services/db/RDG/BackgroundCompo
 
 
 
-class GameManager{
+export class GameManager{
     private static activeRooms:Map<number,Room> = new Map()
     public static async loadGame(name:string,author:string){
          let game = await GameFinder.getIntance().findByName(name)
@@ -116,10 +116,14 @@ class GameManager{
         return ret
     }
   
-    public static getActiveRooms(){
+    static closeInactiveRooms(){
+    
+    }
+    
+    static getActiveRooms(){
         return this.activeRooms
     }
-    public static setActiveRooms(newRooms:Map<number,Room>){
+    static setActiveRooms(newRooms:Map<number,Room>){
         return this.activeRooms = newRooms;
     }
     

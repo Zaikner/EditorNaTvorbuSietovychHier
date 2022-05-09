@@ -10,7 +10,7 @@ function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,fu
     label.htmlFor = id
     label.textContent = lbl
     label.style.float = 'left'
-    label.style.fontSize = 'large'
+    label.style.fontSize = 'normal'
 
 
     let colorPicker:HTMLInputElement = doc.createElement('input')
@@ -59,7 +59,7 @@ function spawnCheckerWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:stri
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
+  label.style.fontSize = 'normal'
   label.style.verticalAlign = 'baseline'
 
   
@@ -98,7 +98,7 @@ function spawnSliderWithValueShower(doc:HTMLDocument,parent:string,id:string,lbl
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
+  label.style.fontSize = 'normal'
 
     let slider:HTMLInputElement = doc.createElement('input')
     slider.type = 'range'
@@ -142,7 +142,8 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
+  label.style.fontSize = 'normal'
+
 
   let button:HTMLButtonElement = doc.createElement('button')
   button.id = 'div'+id;
@@ -163,7 +164,7 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
+  label.style.fontSize = 'normal'
 
     let menu:HTMLSelectElement = doc.createElement('select')
     menu.id = id;
@@ -190,7 +191,7 @@ function spawnRadioButtons(doc:HTMLDocument,parent:string,id:string,lbl:string,c
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
+  label.style.fontSize = 'normal'
   div.appendChild(label)
 
     for (let i = 0; i < options.length; i++) {
@@ -231,7 +232,7 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     label.htmlFor = id
     label.textContent = lbl
     label.style.float = 'left'
-    label.style.fontSize = 'large'
+    label.style.fontSize = 'normal'
 
     let image:HTMLInputElement = doc.createElement('input')
     image.id = id
@@ -255,8 +256,8 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
   label.htmlFor = id
   label.textContent = lbl
   label.style.float = 'left'
-  label.style.fontSize = 'large'
-  label.style.marginRight = '15%'
+  label.style.fontSize = 'normal'
+  label.style.marginRight = '0%'
 
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'

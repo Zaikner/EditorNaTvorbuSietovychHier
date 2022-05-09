@@ -1,7 +1,7 @@
 import { Account } from "../Accounts/Account";
 import { Player } from "./Player";
 import { ServerSocket } from "../../services/socket/SocketServer";
-const GameManager = require('./GameManager')
+import {GameManager} from './GameManager'
 export class Room{
         private id:number = 0;
         private socketId:string = '';
@@ -71,7 +71,7 @@ export class Room{
         }
 
         public leave(player:Player){
-        
+            
             if (player.getToken() != 'spectator'){
                 this.players = this.players.filter((t) => {return t != player});
                 this.numOfPresentPlayers--;
@@ -79,7 +79,10 @@ export class Room{
             else{
                 this.spectators = this.spectators.filter((t) => {return t != player});
             }
-           
+            if (this.numOfPresentPlayers == 0){
+                GameManager.getActiveRooms().delete(this.id)
+            
+            }
         }
         public broadcast(msg:string){
 

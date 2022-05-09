@@ -125,6 +125,7 @@ title=text[1]
 footer 
   p Gamelobby
 script.
+
   let full="#{full}";
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
@@ -133,6 +134,10 @@ script.
      alert("#{text[188]}")
    
   });
+  const params = new URLSearchParams(window.location.search);
+  const editorSocket = io();
+  setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
+ 
  
  
  

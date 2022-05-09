@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.GameManager = void 0;
 var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
@@ -167,6 +168,8 @@ var GameManager = /** @class */ (function () {
         }
         return ret;
     };
+    GameManager.closeInactiveRooms = function () {
+    };
     GameManager.getActiveRooms = function () {
         return this.activeRooms;
     };
@@ -176,4 +179,5 @@ var GameManager = /** @class */ (function () {
     GameManager.activeRooms = new Map();
     return GameManager;
 }());
+exports.GameManager = GameManager;
 module.exports = GameManager;

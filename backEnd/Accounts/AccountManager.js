@@ -40,7 +40,6 @@ exports.AccountManager = void 0;
 var Account_db_js_1 = require("../../services/db/RDG/Account_db.js");
 var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var Account_js_1 = require("./Account.js");
-var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
 var CryptoJS = require("crypto-js");
 require("dotenv").config('.env');
 var AccountManager = /** @class */ (function () {
@@ -133,22 +132,15 @@ var AccountManager = /** @class */ (function () {
         newAcc.setGameLost(acc.getGameLost());
         newAcc.setId(acc.getId());
         this.loggedAccounts.push(newAcc);
+        newAcc.addPing();
         //newAcc.checkIfOnline()
         return newAcc;
     };
-    AccountManager.logout = function (name) {
-        var lout = undefined;
-        this.loggedAccounts.forEach(function (acc) {
-            if (acc.getClientId() == name) {
-                lout = acc;
-            }
-            else {
-            }
-        });
-        if (lout != undefined) {
-            this.loggedAccounts = this.loggedAccounts.filter(function (acc) { return acc != lout; });
-            this.clientIds = this.clientIds.filter(function (id) { return id != name; });
-        }
+    AccountManager.logout = function (acc) {
+        this.loggedAccounts = this.loggedAccounts.filter(function (a) { return a != acc; });
+        this.clientIds = this.clientIds.filter(function (id) { return id != acc.getClientId(); });
+        console.log(this.loggedAccounts);
+        console.log(this.clientIds);
     };
     AccountManager.logGuest = function () {
         var newAcc = new Account_js_1.Account((this.numberOfGuests + 1).toString(), 'guestHaveNoPassword');
@@ -230,9 +222,14 @@ var AccountManager = /** @class */ (function () {
         });
     };
     AccountManager.checkLogedAccounts = function () {
+        var man = this;
         setInterval(function () {
             AccountManager.loggedAccounts.forEach(function (acc) {
-                SocketServer_js_1.ServerSocket.emitToSpecificSocket(acc.getSocketId(), 'check if online', {});
+                console.log('spytal sa');
+                if (acc.getPing() == 12) {
+                    man.logout(acc);
+                    console.log('odlogol');
+                }
             });
         }, 5000);
     };

@@ -71,25 +71,15 @@ export class AccountManager{
         newAcc.setGameLost(acc.getGameLost())
         newAcc.setId(acc.getId())
         this.loggedAccounts.push(newAcc)
+        newAcc.addPing()
         //newAcc.checkIfOnline()
         return newAcc
     }
-    public static logout(name:string){
-        let lout:Account = undefined!;
-       
-        this.loggedAccounts.forEach((acc:Account)=>{
-            if (acc.getClientId() == name){
-                lout = acc
-             
-            }
-            else{
-           
-            }
-        })
-        if (lout != undefined!){
-            this.loggedAccounts = this.loggedAccounts.filter((acc:Account) => acc!=lout)
-            this.clientIds = this.clientIds.filter((id) => id != name)
-        }
+    public static logout(acc:Account){
+        this.loggedAccounts = this.loggedAccounts.filter((a:Account) => a!=acc)
+        this.clientIds = this.clientIds.filter((id) => id != acc.getClientId())
+        console.log(this.loggedAccounts)
+        console.log(this.clientIds)
      
     }
     public static logGuest(){
@@ -162,15 +152,21 @@ export class AccountManager{
         }
     }
     public static checkLogedAccounts(){
+        let man = this
+        
         setInterval(function(){   AccountManager.loggedAccounts.forEach((acc:Account)=>{
-          
-            ServerSocket.emitToSpecificSocket(acc.getSocketId(),'check if online',{})
+            console.log('spytal sa')
+            if (acc.getPing() == 12){
+                man.logout(acc)
+                console.log('odlogol')
+            }
         })},5000)
      
     }
     public static getLogedAccounts(){
         return this.loggedAccounts
     }
+    
     
 
 }

@@ -152,7 +152,7 @@ function createQuestion(id) {
         var data = { question: '', options: options, id: localStorage.getItem('id'), questionId: id };
         data.question = document.getElementById('question').value;
         num = 0;
-        clientSocket_js_1.editorSocket.emit('newQuestion', data);
+        clientSocket_js_1.editorSocket.emit('upsertQuestion', data);
     }
     else {
         Warning_1.Warning.show(clientSocket_js_1.texts[191]);

@@ -57,7 +57,11 @@ head
           button.btn.btn-primary(type='submit')=text[153]
         form.text-center.maxWidth(action='/', method='get')
           button.btn.btn-primary(type='submit')=text[154]
+script(src='../socket.io/socket.io.js')
 script.
   $(window).on('load', function() {
   $('#accountModal').modal('show');
   });
+  const params = new URLSearchParams(window.location.search);
+  const editorSocket = io();
+  setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)

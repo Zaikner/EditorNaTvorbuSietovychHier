@@ -22,6 +22,7 @@ exports.isEditor = isEditor;
 var params = new URLSearchParams(window.location.search);
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
+setInterval(function () { editorSocket.emit('ping', { id: localStorage.getItem('id') }); }, 5000);
 function getCookie(name) {
     var cookie = new Map();
     document.cookie.split(';').forEach(function (el) {
@@ -159,7 +160,7 @@ editorSocket.on('connected', function (msg) {
         tokens.push('Player ' + i_3);
     }
     canvas_1.game.setPlayerTokens(tokens);
-    (0, Gameplay_1.initGameInfo)(msg.game.name);
+    Gameplay_1.Gameplay.initGameInfo(msg.game.name);
     var i = 0;
     msg.pawns.forEach(function (pawn) {
         i++;
@@ -340,11 +341,12 @@ editorSocket.on('got texts', function (msg) {
     }
     else {
         //
+        Gameplay_1.Gameplay.init();
         if (params.get('id') != null) {
             document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
             editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
             editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
-            (0, Gameplay_1.initDice)();
+            Gameplay_1.Gameplay.initDice();
         }
         else {
             editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });
@@ -388,7 +390,7 @@ editorSocket.on('turnMove', function (msg) {
         // if (game.getChoosenTile()!=undefined && pawn!= undefined){
         // canvas.removeEventListener('click',pickTile)
         if (canvas_1.game.getCanThrow()) {
-            (0, Gameplay_1.throwDice)(msg.token);
+            Gameplay_1.Gameplay.throwDice(msg.token);
         }
     }
     //}
@@ -465,7 +467,7 @@ editorSocket.on('add Opt', function (data) {
     (0, Questions_1.addOption)('editQuestion', data.text, data.isAnswer, data.id);
 });
 editorSocket.on('reloaded waiting room', function (msg) {
-    (0, Gameplay_1.changeWaitingRoom)(msg.names);
+    Gameplay_1.Gameplay.changeWaitingRoom(msg.names);
 });
 editorSocket.on('question is used', function () {
     Warning_1.Warning.show(texts[203]);

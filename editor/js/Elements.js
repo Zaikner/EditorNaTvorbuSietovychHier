@@ -10,7 +10,7 @@ function spawnColorPicker(doc, parent, id, lbl, func) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     var colorPicker = doc.createElement('input');
     colorPicker.type = 'color';
     colorPicker.id = id;
@@ -55,7 +55,7 @@ function spawnCheckerWithLabel(doc, parent, id, lbl, isChecked, options) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     label.style.verticalAlign = 'baseline';
     doc.getElementById('div' + id).appendChild(checker);
     doc.getElementById('div' + id).appendChild(label);
@@ -88,7 +88,7 @@ function spawnSliderWithValueShower(doc, parent, id, lbl, min, max, step, value)
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     var slider = doc.createElement('input');
     slider.type = 'range';
     slider.id = id;
@@ -129,7 +129,7 @@ function spawnButtonWithLabel(doc, parent, id, lbl, classList, txt, func) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     var button = doc.createElement('button');
     button.id = 'div' + id;
     button.textContent = txt;
@@ -149,7 +149,7 @@ function spawnSelectMenu(doc, parent, id, lbl, classList, options) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     var menu = doc.createElement('select');
     menu.id = id;
     menu.style.float = 'right';
@@ -175,7 +175,7 @@ function spawnRadioButtons(doc, parent, id, lbl, classList, options, onchangeFun
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     div.appendChild(label);
     for (var i = 0; i < options.length; i++) {
         var divko = doc.createElement('div');
@@ -212,7 +212,7 @@ function spawnImageInput(doc, parent, id, txt, lbl, func) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
+    label.style.fontSize = 'normal';
     var image = doc.createElement('input');
     image.id = id;
     image.type = 'file';
@@ -235,8 +235,8 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.float = 'left';
-    label.style.fontSize = 'large';
-    label.style.marginRight = '15%';
+    label.style.fontSize = 'normal';
+    label.style.marginRight = '0%';
     var startMenuWrapper = doc.createElement('div');
     startMenuWrapper.id = 'startMenuWrapper';
     startMenuWrapper.classList.add("dropdown");
