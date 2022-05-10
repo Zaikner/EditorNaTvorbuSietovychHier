@@ -104,6 +104,7 @@ var BackgroundComponentFinder = /** @class */ (function () {
                         return [2 /*return*/, ret];
                     case 4:
                         err_2 = _a.sent();
+                        console.log(err_2);
                         console.log("Connection failed components");
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];

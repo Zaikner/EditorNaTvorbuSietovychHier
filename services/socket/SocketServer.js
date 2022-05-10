@@ -49,7 +49,6 @@ var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder")
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
 var TextFinder_1 = require("../db/RDG/TextFinder");
-var BackgroundComponentFinder_1 = require("../db/RDG/BackgroundComponentFinder");
 var PawnStyleFinder_1 = require("../db/RDG/PawnStyleFinder");
 var QuestionOptionFinder_1 = require("../db/RDG/QuestionOptionFinder");
 var Player = require("../../backEnd/Game/Player");
@@ -188,19 +187,19 @@ var ServerSocket = /** @class */ (function () {
                         case 3:
                             last = _a.sent();
                             lastId = last === null || last === void 0 ? void 0 : last.getId();
-                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByGameId(id)];
-                        case 4:
-                            _a.sent();
-                            return [4 /*yield*/, BackgroundComponentFinder_1.BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
+                            return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().deleteByGameId(id)
+                                //await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
                                 //await PawnFinder.getIntance().deleteByName(data.name)
                             ];
-                        case 5:
+                        case 4:
                             _a.sent();
+                            //await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
                             //await PawnFinder.getIntance().deleteByName(data.name)
                             return [4 /*yield*/, PawnStyleFinder_1.PawnStyleFinder.getIntance().deleteById(id)
                                 //console.log('ucet je:'+ acc)
                             ];
-                        case 6:
+                        case 5:
+                            //await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
                             //await PawnFinder.getIntance().deleteByName(data.name)
                             _a.sent();
                             g = new Game_db_1.Game_db();

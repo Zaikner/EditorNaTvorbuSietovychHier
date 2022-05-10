@@ -171,7 +171,7 @@ export class ServerSocket{
         let lastId = last?.getId()
       
         await TileFinder.getIntance().deleteByGameId(id)
-        await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
+        //await BackgroundComponentFinder.getIntance().deleteByGameName(data.name)
         //await PawnFinder.getIntance().deleteByName(data.name)
         await PawnStyleFinder.getIntance().deleteById(id)
 

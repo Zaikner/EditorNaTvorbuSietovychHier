@@ -195,9 +195,10 @@ var TileFinder = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 4, , 5]);
+                        console.log('maze tily s gameID:' + id);
                         query = {
                             name: 'delete-gameTiles',
-                            text: 'DELETE FROM bachelors_thesis.tiles WHERE "gameId"=$1;',
+                            text: 'DELETE FROM bachelors_thesis.tiles WHERE game_id=$1;',
                             values: [id]
                         };
                         return [4 /*yield*/, client.query(query)];
@@ -209,9 +210,12 @@ var TileFinder = /** @class */ (function () {
                             })];
                     case 3:
                         _a.sent();
+                        console.log('zmazal:');
+                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_5 = _a.sent();
+                        console.log(err_5);
                         console.log("Connection failed");
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];

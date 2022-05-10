@@ -54,6 +54,7 @@ public async findByName(name:string){
 
     }
     catch(err){
+      console.log(err)
       console.log("Connection failed components")
     } 
   }
