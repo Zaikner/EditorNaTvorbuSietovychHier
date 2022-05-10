@@ -123,13 +123,13 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 4, , 5]);
                         query = {
-                            name: 'select-question-with-options-author',
-                            text: 'SELECT o.id as option_id,' +
-                                'o.text as option_text,' +
-                                'o.question_id,' +
-                                'o.is_answer,' +
+                            name: 'select-question-with-options-author ',
+                            text: 'SELECT o.id as option_id, ' +
+                                'o.text as option_text, ' +
+                                'o.question_id, ' +
+                                'o.is_answer, ' +
                                 'q.text as question_text,' +
-                                'q.author_id' +
+                                'q.author_id ' +
                                 'FROM bachelors_thesis.questions as q ' +
                                 'INNER JOIN bachelors_thesis.options as o ' +
                                 'ON q.id = o.question_id ' +
