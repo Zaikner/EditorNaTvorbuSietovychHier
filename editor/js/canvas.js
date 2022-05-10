@@ -345,30 +345,50 @@ function mainMenu() {
         }
     };
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'savaGameButton', ["btn", "btn-dark"], clientSocket_1.texts[113], function () {
-        // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
-        //   Warning.show(texts[183])
-        // }
-        // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
-        //   Warning.show(texts[184])
-        // }
-        // else{
-        game.saveGame();
-        //}
+        var numOfFinishTiles = game.numberOfFinishingTilesPerToken();
+        var numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer();
+        var ret = false;
+        game.getPlayerTokens().forEach(function (token) {
+            if (numOfFinishTiles.get(token) > numOfPawnsPerPlayers.get(token)) {
+                ret = true;
+            }
+        });
+        if (game.checkIfAllPlayersHaveFinishTile().length > 0) {
+            Warning_1.Warning.show(clientSocket_1.texts[183]);
+        }
+        else if (game.checkIfAllPlayersHaveStartingTile().length > 0) {
+            Warning_1.Warning.show(clientSocket_1.texts[184]);
+        }
+        else if (ret) {
+            Warning_1.Warning.show(clientSocket_1.texts[209]);
+        }
+        else {
+            game.saveGame();
+        }
         //window.location.replace('/')
     });
     (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
-        // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
-        //   Warning.show(texts[183])
-        // }
-        // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
-        //   Warning.show(texts[184])
-        // }
-        // else{
-        //   game.setIsPublished(true)
-        //   game.saveGame()
-        // }
-        game.setIsPublished(true);
-        game.saveGame();
+        var numOfFinishTiles = game.numberOfFinishingTilesPerToken();
+        var numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer();
+        var ret = false;
+        game.getPlayerTokens().forEach(function (token) {
+            if (numOfFinishTiles.get(token) > numOfPawnsPerPlayers.get(token)) {
+                ret = true;
+            }
+        });
+        if (game.checkIfAllPlayersHaveFinishTile().length > 0) {
+            Warning_1.Warning.show(clientSocket_1.texts[183]);
+        }
+        else if (game.checkIfAllPlayersHaveStartingTile().length > 0) {
+            Warning_1.Warning.show(clientSocket_1.texts[184]);
+        }
+        else if (ret) {
+            Warning_1.Warning.show(clientSocket_1.texts[209]);
+        }
+        else {
+            game.setIsPublished(true);
+            game.saveGame();
+        }
     });
 }
 exports.mainMenu = mainMenu;

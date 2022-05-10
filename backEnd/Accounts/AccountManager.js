@@ -160,7 +160,7 @@ var AccountManager = /** @class */ (function () {
             if (acc.getName() === name) {
                 ret = true;
             }
-            ////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
+            //////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
         });
         return ret;
     };
@@ -180,7 +180,7 @@ var AccountManager = /** @class */ (function () {
             if (acc.getClientId() === clientId) {
                 ret = acc;
             }
-            ////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
+            //////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
         });
         return ret;
     };
@@ -193,7 +193,7 @@ var AccountManager = /** @class */ (function () {
                     case 1:
                         accounts = _a.sent();
                         if (accounts != undefined) {
-                            ////console.log(accounts[0])
+                            //////console.log(accounts[0])
                             accounts[0].setPassword(this.encode(newPassword));
                             accounts[0].update();
                         }
@@ -212,8 +212,8 @@ var AccountManager = /** @class */ (function () {
                         accounts = _a.sent();
                         if (accounts != undefined) {
                             accounts[0].setAvatar(newAvatar);
-                            //////console.log(accounts[0])
-                            ////console.log('aspon updatol avatar')
+                            ////////console.log(accounts[0])
+                            //////console.log('aspon updatol avatar')
                             accounts[0].update();
                         }
                         return [2 /*return*/];
@@ -225,10 +225,10 @@ var AccountManager = /** @class */ (function () {
         var man = this;
         setInterval(function () {
             AccountManager.loggedAccounts.forEach(function (acc) {
-                ////console.log('spytal sa')
+                //////console.log('spytal sa')
                 if (acc.getPing() == 12) {
                     man.logout(acc);
-                    ////console.log('odlogol')
+                    //////console.log('odlogol')
                 }
             });
         }, 5000);

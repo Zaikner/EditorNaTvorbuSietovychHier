@@ -415,32 +415,55 @@ numbering.onchange = function(){
   }
 }
 spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],texts[113],function(){
-  // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
-  //   Warning.show(texts[183])
-  // }
-  // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
-  //   Warning.show(texts[184])
-  // }
-  // else{
+  let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
+  let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
+  let ret = false;
+  
+  game.getPlayerTokens().forEach((token:string)=>{
+    if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
+      ret = true
+    }
+  })
+  if (game.checkIfAllPlayersHaveFinishTile().length > 0){
+    Warning.show(texts[183])
+  }
+  else if (game.checkIfAllPlayersHaveStartingTile().length >0){
+    Warning.show(texts[184])
+  }
+  else if (ret){
+    Warning.show(texts[209])
+  }
+  else{
 
     game.saveGame()
-  //}
+  }
   
   //window.location.replace('/')
 })
 spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],function(){
-  // if (game.checkIfAllPlayersHaveFinishTile().length > 0){
-  //   Warning.show(texts[183])
-  // }
-  // else if (game.checkIfAllPlayersHaveStartingTile().length >0){
-  //   Warning.show(texts[184])
-  // }
-  // else{
-  //   game.setIsPublished(true)
-  //   game.saveGame()
-  // }
-  game.setIsPublished(true)
-  game.saveGame()
+  let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
+  let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
+  let ret = false;
+  
+  game.getPlayerTokens().forEach((token:string)=>{
+    if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
+      ret = true
+    }
+  })
+  if (game.checkIfAllPlayersHaveFinishTile().length > 0){
+    Warning.show(texts[183])
+  }
+  else if (game.checkIfAllPlayersHaveStartingTile().length >0){
+    Warning.show(texts[184])
+  }
+  else if (ret){
+    Warning.show(texts[209])
+  }
+  else{
+    game.setIsPublished(true)
+    game.saveGame()
+  }
+ 
 })
 }
 

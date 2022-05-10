@@ -45,7 +45,7 @@ var TileFinder_1 = require("../db/RDG/TileFinder");
 var Question_1 = require("../db/RDG/Question");
 var QuestionOption_1 = require("../db/RDG/QuestionOption");
 var QuestionFinder_1 = require("../db/RDG/QuestionFinder");
-var QuestionWithAnswersFinder_1 = require("../db/RDG/QuestionWithAnswersFinder");
+var QuestionWithOptionsFinder_1 = require("../db/RDG/QuestionWithOptionsFinder");
 var PawnStyle_1 = require("../db/RDG/PawnStyle");
 var Rules_1 = require("../db/RDG/Rules");
 var TextFinder_1 = require("../db/RDG/TextFinder");
@@ -398,11 +398,11 @@ var ServerSocket = /** @class */ (function () {
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(r.getGameName())];
                         case 1:
                             author = (_a.sent());
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(author[0].getAuthorId())];
+                            return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findByAuthor(author[0].getAuthorId())];
                         case 2:
                             allQuesstions = _a.sent();
                             randomId = allQuesstions[Math.floor(Math.random() * allQuesstions.length)].getQuestionId();
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(randomId)];
+                            return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findById(randomId)];
                         case 3:
                             questions = _a.sent();
                             data_1 = [];
@@ -425,7 +425,7 @@ var ServerSocket = /** @class */ (function () {
                             //console.log('nasiel otazku')
                             r.setReturnValue(msg.returnValue);
                             r.setChoosedPawnId(msg.pawnId);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.questionId)];
+                            return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findById(msg.questionId)];
                         case 5:
                             questions = _a.sent();
                             data_2 = [];
@@ -609,7 +609,7 @@ var ServerSocket = /** @class */ (function () {
                         case 1:
                             lastQuest = _a.sent();
                             acc = AccountManager.getAccountByClientId(data.id);
-                            QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
+                            QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
                             id = 0;
                             if (data.questionId < 0) {
                                 try {
@@ -681,7 +681,7 @@ var ServerSocket = /** @class */ (function () {
                         case 4: return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
                         case 5:
                             if ((_a.sent()).length == 0) {
-                                QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId));
+                                QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId));
                                 quest = new Question_1.Question();
                                 quest.setId(parseInt(data.questionId));
                                 quest["delete"]();
@@ -727,7 +727,7 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
-                            return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getId())];
+                            return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findByAuthor(acc.getId())];
                         case 1:
                             questions = _a.sent();
                             data = [];
@@ -755,7 +755,7 @@ var ServerSocket = /** @class */ (function () {
                 var questions, data;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, QuestionWithAnswersFinder_1.QuestionWithAnswersFinder.getInstance().findById(msg.id)];
+                        case 0: return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findById(msg.id)];
                         case 1:
                             questions = _a.sent();
                             data = [];

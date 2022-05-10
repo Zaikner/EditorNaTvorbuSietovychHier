@@ -30,7 +30,7 @@ title=text[1]
                     p(style='font-size: 15px; float:left;')=text[156]
                   
                     input#roomIdSelecter(type='number', style = 'height:15%; width:35%; float:left;')
-                    button.btn.btn-dark(type='submit' style = 'float:left;')=text[8]
+                    button#joinSelectedRoom.btn.btn-dark(type='button' style = 'float:left;')=text[8]
                 form
                   div(style = 'float:left;')
                     p(style='font-size: 15px; float:left;')=text[4]
@@ -47,7 +47,7 @@ title=text[1]
                             |
                             input(type='hidden' name='id' value=room[0])
                             //input(type='hidden' name='hasStarted' value=room[3])
-                            button(type = 'submit' name='name' value = room[2]).btn.btn-dark=text[8]
+                            button(type = 'submit' name='name' id = room[0] value = room[2]).btn.btn-dark=text[8]
               div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 30vh;  border-radius: 25px;')
                 // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
@@ -127,6 +127,7 @@ footer
 script.
 
   let full="#{full}";
+  let existingRoomsId="#{existingRoomsIds}";
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
   $(window).on('load', function() {
@@ -137,6 +138,23 @@ script.
   const params = new URLSearchParams(window.location.search);
   const editorSocket = io();
   setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
+
+  document.getElementById('joinSelectedRoom').onclick = function(){
+    console.log( existingRoomsId)
+    console.log("#{existingRoomsIds}")
+   
+    let roomId = document.getElementById('roomIdSelecter')
+    if (roomId.value!=undefined){
+      if (existingRoomsId.includes(parseInt(roomId.value))){
+        //window.location.replace('/room?id:'+roomId.value+'&button=true')
+        // window.location.replace('/room?id=1&name=pawns%20>%20finish%20tiles')
+        document.getElementById(roomId.value).click()
+      }
+      else{
+       alert("#{text[210]}")
+      }
+    }
+  }
  
  
  

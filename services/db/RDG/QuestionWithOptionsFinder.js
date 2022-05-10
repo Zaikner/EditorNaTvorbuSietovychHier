@@ -36,14 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.QuestionWithAnswersFinder = void 0;
+exports.QuestionWithOptionsFinder = void 0;
 var DbConnect_1 = require("../DbConnect");
-var QuestionsWithAnswers_1 = require("./QuestionsWithAnswers");
-var QuestionWithAnswersFinder = /** @class */ (function () {
-    function QuestionWithAnswersFinder() {
+var QuestionsWithOptions_1 = require("./QuestionsWithOptions");
+var QuestionWithOptionsFinder = /** @class */ (function () {
+    function QuestionWithOptionsFinder() {
     }
-    QuestionWithAnswersFinder.getInstance = function () { return this.INSTANCE; };
-    QuestionWithAnswersFinder.prototype.findAll = function () {
+    QuestionWithOptionsFinder.getInstance = function () { return this.INSTANCE; };
+    QuestionWithOptionsFinder.prototype.findAll = function () {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_1;
             return __generator(this, function (_a) {
@@ -63,7 +63,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
+                                ret.push(QuestionsWithOptions_1.QuestionWithOptions.load(row));
                             })];
                     case 3:
                         _a.sent();
@@ -77,7 +77,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             });
         });
     };
-    QuestionWithAnswersFinder.prototype.findById = function (id) {
+    QuestionWithOptionsFinder.prototype.findById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_2;
             return __generator(this, function (_a) {
@@ -97,7 +97,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
+                                ret.push(QuestionsWithOptions_1.QuestionWithOptions.load(row));
                             })];
                     case 3:
                         _a.sent();
@@ -112,7 +112,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             });
         });
     };
-    QuestionWithAnswersFinder.prototype.findByAuthor = function (id) {
+    QuestionWithOptionsFinder.prototype.findByAuthor = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var client, query, results, ret, err_3;
             return __generator(this, function (_a) {
@@ -141,7 +141,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
                         results = _a.sent();
                         ret = [];
                         return [4 /*yield*/, results.rows.forEach(function (row) {
-                                ret.push(QuestionsWithAnswers_1.QuestionWithAnswers.load(row));
+                                ret.push(QuestionsWithOptions_1.QuestionWithOptions.load(row));
                             })];
                     case 3:
                         _a.sent();
@@ -156,7 +156,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             });
         });
     };
-    QuestionWithAnswersFinder.prototype.deleteOptionsByQuestionId = function (questionId) {
+    QuestionWithOptionsFinder.prototype.deleteOptionsByQuestionId = function (questionId) {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'delete-option',
@@ -167,7 +167,7 @@ var QuestionWithAnswersFinder = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
-    QuestionWithAnswersFinder.INSTANCE = new QuestionWithAnswersFinder();
-    return QuestionWithAnswersFinder;
+    QuestionWithOptionsFinder.INSTANCE = new QuestionWithOptionsFinder();
+    return QuestionWithOptionsFinder;
 }());
-exports.QuestionWithAnswersFinder = QuestionWithAnswersFinder;
+exports.QuestionWithOptionsFinder = QuestionWithOptionsFinder;

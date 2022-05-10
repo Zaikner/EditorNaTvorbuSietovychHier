@@ -36,10 +36,16 @@ head
                   button.btn.btn-primary(type='submit')=text[152]
           .container-fluid
             .row
-               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[179]+':' 
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[179]
                .col-6.fs-5
                 form(action='/account/change/password', method='get')
                   p(style='font-weight:bold;')=score
+          .container-fluid
+            .row
+               p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[211]
+               .col-6.fs-5
+                form(action='/account/change/password', method='get')
+                  p(style='font-weight:bold;')=gameWon+gameLost
           .container-fluid
             .row
                p.col-6.fs-5.accountParagraph(style='font-weight:bold;')=text[193]

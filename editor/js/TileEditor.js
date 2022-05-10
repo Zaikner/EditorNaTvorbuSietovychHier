@@ -183,6 +183,7 @@ function spawnElements() {
     p.style.float = 'right';
     var button = (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
         canvas_js_1.game.deleteTile();
+        showActualState();
     });
     button.style.marginTop = '10%';
     button.style.textAlign = 'center';

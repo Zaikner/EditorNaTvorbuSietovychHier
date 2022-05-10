@@ -82,7 +82,7 @@ editorSocket.on('connected',(msg)=>{
         let t = tile.nextTilesIds;
         let add:Map<string,number> = new Map()
         for (let i = 0; i*2 < t.length;i++){
-          add.set(t[2*i],t[2*i+1])
+          add.set(t[2*i],parseInt(t[2*i+1]))
         }
         addedTile.setNextTilesIds(add)
      
@@ -186,7 +186,7 @@ editorSocket.on('connected',(msg)=>{
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
     for (let i = 0; i*2 < gameNextTiles.length;i++){
-      add.set(gameNextTiles[2*i],gameNextTiles[2*i+1])
+      add.set(gameNextTiles[2*i],parseInt(gameNextTiles[2*i+1]))
     }
     game.setNextTilesIds(add)
     

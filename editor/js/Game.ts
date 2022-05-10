@@ -503,11 +503,7 @@ class Game{
             if (!pawn.tile.getIsEndingFor().includes(token)){
                 allPawnFinished = false
             }
-            else{
-                console.log(pawn)
-                console.log('contains')
-                console.log(token)
-            }
+        
         })
         
         return (allTilesAreFull && allPawnFinished)
@@ -636,6 +632,28 @@ class Game{
     }
     checkIfPathFromStartToEndExists(){
 
+    }
+    numberOfFinishingTilesPerToken(){
+        let m:Map<string,number> = new Map()
+        this.playerTokens.forEach((token:string)=>{
+            m.set(token,0)
+        })
+        this.tiles.forEach((tile:Tile)=>{
+            tile.getIsEndingFor().forEach((token:string)=>{
+                m.set(token,m.get(token)!+1)
+            })
+        })
+        return m
+    }
+    numberOfPawnsPerPlayer(){
+        let m:Map<string,number> = new Map()
+        this.playerTokens.forEach((token:string)=>{
+            m.set(token,0)
+        })
+        this.pawns.forEach((pawn:Pawn)=>{
+            m.set(pawn.player,m.get(pawn.player)!+1)
+        })
+        return m
     }
     setPath(newPath:Path){
         this.path = newPath;

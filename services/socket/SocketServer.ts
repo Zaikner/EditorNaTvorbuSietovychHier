@@ -11,7 +11,7 @@ import { Question } from "../db/RDG/Question";
 import { QuestionOption } from "../db/RDG/QuestionOption";
 import { QuestionFinder } from "../db/RDG/QuestionFinder";
 
-import { QuestionWithAnswersFinder } from "../db/RDG/QuestionWithAnswersFinder";
+import { QuestionWithOptionsFinder } from "../db/RDG/QuestionWithOptionsFinder";
 import { Pawn } from "../db/RDG/Pawn";
 import { PawnStyles } from "../db/RDG/PawnStyle";
 
@@ -401,9 +401,9 @@ export class ServerSocket{
             r.setChoosedPawnId(msg.pawnId)
             let author = (await GameFinder.getIntance().findByName(r.getGameName()))!
 
-            let allQuesstions = await QuestionWithAnswersFinder.getInstance().findByAuthor(author[0]!.getAuthorId())
+            let allQuesstions = await QuestionWithOptionsFinder.getInstance().findByAuthor(author[0]!.getAuthorId())
             let randomId  = allQuesstions![Math.floor(Math.random()*allQuesstions!.length)]!.getQuestionId()
-            let questions = await QuestionWithAnswersFinder.getInstance().findById(randomId)
+            let questions = await QuestionWithOptionsFinder.getInstance().findById(randomId)
             let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
             //console.log(questions)
     
@@ -424,7 +424,7 @@ export class ServerSocket{
             //console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
-            let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.questionId)
+            let questions = await QuestionWithOptionsFinder.getInstance().findById(msg.questionId)
             let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
             //console.log(questions)
     
@@ -634,7 +634,7 @@ export class ServerSocket{
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
         let acc = AccountManager.getAccountByClientId(data.id)
       
-        QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
+        QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
         //console.log('options na servery su:')
         //console.log(data.options)
         let id = 0
@@ -688,7 +688,7 @@ export class ServerSocket{
           option.insert()
         })
         
-        ////console.log(await QuestionWithAnswersFinder.getIntance().findAll())
+        ////console.log(await QuestionWithOptionsFinder.getIntance().findAll())
       })
   
       socket.on('deleteQuestion', async(data:{questionId:string,id:string})=>{
@@ -708,7 +708,7 @@ export class ServerSocket{
           socket.emit('random and 0')
         }
         else   if ((await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0){
-          QuestionWithAnswersFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId))
+          QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(parseInt(data.questionId))
           let quest= new Question()
           quest.setId(parseInt(data.questionId))
           quest.delete()
@@ -748,7 +748,7 @@ export class ServerSocket{
       socket.on('loadQuestions',async(msg:{id:string,pick:boolean})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
   
-        let questions = await QuestionWithAnswersFinder.getInstance().findByAuthor(acc.getId())
+        let questions = await QuestionWithOptionsFinder.getInstance().findByAuthor(acc.getId())
 
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
         questions?.forEach((question) => {
@@ -774,7 +774,7 @@ export class ServerSocket{
       socket.on('answerQuestion',async(msg:{id:number})=>{
         //console.log('odchytil answerQuestion' )
         //console.log(msg.id)
-        let questions = await QuestionWithAnswersFinder.getInstance().findById(msg.id)
+        let questions = await QuestionWithOptionsFinder.getInstance().findById(msg.id)
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
         //console.log(questions)
 

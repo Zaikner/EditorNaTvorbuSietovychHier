@@ -246,6 +246,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     p.style.float ='right'
     let button = spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[70],function(){
       game.deleteTile()
+      showActualState();
       
     })
     button.style.marginTop = '10%'

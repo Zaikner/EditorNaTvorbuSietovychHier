@@ -37,16 +37,20 @@ router
             //res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
         }
         else{
-            console.log('hra este nezacala!')
+            // console.log('hra este nezacala!')
             if (request.query.name == undefined){
-                //     request.query = {name: "hra", room:request.query.room}
-                res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
-                }
-                else{
-                    res.sendFile('room.html',{root:'./editor/views'});
-                }
+                 //     request.query = {name: "hra", room:request.query.room}
+                 res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
+                 console.log('poslal tadeto a zavolal ' + "/room?id="+request.query.room+'&name='+request.query.name)
+                 }
+                 else{
+                     console.log('poslal inakade')
+                     res.sendFile('room.html',{root:'./editor/views'});
+                 }
                 
-                console.log('sem ho poslal')
+            //     console.log('sem ho poslal')
+            //res.redirect("/room?id="+request.query.room+'&name='+r.getGameName())
+            //res.sendFile('room.html',{root:'./editor/views'});
         }
     }
   

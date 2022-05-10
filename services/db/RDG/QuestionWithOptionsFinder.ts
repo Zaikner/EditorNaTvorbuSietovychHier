@@ -1,11 +1,11 @@
 import { DbConnect } from "../DbConnect";
 
-import { QuestionWithAnswers } from "./QuestionsWithAnswers";
+import { QuestionWithOptions } from "./QuestionsWithOptions";
 
 
-export class QuestionWithAnswersFinder{
-    private static INSTANCE:QuestionWithAnswersFinder = new QuestionWithAnswersFinder()
-    public static getInstance():QuestionWithAnswersFinder{return this.INSTANCE}
+export class QuestionWithOptionsFinder{
+    private static INSTANCE:QuestionWithOptionsFinder = new QuestionWithOptionsFinder()
+    public static getInstance():QuestionWithOptionsFinder{return this.INSTANCE}
 
     private constructor(){
 
@@ -21,11 +21,11 @@ export class QuestionWithAnswersFinder{
                     values: [],
                   }
                 var results = await  client.query(query)
-                var ret:Array<QuestionWithAnswers> = []
+                var ret:Array<QuestionWithOptions> = []
               
                 await results.rows.forEach((row:any) => {
                    
-                    ret.push(QuestionWithAnswers.load(row))
+                    ret.push(QuestionWithOptions.load(row))
                 });
                
                 return ret
@@ -47,11 +47,11 @@ export class QuestionWithAnswersFinder{
                     values: [id],
                   }
                 var results = await  client.query(query)
-                var ret:Array<QuestionWithAnswers> = []
+                var ret:Array<QuestionWithOptions> = []
               
                 await results.rows.forEach((row:any) => {
               
-                    ret.push(QuestionWithAnswers.load(row))
+                    ret.push(QuestionWithOptions.load(row))
                 });
                
                 return ret
@@ -82,11 +82,11 @@ export class QuestionWithAnswersFinder{
                     values: [id],
                   }
                 var results = await  client.query(query)
-                var ret:Array<QuestionWithAnswers> = []
+                var ret:Array<QuestionWithOptions> = []
               
                 await results.rows.forEach((row:any) => {
               
-                    ret.push(QuestionWithAnswers.load(row))
+                    ret.push(QuestionWithOptions.load(row))
                 });
                
                 return ret

@@ -23,7 +23,10 @@ var Account = /** @class */ (function () {
         newAcc.setPassword(this.password);
         newAcc.setScore(this.score);
         newAcc.setName(this.name);
+        newAcc.setGameWon(this.gameWon);
         newAcc.setGameLost(this.gameLost);
+        console.log('updatoval:');
+        console.log(newAcc);
         newAcc.update();
     };
     Account.prototype.addPing = function () {

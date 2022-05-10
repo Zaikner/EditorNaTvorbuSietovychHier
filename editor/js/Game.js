@@ -435,11 +435,6 @@ var Game = /** @class */ (function () {
             if (!pawn.tile.getIsEndingFor().includes(token)) {
                 allPawnFinished = false;
             }
-            else {
-                console.log(pawn);
-                console.log('contains');
-                console.log(token);
-            }
         });
         return (allTilesAreFull && allPawnFinished);
     };
@@ -550,6 +545,28 @@ var Game = /** @class */ (function () {
         return notFinished;
     };
     Game.prototype.checkIfPathFromStartToEndExists = function () {
+    };
+    Game.prototype.numberOfFinishingTilesPerToken = function () {
+        var m = new Map();
+        this.playerTokens.forEach(function (token) {
+            m.set(token, 0);
+        });
+        this.tiles.forEach(function (tile) {
+            tile.getIsEndingFor().forEach(function (token) {
+                m.set(token, m.get(token) + 1);
+            });
+        });
+        return m;
+    };
+    Game.prototype.numberOfPawnsPerPlayer = function () {
+        var m = new Map();
+        this.playerTokens.forEach(function (token) {
+            m.set(token, 0);
+        });
+        this.pawns.forEach(function (pawn) {
+            m.set(pawn.player, m.get(pawn.player) + 1);
+        });
+        return m;
     };
     Game.prototype.setPath = function (newPath) {
         this.path = newPath;

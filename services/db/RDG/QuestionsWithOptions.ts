@@ -1,7 +1,7 @@
 
 import { DbConnect } from "../DbConnect";
 
-export class QuestionWithAnswers{
+export class QuestionWithOptions{
     private questionId:number = 0;
     private optionId:number = 0;
     private questionText:string = '';
@@ -56,7 +56,7 @@ export class QuestionWithAnswers{
     public static load(data:any){
      
       
-                let ret = new QuestionWithAnswers()
+                let ret = new QuestionWithOptions()
                 ret.setQuestionId(data.question_id)
                 ret.setOptionId(data.option_id)
                 ret.setQuestionText(data.question_text)

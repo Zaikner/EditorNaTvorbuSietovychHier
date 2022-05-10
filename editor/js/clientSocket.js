@@ -72,7 +72,7 @@ editorSocket.on('connected', function (msg) {
         var t = tile.nextTilesIds;
         var add = new Map();
         for (var i_1 = 0; i_1 * 2 < t.length; i_1++) {
-            add.set(t[2 * i_1], t[2 * i_1 + 1]);
+            add.set(t[2 * i_1], parseInt(t[2 * i_1 + 1]));
         }
         addedTile.setNextTilesIds(add);
         canvas_1.game.addTile(addedTile);
@@ -152,7 +152,7 @@ editorSocket.on('connected', function (msg) {
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
-        add.set(gameNextTiles[2 * i_2], gameNextTiles[2 * i_2 + 1]);
+        add.set(gameNextTiles[2 * i_2], parseInt(gameNextTiles[2 * i_2 + 1]));
     }
     canvas_1.game.setNextTilesIds(add);
     var tokens = [];

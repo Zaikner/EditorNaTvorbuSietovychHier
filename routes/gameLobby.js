@@ -48,12 +48,16 @@ router
         let players = GameManager.getActivePlayers(acc)
         //console.log(rooms)
         //console.log(sendScores)
+        let existingRoomsIds = Array.from(GameManager.getActiveRooms().keys())
+        console.log('existing rooms:')
+        //console.log(existingRoomsId)
+
         if (request.query.full == undefined){
-            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players});
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players,existingRoomsIds:existingRoomsIds});
         }
         else{
             console.log('aspon zachytil ze hra je plna')
-            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players,full:true});
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,scores:sendScores,text:text,players:players,full:true,existingRoomsIds:existingRoomsIds});
         }
         
         
