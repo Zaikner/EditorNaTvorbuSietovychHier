@@ -251,6 +251,20 @@ editorSocket.on('join Room', function (msg) {
 });
 editorSocket.on('player left', function (msg) {
     console.log(msg.msg);
+    console.log(msg);
+    var rem = [];
+    canvas_1.game.getPawns().forEach(function (pawn) {
+        if (pawn.player == msg.token) {
+            rem.push(pawn);
+            console.log('odstranil:');
+            console.log(pawn);
+        }
+    });
+    rem.forEach(function (pawn) {
+        canvas_1.game.removePawn(pawn);
+        pawn.tile.removePawn(pawn);
+    });
+    (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
@@ -335,7 +349,6 @@ editorSocket.on('show Dice value', function (msg) {
         (0, canvas_1.elementDeleter)('dicePlace');
         (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image);
     };
-    console.log('nastavil Dice value' + msg.value);
 });
 editorSocket.on('got texts', function (msg) {
     var _a, _b, _c, _d, _e;

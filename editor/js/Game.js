@@ -423,13 +423,25 @@ var Game = /** @class */ (function () {
         return res;
     };
     Game.prototype.playerEnded = function (token) {
-        var ret = true;
+        var allTilesAreFull = true;
         this.getTiles().forEach(function (tile) {
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)) {
-                ret = false;
+                allTilesAreFull = false;
             }
         });
-        return ret;
+        var playerPawns = this.pawns.filter(function (p) { return token == p.player; });
+        var allPawnFinished = true;
+        playerPawns.forEach(function (pawn) {
+            if (!pawn.tile.getIsEndingFor().includes(token)) {
+                allPawnFinished = false;
+            }
+            else {
+                console.log(pawn);
+                console.log('contains');
+                console.log(token);
+            }
+        });
+        return (allTilesAreFull && allPawnFinished);
     };
     Game.prototype.movePawnBack = function (pawnId, value, react) {
         var pawn = this.findPawnById(pawnId);

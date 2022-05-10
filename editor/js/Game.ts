@@ -489,14 +489,28 @@ class Game{
     }
  
     playerEnded(token:string){
-        let ret = true
+        let allTilesAreFull = true
         this.getTiles().forEach((tile:Tile)=>{
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)){
-                ret =  false
+                allTilesAreFull  =  false
             }
           
         })
-        return ret
+        let playerPawns =  this.pawns.filter((p) => {return token == p.player});
+        let allPawnFinished = true
+    
+        playerPawns.forEach((pawn:Pawn)=>{
+            if (!pawn.tile.getIsEndingFor().includes(token)){
+                allPawnFinished = false
+            }
+            else{
+                console.log(pawn)
+                console.log('contains')
+                console.log(token)
+            }
+        })
+        
+        return (allTilesAreFull && allPawnFinished)
     }
    
     movePawnBack(pawnId:number,value:number,react:boolean){

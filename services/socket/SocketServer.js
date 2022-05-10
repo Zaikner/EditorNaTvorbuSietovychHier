@@ -348,7 +348,7 @@ var ServerSocket = /** @class */ (function () {
                 if (r == undefined) {
                     return;
                 }
-                r.setTimeLeft(10);
+                r.setTimeLeft(120);
                 if (r.getPlayerOnTurn().getMustThrown() != 0) {
                     if (r.getPlayerOnTurn().getMustThrown() != msg.value) {
                         socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
@@ -388,7 +388,7 @@ var ServerSocket = /** @class */ (function () {
                             if (r == undefined) {
                                 return [2 /*return*/];
                             }
-                            r.setTimeLeft(10);
+                            r.setTimeLeft(120);
                             if (!(r.getPlayerOnTurn().getAccount().getSocketId() == socket.id)) return [3 /*break*/, 8];
                             this.io["in"](msg.room).emit('return pawns to starting tile', { ids: msg.canRemovePawnIds });
                             this.io["in"](msg.room).emit('ended turn');
@@ -500,7 +500,7 @@ var ServerSocket = /** @class */ (function () {
                 if (r == undefined) {
                     return;
                 }
-                r.setTimeLeft(10);
+                r.setTimeLeft(120);
                 var player = r.findPlayerByToken(msg.token);
                 if (msg.is == true && !r.getPlayersWhichEnded().includes(player)) {
                     r.getPlayersWhichEnded().push(player);

@@ -312,9 +312,22 @@ editorSocket.on('player joined',(msg:{msg:string})=>{
   }
   reload(game,ctx)
 })})
-editorSocket.on('player left',(msg:{msg:string})=>{
+editorSocket.on('player left',(msg:{msg:string,token:string})=>{
   console.log(msg.msg)
-  
+  console.log(msg)
+  let rem:Array<Pawn>  = []
+  game.getPawns().forEach((pawn:Pawn)=>{
+    if (pawn.player == msg.token){
+      rem.push(pawn)
+      console.log('odstranil:')
+      console.log(pawn)
+    }
+  })
+  rem.forEach((pawn:Pawn)=>{
+    game.removePawn(pawn)
+    pawn.tile.removePawn(pawn)
+  })
+  reload(game,ctx)
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
@@ -418,7 +431,7 @@ editorSocket.on('show Dice value',(msg:{value:number})=>{
       elementDeleter('dicePlace')
       document.getElementById('dicePlace')?.append(image)
   }
-  console.log('nastavil Dice value' + msg.value)
+ 
 })
 editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     

@@ -41,7 +41,7 @@ export class GameManager{
         return {texts:await TextsFinder.getIntance().findAll()}
     }
     public static async createRoom(name:string,numOfPlayers:number,accId:number){
-        console.log('aspon vyvroil room')
+        //console.log('aspon vyvroil room')
         
         //let id = Math.floor(Math.random()*9000)+1000
         let stop = false
@@ -61,7 +61,7 @@ export class GameManager{
         let gameData =  await GameManager.loadGame(name,acc![0]!.getName())
        
         
-        console.log(room)
+        //console.log(room)
         this.activeRooms.set(id,room)
         //+ pushni hraca
         //   let pawns = await PawnFinder.getIntance().findByGameId(gameData.game.getId())
@@ -108,7 +108,7 @@ export class GameManager{
         let rooms = Array.from(this.activeRooms.values())
         for (let i = 0; i < rooms.length;i++){
             rooms[i].getPlayers().forEach((player:Player)=>{
-                console.log(acc)
+                //console.log(acc)
                 ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ 
                     rooms[i].join(new Player(acc,''))}])
             })

@@ -100,7 +100,6 @@ var GameManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('aspon vyvroil room');
                         stop = false;
                         id = 0;
                         while (!stop) {
@@ -116,10 +115,12 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findById(accId)];
                     case 1:
                         acc = _a.sent();
-                        return [4 /*yield*/, GameManager.loadGame(name, acc[0].getName())];
+                        return [4 /*yield*/, GameManager.loadGame(name, acc[0].getName())
+                            //console.log(room)
+                        ];
                     case 2:
                         gameData = _a.sent();
-                        console.log(room);
+                        //console.log(room)
                         this.activeRooms.set(id, room);
                         numOfPawns = gameData.game.getNumOfPawnsPerTile();
                         pawnNumber = 1;
@@ -156,7 +157,7 @@ var GameManager = /** @class */ (function () {
         var rooms = Array.from(this.activeRooms.values());
         var _loop_1 = function (i) {
             rooms[i].getPlayers().forEach(function (player) {
-                console.log(acc);
+                //console.log(acc)
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () {
                         rooms[i].join(new Player_js_1.Player(acc, ''));
                     }]);

@@ -346,7 +346,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
-        r.setTimeLeft(10)
+        r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getMustThrown()!=0){
           if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
@@ -391,7 +391,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
-        r.setTimeLeft(10)
+        r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
@@ -510,7 +510,7 @@ export class ServerSocket{
         if (r == undefined){
           return
         }
-        r.setTimeLeft(10)
+        r.setTimeLeft(120)
         let player = r.findPlayerByToken(msg.token)
 
         if(msg.is == true &&  !r.getPlayersWhichEnded().includes(player)){

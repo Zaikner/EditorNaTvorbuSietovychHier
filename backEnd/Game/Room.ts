@@ -20,6 +20,7 @@ export class Room{
         private static activeInRoom:Room = undefined!;
         private timeLeft:number = 0;
         private lastDiceValue:number = 0
+        private usedTokens:Array<string> = []
 
        
         private pawnPositions:Map<number,number> = new Map()
@@ -34,32 +35,44 @@ export class Room{
 
         // public  async initGameData(){
         //     this.gameData = await GameManager.loadGame(this.gameName)
-        //     console.log('zavolal initGameData')
-        //     console.log(this.gameData)
+        //     //console.log('zavolal initGameData')
+        //     //console.log(this.gameData)
         // }
         public join(player:Player){
-            console.log('skusil join')
-            console.log(this.hasStarted)
+            //console.log('skusil join')
+            //console.log(this.hasStarted)
             if (this.numOfPresentPlayers == this.maxPlayers || this.hasStarted){
-                console.log('nepustil')
+                //console.log('nepustil')
                 ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'room is full',{})
                 return;
             }
-            console.log('aktivoval room join')
+            //console.log('aktivoval room join')
             if (player.getToken() != 'spectator'){
 
                 if (this.numOfPresentPlayers == this.maxPlayers){
                     ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'room is full',{})
                     player.setToken('spectator')
                     this.spectators.push(player)
-                    console.log('premenil na spectator')
+                    //console.log('premenil na spectator')
                 }
                 else{
                     this.players.push(player)
+                    //console.log('aspon zavoalal pridelenie tokenu')
                     player.getAccount().setActiveInRoom(this)
-                    player.setToken('Player '+ (this.numOfPresentPlayers+1))
+                    player.setToken('')
+                    for (let i = 1; i <= this.players.length;i++){
+                        if (!this.usedTokens.includes('Player '+i) && player.getToken()==''){
+                            player.setToken('Player '+ i)
+                            this.usedTokens.push('Player '+ i)
+                            this.numOfPresentPlayers++;
+                            //console.log('pridelil token:' + player.getToken())
+                        }
+                        else{
+                            //console.log('nechcel Player '+i)
+                        }
+                    }
                   
-                    this.numOfPresentPlayers++;
+                    
                  }
                
             }
@@ -68,7 +81,7 @@ export class Room{
             }
          
             ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString(),started:this.hasStarted})
-            console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
+            //console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
            
             if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator'){
                 this.playerOnTurn = this.players[0]
@@ -79,8 +92,10 @@ export class Room{
             
             if (player.getToken() != 'spectator'){
                 this.players = this.players.filter((t) => {return t != player});
+                this.usedTokens= this.usedTokens.filter((t) => {return t != player.getToken()});
                 this.numOfPresentPlayers--;
                 player.getAccount().setActiveInRoom(undefined!)
+                this.nextTurn()
             }
             else{
                 this.spectators = this.spectators.filter((t) => {return t != player});
@@ -90,51 +105,57 @@ export class Room{
                 GameManager.getActiveRooms().delete(this.id)
             
             }
-            ServerSocket.emitToRoom(this.id.toString(),'player left',{msg:player.getAccount().getName()})
+            ServerSocket.emitToRoom(this.id.toString(),'player left',{msg:player.getAccount().getName(),token:player.getToken()})
+            
             //'player left',(msg:{msg:string})
         }
-
+        
         public startGame(){
             this.setHasStarted(true)
             let r = this
-            this.timeLeft = 10
-            setInterval(function(){r.timeLeft--;
-                
-                if (r.timeLeft == 0){
-                    r.timeLeft = 10
-                    console.log('ended turn')
-                    ServerSocket.emitToRoom(r.id.toString(),'end turn',{})
-                    r.nextTurn()
-                    let stop = true
-                    if (r.getPlayerOnTurn().getSkip() !=0){
-                      //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
-                      ServerSocket.emitToRoom(r.id.toString(),'react to event: skip',{token: r.getPlayerOnTurn().getAccount().getName(),left:r.getPlayerOnTurn().getSkip()-1})
-                      stop = false
-                    }
-                    while(!stop){
-                      //console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
-                      //console.log('skipped:' + r.getPlayerOnTurn().getSkip())
-                      
-                      
-                      if (r.getPlayerOnTurn().getSkip() ==0){
-                           stop = true
-                      }
-                      else{
-                        r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+            this.timeLeft = 120
+            setInterval(function(){
+                if (r.players.length > 0){
+
+                    r.timeLeft--;
+                    //console.log('time left --->' + r.timeLeft)
+                    if (r.timeLeft == 0){
+                        r.timeLeft = 120
+                        //console.log('ended turn')
+                        ServerSocket.emitToRoom(r.id.toString(),'end turn',{})
                         r.nextTurn()
-                        //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
-                      }
+                        let stop = true
+                        if (r.getPlayerOnTurn().getSkip() !=0){
+                          //r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                          ServerSocket.emitToRoom(r.id.toString(),'react to event: skip',{token: r.getPlayerOnTurn().getAccount().getName(),left:r.getPlayerOnTurn().getSkip()-1})
+                          stop = false
+                        }
+                        while(!stop){
+                          ////console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+                          ////console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+                          
+                          
+                          if (r.getPlayerOnTurn().getSkip() ==0){
+                               stop = true
+                          }
+                          else{
+                            r.getPlayerOnTurn().setSkip(r.getPlayerOnTurn().getSkip()-1)
+                            r.nextTurn()
+                            //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
+                          }
+                        }
+                        ////console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+                        //////console.log(r)
+                   
+                        ServerSocket.emitToRoom(r.id.toString(),'turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                        ServerSocket.emitToRoom(r.getPlayerOnTurn().getAccount().getSocketId(),'turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
+                        
+                        r.setReturnValue(-1)
+                        r.setChoosedPawnId(-1)
+                        //ServerSocket.emitToRoom(r.id.toString(),'show Dice value',{value:r.getLastDiceValue()})
                     }
-                    //console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
-                    ////console.log(r)
-               
-                    ServerSocket.emitToRoom(r.id.toString(),'turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-                    ServerSocket.emitToRoom(r.getPlayerOnTurn().getAccount().getSocketId(),'turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-                    
-                    r.setReturnValue(-1)
-                    r.setChoosedPawnId(-1)
-                    //ServerSocket.emitToRoom(r.id.toString(),'show Dice value',{value:r.getLastDiceValue()})
                 }
+                
             },1000)
         }
         public broadcast(msg:string){
@@ -143,22 +164,29 @@ export class Room{
 
         public nextTurn()
         {
+            //console.log('teraz je next ID :')
+            //console.log(this.playerOnTurn)
+            //console.log(this.lastPlayerId)
             if (!this.gameEnded()){
                 
                 if (this.playerOnTurn.getRepeat()!=0){
                     this.playerOnTurn.setRepeat((this.playerOnTurn.getRepeat()-1))
-                    console.log('zopakoval')
-                    console.log(this.playerOnTurn.getRepeat())
+                    //console.log('zopakoval')
+                    //console.log(this.playerOnTurn.getRepeat())
                 }
                 else{
-                    if (this.lastPlayerId+1  == this.players.length){
+                    if (this.lastPlayerId+1  >= this.players.length){
                         this.lastPlayerId = 0
                     }
                     else{
                         this.lastPlayerId++;
                     }
                     this.playerOnTurn = this.players[this.lastPlayerId]
-    
+                    
+            //console.log('teraz je next ID :')
+            //console.log(this.playerOnTurn)
+            //console.log(this.lastPlayerId)
+
                     if (!this.gameEnded() && this.playerOnTurn.getPlace()!=0){
                         this.nextTurn()
                     }
