@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.unchooseEverything = exports.deleteTiles = exports.editTiles = exports.pickTile = exports.insert = exports.startInsertingByOne = exports.copyNextTileMap = exports.moveEventHandler = exports.update = exports.insertTilesMenu = void 0;
+exports.saveInsertingTiles = exports.undoTileInsert = exports.spawnTile = exports.spawnElements = exports.removeAllListenersAdded = exports.showActualState = exports.removeAllButtons = exports.moveTiles = exports.unchooseEverything = exports.deleteTiles = exports.editTiles = exports.pickTile = exports.insert = exports.startInsertingByOne = exports.copyNextTileMap = exports.moveEventHandler = exports.update = void 0;
 var canvas_js_1 = require("./canvas.js");
 var clientSocket_js_1 = require("./clientSocket.js");
 var PathEditor_js_1 = require("./PathEditor.js");
@@ -57,7 +57,7 @@ var copyTile = function (event) {
     (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setIsChoosen(false);
     canvas_js_1.game.setChoosenTile(undefined);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], clientSocket_js_1.texts[79], saveInsertingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'endInsertingButton', ["btn", "btn-dark"], clientSocket_js_1.texts[121], insertTilesMenu);
+    //spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[121],insertTilesMenu)   
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'undoButton', ["btn", "btn-dark"], clientSocket_js_1.texts[122], undoTileInsert);
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'copyStyleButton', ["btn", "btn-dark"], clientSocket_js_1.texts[123], copyTileStyle);
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
@@ -68,6 +68,7 @@ var deleteHandler = function (event) {
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 function spawnElements() {
+    var _a;
     //$('#exampleModal').modal('toggle')
     var options = [clientSocket_js_1.texts[195]];
     canvas_js_1.game.getPlayerTokens().slice().forEach(function (player) {
@@ -75,6 +76,9 @@ function spawnElements() {
     });
     (0, Elements_js_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[19]);
     var cs = (0, Elements_js_1.spawnCanvas)(canvas_js_1.doc, 'tileEditingPlace', 'changeCanvas');
+    cs.style.height = '100px';
+    cs.style.width = '200px';
+    cs.style.borderRadius = '20%';
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker', clientSocket_js_1.texts[124]);
     colorPicker.onchange = function () {
         canvas_js_1.game.setImage(undefined);
@@ -181,7 +185,13 @@ function spawnElements() {
     });
     var p = (0, Elements_js_1.spawnParagraph)(document, 'tileEditingPlace', 'pickedEventParagraph', clientSocket_js_1.texts[197], false);
     p.style.float = 'right';
-    var button = (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
+    var div = document.createElement('div');
+    div.id = 'wrapperDiv';
+    div.style.textAlign = 'center';
+    div.style.marginTop = '100px';
+    div.style.width = '100%';
+    (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
+    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
         canvas_js_1.game.deleteTile();
         showActualState();
     });
@@ -190,27 +200,26 @@ function spawnElements() {
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 exports.spawnElements = spawnElements;
-function insertTilesMenu() {
-    //unchooseEverything()
-    //doc.getElementById("canvasPlace")!.style.cursor = 'default'
-    removeAllListenersAdded();
-    canvas_js_1.game.makeAllTilesNotChoosen();
-    (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
-    removeAllButtons();
-    canvas_js_1.canvas.addEventListener('click', moveEventHandler);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'Save', ["btn", "btn-dark"], clientSocket_js_1.texts[79], saveInsertingTiles);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'drawPath', ["btn", "btn-dark"], clientSocket_js_1.texts[26], PathEditor_js_1.editTrack);
-    (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'startInsertingButton', ["btn", "btn-dark"], clientSocket_js_1.texts[27], startInsertingByOne);
-}
-exports.insertTilesMenu = insertTilesMenu;
+// function insertTilesMenu():void{
+//   //unchooseEverything()
+//   //doc.getElementById("canvasPlace")!.style.cursor = 'default'
+//   removeAllListenersAdded()
+//   game.makeAllTilesNotChoosen()
+//   reload(game,ctx)
+//   removeAllButtons()  
+//   canvas.addEventListener('mouseup',moveEventHandler)
+//     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
+//     spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],texts[26],editTrack)
+//     spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],texts[27],startInsertingByOne)
+// }
 function startInsertingByOne() {
     canvas_js_1.game.nullEditor();
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons();
     removeAllListenersAdded();
     //canvas.addEventListener('mousedown', insert);
-    canvas_js_1.canvas.addEventListener('click', moveEventHandler);
-    canvas_js_1.canvas.addEventListener('mousedown', moveTile);
+    canvas_js_1.canvas.addEventListener('mouseup', moveEventHandler);
+    //canvas.addEventListener('mousedown',moveTile)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
     //spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[28],insertTilesMenu)   
     spawnElements();
@@ -241,7 +250,7 @@ function editTiles() {
     // console.log('zavolal update')
     canvas_js_1.game.nullEditor();
     removeAllListenersAdded();
-    canvas_js_1.canvas.addEventListener('click', moveEventHandler);
+    canvas_js_1.canvas.addEventListener('mouseup', moveEventHandler);
     removeAllButtons();
     canvas_js_1.game.setIsMoving(false);
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
@@ -271,9 +280,9 @@ function moveTiles() {
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     canvas_js_1.game.setIsMoving(true);
     removeAllButtons();
-    canvas_js_1.canvas.addEventListener('click', onlyMoveHandler);
-    addEventListener('mousemove', moveTile);
-    canvas_js_1.canvas.addEventListener('mousedown', moveTile);
+    //canvas.addEventListener('click',onlyMoveHandler)
+    //addEventListener('mousemove',moveTile)
+    //canvas.addEventListener('mousedown',moveTile)
 }
 exports.moveTiles = moveTiles;
 function deleteTiles() {
@@ -281,7 +290,7 @@ function deleteTiles() {
     removeAllListenersAdded();
     removeAllButtons();
     (0, Elements_js_1.spawnButton)(canvas_js_1.doc, "buttonPlace", 'End', ["btn", "btn-dark"], clientSocket_js_1.texts[90], saveInsertingTiles);
-    canvas_js_1.canvas.addEventListener('click', deleteHandler);
+    //canvas.addEventListener('click',deleteHandler)
 }
 exports.deleteTiles = deleteTiles;
 function removeAllButtons() {
@@ -299,7 +308,7 @@ function removeAllListenersAdded() {
     canvas_js_1.canvas.removeEventListener('mousemove', moveTile);
     canvas_js_1.canvas.removeEventListener('mousedown', moveTile);
     canvas_js_1.canvas.removeEventListener('mousedown', insert);
-    canvas_js_1.canvas.removeEventListener('click', moveEventHandler);
+    canvas_js_1.canvas.removeEventListener('mouseup', moveEventHandler);
     canvas_js_1.canvas.removeEventListener('click', deleteHandler);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.insertPawn);
     canvas_js_1.canvas.removeEventListener('click', PawnEditor_js_1.deletePawn);
@@ -488,9 +497,11 @@ var setValues = function (tile, copyNumber) {
         canvas_js_1.game.setQuestionId(tile.getQuestionId());
         canvas_js_1.game.setRandomQuestion(tile.getRandomQuestion());
         var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
+        var sizeOfTileSliderShower = canvas_js_1.doc.getElementById('sizeOfTileSliderShower');
         var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
         //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
         var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
+        var sizeOfOutlineSliderShower = canvas_js_1.doc.getElementById('sizeOfOutlineSliderShower');
         var outlineColorPicker = canvas_js_1.doc.getElementById('outlineColorPicker');
         //let outlineChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('outlineChecker')!
         var shapeMenu = canvas_js_1.doc.getElementById('shapeMenu');
@@ -503,7 +514,9 @@ var setValues = function (tile, copyNumber) {
         colorPicker.value = tile.getColor();
         //numberingColor.value = tile!.getNumberingColor()
         sizeOfTileSlider.value = tile.getRadius().toString();
+        sizeOfTileSliderShower.textContent = tile.getRadius().toString();
         sizeOfOutlineSlider.value = tile.getStroke().toString();
+        sizeOfOutlineSliderShower.textContent = tile.getStroke().toString();
         outlineColorPicker.value = tile.getStrokeColor();
         // if (copyNumber){
         //   tileNumberSetter.value = tile!.getTileNumber().toString()
@@ -602,7 +615,9 @@ function showActualState() {
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
     tile.setImage(canvas_js_1.game.getImage());
+    //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0, 0, cs.width, cs.height);
+    cttttx.resetTransform();
     tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 }

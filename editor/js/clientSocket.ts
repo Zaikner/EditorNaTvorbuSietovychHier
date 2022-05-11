@@ -181,8 +181,10 @@ editorSocket.on('connected',(msg)=>{
     game.setInitSizeY(msg.game.initSizeY)
     game.setIsPublished(msg.game.isPublished)
     game.setToogleNumber(msg.game.toogleNumber)
-    game.setId(msg.game.id)
+    game.setId(msg.game.id);
   
+
+    (<HTMLInputElement>document.getElementById('toogleNumberingChecker'))!.checked = game.getToogleNumber()
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
     for (let i = 0; i*2 < gameNextTiles.length;i++){

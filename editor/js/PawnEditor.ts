@@ -89,7 +89,8 @@ function pawnEditMenu(){
             document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
         }
         let type = game.getPawnStyle().get(playerPicker.value)?.getType()
-        document.getElementById('canvasPawn'+type!.charAt(type!.length - 1))!.style.borderColor = 'red'
+        document.getElementById('canvasPawn'+type!.charAt(type!.length - 1))!.style.borderColor = 'red';
+        (<HTMLInputElement> document.getElementById('pawnColorPicker')).value = game.getPawnStyle().get(playerPicker.value)?.getColor()!
        
     }
     // let cavn = spawnCanvas(doc,'tileEditingPlace','pawnStyle')

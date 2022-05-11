@@ -17,14 +17,15 @@ function loadGameMenu(names:Array<string>){
       
         mainMenu()
     })
-    button.style.float='left'
-    button.style.marginRight = '30%'
+    button.style.float='right'
+    //button.style.marginRight = '30%'
 
-    button = spawnButtonWithLabel(document,'tileEditingPlace','',texts[199],['btn','btn-secondary'],texts[199],function(){
+    button = spawnButton(document,'tileEditingPlace',texts[199],['btn','btn-secondary'],texts[199],function(){
         initNewGame()
         reload(game,ctx)
     })
-    
+    button.style.float='right'
+    button.style.marginTop='20px';
 }
 
 export{loadGameMenu}

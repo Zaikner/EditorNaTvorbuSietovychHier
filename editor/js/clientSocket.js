@@ -149,6 +149,7 @@ editorSocket.on('connected', function (msg) {
     canvas_1.game.setIsPublished(msg.game.isPublished);
     canvas_1.game.setToogleNumber(msg.game.toogleNumber);
     canvas_1.game.setId(msg.game.id);
+    document.getElementById('toogleNumberingChecker').checked = canvas_1.game.getToogleNumber();
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {

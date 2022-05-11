@@ -277,10 +277,10 @@ function mainMenu() {
     document.getElementById("gameNamePlace").appendChild(gameName);
     var gameType = document.createElement('select');
     gameType.id = 'gameType';
-    text = document.createElement('p');
-    text.textContent = 'Typ hry:';
-    document.getElementById("gameTypePlace").appendChild(text);
-    document.getElementById("gameTypePlace").appendChild(gameType);
+    // text = document.createElement('p')
+    // text.textContent = 'Typ hry:'
+    // document.getElementById("gameTypePlace")!.appendChild(text);
+    // document.getElementById("gameTypePlace")!.appendChild(gameType);
     //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
     var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', clientSocket_1.texts[112], '1', '4', '1', game.getNumberOfStartingPawns().toString());
     slid.style.width = '100%';

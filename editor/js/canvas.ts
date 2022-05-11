@@ -1,7 +1,7 @@
 
 import { Point } from "./Point";
 import {Tile} from './Tile.js'
-import { insertTilesMenu,editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
+import {editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
 import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
 
 import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
@@ -340,10 +340,10 @@ document.getElementById("gameNamePlace")!.appendChild(gameName);
 let gameType:HTMLSelectElement = document.createElement('select');
 gameType.id = 'gameType'
 
-text = document.createElement('p')
-text.textContent = 'Typ hry:'
-document.getElementById("gameTypePlace")!.appendChild(text);
-document.getElementById("gameTypePlace")!.appendChild(gameType);
+// text = document.createElement('p')
+// text.textContent = 'Typ hry:'
+// document.getElementById("gameTypePlace")!.appendChild(text);
+// document.getElementById("gameTypePlace")!.appendChild(gameType);
 
 //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
 let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4','1',game.getNumberOfStartingPawns().toString())
@@ -406,6 +406,7 @@ slid.onchange = function(){
   reload(game,ctx)
 }
 let numbering = spawnCheckerWithLabel(doc,'tileEditingPlace','toogleNumberingChecker',texts[137],game.getToogleNumber(),[texts[92],texts[93]])
+
 numbering.onchange = function(){
   if (numbering.checked){
     game.setToogleNumber(true)

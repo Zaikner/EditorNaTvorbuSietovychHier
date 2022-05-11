@@ -61,7 +61,7 @@ let copyTile = function(event:MouseEvent) {
   game.setChoosenTile(undefined!)   
 
   spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
-    spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[121],insertTilesMenu)   
+    //spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[121],insertTilesMenu)   
   
 
     spawnButton(doc,"buttonPlace",'undoButton',["btn","btn-dark"],texts[122],undoTileInsert)
@@ -84,6 +84,9 @@ function spawnElements(){
 
     spawnHeading(document,'tileEditingPlace','',texts[19])
     let cs = spawnCanvas(doc,'tileEditingPlace','changeCanvas')
+    cs.style.height = '100px'
+    cs.style.width = '200px'
+    cs.style.borderRadius = '20%'
   
   
    
@@ -244,7 +247,13 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     })
     let p = spawnParagraph(document,'tileEditingPlace','pickedEventParagraph',texts[197],false)
     p.style.float ='right'
-    let button = spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[70],function(){
+    let div = document.createElement('div')
+    div.id = 'wrapperDiv'
+    div.style.textAlign = 'center'
+    div.style.marginTop = '100px';
+    div.style.width='100%'
+    document.getElementById('tileEditingPlace')?.appendChild(div)
+    let button = spawnButton(document,'wrapperDiv','',['btn','btn-dark'],texts[70],function(){
       game.deleteTile()
       showActualState();
       
@@ -255,19 +264,19 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 
-function insertTilesMenu():void{
-  //unchooseEverything()
-  //doc.getElementById("canvasPlace")!.style.cursor = 'default'
-  removeAllListenersAdded()
-  game.makeAllTilesNotChoosen()
-  reload(game,ctx)
-  removeAllButtons()  
-  canvas.addEventListener('click',moveEventHandler)
-    spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
-    spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],texts[26],editTrack)
-    spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],texts[27],startInsertingByOne)
+// function insertTilesMenu():void{
+//   //unchooseEverything()
+//   //doc.getElementById("canvasPlace")!.style.cursor = 'default'
+//   removeAllListenersAdded()
+//   game.makeAllTilesNotChoosen()
+//   reload(game,ctx)
+//   removeAllButtons()  
+//   canvas.addEventListener('mouseup',moveEventHandler)
+//     spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
+//     spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],texts[26],editTrack)
+//     spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],texts[27],startInsertingByOne)
     
-}
+// }
 
 
   function startInsertingByOne(){
@@ -278,8 +287,8 @@ function insertTilesMenu():void{
     
     
     //canvas.addEventListener('mousedown', insert);
-    canvas.addEventListener('click', moveEventHandler);
-    canvas.addEventListener('mousedown',moveTile)
+    canvas.addEventListener('mouseup', moveEventHandler);
+    //canvas.addEventListener('mousedown',moveTile)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
     //spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[28],insertTilesMenu)   
     spawnElements()
@@ -313,7 +322,7 @@ function insertTilesMenu():void{
     
     
     removeAllListenersAdded()
-    canvas.addEventListener('click',moveEventHandler)
+    canvas.addEventListener('mouseup',moveEventHandler)
     removeAllButtons()
     game.setIsMoving(false)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
@@ -350,9 +359,9 @@ function insertTilesMenu():void{
     reload(game,ctx)
     game.setIsMoving(true)
     removeAllButtons()
-    canvas.addEventListener('click',onlyMoveHandler)
-    addEventListener('mousemove',moveTile)
-    canvas.addEventListener('mousedown',moveTile)
+    //canvas.addEventListener('click',onlyMoveHandler)
+    //addEventListener('mousemove',moveTile)
+    //canvas.addEventListener('mousedown',moveTile)
   }
   function deleteTiles(){
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
@@ -360,7 +369,7 @@ function insertTilesMenu():void{
     removeAllButtons()
     spawnButton(doc,"buttonPlace",'End',["btn","btn-dark"],texts[90],saveInsertingTiles) 
    
-    canvas.addEventListener('click',deleteHandler)
+    //canvas.addEventListener('click',deleteHandler)
   }
   
   function removeAllButtons(){
@@ -378,7 +387,7 @@ function insertTilesMenu():void{
     canvas.removeEventListener('mousemove',moveTile)
     canvas.removeEventListener('mousedown',moveTile)
     canvas.removeEventListener('mousedown', insert)
-    canvas.removeEventListener('click',moveEventHandler)
+    canvas.removeEventListener('mouseup',moveEventHandler)
     canvas.removeEventListener('click',deleteHandler)
     canvas.removeEventListener('click',insertPawn)
     canvas.removeEventListener('click',deletePawn)
@@ -599,9 +608,11 @@ function insertTilesMenu():void{
       game.setQuestionId(tile.getQuestionId())
       game.setRandomQuestion(tile.getRandomQuestion())
       let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
+      let sizeOfTileSliderShower:HTMLParagraphElement = <HTMLParagraphElement>doc.getElementById('sizeOfTileSliderShower')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
       let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
+      let sizeOfOutlineSliderShower:HTMLParagraphElement = <HTMLParagraphElement>doc.getElementById('sizeOfOutlineSliderShower')!
       let outlineColorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('outlineColorPicker')!
       //let outlineChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('outlineChecker')!
       let shapeMenu:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('shapeMenu')!
@@ -618,7 +629,9 @@ function insertTilesMenu():void{
     
       //numberingColor.value = tile!.getNumberingColor()
       sizeOfTileSlider.value = tile!.getRadius().toString()
+      sizeOfTileSliderShower.textContent = tile!.getRadius().toString()
       sizeOfOutlineSlider.value = tile!.getStroke().toString()
+      sizeOfOutlineSliderShower.textContent = tile!.getStroke().toString()
       outlineColorPicker.value = tile!.getStrokeColor()
      
       // if (copyNumber){
@@ -767,8 +780,10 @@ function insertTilesMenu():void{
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
     tile.setImage(game.getImage())
-  
+    //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0,0,cs.width,cs.height)
+    cttttx.resetTransform()
+    
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
     
     reload(game,ctx)
@@ -860,7 +875,7 @@ function insertTilesMenu():void{
     })
   }
   
-  export{insertTilesMenu,update,moveEventHandler,copyNextTileMap,startInsertingByOne,insert,pickTile,editTiles,deleteTiles,unchooseEverything,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
+  export{update,moveEventHandler,copyNextTileMap,startInsertingByOne,insert,pickTile,editTiles,deleteTiles,unchooseEverything,moveTiles,removeAllButtons,showActualState,removeAllListenersAdded,spawnElements,spawnTile,undoTileInsert,saveInsertingTiles}
 
 
   

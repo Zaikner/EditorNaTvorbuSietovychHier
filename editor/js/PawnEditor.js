@@ -79,13 +79,14 @@ function pawnEditMenu() {
     (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_1.texts[18]);
     var playerPicker = (0, Elements_1.spawnSelectMenu)(canvas_1.doc, 'tileEditingPlace', 'playerSelect', clientSocket_1.texts[74], ['btn', 'btn-secondary'], canvas_1.game.getPlayerTokens());
     playerPicker.onchange = function () {
-        var _a;
+        var _a, _b;
         drawActualPawnLook(playerPicker.value);
         for (var i = 1; i <= 8; i++) {
             document.getElementById('canvasPawn' + i).style.borderColor = 'white';
         }
         var type = (_a = canvas_1.game.getPawnStyle().get(playerPicker.value)) === null || _a === void 0 ? void 0 : _a.getType();
         document.getElementById('canvasPawn' + type.charAt(type.length - 1)).style.borderColor = 'red';
+        document.getElementById('pawnColorPicker').value = (_b = canvas_1.game.getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.getColor();
     };
     // let cavn = spawnCanvas(doc,'tileEditingPlace','pawnStyle')
     // cavn.classList.add('pawnType')

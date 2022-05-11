@@ -146,7 +146,12 @@ var Tile = /** @class */ (function () {
                 ctx.fillStyle = '#FFFFFF';
             }
             ctx.textBaseline = 'middle';
-            ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+            if (this.tileNumber < 10) {
+                ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+            }
+            else {
+                ctx.fillText(this.tileNumber.toString(), this.centerX - 15, this.centerY);
+            }
             ctx.resetTransform();
             ctx.restore();
         }

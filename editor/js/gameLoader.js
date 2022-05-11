@@ -17,11 +17,13 @@ function loadGameMenu(names) {
         clientSocket_1.editorSocket.emit('load game', { id: (0, clientSocket_1.getCookie)('id'), name: menu.value, response: true });
         (0, canvas_1.mainMenu)();
     });
-    button.style.float = 'left';
-    button.style.marginRight = '30%';
-    button = (0, Elements_1.spawnButtonWithLabel)(document, 'tileEditingPlace', '', clientSocket_1.texts[199], ['btn', 'btn-secondary'], clientSocket_1.texts[199], function () {
+    button.style.float = 'right';
+    //button.style.marginRight = '30%'
+    button = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', clientSocket_1.texts[199], ['btn', 'btn-secondary'], clientSocket_1.texts[199], function () {
         (0, canvas_1.initNewGame)();
         (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     });
+    button.style.float = 'right';
+    button.style.marginTop = '20px';
 }
 exports.loadGameMenu = loadGameMenu;
