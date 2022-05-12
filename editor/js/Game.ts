@@ -2,7 +2,7 @@ import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
 import { calibreEventCoords, canvas, ctx, game, reload} from './canvas.js';
-import { editorSocket, getCookie, texts} from './clientSocket.js'
+import { editorSocket, getCookie, isEditor, texts} from './clientSocket.js'
 import {getDataUrlFromImage} from './utilityFunctions.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
@@ -301,7 +301,7 @@ class Game{
                     tiles[i].setIsChoosen(false)               
                     this.choosenTile = undefined
                     console.log('odvybral')
-                    document.getElementById('removeTileButton')!.removeAttribute('hidden')
+                    if (isEditor) document.getElementById('removeTileButton')!.removeAttribute('hidden')
                 }
                 else{
                     if (this.choosenTile!= undefined){
@@ -309,7 +309,7 @@ class Game{
                     }              
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
-                    document.getElementById('removeTileButton')!.setAttribute('hidden','hidden')
+                    if(isEditor)document.getElementById('removeTileButton')!.setAttribute('hidden','hidden')
                     console.log('vybral')
                     //if (!this.isMoving && edit)editTiles()
                     
@@ -319,10 +319,10 @@ class Game{
         }
         console.log('nasiel:')
         console.log(found)
-        if (!found){
+        if (!found && isEditor){
             insert(event)
         }
-        else if (found){
+        else if (found && isEditor){
             editTiles()
         }
     }

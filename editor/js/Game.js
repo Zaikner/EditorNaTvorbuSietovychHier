@@ -257,7 +257,8 @@ var Game = /** @class */ (function () {
                     tiles[i].setIsChoosen(false);
                     this.choosenTile = undefined;
                     console.log('odvybral');
-                    document.getElementById('removeTileButton').removeAttribute('hidden');
+                    if (clientSocket_js_1.isEditor)
+                        document.getElementById('removeTileButton').removeAttribute('hidden');
                 }
                 else {
                     if (this.choosenTile != undefined) {
@@ -265,7 +266,8 @@ var Game = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
-                    document.getElementById('removeTileButton').setAttribute('hidden', 'hidden');
+                    if (clientSocket_js_1.isEditor)
+                        document.getElementById('removeTileButton').setAttribute('hidden', 'hidden');
                     console.log('vybral');
                     //if (!this.isMoving && edit)editTiles()
                 }
@@ -274,10 +276,10 @@ var Game = /** @class */ (function () {
         }
         console.log('nasiel:');
         console.log(found);
-        if (!found) {
+        if (!found && clientSocket_js_1.isEditor) {
             (0, TileEditor_js_1.insert)(event);
         }
-        else if (found) {
+        else if (found && clientSocket_js_1.isEditor) {
             (0, TileEditor_js_1.editTiles)();
         }
     };
