@@ -94,8 +94,8 @@ class Game{
                                           rules:this.rules,
                                           clientId:getCookie('id'),
                                           nextTilesIds:this.mapNextTiles(),
-                                          initSizeX:canvas.width,
-                                          initSizeY:canvas.height,
+                                          initSizeX:this.initSizeX,
+                                          initSizeY:this.initSizeY,
                                           isPublished:this.isPublished,
                                           toogleNumber:this.toogleNumber,
                                           numOfPawnsPerTile:this.numberOfStartingPawns
@@ -381,12 +381,12 @@ class Game{
         if (tile != undefined){
             console.log('nebol undefined')
             let coords = calibreEventCoords(event)
-            tile.setCenterX(coords.x)
-            tile.setCenterY(coords.y)
-            tile.setX1(coords.x-tile.getRadius())
-            tile.setX2(coords.x+tile.getRadius())
-            tile.setY1(coords.y-tile.getRadius())
-            tile.setY2(coords.y+tile.getRadius())
+            tile.setCenterX(coords.x/this.scaleX)
+            tile.setCenterY(coords.y/this.scaleY)
+            tile.setX1((coords.x-tile.getRadius())/this.scaleX)
+            tile.setX2((coords.x+tile.getRadius())/this.scaleX)
+            tile.setY1((coords.y-tile.getRadius())/this.scaleY)
+            tile.setY2((coords.y+tile.getRadius())/this.scaleY)
             reload(this,ctx)
         }
     

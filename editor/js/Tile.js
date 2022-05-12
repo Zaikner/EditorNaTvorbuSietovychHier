@@ -27,12 +27,12 @@ var Tile = /** @class */ (function () {
         this.turnToSetFree = 0;
         this.nextTilesIds = new Map();
         this.randomQuestion = false;
-        this.centerX = centerX;
-        this.centerY = centerY;
-        this.x1 = x1;
-        this.x2 = x2;
-        this.y1 = y1;
-        this.y2 = y2;
+        this.centerX = centerX / canvas_js_1.game.getScaleX();
+        this.centerY = centerY / canvas_js_1.game.getScaleY();
+        this.x1 = x1 / canvas_js_1.game.getScaleX();
+        this.x2 = x2 / canvas_js_1.game.getScaleX();
+        this.y1 = y1 / canvas_js_1.game.getScaleY();
+        this.y2 = y2 / canvas_js_1.game.getScaleY();
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
@@ -147,7 +147,7 @@ var Tile = /** @class */ (function () {
             }
             ctx.textBaseline = 'middle';
             if (this.tileNumber < 10) {
-                ctx.fillText(this.tileNumber.toString(), this.centerX - 8, this.centerY);
+                ctx.fillText(this.tileNumber.toString(), (this.centerX - 8), this.centerY);
             }
             else {
                 ctx.fillText(this.tileNumber.toString(), this.centerX - 15, this.centerY);

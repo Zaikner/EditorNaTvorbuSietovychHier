@@ -488,7 +488,7 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
    console.log('initSizeY:'+game.getInitSizeY() )
    context.canvas.width = window.innerWidth/ 3 * 2-30
    context.canvas.height = window.innerHeight;
-   if(!isEditor){
+   //if(!isEditor){
     if(game.getInitSizeX() == 0){
       game.setInitSizeX((window.innerWidth/ 3 * 2-30))
      }
@@ -502,7 +502,7 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
      console.log('pomer x je :'+game.getScaleX() )
      console.log('pomer y je:'+game.getScaleY())
      
-   }
+   //}
    
   
    reload(editor,context);

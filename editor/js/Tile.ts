@@ -37,12 +37,12 @@ class Tile{
 
     constructor(centerX:number,centerY:number,x1:number,x2:number,y1:number,y2:number, radius:number,color:string,tileNumber:number){
 
-        this.centerX = centerX;
-        this.centerY = centerY;
-        this.x1 = x1;
-        this.x2 = x2;
-        this.y1 = y1;
-        this.y2 = y2;
+        this.centerX = centerX/game.getScaleX();
+        this.centerY = centerY/game.getScaleY();
+        this.x1 = x1/game.getScaleX();
+        this.x2 = x2/game.getScaleX();
+        this.y1 = y1/game.getScaleY();
+        this.y2 = y2/game.getScaleY();
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
@@ -174,7 +174,7 @@ class Tile{
                
                 ctx.textBaseline = 'middle';
                 if(this.tileNumber < 10){
-                    ctx.fillText(this.tileNumber.toString(),this.centerX-8,this.centerY)
+                    ctx.fillText(this.tileNumber.toString(),(this.centerX-8),this.centerY)
                 }
                 else{
                     ctx.fillText(this.tileNumber.toString(),this.centerX-15,this.centerY)

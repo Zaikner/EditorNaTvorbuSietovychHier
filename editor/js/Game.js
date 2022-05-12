@@ -85,8 +85,8 @@ var Game = /** @class */ (function () {
                 rules: this.rules,
                 clientId: (0, clientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles(),
-                initSizeX: canvas_js_1.canvas.width,
-                initSizeY: canvas_js_1.canvas.height,
+                initSizeX: this.initSizeX,
+                initSizeY: this.initSizeY,
                 isPublished: this.isPublished,
                 toogleNumber: this.toogleNumber,
                 numOfPawnsPerTile: this.numberOfStartingPawns
@@ -329,12 +329,12 @@ var Game = /** @class */ (function () {
         if (tile != undefined) {
             console.log('nebol undefined');
             var coords = (0, canvas_js_1.calibreEventCoords)(event);
-            tile.setCenterX(coords.x);
-            tile.setCenterY(coords.y);
-            tile.setX1(coords.x - tile.getRadius());
-            tile.setX2(coords.x + tile.getRadius());
-            tile.setY1(coords.y - tile.getRadius());
-            tile.setY2(coords.y + tile.getRadius());
+            tile.setCenterX(coords.x / this.scaleX);
+            tile.setCenterY(coords.y / this.scaleY);
+            tile.setX1((coords.x - tile.getRadius()) / this.scaleX);
+            tile.setX2((coords.x + tile.getRadius()) / this.scaleX);
+            tile.setY1((coords.y - tile.getRadius()) / this.scaleY);
+            tile.setY2((coords.y + tile.getRadius()) / this.scaleY);
             (0, canvas_js_1.reload)(this, canvas_js_1.ctx);
         }
     };
