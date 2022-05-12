@@ -16,6 +16,11 @@ var Background = /** @class */ (function () {
         this.isMoving = false;
     }
     Background.prototype.draw = function () {
+        // ctx.resetTransform();
+        // ctx.restore()
+        // ctx.beginPath()
+        // ctx.closePath()
+        // ctx.scale(game.getScaleX(),game.getScaleY())
         if (this.backgroundImage != undefined) {
             canvas_1.ctx.drawImage(this.backgroundImage, 0, 0, canvas_1.canvas.width, canvas_1.canvas.height);
         }
@@ -27,6 +32,8 @@ var Background = /** @class */ (function () {
         this.components.forEach(function (component) {
             component.draw(canvas_1.ctx);
         });
+        // ctx.resetTransform();
+        // ctx.restore()
     };
     Background.prototype.createComponent = function (event, type, radius, color, stroke, strokeColor, image, imageWidth, imageHeigth) {
         if (image === void 0) { image = undefined; }

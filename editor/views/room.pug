@@ -1,0 +1,152 @@
+doctype html
+head
+  title=texts[213]+''+id
+  script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+  link(rel='stylesheet' href='../editor/css/styles.css')
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css' integrity='sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2' crossorigin='anonymous')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
+nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
+  .container-fluid
+    .navbar-header
+      a.navbar-brand(href='#')=texts[213]+''+id
+  button#showRulesButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;')=texts[16]
+  form(action='/gameLobby' method='get')
+    button#mainMenuButton.btn.btn-secondary.py-2(type='submit' style=' width:200px; margin-right: 10px;')=texts[1]
+    // <button  type="submit" name="editor" value="editor">Editor</button>
+.container-fluid
+  .row(style='background-color: #292b2c')
+    #canvasPlace.col-8
+    #optionPlace.col-4(style='background-color: #292b2c')
+      .row
+        #buttonPlace.col-12
+      .row
+        #numOfPlayersPlace.col-12
+        #gameNamePlace.col-12
+        #tileEditingPlace.col-12(style='text-align: center; font-weight: bold; font-size: 120%;')
+        #dicePlace.col-12(style='text-align: center;')
+        #onTurnPlace.col-12(style='text-align: center; font-weight: bold; font-size: 120%;')
+        #interactPlace.col-12
+          div(style='text-align:center; margin: 3%; font-weight: bold; font-size: 120%;')
+            h5(style='text-align:center; margin: 3%; font-weight: bold; font-size: 120%; color: white;')=texts[226]
+            #playingContainer.container
+          div(style='text-align:center; margin: 3%; font-weight: bold; font-size: 120%;')
+            h5(style='text-align:center; margin: 3%; font-weight: bold; font-size: 120%; color: white;')=texts[216]
+            textarea#chatPlaying(rows='10' style='width:100%; max-height: 25vh; resize: none;' readonly='')
+            input#messagePlayingPlace(type='text' placeholder=texts[230] style='width:100%; max-height: 5vh; resize: none;')
+            button#messagePlayingSubmitButton(type='button' style='width:100%; max-height: 7vh; resize: none;')=texts[217]
+        #rulesModal.modal.fade(tabindex='-1' role='dialog')
+          .modal-dialog(style=' width: 100vh; height: 100vh;')
+            .modal-content(style='background-color: #292b2c; width: 100vh; ')
+              .modal-header
+                .container(style='text-align: center;')
+                  h5#modalHeader.modal-title(style='color: white; text-align: center;')=texts[16]
+              #modalBody.modal-body
+                textarea#ruleInput(style='width: 100%; height: 50vh;' readonly='')
+                #rulesButtons.container(style='text-align: center;')
+                  button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');") Ok!
+        #exampleModal.modal.fade(tabindex='-1' role='dialog')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                h5#modalHeader.modal-title=texts[222]
+                button.close(type='button' data-dismiss='modal')
+              #modalBody.modal-body
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                button.btn.btn-primary(type='button' onclick="$('#exampleModal').modal('hide')") Ok!
+        #answerModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content(style='background-color: #292b2c')
+              .modal-header
+                .container
+                  h2#modalHeader.modal-title(style='text-align: center; position: sticky; color: white;')=texts[225]
+                button.close(type='button' data-dismiss='modal')
+              #modalBody.modal-body(style='overflow-y: auto;')
+                .container
+                  #answerQuestion.list-group(style=' margin-bottom: 5%;')
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                .container(style='text-align: center;')
+                  button#answerButtonRoom.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#questionModal').modal('hide')") Answer!
+        #WarningModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content(style='background-color: #292b2c')
+              .modal-header
+                h5#modalHeader.modal-title(style='color: white;')=texts[222]
+                button.close(type='button' data-dismiss='modal')
+              #warningModalBody.modal-body
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                button#confirmStart.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide')")=texts[218]
+                button#backToWaitingRoom.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#waitingModal').modal('show')")=texts[224]
+               
+        #InGameModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content(style='background-color: #292b2c')
+              .modal-header
+                h5#modalHeader.modal-title(style='color: white;')=texts[223]
+                button.close(type='button' data-dismiss='modal')
+              #InGameModalBody.modal-body
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                button.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#InGameModal').modal('hide')") OK!
+        #EventReactModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content(style='background-color: #292b2c')
+              .modal-header
+                h5#modalHeader.modal-title(style='color: white;')=texts[224]
+                button.close(type='button' data-dismiss='modal')
+              #EventReactBody.modal-body
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                button.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#EventReactModal').modal('hide')") OK!
+        #waitingModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                h5#modalHeader.modal-title=texts[214]
+                button.close(type='button' data-dismiss='modal')
+              #modalBody.modal-body(style='text-align:center;')
+                div(style='text-align:center; margin: 3%;')
+                  h5=texts[215]
+                  #waitingContainer.container
+                div(style='text-align:center; margin: 3%;')
+                  h5=texts[216]
+                  textarea#chat(rows='10' style='width:100%; max-height: 25vh; resize: none;' readonly='')
+                  input#messagePlace(type='text' placeholder=texts[230] style='width:100%; max-height: 5vh; resize: none;')
+                  button#messageSubmitButton(type='button' style='width:100%; max-height: 7vh; resize: none;')=texts[217]
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                .container(style='text-align: center;')
+                  button#startGameRoom.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#waitingModal').modal('hide');")=texts[218]
+                  button#leaveWaitinRoom.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#waitingModal').modal('hide')")=texts[219]
+        #endModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                h5#modalHeader.modal-title=texts[220]
+                button.close(type='button' data-dismiss='modal')
+              #modalBody.modal-body(style='text-align:center;')
+                div(style='text-align:center; margin: 3%;')
+                  h5=texts[221]
+                  #endContainer.container
+              #modalFooter.modal-footer
+                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                .container(style='text-align: center;')
+                  button#leaveEndRoom.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#endModal').modal('hide')")=texts[219]
+        script(src='../socket.io/socket.io.js')
+        script(src='../editor/js/webpackVysledok.js')
+        //
+          <script type = 'module'>
+          //import { io } from "socket.io-client";
+          const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
+          //socket.emit('chat message', 'hi');
+          editorSocket.on('chat message', function(msg) {
+          console.log(msg)
+          });
+          editorSocket.emit('editor',{jo:'co'})
+          </script>
+        //
+          <script>
+          $(window).on('load', function(){$('#exampleModal').modal('toggle')});
+          </script>

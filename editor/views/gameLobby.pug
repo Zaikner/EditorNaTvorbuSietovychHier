@@ -39,7 +39,7 @@ title=text[1]
                 // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[5]
-                ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+                ul#activeRooms.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each room in rooms
                       form(action='/room?game:'+room[2]+'?hasStarted:'+room[3] method='get' name='name' value = room[0])
                         strong 
@@ -51,7 +51,7 @@ title=text[1]
               div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 30vh;  border-radius: 25px;')
                 // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
-                  strong='Active players'
+                  strong=text[232]
                 ul.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each player in players
                       form(action='/room?game:'+player[1] method='get' name='name' value =player[2])
@@ -80,14 +80,26 @@ title=text[1]
                             input(type='hidden' name='id' value=player[2])
                             button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
             .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
-              div(style='margin: 5%; margin-bottom: 10%;  background-color: white;overflow: hidden; width: 100%px;height: 45vh;  border-radius: 25px;')
+              div(style='margin: 5%;  background-color: white;overflow: hidden; width: 100%px;height: 60vh;  border-radius: 25px;')
                 p(style='font-size: 15px; font-family: sans-serif;')=text[7]
                 hr
-                p Tu niekde bude checkbox alebo dropdown filter
-                br
-                br
+                div
+                  input#containsQuestion(type="checkbox")
+                  label(for='containsQuestion')=text[234]
+                div
+                  label(for='numOfPlayers')=text[235]
+                  input#numOfPlayers(type="number" style = 'width:10%;' max = '6' min = '1' value = '6')
+                div
+                  label(for='numOfPlayers')=text[236]
+                  select#numOfTiles
+                   option=text[237]
+                   option=text[238]
+                   option=text[239]
+                div
+                  button#filterButton.btn.btn-dark(type = 'button')=text[240]  
+             
                 ul.list-group(style='overflow-y: scroll; max-height: 25vh')
-                  each game in gameNames
+                  each game in filteredNames
                       form(action='/showGame' method='get' name='name' value = game)
                         li.list-group-item(name='name' value = game)= game
                           | 
@@ -100,7 +112,7 @@ title=text[1]
                   each score in scores
                       form()
                         strong 
-                          li.list-group-item()= score[0]+'. Place '+ score[1] + ' Score: ' + score[2]+ ' points.'
+                          li.list-group-item()= score[0]+text[117]+' '+ score[1] + ' '+ text[179]+' ' + score[2]+ text[244]
   #loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
     .modal-dialog
       .modal-content
@@ -114,7 +126,7 @@ title=text[1]
                 form(action='/createRoom/name/'+game method='get' name='name' value = game)
                   li.list-group-item(name='name' value = game)= game
                     | 
-                    button(type = 'submit' name='name' value = game).btn.btn-dark=text[9]         
+                    button(type = 'submit' name='name' value = game).btn.btn-dark=text[212]         
           hr
           form.text-center(action='/gameLobby' method='get' style='width: 100%;')
             button.btn.btn-primary(type='button' id='leave')=text[158]
@@ -139,6 +151,15 @@ script.
   const editorSocket = io();
   setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
 
+
+
+  document.getElementById('filterButton').onclick = function(){
+    let msg = {maxPlayers:document.getElementById('numOfPlayers').value,
+                                maxTiles:document.getElementById('numOfPlayers').value,
+                                questions:document.getElementById('containsQuestion').checked
+    }
+    window.location.replace('/gameLobby?players='+document.getElementById('numOfPlayers').value+'&tiles='+document.getElementById('numOfTiles').value+'&questions='+document.getElementById('containsQuestion').checked)
+  }
   document.getElementById('joinSelectedRoom').onclick = function(){
     console.log( existingRoomsId)
     console.log("#{existingRoomsIds}")
@@ -154,6 +175,19 @@ script.
        alert("#{text[210]}")
       }
     }
+    //- editorSocket.on('refresh active players',()=>{
+    //-     console.log('aspon obdrzal refresh active players')
+    //-     document.getElementById('activeRooms').innerHtml = ''
+    //-           //- ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+    //-           //-     each room in rooms
+    //-           //-         form(action='/room?game:'+room[2]+'?hasStarted:'+room[3] method='get' name='name' value = room[0])
+    //-           //-           strong 
+    //-           //-             li.list-group-item(name='room' value = room[2])= room[1]
+    //-           //-               |
+    //-           //-               input(type='hidden' name='id' value=room[0])
+    //-           //-               //input(type='hidden' name='hasStarted' value=room[3])
+    //-           //-               button(type = 'submit' name='name' id = room[0] value = room[2]).btn.btn-dark=text[8]
+    //- })
   }
  
  

@@ -80,7 +80,7 @@ export class Room{
                 this.spectators.push(player)
             }
          
-            ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString(),started:this.hasStarted})
+            ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(),'join Room',{id:this.id.toString(),started:this.hasStarted,name:player.getAccount().getName()})
             //console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
            
             if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator'){

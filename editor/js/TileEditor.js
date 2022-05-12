@@ -8,8 +8,20 @@ var Elements_js_1 = require("./Elements.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
 var BackgroundEditor_js_1 = require("./BackgroundEditor.js");
+var idik = 0;
 var moveEventHandler = function (event) {
-    canvas_js_1.game.findTile(event, true);
+    idik += 1;
+    console.log('vypalil move' + idik);
+    var coords = (0, canvas_js_1.calibreEventCoords)(event);
+    var dist = Math.sqrt(Math.pow((coords.x - startX), 2) + Math.pow((coords.y - startY), 2));
+    console.log(dist);
+    //if (dist < 1){
+    console.log('takže ho pustil');
+    //game.findTile(event,true)  
+    //}
+    canvas_js_1.canvas.removeEventListener('mousemove', canvas_js_1.game.moveTile);
+    tilik = undefined;
+    canvas_js_1.canvas.removeEventListener('mousemove', moveWithTile);
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
 exports.moveEventHandler = moveEventHandler;
@@ -191,12 +203,13 @@ function spawnElements() {
     div.style.marginTop = '100px';
     div.style.width = '100%';
     (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
-    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', '', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
+    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', 'removeTileButton', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
         canvas_js_1.game.deleteTile();
         showActualState();
     });
     button.style.marginTop = '10%';
     button.style.textAlign = 'center';
+    document.getElementById('removeTileButton').hidden = true;
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 exports.spawnElements = spawnElements;
@@ -212,12 +225,42 @@ exports.spawnElements = spawnElements;
 //     spawnButton(doc,"buttonPlace",'drawPath',["btn","btn-dark"],texts[26],editTrack)
 //     spawnButton(doc,"buttonPlace",'startInsertingButton',["btn","btn-dark"],texts[27],startInsertingByOne)
 // }
+var startX = 0;
+var startY = 0;
+var tilik = undefined;
+var moveWithTile = function (event) {
+    if (tilik != undefined) {
+        canvas_js_1.game.moveTile(event, tilik);
+    }
+};
+var initMove = function (event) {
+    var coords = (0, canvas_js_1.calibreEventCoords)(event);
+    startX = coords.x;
+    startY = coords.y;
+    // game.setChoosenTile(undefined!)
+    // console.log(game.getChoosenTile())
+    var found = false;
+    var tiles = canvas_js_1.game.getTiles();
+    for (var i = tiles.length - 1; i >= 0; i--) {
+        if (tiles[i].isPointedAt(coords.x, coords.y)) {
+            tilik = tiles[i];
+            break;
+        }
+    }
+    console.log('nasiel tilik:');
+    console.log(tilik);
+    canvas_js_1.game.findTile(event, false);
+    //canvas.addEventListener('mousemove',moveWithTile)
+    //console.log(coords)
+    // console.log(game.getChoosenTile())
+};
 function startInsertingByOne() {
     canvas_js_1.game.nullEditor();
     //doc.getElementById("canvasPlace")!.style.cursor = 'grabbing'
     removeAllButtons();
     removeAllListenersAdded();
     //canvas.addEventListener('mousedown', insert);
+    canvas_js_1.canvas.addEventListener('mousedown', initMove);
     canvas_js_1.canvas.addEventListener('mouseup', moveEventHandler);
     //canvas.addEventListener('mousedown',moveTile)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
@@ -249,8 +292,12 @@ exports.saveInsertingTiles = saveInsertingTiles;
 function editTiles() {
     // console.log('zavolal update')
     canvas_js_1.game.nullEditor();
-    removeAllListenersAdded();
-    canvas_js_1.canvas.addEventListener('mouseup', moveEventHandler);
+    document.getElementById('removeTileButton').removeAttribute('hidden');
+    canvas_js_1.canvas.addEventListener('mousemove', moveWithTile);
+    //removeAllListenersAdded()
+    //canvas.addEventListener('mouseup',moveEventHandler)
+    //canvas.addEventListener('mousedown',initMove)
+    //canvas.addEventListener('mousemove',game.moveTile)
     removeAllButtons();
     canvas_js_1.game.setIsMoving(false);
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
@@ -305,8 +352,10 @@ function removeAllButtons() {
 exports.removeAllButtons = removeAllButtons;
 function removeAllListenersAdded() {
     (0, BackgroundEditor_js_1.removeAllComponentListeners)();
+    canvas_js_1.canvas.removeEventListener('mousemove', canvas_js_1.game.moveTile);
     canvas_js_1.canvas.removeEventListener('mousemove', moveTile);
     canvas_js_1.canvas.removeEventListener('mousedown', moveTile);
+    canvas_js_1.canvas.removeEventListener('mousedown', initMove);
     canvas_js_1.canvas.removeEventListener('mousedown', insert);
     canvas_js_1.canvas.removeEventListener('mouseup', moveEventHandler);
     canvas_js_1.canvas.removeEventListener('click', deleteHandler);

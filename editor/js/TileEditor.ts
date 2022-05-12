@@ -11,8 +11,20 @@ import { Pawn } from './Pawn.js'
 import { spawn } from 'child_process'
 import { removeAllComponentListeners } from './BackgroundEditor.js'
 import { text } from 'body-parser'
-
-let moveEventHandler = function(event:MouseEvent) {game.findTile(event,true)   
+let idik = 0
+let moveEventHandler = function(event:MouseEvent) {
+  idik+=1
+  console.log('vypalil move' + idik)
+  let coords = calibreEventCoords(event)
+  let dist = Math.sqrt( Math.pow((coords.x-startX), 2) + Math.pow((coords.y-startY), 2) )
+  console.log(dist)
+  //if (dist < 1){
+    console.log('takže ho pustil')
+    //game.findTile(event,true)  
+  //}
+  canvas.removeEventListener('mousemove',game.moveTile)
+  tilik = undefined!
+  canvas.removeEventListener('mousemove',moveWithTile)
 reload(game,ctx)
 }
 let onlyMoveHandler = function(event:MouseEvent) {game.findTile(event,false)
@@ -253,14 +265,14 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     div.style.marginTop = '100px';
     div.style.width='100%'
     document.getElementById('tileEditingPlace')?.appendChild(div)
-    let button = spawnButton(document,'wrapperDiv','',['btn','btn-dark'],texts[70],function(){
+    let button = spawnButton(document,'wrapperDiv','removeTileButton',['btn','btn-dark'],texts[70],function(){
       game.deleteTile()
       showActualState();
       
     })
     button.style.marginTop = '10%'
     button.style.textAlign = 'center'
-    
+    document.getElementById('removeTileButton')!.hidden = true
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 
@@ -278,6 +290,42 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     
 // }
 
+  let startX = 0
+  let startY = 0
+  let tilik:Tile = undefined!
+  let moveWithTile = function(event:MouseEvent){
+    if (tilik!=undefined){
+      game.moveTile(event,tilik)
+    }
+   
+  }
+
+  let initMove = function(event:MouseEvent){
+    let coords = calibreEventCoords(event)
+    startX = coords.x
+    startY = coords.y
+   // game.setChoosenTile(undefined!)
+   // console.log(game.getChoosenTile())
+   let found = false;
+  
+   let tiles = game.getTiles()
+   
+   for (let i = tiles.length-1; i >= 0;i--){
+       if (tiles[i].isPointedAt(coords.x,coords.y)){
+            tilik =tiles[i]
+            break
+           }
+           
+       }
+    console.log('nasiel tilik:')
+    console.log(tilik)
+    game.findTile(event,false)
+    
+    //canvas.addEventListener('mousemove',moveWithTile)
+    //console.log(coords)
+   // console.log(game.getChoosenTile())
+  }
+  
 
   function startInsertingByOne(){
     game.nullEditor()
@@ -287,7 +335,9 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     
     
     //canvas.addEventListener('mousedown', insert);
+    canvas.addEventListener('mousedown',initMove)
     canvas.addEventListener('mouseup', moveEventHandler);
+    
     //canvas.addEventListener('mousedown',moveTile)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveInsertingTiles)
     //spawnButton(doc,"buttonPlace",'endInsertingButton',["btn","btn-dark"],texts[28],insertTilesMenu)   
@@ -319,10 +369,14 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
   function editTiles():void{
    // console.log('zavolal update')
     game.nullEditor()
+    document.getElementById('removeTileButton')!.removeAttribute('hidden')
+    canvas.addEventListener('mousemove',moveWithTile)
     
     
-    removeAllListenersAdded()
-    canvas.addEventListener('mouseup',moveEventHandler)
+    //removeAllListenersAdded()
+    //canvas.addEventListener('mouseup',moveEventHandler)
+    //canvas.addEventListener('mousedown',initMove)
+    //canvas.addEventListener('mousemove',game.moveTile)
     removeAllButtons()
     game.setIsMoving(false)
     //spawnButton(doc,"buttonPlace",'Save',["btn","btn-dark"],texts[79],saveEditingTiles)
@@ -384,8 +438,10 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
   }
   function removeAllListenersAdded(){
     removeAllComponentListeners()
+    canvas.removeEventListener('mousemove',game.moveTile)
     canvas.removeEventListener('mousemove',moveTile)
     canvas.removeEventListener('mousedown',moveTile)
+    canvas.removeEventListener('mousedown',initMove)
     canvas.removeEventListener('mousedown', insert)
     canvas.removeEventListener('mouseup',moveEventHandler)
     canvas.removeEventListener('click',deleteHandler)

@@ -25,7 +25,8 @@ var Gameplay = /** @class */ (function () {
     Gameplay.initGameInfo = function (name) {
         (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[118] + name, true);
     };
-    Gameplay.initDice = function () {
+    Gameplay.initDice = function (name) {
+        (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', 'Hráč: ' + name);
         var diceImages = [];
         this.dice = new Image();
         this.dice.src = '../../src/Dice1.png';

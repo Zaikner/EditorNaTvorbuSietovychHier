@@ -3,20 +3,32 @@ const express = require('express');
 const path = require('path');
 const AccountManager = require('../backEnd/Accounts/AccountManager.js')
 const GameManager = require('../backEnd/Game/GameManager.js')
+const { TextsFinder } = require('../services/db/RDG/TextFinder.js');
 
 
 let router = express.Router()
 
 router
 .route("/")
-.get((request,res) =>
+.get(async(request,res) =>
 {   
+
+    let text;
+    if (request.cookies.language == 'SK'){
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
+    }
+    else{
+        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
+    }
     console.log(request.query)
     let r = GameManager.getActiveRooms().get(parseInt(request.query.id))
     // console.log(GameManager.getActiveRooms())
     // console.log(parseInt(request.query.room))
     // console.log(request.query.room)
     // console.log(r)
+    if(request.query.justShow == 'true'){
+
+    }
     if (r== undefined){
         console.log('nova hra')
         if (request.query.name == undefined){
@@ -24,7 +36,7 @@ router
             res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
             }
             else{
-                res.sendFile('room.html',{root:'./editor/views'});
+                res.render('room',{root:'./editor/views',texts:text,id:request.query.id});
             }
             
             console.log('sem ho poslal')
@@ -45,7 +57,7 @@ router
                  }
                  else{
                      console.log('poslal inakade')
-                     res.sendFile('room.html',{root:'./editor/views'});
+                     res.render('room',{root:'./editor/views',texts:text,id:request.query.id});
                  }
                 
             //     console.log('sem ho poslal')
@@ -56,8 +68,6 @@ router
   
    // console.log(request.params)
   
- 
- 
     
 });
 

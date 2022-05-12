@@ -149,7 +149,9 @@ editorSocket.on('connected', function (msg) {
     canvas_1.game.setIsPublished(msg.game.isPublished);
     canvas_1.game.setToogleNumber(msg.game.toogleNumber);
     canvas_1.game.setId(msg.game.id);
-    document.getElementById('toogleNumberingChecker').checked = canvas_1.game.getToogleNumber();
+    if (isEditor) {
+        document.getElementById('toogleNumberingChecker').checked = canvas_1.game.getToogleNumber();
+    }
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
     for (var i_2 = 0; i_2 * 2 < gameNextTiles.length; i_2++) {
@@ -226,6 +228,7 @@ editorSocket.on('return pawns to starting tile', function (msg) {
     (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
 });
 editorSocket.on('join Room', function (msg) {
+    Gameplay_1.Gameplay.initDice(msg.name);
     editorSocket.emit('join player to Room', { id: getCookie('id'), roomId: msg.id });
     if (!msg.started) {
         $('#waitingModal').modal('show');
@@ -236,16 +239,16 @@ editorSocket.on('join Room', function (msg) {
         var chat = document.getElementById('chat');
         var chatPlaying = document.getElementById("chatPlaying");
         if (chat.value == '') {
-            chat.value = msg.msg;
+            chat.value = texts[227] + ' ' + msg.msg + ' ' + texts[229];
         }
         else {
-            chat.value = chat.value + '\n' + msg.msg;
+            chat.value = chat.value + '\n' + texts[227] + ' ' + msg.msg + ' ' + texts[229];
         }
         if (chatPlaying.value == '') {
-            chatPlaying.value = msg.msg;
+            chatPlaying.value = texts[227] + ' ' + msg.msg + ' ' + texts[229];
         }
         else {
-            chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
+            chatPlaying.value = chatPlaying.value + '\n' + texts[227] + ' ' + msg.msg + ' ' + texts[229];
         }
         (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
     });
@@ -269,16 +272,17 @@ editorSocket.on('player left', function (msg) {
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
-        chat.value = 'Player ' + msg.msg + ' has left the room.';
+        //chat.value =  'Player '+msg.msg +' has left the room.'
+        chat.value = texts[227] + ' ' + msg.msg + texts[228];
     }
     else {
-        chat.value = chat.value + '\n' + 'Player ' + msg.msg + ' has left the room.';
+        chat.value = chat.value + '\n' + texts[227] + ' ' + msg.msg + texts[228];
     }
     if (chatPlaying.value == '') {
-        chatPlaying.value = 'Player ' + msg.msg + ' has left the room.';
+        chatPlaying.value = texts[227] + ' ' + msg.msg + texts[228];
     }
     else {
-        chatPlaying.value = chatPlaying.value + '\n' + 'Player ' + msg.msg + ' has left the room.';
+        chatPlaying.value = chatPlaying.value + '\n' + texts[227] + ' ' + msg.msg + texts[228];
     }
     editorSocket.emit('reload waiting room', { room: params.get('id') });
     (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
@@ -289,16 +293,16 @@ editorSocket.on('game started', function (msg) {
     var chat = document.getElementById('chat');
     var chatPlaying = document.getElementById("chatPlaying");
     if (chat.value == '') {
-        chat.value = msg.msg;
+        chat.value = texts[231];
     }
     else {
-        chat.value = chat.value + '\n' + msg.msg;
+        chat.value = chat.value + '\n' + texts[231];
     }
     if (chatPlaying.value == '') {
-        chatPlaying.value = msg.msg;
+        chatPlaying.value = texts[231];
     }
     else {
-        chatPlaying.value = chatPlaying.value + '\n' + msg.msg;
+        chatPlaying.value = chatPlaying.value + '\n' + texts[231];
     }
     var rem = [];
     canvas_1.game.getPawns().forEach(function (pawn) {
@@ -376,7 +380,6 @@ editorSocket.on('got texts', function (msg) {
             document.getElementById('leaveEndRoom').addEventListener('click', function () { window.location.replace('/gamelobby'); });
             editorSocket.emit('set Socket', { id: getCookie('id'), room: params.get('id') });
             editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name'), room: params.get('id') });
-            Gameplay_1.Gameplay.initDice();
         }
         else {
             editorSocket.emit('load game', { id: getCookie('id'), name: params.get('name') });

@@ -11,7 +11,7 @@ var newQuestions = [];
 var givenOptions = 0;
 function initCreation() {
     (0, TileEditor_1.removeAllButtons)();
-    (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[58]);
+    (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[243]);
     newQuestions = [];
     num = 0;
     var div = canvas_1.doc.createElement('div');
@@ -42,6 +42,7 @@ function initCreation() {
     //but.style.float = 'left'
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[58], function () { createQuestion(-1); });
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[70], function () { clientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false }); });
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], clientSocket_js_1.texts[242], function () { });
 }
 exports.initCreation = initCreation;
 function renumOptions() {
@@ -163,7 +164,7 @@ function showAllQuestions(data) {
     (0, TileEditor_1.removeAllButtons)();
     (0, TileEditor_1.removeAllListenersAdded)();
     (0, Elements_1.spawnHeading)(document, 'tileEditingPlace', '', clientSocket_js_1.texts[17]);
-    var bt = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[58], function () { initCreation(); });
+    var bt = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], clientSocket_js_1.texts[241], function () { initCreation(); });
     bt.style.marginBottom = '3%;';
     var questions = new Map();
     data.forEach(function (elem) {

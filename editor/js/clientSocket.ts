@@ -183,8 +183,10 @@ editorSocket.on('connected',(msg)=>{
     game.setToogleNumber(msg.game.toogleNumber)
     game.setId(msg.game.id);
   
-
-    (<HTMLInputElement>document.getElementById('toogleNumberingChecker'))!.checked = game.getToogleNumber()
+    if (isEditor){
+      (<HTMLInputElement>document.getElementById('toogleNumberingChecker'))!.checked = game.getToogleNumber()
+    }
+    
     let gameNextTiles = msg.game.nextTilesIds;
     let add:Map<string,number> = new Map()
     for (let i = 0; i*2 < gameNextTiles.length;i++){
@@ -283,8 +285,8 @@ editorSocket.on('return pawns to starting tile',(msg:{ids:Array<number>})=>{
   })
   reload(game,ctx)
 })
-editorSocket.on('join Room',(msg:{id:string,started:boolean})=>{
- 
+editorSocket.on('join Room',(msg:{id:string,name:string,started:boolean})=>{
+  Gameplay.initDice(msg.name)
   editorSocket.emit('join player to Room',{id:getCookie('id'),roomId:msg.id})
 
   if (!msg.started){
@@ -300,17 +302,17 @@ editorSocket.on('player joined',(msg:{msg:string})=>{
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
-    chat.value =  msg.msg
+    chat.value =  texts[227] + ' ' + msg.msg + ' '  + texts[229]
   }
-  else{
-    chat.value = chat.value +  '\n' + msg.msg;}
+  else{ 
+    chat.value = chat.value +  '\n' + texts[227] + ' ' + msg.msg + ' ' + texts[229];}
 
   
   if (chatPlaying.value == ''){
-    chatPlaying.value =  msg.msg
+    chatPlaying.value =  texts[227] + ' ' + msg.msg + ' ' + texts[229]
   }
   else{
-    chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
+    chatPlaying.value = chatPlaying.value +  '\n' + texts[227] + ' ' + msg.msg  + ' ' + texts[229];
   }
   reload(game,ctx)
 })})
@@ -333,39 +335,40 @@ editorSocket.on('player left',(msg:{msg:string,token:string})=>{
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
-    chat.value =  'Player '+msg.msg +' has left the room.'
+    //chat.value =  'Player '+msg.msg +' has left the room.'
+    chat.value = texts[227] + ' ' + msg.msg + texts[228]
   }
   else{
-    chat.value = chat.value +  '\n' + 'Player '+msg.msg +' has left the room.'}
+    chat.value = chat.value +  '\n' +  texts[227] + ' ' + msg.msg + texts[228]}
 
   
   if (chatPlaying.value == ''){
-    chatPlaying.value =  'Player '+msg.msg +' has left the room.'
+    chatPlaying.value =   texts[227] + ' ' + msg.msg + texts[228]
   }
   else{
-    chatPlaying.value = chatPlaying.value +  '\n' + 'Player '+msg.msg +' has left the room.';
+    chatPlaying.value = chatPlaying.value +  '\n' +  texts[227] + ' ' + msg.msg + texts[228];
   }
   editorSocket.emit('reload waiting room',{room:params.get('id')})
   reload(game,ctx)
 })
 
-editorSocket.on('game started',(msg:{msg:string,tokens:Array<string>})=>{
+editorSocket.on('game started',(msg:{tokens:Array<string>})=>{
  // game.setHasStarted(true)
  $('#waitingModal').modal('hide')
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
-    chat.value =  msg.msg
+    chat.value =  texts[231]
   }
   else{
-    chat.value = chat.value +  '\n' + msg.msg;}
+    chat.value = chat.value +  '\n' + texts[231];}
 
   
   if (chatPlaying.value == ''){
-    chatPlaying.value =  msg.msg
+    chatPlaying.value = texts[231]
   }
   else{
-    chatPlaying.value = chatPlaying.value +  '\n' + msg.msg;
+    chatPlaying.value = chatPlaying.value +  '\n' +texts[231];
   }
   let rem:Array<Pawn> = []
   game.getPawns().forEach((pawn:Pawn)=>{
@@ -466,7 +469,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
         document.getElementById('leaveEndRoom')!.addEventListener('click',function(){window.location.replace('/gamelobby')})
         editorSocket.emit('set Socket',{id:getCookie('id'),room:params.get('id')})
         editorSocket.emit('load game',{id:getCookie('id'),name:params.get('name'),room:params.get('id')})
-        Gameplay.initDice()
+       
         
       }
       else{
@@ -562,6 +565,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     
     
   })
+  
   editorSocket.on('end turn',()=>{
     game.setIsOnTurn(false)
     game.setCanThrow(false)

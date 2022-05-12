@@ -1,4 +1,4 @@
-import { spawnParagraph } from "./Elements";
+import { spawnHeading, spawnParagraph } from "./Elements";
 import {canvas, doc,game,elementDeleter} from './canvas'
 import { editorSocket, texts} from './clientSocket.js'
 import {pickTile} from './TileEditor'
@@ -30,7 +30,9 @@ export class Gameplay{
 
 
     
-    public static initDice(){
+    public static initDice(name:string){
+
+    spawnHeading(document,'buttonPlace','','Hráč: '+name)
     let  diceImages:Array<HTMLImageElement> = []
     this.dice = new Image()
     this.dice.src = '../../src/Dice1.png'

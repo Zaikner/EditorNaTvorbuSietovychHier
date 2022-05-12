@@ -14,7 +14,11 @@ class Background{
     private isMoving:Boolean = false
 
     public draw(){
-      
+        // ctx.resetTransform();
+        // ctx.restore()
+        // ctx.beginPath()
+        // ctx.closePath()
+        // ctx.scale(game.getScaleX(),game.getScaleY())
         if (this.backgroundImage!= undefined){
              ctx.drawImage(this.backgroundImage,0,0,canvas.width,canvas.height)
         }
@@ -27,6 +31,9 @@ class Background{
         this.components.forEach((component:BackgroundComponent)=>{
             component.draw(ctx)
         })
+
+        // ctx.resetTransform();
+        // ctx.restore()
     }
     public createComponent(event:MouseEvent,type:string,radius:number,color:string,stroke:number,strokeColor:string,image:HTMLImageElement = undefined!,imageWidth:number = 0,imageHeigth:number = 0){
         let coords = calibreEventCoords(event)

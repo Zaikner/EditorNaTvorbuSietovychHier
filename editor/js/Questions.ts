@@ -12,7 +12,7 @@ let givenOptions = 0
 function initCreation(){
     removeAllButtons()
 
-    spawnHeading(document,'buttonPlace','',texts[58])
+    spawnHeading(document,'buttonPlace','',texts[243])
     newQuestions = []
     num = 0
     let div = doc.createElement('div')
@@ -53,6 +53,7 @@ function initCreation(){
     
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[58],function(){createQuestion(-1);})
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){})
 }
 
 
@@ -201,7 +202,7 @@ function showAllQuestions(data:any){
     removeAllButtons()
     removeAllListenersAdded()
     spawnHeading(document,'tileEditingPlace','',texts[17])
-    let bt =spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[58],function(){initCreation()})
+    let bt =spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[241],function(){initCreation()})
     bt.style.marginBottom = '3%;'
 
   

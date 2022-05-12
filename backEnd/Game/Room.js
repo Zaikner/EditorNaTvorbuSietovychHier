@@ -69,7 +69,7 @@ var Room = /** @class */ (function () {
         else {
             this.spectators.push(player);
         }
-        SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString(), started: this.hasStarted });
+        SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString(), started: this.hasStarted, name: player.getAccount().getName() });
         //console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
         if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator') {
             this.playerOnTurn = this.players[0];

@@ -484,20 +484,23 @@ window.addEventListener('resize', function(){resize(game,ctx)});
 // // resize canvas
 function resize(editor:Game,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   //console.log('initSizeX:'+game.getInitSizeX() )
-   //console.log('initSizeY:'+game.getInitSizeY() )
-   context.canvas.width = window.innerWidth / 3 * 2-30;
+   console.log('initSizeX:'+game.getInitSizeX() )
+   console.log('initSizeY:'+game.getInitSizeY() )
+   context.canvas.width = window.innerWidth/ 3 * 2-30
    context.canvas.height = window.innerHeight;
    if(!isEditor){
     if(game.getInitSizeX() == 0){
-      game.setInitSizeX(canvas.width)
+      game.setInitSizeX((window.innerWidth/ 3 * 2-30))
      }
      if(game.getInitSizeY() == 0){
-      game.setInitSizeY(canvas.height)
+      game.setInitSizeY(window.innerHeight)
      }
-     game.setScaleX((window.innerWidth/ 3 * 2-30)/game.getInitSizeX())
+     
+     game.setScaleX(canvas.width/game.getInitSizeX())
    
-     game.setScaleY(window.innerHeight/game.getInitSizeY())
+     game.setScaleY(canvas.height/game.getInitSizeY())
+     console.log('pomer x je :'+game.getScaleX() )
+     console.log('pomer y je:'+game.getScaleY())
      
    }
    

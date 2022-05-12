@@ -1,0 +1,78 @@
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Bachelor&apos;s thesis
+  script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+  script(src='https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js')
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css' integrity='sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2' crossorigin='anonymous')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
+style.
+  body {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #292b2c; */
+  overflow: hidden;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  }
+.text-left
+  button#languageSetter.btn.btn-dark(type='button') SK/EN
+.text-left
+  button#help.btn.btn-dark(type='button' onclick="$('#helpModal').modal('show')") Show help
+.text-center
+  // <div class="container bg-dark" style="width: 100%; height: 100%; color: #292b2c">
+  form#editorForm(action='/editor' method='get')
+    button#editorInput.btn.btn-dark.text-center.btn-xl(type='submit' style='padding: 0 0; width: 700px; height: 70px; margin-top: 50px; font-family: sans-serif; font-size: 30px;')=texts[0]
+  form(action='/gameLobby' method='get')
+    button.btn.btn-dark.text-center(type='submit' style='padding: 0 0; width: 700px; height: 70px; margin-top: 50px; font-family:sans-serif; font-size: 30px;')=texts[1]
+  form#accountForm(action='/account' method='get')
+    button#accountInput.btn.btn-dark.text-center(type='submit' style='padding: 0 0; width: 700px; height: 70px; margin-top: 50px; font-family:sans-serif; font-size: 30px;')=texts[2]
+#helpModal.modal.fade(tabindex='-1' role='dialog')
+  .modal-dialog.modal-xl
+    .modal-content(style='background-color: #292b2c')
+      .modal-header
+        h3#modalHeader.modal-title(style='color: white;') Help:
+      #helpModalBody.modal-body(style='text-align: center;')
+        h4(style='text-align: center; color: white;')=texts[0]
+        hr(style='background-color: white;')
+        h4(style='text-align: center; color: white;')=texts[1]
+        hr(style='background-color: white;')
+        h4(style='text-align: center; color: white;')=texts[2]
+        hr(style='background-color: white;')
+      #editEventFooter.modal-footer
+        // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        button.btn.btn-secondary(type='button' onclick="$('#helpModal').modal('hide');") Leave!
+        // <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button>
+// </div>
+script(src='/socket.io/socket.io.js')
+script.
+  const socket = io();
+  if (window.localStorage.getItem('id')){
+  socket.emit('relog',{id:window.localStorage.getItem('id')})
+  }
+  else{
+  console.log('ziaden uzivatel nie je pripojenz')
+  }
+  if(Cookies.get('language') == undefined){
+  Cookies.set('language','SK')
+  localStorage.setItem('language','SK')
+  }
+  document.getElementById('languageSetter').addEventListener('click',function(){
+  if(Cookies.get('language') == 'SK'){
+  Cookies.set('language','EN')
+  localStorage.setItem('language','EN')
+  document.getElementById('languageSetter').textContent = 'SK/EN'
+  }
+  else{
+  Cookies.set('language','SK')
+  localStorage.setItem('language','SK')
+  document.getElementById('languageSetter').textContent = 'EN/SK'
+  }
+  console.log(Cookies.get('language'))
+  })
+  console.log('jazyk je: '+Cookies.get('language'))
+  socket.on('set cookie',()=>{
+  console.log('nastavil socket')
+  Cookies.set('id',window.localStorage.getItem('id'))
+  })

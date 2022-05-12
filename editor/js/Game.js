@@ -85,8 +85,8 @@ var Game = /** @class */ (function () {
                 rules: this.rules,
                 clientId: (0, clientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles(),
-                initSizeX: this.initSizeX,
-                initSizeY: this.initSizeY,
+                initSizeX: canvas_js_1.canvas.width,
+                initSizeY: canvas_js_1.canvas.height,
                 isPublished: this.isPublished,
                 toogleNumber: this.toogleNumber,
                 numOfPawnsPerTile: this.numberOfStartingPawns
@@ -256,6 +256,8 @@ var Game = /** @class */ (function () {
                 if (tiles[i] == this.choosenTile) {
                     tiles[i].setIsChoosen(false);
                     this.choosenTile = undefined;
+                    console.log('odvybral');
+                    document.getElementById('removeTileButton').removeAttribute('hidden');
                 }
                 else {
                     if (this.choosenTile != undefined) {
@@ -263,15 +265,19 @@ var Game = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
+                    document.getElementById('removeTileButton').setAttribute('hidden', 'hidden');
+                    console.log('vybral');
                     //if (!this.isMoving && edit)editTiles()
                 }
                 break;
             }
         }
+        console.log('nasiel:');
+        console.log(found);
         if (!found) {
             (0, TileEditor_js_1.insert)(event);
         }
-        else if (!this.isMoving && edit) {
+        else if (found) {
             (0, TileEditor_js_1.editTiles)();
         }
     };
@@ -317,15 +323,20 @@ var Game = /** @class */ (function () {
         (_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.setY2(this.choosenTile.getCenterY() + size);
         this.choosenTile;
     };
-    Game.prototype.moveTile = function (event) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-        var coords = (0, canvas_js_1.calibreEventCoords)(event);
-        (_a = this.choosenTile) === null || _a === void 0 ? void 0 : _a.setCenterX(coords.x);
-        (_b = this.choosenTile) === null || _b === void 0 ? void 0 : _b.setCenterY(coords.y);
-        (_c = this.choosenTile) === null || _c === void 0 ? void 0 : _c.setX1(coords.x - ((_d = this.choosenTile) === null || _d === void 0 ? void 0 : _d.getRadius()));
-        (_e = this.choosenTile) === null || _e === void 0 ? void 0 : _e.setX2(coords.x + ((_f = this.choosenTile) === null || _f === void 0 ? void 0 : _f.getRadius()));
-        (_g = this.choosenTile) === null || _g === void 0 ? void 0 : _g.setY1(coords.y - ((_h = this.choosenTile) === null || _h === void 0 ? void 0 : _h.getRadius()));
-        (_j = this.choosenTile) === null || _j === void 0 ? void 0 : _j.setY2(coords.y + ((_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.getRadius()));
+    Game.prototype.moveTile = function (event, tile) {
+        if (tile === void 0) { tile = this.choosenTile; }
+        console.log('pohol');
+        if (tile != undefined) {
+            console.log('nebol undefined');
+            var coords = (0, canvas_js_1.calibreEventCoords)(event);
+            tile.setCenterX(coords.x);
+            tile.setCenterY(coords.y);
+            tile.setX1(coords.x - tile.getRadius());
+            tile.setX2(coords.x + tile.getRadius());
+            tile.setY1(coords.y - tile.getRadius());
+            tile.setY2(coords.y + tile.getRadius());
+            (0, canvas_js_1.reload)(this, canvas_js_1.ctx);
+        }
     };
     Game.prototype.makeAllTilesNotChoosen = function () {
         var tiles = this.getTiles();
@@ -629,13 +640,13 @@ var Game = /** @class */ (function () {
         return this.initSizeX;
     };
     Game.prototype.setInitSizeX = function (newCoord) {
-        return this.initSizeX = newCoord;
+        return this.initSizeX = Math.floor(newCoord);
     };
     Game.prototype.getInitSizeY = function () {
         return this.initSizeY;
     };
     Game.prototype.setInitSizeY = function (newCoord) {
-        return this.initSizeY = newCoord;
+        return this.initSizeY = Math.floor(newCoord);
     };
     Game.prototype.getScaleX = function () {
         return this.scaleX;

@@ -322,7 +322,7 @@ export class ServerSocket{
           return
         }
         r.startGame()
-        
+        //this.io.emit('refresh active players')
         this.io.in(msg.room).emit('game started',{msg:'Game has started!',tokens:r.getPlayers().map((p:any)=>p.getToken())})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
      
@@ -614,7 +614,7 @@ export class ServerSocket{
 
         // }
         // else{
-          this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.'})
+          this.io.in(msg.roomId).emit('player joined',{msg:acc.getName()})
         //}
       })
       // socket.on('relog',async(msg:{id:string})=>{
@@ -805,6 +805,9 @@ export class ServerSocket{
       })
       socket.on('join Room',(msg:{roomName:string})=>{
         socket.join(msg.roomName)
+      })
+      socket.on('filter',(msg:{maxPlayers:string,maxTiles:string,questions:boolean})=>{
+        console.log(msg)
       })
       socket.on('reload waiting room',(msg:{room:string})=>{
         let r =  GameManager.getActiveRooms().get(parseInt(msg.room))

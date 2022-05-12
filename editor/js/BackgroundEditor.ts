@@ -8,7 +8,7 @@ function editBackground(){
     removeAllButtons()
     removeAllListenersAdded()
 
-    spawnHeading(document,'buttonPlace','',texts[19])
+    spawnHeading(document,'buttonPlace','',texts[233])
    
     spawnImageInput(document,'tileEditingPlace','backgroundImage','', texts[91],function(){
       let backgroundImage:HTMLInputElement =<HTMLInputElement> document.getElementById('backgroundImage')

@@ -35,7 +35,7 @@ export class GameFinder{
               console.log("Connection failed")
             } 
           }
-
+      
   public async findByAuthorId(id:number){
             let client = DbConnect.get()
             try {
@@ -43,6 +43,31 @@ export class GameFinder{
                     name: 'select-game-author',
                     text: 'SELECT * FROM bachelors_thesis.games WHERE author_id=$1;',
                     values: [id],
+                  }
+                var results = await  client.query(query)
+                var ret:Array<Game_db> = []
+              
+                await results.rows.forEach((row:any) => {
+                   
+                    ret.push(Game_db.load(row))
+                });
+                console.log('find by name vracia:')
+                console.log(ret)
+                return ret
+        
+            }
+            catch(err){
+              console.log("Connection failed")
+            } 
+          }
+
+    public async findByMaxPlayers(maxPlayers:number){
+            let client = DbConnect.get()
+            try {
+                const query = {
+                    name: 'select-game-author',
+                    text: 'SELECT * FROM bachelors_thesis.games WHERE num_of_players<=$1;',
+                    values: [maxPlayers],
                   }
                 var results = await  client.query(query)
                 var ret:Array<Game_db> = []

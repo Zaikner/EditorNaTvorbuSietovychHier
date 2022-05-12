@@ -94,8 +94,8 @@ class Game{
                                           rules:this.rules,
                                           clientId:getCookie('id'),
                                           nextTilesIds:this.mapNextTiles(),
-                                          initSizeX:this.initSizeX,
-                                          initSizeY:this.initSizeY,
+                                          initSizeX:canvas.width,
+                                          initSizeY:canvas.height,
                                           isPublished:this.isPublished,
                                           toogleNumber:this.toogleNumber,
                                           numOfPawnsPerTile:this.numberOfStartingPawns
@@ -289,6 +289,7 @@ class Game{
         return newTile
   }
     findTile(event:MouseEvent,edit:boolean){
+        
         let found = false;
         let coords = calibreEventCoords(event)
         let tiles = this.getTiles()
@@ -299,6 +300,8 @@ class Game{
                 if (tiles[i] == this.choosenTile){
                     tiles[i].setIsChoosen(false)               
                     this.choosenTile = undefined
+                    console.log('odvybral')
+                    document.getElementById('removeTileButton')!.removeAttribute('hidden')
                 }
                 else{
                     if (this.choosenTile!= undefined){
@@ -306,17 +309,20 @@ class Game{
                     }              
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
+                    document.getElementById('removeTileButton')!.setAttribute('hidden','hidden')
+                    console.log('vybral')
                     //if (!this.isMoving && edit)editTiles()
                     
                 }
                 break
             }
         }
-
+        console.log('nasiel:')
+        console.log(found)
         if (!found){
             insert(event)
         }
-        else if (!this.isMoving && edit){
+        else if (found){
             editTiles()
         }
     }
@@ -370,14 +376,21 @@ class Game{
         
         this.choosenTile
     }
-    moveTile(event:MouseEvent){
-        let coords = calibreEventCoords(event)
-        this.choosenTile?.setCenterX(coords.x)
-        this.choosenTile?.setCenterY(coords.y)
-        this.choosenTile?.setX1(coords.x-this.choosenTile?.getRadius())
-        this.choosenTile?.setX2(coords.x+this.choosenTile?.getRadius())
-        this.choosenTile?.setY1(coords.y-this.choosenTile?.getRadius())
-        this.choosenTile?.setY2(coords.y+this.choosenTile?.getRadius())
+    moveTile(event:MouseEvent,tile:Tile = this.choosenTile!){
+        console.log('pohol')
+        if (tile != undefined){
+            console.log('nebol undefined')
+            let coords = calibreEventCoords(event)
+            tile.setCenterX(coords.x)
+            tile.setCenterY(coords.y)
+            tile.setX1(coords.x-tile.getRadius())
+            tile.setX2(coords.x+tile.getRadius())
+            tile.setY1(coords.y-tile.getRadius())
+            tile.setY2(coords.y+tile.getRadius())
+            reload(this,ctx)
+        }
+    
+       
     }
     makeAllTilesNotChoosen(){
         let tiles = this.getTiles()
@@ -720,13 +733,13 @@ class Game{
         return this.initSizeX
     }
     setInitSizeX(newCoord:number){
-        return this.initSizeX = newCoord
+        return this.initSizeX = Math.floor(newCoord)
     }
     getInitSizeY(){
         return this.initSizeY
     }
     setInitSizeY(newCoord:number){
-        return this.initSizeY = newCoord
+        return this.initSizeY = Math.floor(newCoord)
     }
     getScaleX(){
         return this.scaleX

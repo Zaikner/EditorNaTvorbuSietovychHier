@@ -9,7 +9,7 @@ var background = undefined;
 function editBackground() {
     (0, TileEditor_js_1.removeAllButtons)();
     (0, TileEditor_js_1.removeAllListenersAdded)();
-    (0, Elements_js_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[19]);
+    (0, Elements_js_1.spawnHeading)(document, 'buttonPlace', '', clientSocket_js_1.texts[233]);
     (0, Elements_js_1.spawnImageInput)(document, 'tileEditingPlace', 'backgroundImage', '', clientSocket_js_1.texts[91], function () {
         var backgroundImage = document.getElementById('backgroundImage');
         if (backgroundImage.files.length > 0) {
