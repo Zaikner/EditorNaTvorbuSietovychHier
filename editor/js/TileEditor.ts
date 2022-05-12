@@ -12,6 +12,28 @@ import { spawn } from 'child_process'
 import { removeAllComponentListeners } from './BackgroundEditor.js'
 import { text } from 'body-parser'
 let idik = 0
+
+let lastSize:string = '30'
+let lastColor:string = '#000000'
+let lastOutline:string = '3'
+let lastOutlineColor:string ='#000000'
+let lastShape:string = 'circle'
+let lastImage:HTMLImageElement = undefined!
+let lastSkip:number = undefined!
+let lastBackwards:number = undefined!
+let lastForwards:number = undefined!
+let lastRepeat:number = undefined!
+let lastQuestionId:number = undefined!
+let lastMustThrown:number = undefined!
+let lastTurnsToFree:number = undefined!
+
+
+
+
+
+
+
+
 let moveEventHandler = function(event:MouseEvent) {
   idik+=1
   console.log('vypalil move' + idik)
@@ -103,6 +125,7 @@ function spawnElements(){
   
    
     let colorPicker = spawnColorPicker(doc,"tileEditingPlace",'colorPicker',texts[124])
+    colorPicker.value = lastColor
     colorPicker.onchange = function(){
       game.setImage(undefined!)
       showActualState();
@@ -114,8 +137,9 @@ function spawnElements(){
     //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
 
     //spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
-    let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider',texts[125],'20','50','1','30')
+    let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider',texts[125],'20','50','1',lastSize)
     sizeOfTileSlider.onchange = showActualState
+   
    
     // spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
     // let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,[texts[92],texts[93]])
@@ -124,11 +148,12 @@ function spawnElements(){
     // spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
     let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker',texts[127])
     outlineColorPicker.onchange = showActualState
+    outlineColorPicker.value = lastOutlineColor
     
 
     //spawnParagraph(doc,"tileEditingPlace",'',texts[128],true)
     
-    let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider',texts[128],'0','10','1','3')
+    let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider',texts[128],'0','10','1',lastOutline)
     sizeOfOutlineSlider.onchange = showActualState
     
     //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
@@ -793,6 +818,15 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       // })
   
     }
+    else{
+      (<HTMLInputElement>doc.getElementById('sizeOfTileSlider')!).value = lastSize;
+      ( <HTMLInputElement>doc.getElementById('colorPicker')!).value = lastColor;
+      ( <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!).value = lastOutline;
+      (<HTMLInputElement>doc.getElementById('outlineColorPicker')!).value = lastOutlineColor;
+      (<HTMLSelectElement>doc.getElementById('shapeMenu')!).value = lastShape
+   
+    
+    }
 
     //startingFor = doc.getElementById('')
    
@@ -818,6 +852,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     let width = cs.width
     let height = cs.height
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
+
+   
     let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
     //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
     let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -835,6 +871,9 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
+    if (game.getChoosenTile()!= undefined){
+      tile.setTileNumber(game.getChoosenTile()!.getTileNumber())
+    }
     tile.setImage(game.getImage())
     //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0,0,cs.width,cs.height)
@@ -844,6 +883,13 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     
     reload(game,ctx)
    
+    if (game.getChoosenTile()== undefined){
+      lastSize = sizeOfTileSlider.value
+      lastColor = colorPicker.value
+      lastOutline = sizeOfOutlineSlider.value
+      lastOutlineColor= outlineColorPicker.value
+      lastShape = shapeMenu.value
+    }
     
   }
   function generateNextTiles(){

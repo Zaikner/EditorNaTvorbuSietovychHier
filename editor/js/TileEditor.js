@@ -9,6 +9,19 @@ var PawnEditor_js_1 = require("./PawnEditor.js");
 var Pawn_js_1 = require("./Pawn.js");
 var BackgroundEditor_js_1 = require("./BackgroundEditor.js");
 var idik = 0;
+var lastSize = '30';
+var lastColor = '#000000';
+var lastOutline = '3';
+var lastOutlineColor = '#000000';
+var lastShape = 'circle';
+var lastImage = undefined;
+var lastSkip = undefined;
+var lastBackwards = undefined;
+var lastForwards = undefined;
+var lastRepeat = undefined;
+var lastQuestionId = undefined;
+var lastMustThrown = undefined;
+var lastTurnsToFree = undefined;
 var moveEventHandler = function (event) {
     idik += 1;
     console.log('vypalil move' + idik);
@@ -92,6 +105,7 @@ function spawnElements() {
     cs.style.width = '200px';
     cs.style.borderRadius = '20%';
     var colorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'colorPicker', clientSocket_js_1.texts[124]);
+    colorPicker.value = lastColor;
     colorPicker.onchange = function () {
         canvas_js_1.game.setImage(undefined);
         showActualState();
@@ -99,7 +113,7 @@ function spawnElements() {
     //spawnParagraph(doc,"tileEditingPlace",'',texts[173],true)
     //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
     //spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
-    var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', clientSocket_js_1.texts[125], '20', '50', '1', '30');
+    var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', clientSocket_js_1.texts[125], '20', '50', '1', lastSize);
     sizeOfTileSlider.onchange = showActualState;
     // spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
     // let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,[texts[92],texts[93]])
@@ -107,8 +121,9 @@ function spawnElements() {
     // spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
     var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker', clientSocket_js_1.texts[127]);
     outlineColorPicker.onchange = showActualState;
+    outlineColorPicker.value = lastOutlineColor;
     //spawnParagraph(doc,"tileEditingPlace",'',texts[128],true)
-    var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', clientSocket_js_1.texts[128], '0', '10', '1', '3');
+    var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', clientSocket_js_1.texts[128], '0', '10', '1', lastOutline);
     sizeOfOutlineSlider.onchange = showActualState;
     //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
     var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', clientSocket_js_1.texts[129], ["btn", "btn-dark"], ['circle', 'square']);
@@ -631,6 +646,13 @@ var setValues = function (tile, copyNumber) {
         //   console.log((<HTMLInputElement>document.getElementById('nextTile'+key))!)
         // })
     }
+    else {
+        canvas_js_1.doc.getElementById('sizeOfTileSlider').value = lastSize;
+        canvas_js_1.doc.getElementById('colorPicker').value = lastColor;
+        canvas_js_1.doc.getElementById('sizeOfOutlineSlider').value = lastOutline;
+        canvas_js_1.doc.getElementById('outlineColorPicker').value = lastOutlineColor;
+        canvas_js_1.doc.getElementById('shapeMenu').value = lastShape;
+    }
     //startingFor = doc.getElementById('')
     return tile;
 };
@@ -663,12 +685,22 @@ function showActualState() {
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
     // }
+    if (canvas_js_1.game.getChoosenTile() != undefined) {
+        tile.setTileNumber(canvas_js_1.game.getChoosenTile().getTileNumber());
+    }
     tile.setImage(canvas_js_1.game.getImage());
     //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0, 0, cs.width, cs.height);
     cttttx.resetTransform();
     tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+    if (canvas_js_1.game.getChoosenTile() == undefined) {
+        lastSize = sizeOfTileSlider.value;
+        lastColor = colorPicker.value;
+        lastOutline = sizeOfOutlineSlider.value;
+        lastOutlineColor = outlineColorPicker.value;
+        lastShape = shapeMenu.value;
+    }
 }
 exports.showActualState = showActualState;
 function generateNextTiles() {

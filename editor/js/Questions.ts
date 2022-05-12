@@ -189,6 +189,7 @@ function createQuestion(id:number){
         num  = 0;
       
         editorSocket.emit('upsertQuestion',data)
+        Warning.show(texts[245])
     }
     else{
         Warning.show(texts[191])
