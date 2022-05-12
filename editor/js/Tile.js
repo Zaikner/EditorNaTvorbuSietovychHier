@@ -270,12 +270,12 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.JSONfyTile = function () {
         return {
-            centerX: this.centerX,
-            centerY: this.centerY,
-            x1: this.x1,
-            x2: this.x2,
-            y1: this.y1,
-            y2: this.y2,
+            centerX: Math.floor(this.centerX),
+            centerY: Math.floor(this.centerY),
+            x1: Math.floor(this.x1),
+            x2: Math.floor(this.x2),
+            y1: Math.floor(this.y1),
+            y2: Math.floor(this.y2),
             radius: this.radius,
             color: this.color,
             stroke: this.stroke,
