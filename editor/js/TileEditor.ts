@@ -297,7 +297,10 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     })
     button.style.marginTop = '10%'
     button.style.textAlign = 'center'
-    document.getElementById('removeTileButton')!.hidden = true
+    if(game.getChoosenTile()== undefined){
+      document.getElementById('removeTileButton')!.hidden = true
+    }
+   
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 
@@ -342,8 +345,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
            }
            
        }
-    console.log('nasiel tilik:')
-    console.log(tilik)
+    // console.log('nasiel tilik:')
+    // console.log(tilik)
     game.findTile(event,false)
     
     //canvas.addEventListener('mousemove',moveWithTile)
@@ -510,6 +513,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       game.addToUndoLog([addedTile])
       addedTile.getIsStartingFor().forEach((player:string)=>{
         game.insertPawns(player,addedTile)
+        console.log(game)
       })
       showActualState()
     }
@@ -890,7 +894,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       lastOutlineColor= outlineColorPicker.value
       lastShape = shapeMenu.value
     }
-    
+    console.log(game)
   }
   function generateNextTiles(){
     elementDeleter('nextTileModalBody')

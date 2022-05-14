@@ -1,4 +1,4 @@
-import { game } from "./canvas";
+import { ctx, game, reload } from "./canvas";
 import { showActualState, update } from "./TileEditor";
 
 
@@ -289,16 +289,15 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
         option.style.backgroundColor = 'white'
         option.classList.add("dropdown-item",'btn')
         
-        if (type == 'start' && game.getStartForPlayers().includes(types[i])){
+        if (type == 'start' && (game.getStartForPlayers().includes(types[i]) || (game.getStartForPlayers().length == game.getPlayerTokens().length && i == 0))){
+          
           option.style.backgroundColor = 'yellow'
         }
-        if (type == 'end' && game.getEndForPlayers().includes(types[i])){
+        if (type == 'end' && (game.getEndForPlayers().includes(types[i]) || (game.getEndForPlayers().length == game.getPlayerTokens().length && i == 0))){
           option.style.backgroundColor = 'yellow'
         }
-        if (type == 'enabled' && game.getEnabledForPlayers().includes(types[i])){
-          option.style.backgroundColor = 'yellow'
-        }
-        if (type == 'immune' && game.getCantBeEliminatedOnTile().includes(types[i])){
+    
+        if (type == 'immune' && (game.getCantBeEliminatedOnTile().includes(types[i]) || (game.getCantBeEliminatedOnTile().length == game.getPlayerTokens().length && i == 0))){
           option.style.backgroundColor = 'yellow'
         }
 
@@ -324,12 +323,21 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
                 }
               }
             }
-            // if (game.getStartForPlayers().includes(types[i])){
-            //   game.setStartForPlayers(game.getStartForPlayers().filter((t) => {return t != types[i]}));
-            // }
-            // else{
-            //   game.getStartForPlayers().push(types[i])
-            // }
+            else{
+              if (game.getStartForPlayers().includes(types[i])){
+                game.setStartForPlayers(game.getStartForPlayers().filter((t) => {return t != types[i]}));
+                if (i!=0){
+                  document.getElementById(types[0]+type)!.style.backgroundColor ='white'
+                }
+              }
+              else{
+                game.getStartForPlayers().push(types[i])
+                if (i!=0 && game.getStartForPlayers().length == game.getPlayerTokens().length){
+                  document.getElementById(types[0]+type)!.style.backgroundColor ='yellow'
+                }
+              }
+            }
+          
           }
           else if(type == 'end'){
             if (i == 0){
@@ -351,23 +359,25 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
                 }
               }
             }
-            // if (game.getEndForPlayers().includes(types[i])){
-            //   game.setEndForPlayers(game.getEndForPlayers().filter((t) => {return t != types[i]}));
-            //   console.log(game.getEndForPlayers())
-            // }
-            // else{
-            //   game.getEndForPlayers().push(types[i])
-            //   console.log(game.getEndForPlayers())
-            // }
-          }
-          else if (type == 'enabled'){
-            if (game.getEnabledForPlayers().includes(types[i])){
-              game.setEnabledForPlayers(game.getEnabledForPlayers().filter((t) => {return t != types[i]}));
-            }
             else{
-              game.getEnabledForPlayers().push(types[i])
+              if (game.getEndForPlayers().includes(types[i])){
+                game.setEndForPlayers(game.getEndForPlayers().filter((t) => {return t != types[i]}));
+                if (i!=0){
+                  document.getElementById(types[0]+type)!.style.backgroundColor ='white'
+                }
+                console.log(game.getEndForPlayers())
+              }
+              else{
+                game.getEndForPlayers().push(types[i])
+                if (i!=0 && game.getEndForPlayers().length == game.getPlayerTokens().length){
+                  document.getElementById(types[0]+type)!.style.backgroundColor ='yellow'
+                }
+                console.log(game.getEndForPlayers())
+              }
             }
+          
           }
+    
           else if (type == 'immune'){
             if (i == 0){
               if (game.getCantBeEliminatedOnTile().length < game.getPlayerTokens().length){
@@ -385,12 +395,21 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
                   document.getElementById(types[j]+type)!.style.backgroundColor = 'white'
                 }
               }}
-            // if (game.getCantBeEliminatedOnTile().includes(types[i])){
-            //   game.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
-            // }
-            // else{
-            //   game.getCantBeEliminatedOnTile().push(types[i])
-            // }
+              else{
+                if (game.getCantBeEliminatedOnTile().includes(types[i])){
+                  game.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().filter((t) => {return t != types[i]}));
+                  if (i!=0){
+                    document.getElementById(types[0]+type)!.style.backgroundColor ='white'
+                  }
+                }
+                else{
+                  game.getCantBeEliminatedOnTile().push(types[i])
+                  if (i!=0 && game.getCantBeEliminatedOnTile().length == game.getPlayerTokens().length){
+                    document.getElementById(types[0]+type)!.style.backgroundColor ='yellow'
+                  }
+                }
+              }
+          
           }
      
           if (game.getChoosenTile()!=undefined){
@@ -404,7 +423,9 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
           else if(i!=0){
             option.style.backgroundColor = 'white'
           }
+          reload(game,ctx)
           e.stopPropagation()
+
         })
         startMenuDropdown.appendChild(option);
     }

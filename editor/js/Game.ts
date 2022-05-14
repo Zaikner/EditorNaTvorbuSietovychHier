@@ -377,9 +377,9 @@ class Game{
         this.choosenTile
     }
     moveTile(event:MouseEvent,tile:Tile = this.choosenTile!){
-        console.log('pohol')
+        //console.log('pohol')
         if (tile != undefined){
-            console.log('nebol undefined')
+            //console.log('nebol undefined')
             let coords = calibreEventCoords(event)
             tile.setCenterX(coords.x/this.scaleX)
             tile.setCenterY(coords.y/this.scaleY)

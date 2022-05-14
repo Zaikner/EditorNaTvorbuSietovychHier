@@ -162,6 +162,13 @@ var ServerSocket = /** @class */ (function () {
                             ];
                         case 2:
                             lastGame = _a.sent();
+                            //console.log('prebehli vsetkz queries')
+                            //console.log(acc)
+                            //console.log(existingGames)
+                            //console.log(lastGame)
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
                             id = 0;
                             if (existingGames.length > 0) {
                                 if (existingGames[0].getAuthorId() != acc.getId()) {
@@ -331,7 +338,7 @@ var ServerSocket = /** @class */ (function () {
                     return;
                 }
                 r.startGame();
-                _this.io.emit('refresh active players');
+                //this.io.emit('refresh active players')
                 _this.io["in"](msg.room).emit('game started', { msg: 'Game has started!', tokens: r.getPlayers().map(function (p) { return p.getToken(); }) });
                 _this.io["in"](msg.room).emit('turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                 _this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
@@ -610,6 +617,9 @@ var ServerSocket = /** @class */ (function () {
                         case 1:
                             lastQuest = _a.sent();
                             acc = AccountManager.getAccountByClientId(data.id);
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
                             QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(data.questionId);
                             id = 0;
                             if (data.questionId < 0) {
@@ -667,6 +677,9 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(data.id);
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
                             return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByQuestionId(parseInt(data.questionId))];
                         case 1:
                             can = (_a.sent()).length == 0;
@@ -728,6 +741,9 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
                             return [4 /*yield*/, QuestionWithOptionsFinder_1.QuestionWithOptionsFinder.getInstance().findByAuthor(acc.getId())];
                         case 1:
                             questions = _a.sent();
@@ -823,6 +839,9 @@ var ServerSocket = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             acc = AccountManager.getAccountByClientId(msg.id);
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
                             return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findAllPublished()];
                         case 1:
                             names = (_a.sent()).map(function (game) { return game.getName(); });

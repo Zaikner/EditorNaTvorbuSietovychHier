@@ -484,8 +484,8 @@ window.addEventListener('resize', function(){resize(game,ctx)});
 // // resize canvas
 function resize(editor:Game,context:CanvasRenderingContext2D) {
    //endDrawingPath()
-   console.log('initSizeX:'+game.getInitSizeX() )
-   console.log('initSizeY:'+game.getInitSizeY() )
+  //  console.log('initSizeX:'+game.getInitSizeX() )
+  //  console.log('initSizeY:'+game.getInitSizeY() )
    context.canvas.width = window.innerWidth/ 3 * 2-30
    context.canvas.height = window.innerHeight;
    //if(!isEditor){
@@ -499,8 +499,8 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
      game.setScaleX(canvas.width/game.getInitSizeX())
    
      game.setScaleY(canvas.height/game.getInitSizeY())
-     console.log('pomer x je :'+game.getScaleX() )
-     console.log('pomer y je:'+game.getScaleY())
+    //  console.log('pomer x je :'+game.getScaleX() )
+    //  console.log('pomer y je:'+game.getScaleY())
      
    //}
    

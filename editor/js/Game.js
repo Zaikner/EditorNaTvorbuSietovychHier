@@ -327,9 +327,9 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.moveTile = function (event, tile) {
         if (tile === void 0) { tile = this.choosenTile; }
-        console.log('pohol');
+        //console.log('pohol')
         if (tile != undefined) {
-            console.log('nebol undefined');
+            //console.log('nebol undefined')
             var coords = (0, canvas_js_1.calibreEventCoords)(event);
             tile.setCenterX(coords.x / this.scaleX);
             tile.setCenterY(coords.y / this.scaleY);

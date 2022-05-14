@@ -14,6 +14,9 @@ router
 .get(async (request,res) =>
 {   
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
+    if (acc == undefined){
+        res.redirect('/')
+    }
     let games =  await GameFinder.getIntance().findByName(request.params.name)
     let game = games[0]
     

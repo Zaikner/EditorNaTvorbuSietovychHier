@@ -144,6 +144,9 @@ export class ServerSocket{
           //console.log(acc)
           //console.log(existingGames)
           //console.log(lastGame)
+          if (acc == undefined){
+            return
+          }
           let id =0
           if (existingGames!.length > 0){
             if (existingGames![0].getAuthorId()!= acc.getId()){
@@ -633,7 +636,9 @@ export class ServerSocket{
         let quest = new Question()
         let lastQuest = await QuestionFinder.getIntance().findWithLastId()
         let acc = AccountManager.getAccountByClientId(data.id)
-      
+        if (acc == undefined){
+          return
+        }
         QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
         //console.log('options na servery su:')
         //console.log(data.options)
@@ -694,6 +699,9 @@ export class ServerSocket{
       socket.on('deleteQuestion', async(data:{questionId:string,id:string})=>{
         //console.log('edituje')
         let acc = AccountManager.getAccountByClientId(data.id)
+        if (acc == undefined){
+          return
+        }
         let can = (await TileFinder.getIntance().findByQuestionId(parseInt(data.questionId)))!.length == 0
         let questionNumber = (await QuestionFinder.getIntance().findAllByAuthorId(acc.getId()))!.length
         let lastRandomQuestion = (await TileFinder.getIntance().findByAuthorAndRandomQuestion(acc.getId()))!.length > 0
@@ -747,7 +755,9 @@ export class ServerSocket{
       
       socket.on('loadQuestions',async(msg:{id:string,pick:boolean})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
-  
+        if (acc == undefined){
+          return
+        }
         let questions = await QuestionWithOptionsFinder.getInstance().findByAuthor(acc.getId())
 
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
@@ -826,6 +836,9 @@ export class ServerSocket{
       })
       socket.on('loadGameNames',async(msg:{id:string})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
+        if (acc == undefined){
+          return
+        }
         let names = (await GameFinder.getIntance().findAllPublished())!.map((game) => game.getName())
         let authorNames = (await GameFinder.getIntance().findByAuthorId(acc.getId()))!.map((game) => game.getName())
 

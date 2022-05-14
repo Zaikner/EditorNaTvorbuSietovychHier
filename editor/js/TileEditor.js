@@ -224,7 +224,9 @@ function spawnElements() {
     });
     button.style.marginTop = '10%';
     button.style.textAlign = 'center';
-    document.getElementById('removeTileButton').hidden = true;
+    if (canvas_js_1.game.getChoosenTile() == undefined) {
+        document.getElementById('removeTileButton').hidden = true;
+    }
     //document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
 }
 exports.spawnElements = spawnElements;
@@ -262,8 +264,8 @@ var initMove = function (event) {
             break;
         }
     }
-    console.log('nasiel tilik:');
-    console.log(tilik);
+    // console.log('nasiel tilik:')
+    // console.log(tilik)
     canvas_js_1.game.findTile(event, false);
     //canvas.addEventListener('mousemove',moveWithTile)
     //console.log(coords)
@@ -412,6 +414,7 @@ var insert = function (event) {
         canvas_js_1.game.addToUndoLog([addedTile]);
         addedTile.getIsStartingFor().forEach(function (player) {
             canvas_js_1.game.insertPawns(player, addedTile);
+            console.log(canvas_js_1.game);
         });
         showActualState();
     }
@@ -701,6 +704,7 @@ function showActualState() {
         lastOutlineColor = outlineColorPicker.value;
         lastShape = shapeMenu.value;
     }
+    console.log(canvas_js_1.game);
 }
 exports.showActualState = showActualState;
 function generateNextTiles() {

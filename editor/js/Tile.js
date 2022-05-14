@@ -262,7 +262,7 @@ var Tile = /** @class */ (function () {
             //if (((Math.pow(x-this.centerX*game.getScaleX(),2)/Math.pow(this.radius*game.getScaleX(),2))+(Math.pow(y-this.centerY*game.getScaleY(),2)/Math.pow(this.radius*game.getScaleY(),2))<=1)
         }
         if (this.shape == 'square') {
-            if (this.x1 <= x && x <= this.x2 && this.y1 <= y && y <= this.y2) {
+            if (this.x1 * canvas_js_1.game.getScaleX() <= x && x <= this.x2 * canvas_js_1.game.getScaleX() && this.y1 * canvas_js_1.game.getScaleY() <= y && y <= this.y2 * canvas_js_1.game.getScaleY()) {
                 return true;
             }
         }
