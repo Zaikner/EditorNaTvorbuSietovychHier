@@ -84,17 +84,17 @@ title=text[1]
                 p(style='font-size: 15px; font-family: sans-serif;')=text[7]
                 hr
                 div
-                  input#containsQuestion(type="checkbox")
+                  input#containsQuestion(type="checkbox" checked=questions)
                   label(for='containsQuestion')=text[234]
                 div
                   label(for='numOfPlayers')=text[235]
-                  input#numOfPlayers(type="number" style = 'width:10%;' max = '6' min = '1' value = '6')
+                  input#numOfPlayers(type="number" style = 'width:10%;' max = '6' min = '1' value =numOfPlayers)
                 div
                   label(for='numOfPlayers')=text[236]
                   select#numOfTiles
-                   option=text[237]
-                   option=text[238]
-                   option=text[239]
+                   option(id = '25' value = '25')=text[237]
+                   option(id = '50' value = '50')=text[238]
+                   option(id = '100000' value = '100000')=text[239]
                 div
                   button#filterButton.btn.btn-dark(type = 'button')=text[240]  
              
@@ -139,10 +139,18 @@ footer
 script.
 
   let full="#{full}";
+  let numOfTiles = '#{numOfTiles}'
+  
   let existingRoomsId="#{existingRoomsIds}";
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
   $(window).on('load', function() {
+    if (numOfTiles){
+      console.log(numOfTiles)
+ document.getElementById(numOfTiles).selected = true
+    }
+  
+   
   if (full)
      alert("#{text[188]}")
    
