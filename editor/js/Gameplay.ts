@@ -4,6 +4,7 @@ import { editorSocket, texts} from './clientSocket.js'
 import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
 import { Socket } from "socket.io";
+import { Warning } from "./Warning";
 
 
 export class Gameplay{
@@ -25,7 +26,7 @@ export class Gameplay{
 
 
     public static initGameInfo(name:string){
-        spawnParagraph(doc,"tileEditingPlace",'',texts[118]+name,true)
+        spawnHeading(doc,"tileEditingPlace",'',texts[118]+name)
     }
 
 
@@ -124,6 +125,7 @@ public static changeWaitingRoom(accs:any){
     public static throwDice(token:string){
  
         game.setCanThrow(false)
+        game.setHasThrown(true)
         const params = new URLSearchParams(window.location.search);
         let t = 0
         let times = 0
@@ -132,9 +134,19 @@ public static changeWaitingRoom(accs:any){
             if (times == 10){
                 const params = new URLSearchParams(window.location.search);
                 clearInterval(interval)
-              
-                
-                editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId()})
+                console.log('emitol player thrown')
+                let can = false
+                game.getPawns().forEach((pawn:Pawn)=>{
+                  if (pawn.player == token){
+                    if (pawn.canMove(n)){
+                      can = true
+                    }
+                  }
+                })
+                if (!can){
+                    Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
+                }
+                editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId(),canMove:can})
                 //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
             }
             else{

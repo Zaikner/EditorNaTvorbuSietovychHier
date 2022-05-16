@@ -351,6 +351,7 @@ var ServerSocket = /** @class */ (function () {
                 _this.io["in"](msg.room).emit('move Pawn back', { pawn: msg.pawn, value: msg.value });
             });
             socket.on('player thrown', function (msg) {
+                console.log('recieved player thrond od:' + msg.token + msg.canMove);
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (r == undefined) {
                     return;
@@ -371,8 +372,13 @@ var ServerSocket = /** @class */ (function () {
                         socket.emit('canMovePawn', { value: msg.value, token: msg.token });
                     }
                 }
+                else if (!msg.canMove) {
+                    console.log('nemoze ist dalej');
+                    socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
+                }
                 else {
                     socket.emit('canMovePawn', { value: msg.value, token: msg.token });
+                    console.log('emitol move pawn');
                 }
                 //console.log('recieved player thrown' +msg.token)
                 //console.log('emited movePawn')
@@ -391,6 +397,10 @@ var ServerSocket = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            //returnValue
+                            //console.log('recieved react to tile id: '+msg.id)
+                            //console.log(msg)
+                            console.log('obdrzal react to tile');
                             r = GameManager.getActiveRooms().get(parseInt(msg.room));
                             if (r == undefined) {
                                 return [2 /*return*/];
@@ -474,6 +484,7 @@ var ServerSocket = /** @class */ (function () {
                                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                             }
                             else {
+                                console.log('reac to tile poslal evaluate end');
                                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                                 // r.nextTurn()
                                 // ////console.log(r)
@@ -502,6 +513,7 @@ var ServerSocket = /** @class */ (function () {
                 socket.to(msg.room).emit('loadAnswersToOthers', { wrong: msg.wrong, right: msg.right });
             });
             socket.on('evaluated end', function (msg) {
+                console.log('recieved evaluated end: ' + msg.token);
                 //console.log('odchyil evaluetedEnd')
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));
                 if (r == undefined) {

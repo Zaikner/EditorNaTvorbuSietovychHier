@@ -344,11 +344,14 @@ export class ServerSocket{
       })
 
     
-      socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number})=>{
+      socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number,canMove:boolean})=>{
+        console.log('recieved player thrond od:' + msg.token + msg.canMove)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           return
         }
+
+      
         r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getMustThrown()!=0){
           if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
@@ -367,8 +370,13 @@ export class ServerSocket{
             socket.emit('canMovePawn',{value:msg.value,token:msg.token})
           }
         }
+        else if(!msg.canMove){
+          console.log('nemoze ist dalej')
+          socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
+        }
         else{
           socket.emit('canMovePawn',{value:msg.value,token:msg.token})
+          console.log('emitol move pawn')
         }
         //console.log('recieved player thrown' +msg.token)
         //console.log('emited movePawn')
@@ -390,6 +398,7 @@ export class ServerSocket{
         //returnValue
         //console.log('recieved react to tile id: '+msg.id)
         //console.log(msg)
+        console.log('obdrzal react to tile')
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           return
@@ -469,6 +478,7 @@ export class ServerSocket{
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
           else{
+            console.log('reac to tile poslal evaluate end')
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
             // r.nextTurn()
       
@@ -508,6 +518,7 @@ export class ServerSocket{
 
       })
       socket.on('evaluated end',(msg:{is:boolean,room:string,token:string})=>{
+        console.log('recieved evaluated end: '+msg.token)
         //console.log('odchyil evaluetedEnd')
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){

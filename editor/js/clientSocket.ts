@@ -16,6 +16,7 @@ import { Warning } from "./Warning";
 
 let texts:Array<string> = []
 let isEditor = false;
+let zoz = window.location.href.split('/')
 const params = new URLSearchParams(window.location.search);
 const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
 setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
@@ -200,7 +201,10 @@ editorSocket.on('connected',(msg)=>{
       tokens.push('Player '+i)
     }
     game.setPlayerTokens(tokens)
-    Gameplay.initGameInfo(msg.game.name)
+    if (params.get('id') == undefined && params.get('name')!=undefined){
+      Gameplay.initGameInfo(msg.game.name)
+    }
+    //Gameplay.initGameInfo(msg.game.name)
   
     let i = 0
 
@@ -412,8 +416,14 @@ editorSocket.on('loadAnswersToOthers',(msg:{wrong:Array<string>,right:Array<stri
 editorSocket.on('evaluate End',(msg:{token:string})=>{
 
   let is = game.playerEnded(msg.token)
- 
-  editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
+  console.log('evaluatol end')
+  if (!game.getCanThrow()){
+    editorSocket.emit('evaluated end',{token:msg.token,is:is,room:params.get('id')})
+  }
+  else{
+    console.log('chcel evaluatnut, ale mohol hodit')
+  }
+  
 })
 
 editorSocket.on('is online?',()=>{
@@ -440,7 +450,7 @@ editorSocket.on('show Dice value',(msg:{value:number})=>{
 })
 editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     
-  let zoz = window.location.href.split('/')
+  
     texts = msg.text
   
     if (zoz[zoz.length-2] === 'editor'){
@@ -514,9 +524,11 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   editorSocket.on('turn',(msg:{player:string,token:string})=>{
     console.log('recieved: turn')
     console.log(game.getIsOnturn())
+    game.setHasThrown(false)
     //canvas.removeEventListener('click',pickTile)
     elementDeleter('onTurnPlace')
-    spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player,true)
+    let p = spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player,false)
+    p.style.textAlign = 'center'
    
     
   })
@@ -526,6 +538,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
     console.log('recieved: turn move')
     game.setIsOnTurn(true)
     game.setCanThrow(true)
+    game.setHasThrown(false)
     
     document.getElementById('Dice')?.addEventListener('click',function()
     {// let pawn = game.getChoosenTile()!.havePawnOnTile(msg.token)
@@ -545,23 +558,25 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   let canMovePawnFunc:(event: MouseEvent) => void;
   editorSocket.on('canMovePawn',(msg:{token:string,value:number})=>{
-    let can = false
-    game.getPawns().forEach((pawn:Pawn)=>{
-      if (pawn.player == msg.token){
-        if (pawn.canMove(msg.value)){
-          can = true
-        }
-      }
-    })
-    if (can){
+    // console.log('recived canMovePawn')
+    // console.log(' OBDRZAL CAN MOVE TAK SA POHOL')
+    // let can = false
+    // game.getPawns().forEach((pawn:Pawn)=>{
+    //   if (pawn.player == msg.token){
+    //     if (pawn.canMove(msg.value)){
+    //       can = true
+    //     }
+    //   }
+    // })
+    // if (can){
       canMovePawnFunc = function(event:MouseEvent){pickTile(event,msg.token,msg.value)}
       canvas.addEventListener('click',canMovePawnFunc)
-    }
-    else{
-      Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
-      
-      editorSocket.emit('evaluated end',{is:false,room:params.get('id')})
-    }
+    //}
+    // else{
+    //   Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
+    //   console.log('tu emitol evaluated end')
+    //   editorSocket.emit('evaluated end',{is:false,room:params.get('id')})
+    // }
     
     
   })

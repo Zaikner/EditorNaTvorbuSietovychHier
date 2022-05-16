@@ -63,7 +63,7 @@ export class Pawn{
         }
      
         const params = new URLSearchParams(window.location.search);
-        if (game.getIsOnturn()){
+        if (game.getHasThrown()){
             setTimeout(function(){
                 editorSocket.emit('change Pawn position',{pawnId:p.id,tileId:p.tileId,room:params.get('id'),id:getCookie('id')})
                 startTile.setIsChoosen(false)
@@ -73,6 +73,9 @@ export class Pawn{
                 reload(game,ctx)
           
             }, 550*numOfTiles)
+        }
+        else{
+            console.log('nereagoval lebo nebolo jeho kolo')
         }
      
         

@@ -33,6 +33,7 @@ class Game{
     //----------playing---------
     //private hasStarted = false;
     private isOnTurn = false
+    private hasThrown = false
     private nextTilesIds:Map<string,number> = new Map()
     private canThrow = false;
     private toogleNumber = false;
@@ -459,15 +460,17 @@ class Game{
   
     reactToTile(tile:Tile,returnValue:number,pawn:Pawn){
         const params = new URLSearchParams(window.location.search);
-        
+        console.log('reagoval na tile')
         if (this.getIsOnturn()){
     
             let canRemovePawnIds:Array<number> = []
+            let ownersOfEliminatedPawns:Array<string> = []
             this.getPlayerTokens().forEach((token:string)=>{
-                if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player){
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player && !ownersOfEliminatedPawns.includes(token)){
                     tile.getPawns().forEach((p:Pawn)=>{
                         if (p.player == token && !p.hasEnded){
                             canRemovePawnIds.push(p.id)
+                            ownersOfEliminatedPawns.push(token)
                         }
                     })
                 }
@@ -915,6 +918,12 @@ class Game{
     }
     public getRandomQuestion(){
         return this.randomQuestion
+    }
+    public setHasThrown(is:boolean){
+        this.hasThrown = is
+    }
+    public getHasThrown(){
+        return this.hasThrown
     }
     // getHasStarted(){
     //     return  this.hasStarted

@@ -34,6 +34,7 @@ var Game = /** @class */ (function () {
         //----------playing---------
         //private hasStarted = false;
         this.isOnTurn = false;
+        this.hasThrown = false;
         this.nextTilesIds = new Map();
         this.canThrow = false;
         this.toogleNumber = false;
@@ -398,13 +399,16 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.reactToTile = function (tile, returnValue, pawn) {
         var params = new URLSearchParams(window.location.search);
+        console.log('reagoval na tile');
         if (this.getIsOnturn()) {
             var canRemovePawnIds_1 = [];
+            var ownersOfEliminatedPawns_1 = [];
             this.getPlayerTokens().forEach(function (token) {
-                if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player) {
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player && !ownersOfEliminatedPawns_1.includes(token)) {
                     tile.getPawns().forEach(function (p) {
                         if (p.player == token && !p.hasEnded) {
                             canRemovePawnIds_1.push(p.id);
+                            ownersOfEliminatedPawns_1.push(token);
                         }
                     });
                 }
@@ -823,6 +827,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getRandomQuestion = function () {
         return this.randomQuestion;
+    };
+    Game.prototype.setHasThrown = function (is) {
+        this.hasThrown = is;
+    };
+    Game.prototype.getHasThrown = function () {
+        return this.hasThrown;
     };
     return Game;
 }());

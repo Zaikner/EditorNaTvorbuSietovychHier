@@ -19,6 +19,7 @@ var texts = [];
 exports.texts = texts;
 var isEditor = false;
 exports.isEditor = isEditor;
+var zoz = window.location.href.split('/');
 var params = new URLSearchParams(window.location.search);
 var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
 exports.editorSocket = editorSocket;
@@ -163,7 +164,10 @@ editorSocket.on('connected', function (msg) {
         tokens.push('Player ' + i_3);
     }
     canvas_1.game.setPlayerTokens(tokens);
-    Gameplay_1.Gameplay.initGameInfo(msg.game.name);
+    if (params.get('id') == undefined && params.get('name') != undefined) {
+        Gameplay_1.Gameplay.initGameInfo(msg.game.name);
+    }
+    //Gameplay.initGameInfo(msg.game.name)
     var i = 0;
     msg.pawns.forEach(function (pawn) {
         i++;
@@ -334,7 +338,13 @@ editorSocket.on('loadAnswersToOthers', function (msg) {
 });
 editorSocket.on('evaluate End', function (msg) {
     var is = canvas_1.game.playerEnded(msg.token);
-    editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
+    console.log('evaluatol end');
+    if (!canvas_1.game.getCanThrow()) {
+        editorSocket.emit('evaluated end', { token: msg.token, is: is, room: params.get('id') });
+    }
+    else {
+        console.log('chcel evaluatnut, ale mohol hodit');
+    }
 });
 editorSocket.on('is online?', function () {
     editorSocket.emit('is online', { id: localStorage.getItem('id') });
@@ -357,7 +367,6 @@ editorSocket.on('show Dice value', function (msg) {
 });
 editorSocket.on('got texts', function (msg) {
     var _a, _b, _c, _d, _e;
-    var zoz = window.location.href.split('/');
     exports.texts = texts = msg.text;
     if (zoz[zoz.length - 2] === 'editor') {
         (0, canvas_1.edit)();
@@ -410,15 +419,18 @@ editorSocket.on('wrong game name', function () {
 editorSocket.on('turn', function (msg) {
     console.log('recieved: turn');
     console.log(canvas_1.game.getIsOnturn());
+    canvas_1.game.setHasThrown(false);
     //canvas.removeEventListener('click',pickTile)
     (0, canvas_1.elementDeleter)('onTurnPlace');
-    (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, true);
+    var p = (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, false);
+    p.style.textAlign = 'center';
 });
 editorSocket.on('turnMove', function (msg) {
     var _a;
     console.log('recieved: turn move');
     canvas_1.game.setIsOnTurn(true);
     canvas_1.game.setCanThrow(true);
+    canvas_1.game.setHasThrown(false);
     (_a = document.getElementById('Dice')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         // if (game.getChoosenTile()!=undefined && pawn!= undefined){
         // canvas.removeEventListener('click',pickTile)
@@ -432,22 +444,25 @@ editorSocket.on('turnMove', function (msg) {
 var canMovePawnFunc;
 exports.canMovePawnFunc = canMovePawnFunc;
 editorSocket.on('canMovePawn', function (msg) {
-    var can = false;
-    canvas_1.game.getPawns().forEach(function (pawn) {
-        if (pawn.player == msg.token) {
-            if (pawn.canMove(msg.value)) {
-                can = true;
-            }
-        }
-    });
-    if (can) {
-        exports.canMovePawnFunc = canMovePawnFunc = function (event) { (0, TileEditor_1.pickTile)(event, msg.token, msg.value); };
-        canvas_1.canvas.addEventListener('click', canMovePawnFunc);
-    }
-    else {
-        Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
-        editorSocket.emit('evaluated end', { is: false, room: params.get('id') });
-    }
+    // console.log('recived canMovePawn')
+    // console.log(' OBDRZAL CAN MOVE TAK SA POHOL')
+    // let can = false
+    // game.getPawns().forEach((pawn:Pawn)=>{
+    //   if (pawn.player == msg.token){
+    //     if (pawn.canMove(msg.value)){
+    //       can = true
+    //     }
+    //   }
+    // })
+    // if (can){
+    exports.canMovePawnFunc = canMovePawnFunc = function (event) { (0, TileEditor_1.pickTile)(event, msg.token, msg.value); };
+    canvas_1.canvas.addEventListener('click', canMovePawnFunc);
+    //}
+    // else{
+    //   Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
+    //   console.log('tu emitol evaluated end')
+    //   editorSocket.emit('evaluated end',{is:false,room:params.get('id')})
+    // }
 });
 editorSocket.on('end turn', function () {
     canvas_1.game.setIsOnTurn(false);

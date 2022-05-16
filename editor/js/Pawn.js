@@ -41,7 +41,7 @@ var Pawn = /** @class */ (function () {
             }, 500 * i);
         }
         var params = new URLSearchParams(window.location.search);
-        if (canvas_1.game.getIsOnturn()) {
+        if (canvas_1.game.getHasThrown()) {
             setTimeout(function () {
                 clientSocket_js_1.editorSocket.emit('change Pawn position', { pawnId: p.id, tileId: p.tileId, room: params.get('id'), id: (0, clientSocket_js_1.getCookie)('id') });
                 startTile.setIsChoosen(false);
@@ -49,6 +49,9 @@ var Pawn = /** @class */ (function () {
                 canvas_1.game.reactToTile(actuallTile, numOfTiles, p);
                 (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
             }, 550 * numOfTiles);
+        }
+        else {
+            console.log('nereagoval lebo nebolo jeho kolo');
         }
     };
     Pawn.prototype.returnToStart = function () {

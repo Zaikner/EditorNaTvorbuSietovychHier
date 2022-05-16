@@ -4,6 +4,7 @@ exports.Gameplay = void 0;
 var Elements_1 = require("./Elements");
 var canvas_1 = require("./canvas");
 var clientSocket_js_1 = require("./clientSocket.js");
+var Warning_1 = require("./Warning");
 var Gameplay = /** @class */ (function () {
     function Gameplay() {
     }
@@ -23,7 +24,7 @@ var Gameplay = /** @class */ (function () {
         this.diceImages = diceImages;
     };
     Gameplay.initGameInfo = function (name) {
-        (0, Elements_1.spawnParagraph)(canvas_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[118] + name, true);
+        (0, Elements_1.spawnHeading)(canvas_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[118] + name);
     };
     Gameplay.initDice = function (name) {
         (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', 'Hráč: ' + name);
@@ -107,6 +108,7 @@ var Gameplay = /** @class */ (function () {
     };
     Gameplay.throwDice = function (token) {
         canvas_1.game.setCanThrow(false);
+        canvas_1.game.setHasThrown(true);
         var params = new URLSearchParams(window.location.search);
         var t = 0;
         var times = 0;
@@ -116,7 +118,19 @@ var Gameplay = /** @class */ (function () {
             if (times == 10) {
                 var params_1 = new URLSearchParams(window.location.search);
                 clearInterval(interval);
-                clientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId() });
+                console.log('emitol player thrown');
+                var can_1 = false;
+                canvas_1.game.getPawns().forEach(function (pawn) {
+                    if (pawn.player == token) {
+                        if (pawn.canMove(n)) {
+                            can_1 = true;
+                        }
+                    }
+                });
+                if (!can_1) {
+                    Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
+                }
+                clientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), canMove: can_1 });
                 //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
             }
             else {
