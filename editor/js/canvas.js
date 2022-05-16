@@ -364,6 +364,7 @@ function mainMenu() {
         }
         else {
             game.saveGame();
+            Warning_1.Warning.show(clientSocket_1.texts[249]);
         }
         //window.location.replace('/')
     });
@@ -388,6 +389,7 @@ function mainMenu() {
         else {
             game.setIsPublished(true);
             game.saveGame();
+            Warning_1.Warning.show(clientSocket_1.texts[250]);
         }
     });
 }

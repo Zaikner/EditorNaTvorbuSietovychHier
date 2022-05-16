@@ -13,7 +13,6 @@ export class AccountManager{
     private static numberOfGuests:number = 0
    
 
-    // implementuj funkciu, ktora bude kontrolovat, ci sa uzivatel neodlogol, bud nejake cey request, alebo prebehne vsetky uzivatelov
     public static isValidRegistration(name:string,password:string,confirm:string){
         return password == confirm && this.isValidName(name)
     }

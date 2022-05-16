@@ -426,20 +426,21 @@ function evaluateQuestion(){
     for(let i = 1; i <= givenOptions; i++){
         let button = document.getElementById('givenOption'+i)
        
-        if ((button?.getAttribute('isAnswer') === 'true' && button?.classList.contains('active')) || (button?.getAttribute('isAnswer') === 'false' && !button?.classList.contains('active'))){
+        if (button?.getAttribute('isAnswer') === 'true'){
         
             button!.classList.remove('btn-light')
             button!.classList.add('btn-success')
             button!.classList.add('active')
             right.push(button!.id)
         }
-        else {
+        else if ((button?.getAttribute('isAnswer') === 'false' && button?.classList.contains('active'))){
             button!.classList.remove('btn-light')
             button!.classList.add('btn-danger')
             button!.classList.add('active')
             wrong.push(button!.id)
         }
     }
+    
     editorSocket.emit('showAnswersToOthers',{room:params.get('id'),wrong:wrong,right:right})
     setTimeout(function(){
         $('#answerModal').modal('hide')

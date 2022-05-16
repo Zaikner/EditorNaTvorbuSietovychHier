@@ -437,6 +437,7 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],text
   else{
 
     game.saveGame()
+    Warning.show(texts[249])
   }
   
   //window.location.replace('/')
@@ -463,6 +464,7 @@ spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],functio
   else{
     game.setIsPublished(true)
     game.saveGame()
+    Warning.show(texts[250])
   }
  
 })

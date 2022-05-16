@@ -357,13 +357,13 @@ function evaluateQuestion() {
     var wrong = [];
     for (var i = 1; i <= givenOptions; i++) {
         var button = document.getElementById('givenOption' + i);
-        if (((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'true' && (button === null || button === void 0 ? void 0 : button.classList.contains('active'))) || ((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'false' && !(button === null || button === void 0 ? void 0 : button.classList.contains('active')))) {
+        if ((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'true') {
             button.classList.remove('btn-light');
             button.classList.add('btn-success');
             button.classList.add('active');
             right.push(button.id);
         }
-        else {
+        else if (((button === null || button === void 0 ? void 0 : button.getAttribute('isAnswer')) === 'false' && (button === null || button === void 0 ? void 0 : button.classList.contains('active')))) {
             button.classList.remove('btn-light');
             button.classList.add('btn-danger');
             button.classList.add('active');
