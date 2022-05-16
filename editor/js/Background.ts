@@ -20,7 +20,7 @@ class Background{
         // ctx.closePath()
         // ctx.scale(game.getScaleX(),game.getScaleY())
         if (this.backgroundImage!= undefined){
-             ctx.drawImage(this.backgroundImage,0,0,canvas.width,canvas.height)
+             ctx.drawImage(this.backgroundImage,0,0,canvas.width,canvas.height-40)
         }
         else{
             ctx.beginPath()

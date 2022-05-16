@@ -22,7 +22,7 @@ var Background = /** @class */ (function () {
         // ctx.closePath()
         // ctx.scale(game.getScaleX(),game.getScaleY())
         if (this.backgroundImage != undefined) {
-            canvas_1.ctx.drawImage(this.backgroundImage, 0, 0, canvas_1.canvas.width, canvas_1.canvas.height);
+            canvas_1.ctx.drawImage(this.backgroundImage, 0, 0, canvas_1.canvas.width, canvas_1.canvas.height - 40);
         }
         else {
             canvas_1.ctx.beginPath();
