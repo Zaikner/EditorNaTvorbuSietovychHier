@@ -103,6 +103,19 @@ export class Game_db{
                       .query(query)
                       .then((res:any) => console.log(res.rows[0]))
                       .catch((e:Error) => console.error(e.stack))}
+
+    public delete(){
+                        let client = DbConnect.get()
+                            const query = {
+                                name: 'delete-game',
+                                
+                                text: 'DELETE FROM bachelors_thesis.games WHERE id = $1;',
+                                values: [this.id],
+                              }
+                              client
+                              .query(query)
+                              .then((res:any) => console.log(res.rows[0]))
+                              .catch((e:Error) => console.error(e.stack))}
                 
         
 

@@ -169,6 +169,10 @@ function edit() {
     document.getElementById('createQuestionButtonModal').addEventListener('click', function () {
         (0, Questions_1.initCreation)();
     });
+    document.getElementById('deleteGameButton').addEventListener('click', function () {
+        clientSocket_1.editorSocket.emit('deleteGame', { id: localStorage.getItem('id'), name: game.getName() });
+        window.location.replace('/editor');
+    });
     //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
     //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     (_b = document.getElementById('nextTileButtonSet')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
@@ -272,7 +276,7 @@ function mainMenu() {
     text.textContent = clientSocket_1.texts[23];
     document.getElementById("gameNamePlace").appendChild(text);
     gameName.oninput = function () {
-        game.setName(gameName.value);
+        game.setName(gameName.value.trim());
     };
     document.getElementById("gameNamePlace").appendChild(gameName);
     var gameType = document.createElement('select');
@@ -368,28 +372,37 @@ function mainMenu() {
         }
         //window.location.replace('/')
     });
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
-        var numOfFinishTiles = game.numberOfFinishingTilesPerToken();
-        var numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer();
-        var ret = false;
-        game.getPlayerTokens().forEach(function (token) {
-            if (numOfFinishTiles.get(token) > numOfPawnsPerPlayers.get(token)) {
-                ret = true;
+    var button = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'publishGame', ['btn', 'btn-dark'], clientSocket_1.texts[181], function () {
+        if (!game.getIsPublished()) {
+            var numOfFinishTiles_1 = game.numberOfFinishingTilesPerToken();
+            var numOfPawnsPerPlayers_1 = game.numberOfPawnsPerPlayer();
+            var ret_1 = false;
+            game.getPlayerTokens().forEach(function (token) {
+                if (numOfFinishTiles_1.get(token) > numOfPawnsPerPlayers_1.get(token)) {
+                    ret_1 = true;
+                }
+            });
+            if (game.checkIfAllPlayersHaveFinishTile().length > 0) {
+                Warning_1.Warning.show(clientSocket_1.texts[183]);
             }
-        });
-        if (game.checkIfAllPlayersHaveFinishTile().length > 0) {
-            Warning_1.Warning.show(clientSocket_1.texts[183]);
-        }
-        else if (game.checkIfAllPlayersHaveStartingTile().length > 0) {
-            Warning_1.Warning.show(clientSocket_1.texts[184]);
-        }
-        else if (ret) {
-            Warning_1.Warning.show(clientSocket_1.texts[209]);
+            else if (game.checkIfAllPlayersHaveStartingTile().length > 0) {
+                Warning_1.Warning.show(clientSocket_1.texts[184]);
+            }
+            else if (ret_1) {
+                Warning_1.Warning.show(clientSocket_1.texts[209]);
+            }
+            else {
+                button.textContent = clientSocket_1.texts[258];
+                game.setIsPublished(true);
+                game.saveGame();
+                Warning_1.Warning.show(clientSocket_1.texts[250]);
+            }
         }
         else {
-            game.setIsPublished(true);
-            game.saveGame();
-            Warning_1.Warning.show(clientSocket_1.texts[250]);
+            game.setIsPublished(false);
+            clientSocket_1.editorSocket.emit('make game not published', { id: localStorage.getItem('id'), name: game.getName() });
+            button.textContent = clientSocket_1.texts[181];
+            Warning_1.Warning.show(clientSocket_1.texts[259]);
         }
     });
 }
@@ -400,26 +413,18 @@ resize(game, ctx);
 window.addEventListener('resize', function () { resize(game, ctx); });
 // // resize canvas
 function resize(editor, context) {
-    //endDrawingPath()
-    //  console.log('initSizeX:'+game.getInitSizeX() )
-    //  console.log('initSizeY:'+game.getInitSizeY() )
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
     //if(!isEditor){
     if (game.getInitSizeX() == 0) {
-        game.setInitSizeX((window.innerWidth / 3 * 2 - 30));
+        game.setInitSizeX(canvas.width);
     }
     if (game.getInitSizeY() == 0) {
-        game.setInitSizeY(window.innerHeight);
+        game.setInitSizeY(canvas.height);
     }
     game.setScaleX(canvas.width / game.getInitSizeX());
     game.setScaleY(canvas.height / game.getInitSizeY());
-    //  console.log('pomer x je :'+game.getScaleX() )
-    //  console.log('pomer y je:'+game.getScaleY())
-    //}
     reload(editor, context);
-    //if (started) startDrawingPath();
-    // }
 }
 exports.resize = resize;
 function reload(editor, ctx) {

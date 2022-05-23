@@ -24,17 +24,20 @@ import { BackgroundComponentFinder } from '../../services/db/RDG/BackgroundCompo
 
 export class GameManager{
     private static activeRooms:Map<number,Room> = new Map()
-    public static async loadGame(name:string,author:string){
-         let game = await GameFinder.getIntance().findByName(name)
-            let tiles =await TileFinder.getIntance().findByGameId(game![0].getId())
-            let background = await BackgroundFinder.getIntance().findById(game![0].getId())
-            //let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
-            let styles = await PawnStyleFinder.getIntance().findByGameId(game![0].getId())
-            let rules = await RulesFinder.getIntance().findByGameId(game![0].getId())
-            //let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
-            let pawns:Array<{token:string,id:number,tileId:number}> = []
+    public static async loadGame(name:string){
+        let game = await GameFinder.getIntance().findByName(name)
+        let tiles =await TileFinder.getIntance().findByGameId(game![0].getId())
+        let background = await BackgroundFinder.getIntance().findById(game![0].getId())
+        let styles = await PawnStyleFinder.getIntance().findByGameId(game![0].getId())
+        let rules = await RulesFinder.getIntance().findByGameId(game![0].getId())
+        let pawns:Array<{token:string,id:number,tileId:number}> = []
             
-       return {author:author,pawns:pawns,game:game![0],tiles:tiles,background:background![0],styles:styles,rules:rules![0].getText()}
+       return {pawns:pawns,
+               game:game![0],
+               tiles:tiles,
+               background:background![0],
+               styles:styles,
+               rules:rules![0].getText()}
     }
     
     public static async loadTexts(){
@@ -57,8 +60,7 @@ export class GameManager{
         }
         
         let room = new Room(id,numOfPlayers,name)
-        let acc = await AccountFinder.getIntance().findById(accId)
-        let gameData =  await GameManager.loadGame(name,acc![0]!.getName())
+        let gameData =  await GameManager.loadGame(name)
        
         
         //console.log(room)
@@ -110,7 +112,7 @@ export class GameManager{
             rooms[i].getPlayers().forEach((player:Player)=>{
                 //console.log(acc)
                 ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ 
-                    rooms[i].join(new Player(acc,''))}])
+                    rooms[i].join(new Player(acc,''))},rooms[i].getHasStarted()])
             })
         }
         return ret

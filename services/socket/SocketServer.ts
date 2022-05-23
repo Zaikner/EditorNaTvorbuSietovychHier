@@ -852,15 +852,57 @@ export class ServerSocket{
         }
         let names = (await GameFinder.getIntance().findAllPublished())!.map((game) => game.getName())
         let authorNames = (await GameFinder.getIntance().findByAuthorId(acc.getId()))!.map((game) => game.getName())
-
+       
         for ( let i of authorNames){
           if (!names.includes(i)){
             names.push(i)
           }
         }
-        socket.emit('loadedGameNames',{names:names})
+        socket.emit('loadedGameNames',{names:names,authored:authorNames})
       })
+      socket.on('make game not published', async(msg:{name:string,id:string})=>{
+        let acc = AccountManager.getAccountByClientId(msg.id)
+        let existingGames = await GameFinder.getIntance().findByName(msg.name)
+      
+        if (acc == undefined){
+          return
+        }
+      
+        if (existingGames!.length > 0){
+          if (existingGames![0].getAuthorId()!= acc.getId()){
+            socket.emit('not author')
 
+            return
+          }
+          else{
+            //console.log('je author a chce zmenit')
+            existingGames![0].setIsPublished(false)
+            existingGames![0].upsert()
+          }
+         
+        }
+      })
+      socket.on('deleteGame',async (msg:{id:string,name:string})=>{
+        let acc = AccountManager.getAccountByClientId(msg.id)
+        let existingGames = await GameFinder.getIntance().findByName(msg.name)
+      
+        if (acc == undefined){
+          return
+        }
+      
+        if (existingGames!.length > 0){
+          if (existingGames![0].getAuthorId()!= acc.getId()){
+            socket.emit('not author')
+
+            return
+          }
+          else{
+            //console.log('je author a chce zmenit')
+            existingGames![0].delete()
+          }
+         
+        }
+      })
       socket.on('ping',(msg:{id:string})=>{
         let acc = AccountManager.getAccountByClientId(msg.id)
         if (acc != undefined){

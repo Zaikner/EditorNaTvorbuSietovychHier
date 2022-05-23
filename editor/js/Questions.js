@@ -311,7 +311,8 @@ function editQuestion(id, text) {
 function askQuestion(data) {
     var questions = new Map();
     (0, canvas_1.elementDeleter)('answerQuestion');
-    (0, TileEditor_1.removeAllButtons)();
+    //removeAllButtons()
+    //$('#answerButtonRoom').show()
     var i = 0;
     data.forEach(function (elem) {
         var _a, _b;
@@ -352,6 +353,7 @@ function askQuestion(data) {
 exports.askQuestion = askQuestion;
 function evaluateQuestion() {
     document.getElementById('answerButtonRoom').removeEventListener('click', clientSocket_js_1.clickFunction);
+    document.getElementById('answerButtonRoom').setAttribute('hidden', 'hidden');
     var params = new URLSearchParams(window.location.search);
     var right = [];
     var wrong = [];

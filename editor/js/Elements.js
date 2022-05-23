@@ -143,7 +143,8 @@ function spawnButtonWithLabel(doc, parent, id, lbl, classList, txt, func) {
     return button;
 }
 exports.spawnButtonWithLabel = spawnButtonWithLabel;
-function spawnSelectMenu(doc, parent, id, lbl, classList, options) {
+function spawnSelectMenu(doc, parent, id, lbl, classList, options, active) {
+    if (active === void 0) { active = []; }
     spawnDiv(document, parent, 'div' + id, []);
     var label = doc.createElement('label');
     label.htmlFor = id;
@@ -160,6 +161,9 @@ function spawnSelectMenu(doc, parent, id, lbl, classList, options) {
         var option = doc.createElement("option");
         option.value = options[i];
         option.text = options[i];
+        if (active.includes(options[i])) {
+            option.style.color = 'yellow';
+        }
         menu.appendChild(option);
     }
     doc.getElementById('div' + id).appendChild(label);

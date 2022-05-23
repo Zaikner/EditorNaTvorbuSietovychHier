@@ -17,7 +17,12 @@ var Pawn = /** @class */ (function () {
         var ret = true;
         var actuallTile = this.tile;
         for (var i = 0; i < numOfTiles; i++) {
-            actuallTile = canvas_1.game.findTileByTileId(actuallTile.getNextTilesIds().get(this.player));
+            var newTile = canvas_1.game.findTileByTileId(actuallTile.getNextTilesIds().get(this.player));
+            if (newTile == actuallTile) {
+                ret = false;
+                break;
+            }
+            actuallTile = newTile;
             if (actuallTile == undefined) {
                 ret = false;
                 break;

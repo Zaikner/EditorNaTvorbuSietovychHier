@@ -377,7 +377,10 @@ function editQuestion(id:number,text:HTMLInputElement){
 function askQuestion(data:any){
     let questions:Map<number,HTMLDivElement> = new Map()
     elementDeleter('answerQuestion')
-    removeAllButtons()
+   
+    //removeAllButtons()
+    //$('#answerButtonRoom').show()
+    
     let i = 0
     data.forEach((elem:any) =>{
         i++;
@@ -420,6 +423,8 @@ function askQuestion(data:any){
     }
 function evaluateQuestion(){
     document.getElementById('answerButtonRoom')!.removeEventListener('click',clickFunction)
+    
+    document.getElementById('answerButtonRoom')!.setAttribute('hidden','hidden')
     const params = new URLSearchParams(window.location.search);
     let right:Array<string> = []
     let wrong:Array<string> = []
@@ -446,6 +451,7 @@ function evaluateQuestion(){
         $('#answerModal').modal('hide')
         let answ = (wrong.length == 0)
         editorSocket.emit('wasRightAnswer',{is:answ,room:params.get('id')})
+        
     }, 5000)
 }
 function showResults(right:Array<string>,wrong:Array<string> ){

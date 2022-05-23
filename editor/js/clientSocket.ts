@@ -186,6 +186,9 @@ editorSocket.on('connected',(msg)=>{
   
     if (isEditor){
       (<HTMLInputElement>document.getElementById('toogleNumberingChecker'))!.checked = game.getToogleNumber()
+      if (game.getIsPublished()){
+        (<HTMLInputElement>document.getElementById('publishGame')).textContent = texts[258]
+      }
     }
     
     let gameNextTiles = msg.game.nextTilesIds;
@@ -259,14 +262,12 @@ editorSocket.on('connected',(msg)=>{
   editorSocket.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
     game.setIsOnTurn(true)
     let ret = game.howManyCanMove(msg.pawnId,msg.value)
-    Warning.showInGame('Event occured: Go forward!')
     editorSocket.emit('move pawns',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
 editorSocket.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
   game.setIsOnTurn(true)
   let ret = game.howManyCanMoveBack(msg.pawnId,msg.value)
-  Warning.showInGame('Event occured: Go backward!')
   editorSocket.emit('move pawns back',{pawn:msg.pawnId,value:ret,room:params.get('id')})
 })
 
@@ -278,10 +279,10 @@ editorSocket.on('game saved',(msg:{newId:number})=>{
   game.setId(msg.newId)
 })
 editorSocket.on('react to event: skip',(msg:{token:string,left:number})=>{
-  Warning.showInGame('Event occured: Player '+ msg.token +' ' +'skipped his turn! Turns left to skip: ' + msg.left)
+  Warning.showInGame(texts[262]+' '+ msg.token +' '+  texts[263] + msg.left)
 })
 editorSocket.on('react to event:must Thrown',(msg:{token:string,value:number,turnsLeft:number})=>{
-  Warning.showInGame('Event occured: Player '+ msg.token +' ' +'must wait '+msg.turnsLeft+'! turns or throw ' + msg.value +' to set pawn free ')
+  Warning.showInGame(texts[262]+' '+ msg.token +texts[264] +' '+  msg.turnsLeft+texts[265] + msg.value +texts[266])
 })
 editorSocket.on('return pawns to starting tile',(msg:{ids:Array<number>})=>{
   msg.ids.forEach((id:number)=>{
@@ -636,6 +637,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   let clickFunction = function(){evaluateQuestion();}
   editorSocket.on('canReactToAnswer',()=>{
+    document.getElementById('answerButtonRoom')!.removeAttribute('hidden')
     document.getElementById('answerButtonRoom')!.addEventListener('click',clickFunction)
   })
   editorSocket.on('add Opt',(data:any) =>{
@@ -654,7 +656,7 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
   editorSocket.on('player ended',(msg:{player:string,place:number,token:string})=>{
     editorSocket.emit('reload waiting room',{room:params.get('id')})
-    Warning.showInGame(msg.player + texts[190] + msg.place + texts[189])
+    Warning.showInGame(msg.player + ' '+ texts[190] + msg.place + texts[189])
     game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == msg.token){
             pawn.hasEnded = true
@@ -671,8 +673,8 @@ editorSocket.on('got texts',(msg:{text:Array<string>})=>{
   })
 
 
-  editorSocket.on('loadedGameNames',(msg:{names:Array<string>})=>{
-    loadGameMenu(msg.names)
+  editorSocket.on('loadedGameNames',(msg:{names:Array<string>,authored:Array<string>})=>{
+    loadGameMenu(msg.names,msg.authored)
   
   })
 

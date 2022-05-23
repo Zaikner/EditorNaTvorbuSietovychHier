@@ -238,6 +238,21 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                   .container.alignCenter
                     button#questionSubmitButton.btn.btn-secondary(type='button' onclick="$('#createModal').modal('hide');")=text[151]
               #modalFooter.modal-footer
+        #deleteGameModal.modal.fade(tabindex='-1' role='dialog')
+          .modal-dialog
+            .modal-content.darkColor(style='background-color: #292b2c;')
+              .modal-header
+                h5#modalHeader.modal-title.whiteColor=text[260]
+                button.close(type='button' data-dismiss='modal')
+              #modalBody.modal-body
+                strong
+                  p.whiteColor=text[261]
+               
+            
+                  .container.alignCenter
+                    button#deleteGameButton.btn.btn-secondary(type='button' onclick="$('#deleteGameModal').modal('hide');")=text[260]
+                    button.btn.btn-secondary(type='button' onclick="$('#deleteGameModal').modal('hide');")=text[256]
+              #modalFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #editModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog(style=' width: 100vh;')

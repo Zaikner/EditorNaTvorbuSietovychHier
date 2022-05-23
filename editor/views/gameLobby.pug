@@ -11,6 +11,8 @@ title=text[1]
 .gamelobby
   nav.navbar.navbar-left.navbar-expand-sm.Sticky-top.py-0(style='background: none;')
     .container-fluid
+     .navbar-header
+      p.navbar-brand(style='color:white')=text[1]
     form(action='/' method='get')
       button.btn.btn-dark.py-2(type='submit' style=' width:200px; margin-right: 10px;')=text[11]
     form(action='/account' method='get')
@@ -22,7 +24,7 @@ title=text[1]
         .col-12(style=' overflow: auto; width: 100vh; height: 100vh;  bottom-padding:1px')
           .row(style='height:100vh; width: 100%;  bottom-padding:1px')
             .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%; bottom-padding:1px;')
-              div(style='margin: 5%; margin-top: 0;   background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
+              div(style='margin: 5%;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
                 p(style='font-size: 15px; font-family: sans-serif; font-weight:bold;')=text[3]
                 hr
                 form
@@ -47,7 +49,8 @@ title=text[1]
                             |
                             input(type='hidden' name='id' value=room[0])
                             //input(type='hidden' name='hasStarted' value=room[3])
-                            button(type = 'submit' name='name' id = room[0] value = room[2]).btn.btn-dark=text[8]
+                            if (!room[3])
+                              button(type = 'submit' name='name' id = room[0] value = room[2] style = 'margin-left:3%;').btn.btn-dark=text[8]
               div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 30vh;  border-radius: 25px;')
                 // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
@@ -56,10 +59,13 @@ title=text[1]
                   each player in players
                       form(action='/room?game:'+player[1] method='get' name='name' value =player[2])
                         strong 
-                          li.list-group-item(name='room' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
+                          li.list-group-item(name='room' id='listOfPlayers' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
                             |
                             input(type='hidden' name='id' value=player[2])
-                            button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
+                            
+                            button(type = 'button' id = player[0]).btn.btn-dark=text[2]
+                            if (!player[4])
+                              button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
             
             
                         
@@ -78,25 +84,28 @@ title=text[1]
                           li.list-group-item(name='room' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
                             |
                             input(type='hidden' name='id' value=player[2])
-                            button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
-            .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 1%;')
+                            form(action='/account?game='+player[1])
+                              button().btn.btn-dark=text[2]
+                            if (!player[4])
+                              button(type = 'submit'  name='name' value = player[1] onclick= player[3]).btn.btn-dark=text[8]
+            .col-5(style=' overflow: hidden;  width: 50vh;height: 100vh; margin-right: 3%;')
               div(style='margin: 5%;  background-color: white;overflow: hidden; width: 100%px;height: 60vh;  border-radius: 25px;')
-                p(style='font-size: 15px; font-family: sans-serif;')=text[7]
+                strong(style='font-size: 15px; font-family: sans-serif;')=text[7]
                 hr
                 div
                   input#containsQuestion(type="checkbox" checked=questions)
-                  label(for='containsQuestion')=text[234]
+                  label(for='containsQuestion' style='margin-left:3%')=' '+text[234]
                 div
-                  label(for='numOfPlayers')=text[235]
-                  input#numOfPlayers(type="number" style = 'width:10%;' max = '6' min = '1' value =numOfPlayers)
+                  label(for='numOfPlayers')=text[235]+' '
+                  input#numOfPlayers(type="number" style = 'width:10%; margin-left:3%; ' max = '6' min = '1' value =numOfPlayers)
                 div
                   label(for='numOfPlayers')=text[236]
-                  select#numOfTiles
+                  select#numOfTiles(style = 'margin-left:3%; ')
                    option(id = '25' value = '25')=text[237]
                    option(id = '50' value = '50')=text[238]
                    option(id = '100000' value = '100000')=text[239]
                 div
-                  button#filterButton.btn.btn-dark(type = 'button')=text[240]  
+                  button#filterButton.btn.btn-dark(type = 'button' style = 'margin:3%;')=text[240]  
              
                 ul.list-group(style='overflow-y: scroll; max-height: 25vh')
                   each game in filteredNames
@@ -105,7 +114,7 @@ title=text[1]
                           | 
                           button(type = 'submit' name='name' value = game).btn.btn-dark=text[246]       
                 hr
-              div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
+              div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
               
                 strong=text[6]
                 ul.list-group(style='overflow-y: scroll; max-height: 34vh; margin-top:2%; ')
@@ -140,7 +149,8 @@ script.
 
   let full="#{full}";
   let numOfTiles = '#{numOfTiles}'
-  
+  let playerNames = '#{playerNames}'.split(',');
+ 
   let existingRoomsId="#{existingRoomsIds}";
   document.getElementById('leave').addEventListener('click',function(){$("#loginModal").modal('hide')})
   document.getElementById('create').addEventListener('click',function(){$("#loginModal").modal('show')})
@@ -168,6 +178,12 @@ script.
     }
     window.location.replace('/gameLobby?players='+document.getElementById('numOfPlayers').value+'&tiles='+document.getElementById('numOfTiles').value+'&questions='+document.getElementById('containsQuestion').checked)
   }
+  for (let i of playerNames){
+    console.log(i)
+  document.getElementById(i).addEventListener('click',function(){
+       window.location.replace('/account?name='+i)
+     })}
+  
   document.getElementById('joinSelectedRoom').onclick = function(){
     console.log( existingRoomsId)
     console.log("#{existingRoomsIds}")

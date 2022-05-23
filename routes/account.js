@@ -23,6 +23,14 @@ router
         text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
     }
 
+    let name = request.query.name
+    let visitAcc = undefined
+    let edit = true
+    if (name!= undefined){
+        visitAcc = await AccountManager.findAccountByName(name)
+        acc = visitAcc
+        edit = false
+    }
     if (request.cookies.id != undefined && acc != undefined){
      
         if (acc.getIsGuest() === true){
@@ -38,7 +46,9 @@ router
                 f = acc.getAvatar()
                 //console.log(f)
             }
-            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore(),gameWon:acc.getGameWon(),gameLost:acc.getGameLost(),name:acc.getName()});
+            
+            
+            res.render('account.pug',{root:'./editor/views',file:f,text:text,score:acc.getScore(),gameWon:acc.getGameWon(),gameLost:acc.getGameLost(),name:acc.getName(),edit:edit});
         }
         
         

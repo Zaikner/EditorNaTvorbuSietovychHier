@@ -152,6 +152,9 @@ editorSocket.on('connected', function (msg) {
     canvas_1.game.setId(msg.game.id);
     if (isEditor) {
         document.getElementById('toogleNumberingChecker').checked = canvas_1.game.getToogleNumber();
+        if (canvas_1.game.getIsPublished()) {
+            document.getElementById('publishGame').textContent = texts[258];
+        }
     }
     var gameNextTiles = msg.game.nextTilesIds;
     var add = new Map();
@@ -204,13 +207,11 @@ editorSocket.on('connected', function (msg) {
 editorSocket.on('react to event: forward', function (msg) {
     canvas_1.game.setIsOnTurn(true);
     var ret = canvas_1.game.howManyCanMove(msg.pawnId, msg.value);
-    Warning_1.Warning.showInGame('Event occured: Go forward!');
     editorSocket.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('react to event: backward', function (msg) {
     canvas_1.game.setIsOnTurn(true);
     var ret = canvas_1.game.howManyCanMoveBack(msg.pawnId, msg.value);
-    Warning_1.Warning.showInGame('Event occured: Go backward!');
     editorSocket.emit('move pawns back', { pawn: msg.pawnId, value: ret, room: params.get('id') });
 });
 editorSocket.on('not author', function () {
@@ -220,10 +221,10 @@ editorSocket.on('game saved', function (msg) {
     canvas_1.game.setId(msg.newId);
 });
 editorSocket.on('react to event: skip', function (msg) {
-    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'skipped his turn! Turns left to skip: ' + msg.left);
+    Warning_1.Warning.showInGame(texts[262] + ' ' + msg.token + ' ' + texts[263] + msg.left);
 });
 editorSocket.on('react to event:must Thrown', function (msg) {
-    Warning_1.Warning.showInGame('Event occured: Player ' + msg.token + ' ' + 'must wait ' + msg.turnsLeft + '! turns or throw ' + msg.value + ' to set pawn free ');
+    Warning_1.Warning.showInGame(texts[262] + ' ' + msg.token + texts[264] + ' ' + msg.turnsLeft + texts[265] + msg.value + texts[266]);
 });
 editorSocket.on('return pawns to starting tile', function (msg) {
     msg.ids.forEach(function (id) {
@@ -515,6 +516,7 @@ editorSocket.on('loadedAnswerQuestions', function (data) {
 var clickFunction = function () { (0, Questions_1.evaluateQuestion)(); };
 exports.clickFunction = clickFunction;
 editorSocket.on('canReactToAnswer', function () {
+    document.getElementById('answerButtonRoom').removeAttribute('hidden');
     document.getElementById('answerButtonRoom').addEventListener('click', clickFunction);
 });
 editorSocket.on('add Opt', function (data) {
@@ -531,7 +533,7 @@ editorSocket.on('random and 0', function () {
 });
 editorSocket.on('player ended', function (msg) {
     editorSocket.emit('reload waiting room', { room: params.get('id') });
-    Warning_1.Warning.showInGame(msg.player + texts[190] + msg.place + texts[189]);
+    Warning_1.Warning.showInGame(msg.player + ' ' + texts[190] + msg.place + texts[189]);
     canvas_1.game.getPawns().forEach(function (pawn) {
         if (pawn.player == msg.token) {
             pawn.hasEnded = true;
@@ -544,7 +546,7 @@ editorSocket.on('player ended', function (msg) {
     document.getElementById("ruleInput").value = canvas_1.game.getRules();
 });
 editorSocket.on('loadedGameNames', function (msg) {
-    (0, gameLoader_1.loadGameMenu)(msg.names);
+    (0, gameLoader_1.loadGameMenu)(msg.names, msg.authored);
 });
 editorSocket.on('room is full', function () {
     Warning_1.Warning.showInGame(texts[188]);

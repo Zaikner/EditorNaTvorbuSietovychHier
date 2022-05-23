@@ -290,7 +290,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     div.style.marginTop = '100px';
     div.style.width='100%'
     document.getElementById('tileEditingPlace')?.appendChild(div)
-    let button = spawnButton(document,'wrapperDiv','removeTileButton',['btn','btn-dark'],texts[70],function(){
+    let button = spawnButton(document,'wrapperDiv','removeTileButton',['btn','btn-dark'],texts[255],function(){
       game.deleteTile()
       showActualState();
       

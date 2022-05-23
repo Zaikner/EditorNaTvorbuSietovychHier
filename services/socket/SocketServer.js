@@ -866,7 +866,60 @@ var ServerSocket = /** @class */ (function () {
                                     names.push(i);
                                 }
                             }
-                            socket.emit('loadedGameNames', { names: names });
+                            socket.emit('loadedGameNames', { names: names, authored: authorNames });
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+            socket.on('make game not published', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var acc, existingGames;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            acc = AccountManager.getAccountByClientId(msg.id);
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
+                        case 1:
+                            existingGames = _a.sent();
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
+                            if (existingGames.length > 0) {
+                                if (existingGames[0].getAuthorId() != acc.getId()) {
+                                    socket.emit('not author');
+                                    return [2 /*return*/];
+                                }
+                                else {
+                                    //console.log('je author a chce zmenit')
+                                    existingGames[0].setIsPublished(false);
+                                    existingGames[0].upsert();
+                                }
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+            socket.on('deleteGame', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+                var acc, existingGames;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            acc = AccountManager.getAccountByClientId(msg.id);
+                            return [4 /*yield*/, GameFinder_db_1.GameFinder.getIntance().findByName(msg.name)];
+                        case 1:
+                            existingGames = _a.sent();
+                            if (acc == undefined) {
+                                return [2 /*return*/];
+                            }
+                            if (existingGames.length > 0) {
+                                if (existingGames[0].getAuthorId() != acc.getId()) {
+                                    socket.emit('not author');
+                                    return [2 /*return*/];
+                                }
+                                else {
+                                    //console.log('je author a chce zmenit')
+                                    existingGames[0]["delete"]();
+                                }
+                            }
                             return [2 /*return*/];
                     }
                 });

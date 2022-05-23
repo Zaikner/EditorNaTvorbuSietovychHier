@@ -207,7 +207,10 @@ document.getElementById('addButtonInsert')!.addEventListener('click',function(){
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
 document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation();
                                                                                                       })
-
+document.getElementById('deleteGameButton')!.addEventListener('click',function(){
+ editorSocket.emit('deleteGame',{id:localStorage.getItem('id'),name:game.getName()})
+  window.location.replace('/editor')
+})
 //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
 //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
 document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
@@ -332,7 +335,7 @@ text = document.createElement('p')
 text.textContent = texts[23]
 document.getElementById("gameNamePlace")!.appendChild(text);
 gameName.oninput =function(){
-  game.setName(gameName.value)
+  game.setName(gameName.value.trim())
   
 }
 document.getElementById("gameNamePlace")!.appendChild(gameName);
@@ -442,30 +445,42 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],text
   
   //window.location.replace('/')
 })
-spawnButton(document,'tileEditingPlace','',['btn','btn-dark'],texts[181],function(){
-  let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
-  let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
-  let ret = false;
-  
-  game.getPlayerTokens().forEach((token:string)=>{
-    if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
-      ret = true
+
+let button = spawnButton(document,'tileEditingPlace','publishGame',['btn','btn-dark'],texts[181],function(){
+  if (!game.getIsPublished()){
+   
+    let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
+    let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
+    let ret = false;
+    
+    game.getPlayerTokens().forEach((token:string)=>{
+      if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
+        ret = true
+      }
+    })
+    if (game.checkIfAllPlayersHaveFinishTile().length > 0){
+      Warning.show(texts[183])
     }
-  })
-  if (game.checkIfAllPlayersHaveFinishTile().length > 0){
-    Warning.show(texts[183])
-  }
-  else if (game.checkIfAllPlayersHaveStartingTile().length >0){
-    Warning.show(texts[184])
-  }
-  else if (ret){
-    Warning.show(texts[209])
+    else if (game.checkIfAllPlayersHaveStartingTile().length >0){
+      Warning.show(texts[184])
+    }
+    else if (ret){
+      Warning.show(texts[209])
+    }
+    else{
+      button.textContent = texts[258]
+      game.setIsPublished(true)
+      game.saveGame()
+      Warning.show(texts[250])
+    }
   }
   else{
-    game.setIsPublished(true)
-    game.saveGame()
-    Warning.show(texts[250])
+    game.setIsPublished(false)
+    editorSocket.emit('make game not published',{id:localStorage.getItem('id'),name:game.getName()})
+    button.textContent =texts[181]
+    Warning.show(texts[259])
   }
+ 
  
 })
 }
@@ -485,31 +500,21 @@ window.addEventListener('resize', function(){resize(game,ctx)});
 
 // // resize canvas
 function resize(editor:Game,context:CanvasRenderingContext2D) {
-   //endDrawingPath()
-  //  console.log('initSizeX:'+game.getInitSizeX() )
-  //  console.log('initSizeY:'+game.getInitSizeY() )
    context.canvas.width = window.innerWidth/ 3 * 2-30
    context.canvas.height = window.innerHeight;
    //if(!isEditor){
     if(game.getInitSizeX() == 0){
-      game.setInitSizeX((window.innerWidth/ 3 * 2-30))
+      game.setInitSizeX(canvas.width)
      }
      if(game.getInitSizeY() == 0){
-      game.setInitSizeY(window.innerHeight)
+      game.setInitSizeY(canvas.height)
      }
      
      game.setScaleX(canvas.width/game.getInitSizeX())
-   
      game.setScaleY(canvas.height/game.getInitSizeY())
-    //  console.log('pomer x je :'+game.getScaleX() )
-    //  console.log('pomer y je:'+game.getScaleY())
-     
-   //}
-   
   
    reload(editor,context);
-   //if (started) startDrawingPath();
-// }
+  
 }
 
 

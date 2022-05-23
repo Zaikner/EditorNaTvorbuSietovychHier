@@ -15,7 +15,7 @@ export class Account{
     private gameLost:number = 0;
     private gameWon:number = 0;
     private ping:number = 0;
-    private activeInRoom:Room = undefined!
+    activeInRoom:Room = undefined!
 
     constructor(name:string,password:string){
         this.name = name
@@ -107,7 +107,7 @@ export class Account{
     public setId(newId:number){
         this.id = newId
     }
-    public  getActiveInRoom(){
+    public getActiveInRoom(){
         return this.activeInRoom
     }
     public setActiveInRoom(room:Room){

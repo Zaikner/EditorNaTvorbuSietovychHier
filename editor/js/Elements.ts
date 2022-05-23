@@ -157,7 +157,7 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
   doc.getElementById('div'+id)!.appendChild(button)
   return button
 }
-function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>){
+function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,active:Array<string> = []){
 
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
@@ -176,6 +176,9 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
       let option = doc.createElement("option");
       option.value = options[i];
       option.text = options[i];
+      if (active.includes(options[i])){
+        option.style.color = 'yellow'
+      }
       menu.appendChild(option);
     }
     doc.getElementById('div'+id)!.appendChild( label);

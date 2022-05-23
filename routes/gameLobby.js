@@ -47,6 +47,8 @@ router
             sendScores.push([i,scores[i-1].getName(),scores[i-1].getScore()])
         }
         let players = GameManager.getActivePlayers(acc)
+        let playerNames = players.map(p=>p[0])
+        console.log(players)
         //console.log(rooms)
         //console.log(sendScores)
         let existingRoomsIds = Array.from(GameManager.getActiveRooms().keys())
@@ -112,11 +114,11 @@ router
             filteredNames = a.slice()
         }
         if (request.query.full == undefined){
-            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString()});
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString(),playerNames:playerNames});
         }
         else{
             console.log('aspon zachytil ze hra je plna')
-            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,full:true,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString()});
+            res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,full:true,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString(),playerNames:playerNames});
         }
         
         

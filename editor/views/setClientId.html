@@ -15,6 +15,7 @@
 let params = new URLSearchParams(window.location.search);
 window.localStorage.setItem('id',params.get("id"))
 //Cookies.set('id',params.get("id"))
+console.log(Cookies.get('mode'))
 if (Cookies.get('mode') == 'editor'){
     window.location.replace('/editor')
 }

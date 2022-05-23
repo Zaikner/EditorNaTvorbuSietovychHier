@@ -45,7 +45,6 @@ require("dotenv").config('.env');
 var AccountManager = /** @class */ (function () {
     function AccountManager() {
     }
-    // implementuj funkciu, ktora bude kontrolovat, ci sa uzivatel neodlogol, bud nejake cey request, alebo prebehne vsetky uzivatelov
     AccountManager.isValidRegistration = function (name, password, confirm) {
         return password == confirm && this.isValidName(name);
     };
@@ -137,9 +136,15 @@ var AccountManager = /** @class */ (function () {
         return newAcc;
     };
     AccountManager.logout = function (acc) {
+        console.log('vykonal logout');
+        if (acc == undefined) {
+            return;
+        }
+        console.log('nie je undefined');
         this.loggedAccounts = this.loggedAccounts.filter(function (a) { return a != acc; });
         this.clientIds = this.clientIds.filter(function (id) { return id != acc.getClientId(); });
-        var room = acc.getActiveInRoom();
+        console.log(acc.activeInRoom);
+        var room = acc.activeInRoom;
         if (room != undefined) {
             room.leave(room.findPlayerOnAccount(acc));
         }
@@ -232,6 +237,31 @@ var AccountManager = /** @class */ (function () {
                 }
             });
         }, 5000);
+    };
+    AccountManager.findAccountByName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ret, acc, newAcc;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        ret = undefined;
+                        return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findByName(name)];
+                    case 1:
+                        acc = _a.sent();
+                        if (acc.length > 0) {
+                            newAcc = new Account_js_1.Account(acc[0].getName(), acc[0].getPassword());
+                            newAcc.setAvatar(acc[0].getAvatar());
+                            //newAcc.setClientId(this.createNewClientId())
+                            newAcc.setScore(acc[0].getScore());
+                            newAcc.setGameWon(acc[0].getGameWon());
+                            newAcc.setGameLost(acc[0].getGameLost());
+                            newAcc.setId(acc[0].getId());
+                            ret = newAcc;
+                        }
+                        return [2 /*return*/, ret];
+                }
+            });
+        });
     };
     AccountManager.getLogedAccounts = function () {
         return this.loggedAccounts;

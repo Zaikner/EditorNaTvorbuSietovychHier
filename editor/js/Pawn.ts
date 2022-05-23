@@ -26,8 +26,12 @@ export class Pawn{
       
 
         for (let i = 0;i < numOfTiles ; i++){
-            actuallTile = game.findTileByTileId(actuallTile.getNextTilesIds().get(this.player)!)!
-                
+            let newTile = game.findTileByTileId(actuallTile.getNextTilesIds().get(this.player)!)!
+            if (newTile == actuallTile){
+                ret = false
+                break;
+            }
+            actuallTile = newTile
                 
             if (actuallTile == undefined){
                 ret = false

@@ -95,6 +95,17 @@ var Game_db = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
+    Game_db.prototype["delete"] = function () {
+        var client = DbConnect_1.DbConnect.get();
+        var query = {
+            name: 'delete-game',
+            text: 'DELETE FROM bachelors_thesis.games WHERE id = $1;',
+            values: [this.id]
+        };
+        client
+            .query(query)
+            .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
+    };
     Game_db.load = function (data) {
         var ret = new Game_db();
         ret.setId(data.id);

@@ -143,6 +143,7 @@ var Room = /** @class */ (function () {
         if (!this.gameEnded()) {
             if (this.playerOnTurn.getRepeat() != 0) {
                 this.playerOnTurn.setRepeat((this.playerOnTurn.getRepeat() - 1));
+                SocketServer_1.ServerSocket.emitToRoom(this.id.toString(), 'player repeat his turn', { name: this.playerOnTurn.getAccount().getName() });
                 //console.log('zopakoval')
                 //console.log(this.playerOnTurn.getRepeat())
             }

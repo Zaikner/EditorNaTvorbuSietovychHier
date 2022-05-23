@@ -17,7 +17,9 @@ router
     if (acc == undefined){
         res.redirect('/')
     }
+    console.log(request.params)
     let games =  await GameFinder.getIntance().findByName(request.params.name)
+    console.log(games)
     let game = games[0]
     
     let room = await GameManager.createRoom(request.params.name,game.getNumOfPlayers(),acc.getId())

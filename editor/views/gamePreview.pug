@@ -52,9 +52,9 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.btn.btn-primary(type='button' onclick="$('#exampleModal').modal('hide')") Ok!
     // <script src="../socket.io/socket.io.js"></script>
     script(src='/editor/js/webpackVysledok.js')
-   script.
-    const params = new URLSearchParams(window.location.search);
-    const editorSocket = io();
-    setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
+    script.
+      const params = new URLSearchParams(window.location.search);
+      const editorSocket = io();
+      setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
     //
      

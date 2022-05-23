@@ -77,9 +77,15 @@ export class AccountManager{
         return newAcc
     }
     public static logout(acc:Account){
+        console.log('vykonal logout')
+        if (acc == undefined){
+            return
+        }
+        console.log('nie je undefined')
         this.loggedAccounts = this.loggedAccounts.filter((a:Account) => a!=acc)
         this.clientIds = this.clientIds.filter((id) => id != acc.getClientId())
-        let room = acc.getActiveInRoom()
+        console.log(acc.activeInRoom)
+        let room = acc.activeInRoom
         if (room!=undefined){
             room.leave(room.findPlayerOnAccount(acc)!)
         }
@@ -166,6 +172,23 @@ export class AccountManager{
             }
         })},5000)
      
+    }
+    public static async findAccountByName(name:string){
+        let ret:Account = undefined!
+        let acc = await AccountFinder.getIntance().findByName(name)
+        if (acc!.length >0){
+            let newAcc = new Account(acc![0].getName(),acc![0].getPassword())
+            newAcc.setAvatar(acc![0].getAvatar())
+            //newAcc.setClientId(this.createNewClientId())
+            newAcc.setScore(acc![0].getScore())
+            newAcc.setGameWon(acc![0].getGameWon())
+            newAcc.setGameLost(acc![0].getGameLost())
+            newAcc.setId(acc![0].getId())
+            ret = newAcc
+        }
+
+
+        return ret
     }
     public static getLogedAccounts(){
         return this.loggedAccounts

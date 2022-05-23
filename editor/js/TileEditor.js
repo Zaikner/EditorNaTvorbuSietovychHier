@@ -218,7 +218,7 @@ function spawnElements() {
     div.style.marginTop = '100px';
     div.style.width = '100%';
     (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
-    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', 'removeTileButton', ['btn', 'btn-dark'], clientSocket_js_1.texts[70], function () {
+    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', 'removeTileButton', ['btn', 'btn-dark'], clientSocket_js_1.texts[255], function () {
         canvas_js_1.game.deleteTile();
         showActualState();
     });

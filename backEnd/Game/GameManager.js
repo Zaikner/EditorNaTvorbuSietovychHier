@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.GameManager = void 0;
-var AccountFinder_js_1 = require("../../services/db/RDG/AccountFinder.js");
 var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
@@ -51,7 +50,7 @@ var Player_js_1 = require("./Player.js");
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
-    GameManager.loadGame = function (name, author) {
+    GameManager.loadGame = function (name) {
         return __awaiter(this, void 0, void 0, function () {
             var game, tiles, background, styles, rules, pawns;
             return __generator(this, function (_a) {
@@ -62,21 +61,22 @@ var GameManager = /** @class */ (function () {
                         return [4 /*yield*/, TileFinder_1.TileFinder.getIntance().findByGameId(game[0].getId())];
                     case 2:
                         tiles = _a.sent();
-                        return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findById(game[0].getId())
-                            //let pawns = await PawnFinder.getIntance().findByGameId(game![0].getId())
-                        ];
+                        return [4 /*yield*/, BackgroundFinder_js_1.BackgroundFinder.getIntance().findById(game[0].getId())];
                     case 3:
                         background = _a.sent();
                         return [4 /*yield*/, PawnStyleFinder_js_1.PawnStyleFinder.getIntance().findByGameId(game[0].getId())];
                     case 4:
                         styles = _a.sent();
-                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByGameId(game[0].getId())
-                            //let backgroundComponents = await BackgroundComponentFinder.getIntance().findByName(name)
-                        ];
+                        return [4 /*yield*/, RulesFinder_js_1.RulesFinder.getIntance().findByGameId(game[0].getId())];
                     case 5:
                         rules = _a.sent();
                         pawns = [];
-                        return [2 /*return*/, { author: author, pawns: pawns, game: game[0], tiles: tiles, background: background[0], styles: styles, rules: rules[0].getText() }];
+                        return [2 /*return*/, { pawns: pawns,
+                                game: game[0],
+                                tiles: tiles,
+                                background: background[0],
+                                styles: styles,
+                                rules: rules[0].getText() }];
                 }
             });
         });
@@ -96,7 +96,7 @@ var GameManager = /** @class */ (function () {
     };
     GameManager.createRoom = function (name, numOfPlayers, accId) {
         return __awaiter(this, void 0, void 0, function () {
-            var stop, id, room, acc, gameData, numOfPawns, pawnNumber, pawns;
+            var stop, id, room, gameData, numOfPawns, pawnNumber, pawns;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -112,13 +112,10 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
-                        return [4 /*yield*/, AccountFinder_js_1.AccountFinder.getIntance().findById(accId)];
-                    case 1:
-                        acc = _a.sent();
-                        return [4 /*yield*/, GameManager.loadGame(name, acc[0].getName())
+                        return [4 /*yield*/, GameManager.loadGame(name)
                             //console.log(room)
                         ];
-                    case 2:
+                    case 1:
                         gameData = _a.sent();
                         //console.log(room)
                         this.activeRooms.set(id, room);
@@ -160,7 +157,7 @@ var GameManager = /** @class */ (function () {
                 //console.log(acc)
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () {
                         rooms[i].join(new Player_js_1.Player(acc, ''));
-                    }]);
+                    }, rooms[i].getHasStarted()]);
             });
         };
         for (var i = 0; i < rooms.length; i++) {
