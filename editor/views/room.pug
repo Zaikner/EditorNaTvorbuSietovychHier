@@ -8,7 +8,7 @@ head
 nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   .container-fluid
     .navbar-header
-      a.navbar-brand(href='#')=texts[213]+''+id
+      a.navbar-brand(href='#')=texts[213]+': '+id + ' '+texts[23]+': '+name
   button#showRulesButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;')=texts[16]
   form(action='/gameLobby' method='get')
     button#mainMenuButton.btn.btn-secondary.py-2(type='submit' style=' width:200px; margin-right: 10px;')=texts[1]

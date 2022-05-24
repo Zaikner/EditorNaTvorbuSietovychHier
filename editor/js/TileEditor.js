@@ -152,17 +152,23 @@ function spawnElements() {
             canvas_js_1.game.setImage(new Image());
             canvas_js_1.game.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
             canvas_js_1.game.getImage().onload = function () {
+                if (canvas_js_1.game.getChoosenTile() != undefined) {
+                    lastImage = canvas_js_1.game.getImage();
+                }
                 showActualState();
             };
         }
         else {
             canvas_js_1.game.setImage(undefined);
+            if (canvas_js_1.game.getChoosenTile() != undefined) {
+                lastImage = canvas_js_1.game.getImage();
+            }
         }
     });
     //spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
-    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[135], clientSocket_js_1.texts[192], options, 'start');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[135], clientSocket_js_1.texts[192], options, 'start', canvas_js_1.game.getChoosenTile() == undefined);
     //spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
-    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[136], clientSocket_js_1.texts[192], options, 'end');
+    (0, Elements_js_1.spawnMultiSelect)(canvas_js_1.doc, 'tileEditingPlace', '', clientSocket_js_1.texts[136], clientSocket_js_1.texts[192], options, 'end', canvas_js_1.game.getChoosenTile() == undefined);
     // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
     // spawnMultiSelect(doc,'tileEditingPlace','',game.getPlayerTokens(),'enabled')
     //spawnParagraph(doc,"tileEditingPlace",'',texts[138],true)
@@ -182,7 +188,7 @@ function spawnElements() {
     //spawnButtonWithLabel(doc,"tileEditingPlace",'eleminationButton','',['btn','btn-secondary'],texts[142],function(){
     //})
     //spawnParagraph(document,'tileEditingPlace','',texts[143],true)
-    (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', clientSocket_js_1.texts[143], clientSocket_js_1.texts[192], options, 'immune');
+    (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', clientSocket_js_1.texts[143], clientSocket_js_1.texts[192], options, 'immune', canvas_js_1.game.getChoosenTile() == undefined);
     //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
     //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
     //pawnParagraph(document,'tileEditingPlace','',texts[72],true)
@@ -472,7 +478,7 @@ var spawnTile = function (coords) {
 exports.spawnTile = spawnTile;
 var update = function () {
     var _a, _b;
-    // console.log('zavolal update')
+    console.log('zavolal update');
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -490,6 +496,8 @@ var update = function () {
     //   pattImage = undefined!
     // }
     canvas_js_1.game.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
+    canvas_js_1.game.getChoosenTile().setIsStartingFor(canvas_js_1.game.getStartForPlayers().slice());
+    canvas_js_1.game.getChoosenTile().setIsEndingFor(canvas_js_1.game.getEndForPlayers().slice());
     (_a = canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
     (_b = canvas_js_1.game.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
         for (var i = 0; i < canvas_js_1.game.getNumberOfStartingPawns(); i++) {
@@ -498,8 +506,6 @@ var update = function () {
     });
     // console.log(game.getChoosenTile()!)
     //  console.log(game.getStartForPlayers().slice())
-    canvas_js_1.game.getChoosenTile().setIsStartingFor(canvas_js_1.game.getStartForPlayers().slice());
-    canvas_js_1.game.getChoosenTile().setIsEndingFor(canvas_js_1.game.getEndForPlayers().slice());
     //game.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     //game.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)
     canvas_js_1.game.getChoosenTile().setCantBeEliminatedOnTile(canvas_js_1.game.getCantBeEliminatedOnTile().slice());

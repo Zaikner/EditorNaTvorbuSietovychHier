@@ -36,7 +36,7 @@ router
             res.redirect("/room?id="+request.query.room+'&name='+request.query.name)
             }
             else{
-                res.render('room',{root:'./editor/views',texts:text,id:request.query.id});
+                res.render('room',{root:'./editor/views',texts:text,id:request.query.id,name:r.getGameName()});
             }
             
             console.log('sem ho poslal')
@@ -57,7 +57,7 @@ router
                  }
                  else{
                      console.log('poslal inakade')
-                     res.render('room',{root:'./editor/views',texts:text,id:request.query.id});
+                     res.render('room',{root:'./editor/views',texts:text,id:request.query.id,name:r.getGameName()});
                  }
                 
             //     console.log('sem ho poslal')

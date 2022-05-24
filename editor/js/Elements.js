@@ -3,6 +3,9 @@ exports.__esModule = true;
 exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnTextArea = exports.spawnHeading = exports.spawnLabel = exports.spawnRadioButtons = exports.spawnCheckerWithLabel = exports.spawnButtonWithLabel = exports.spawnParagraph = exports.spawnDiv = exports.spawnColorPicker = void 0;
 var canvas_1 = require("./canvas");
 var TileEditor_1 = require("./TileEditor");
+var lastStart = [];
+var lastEnd = [];
+var lastImmune = [];
 function spawnColorPicker(doc, parent, id, lbl, func) {
     if (func === void 0) { func = function () { }; }
     spawnDiv(document, parent, 'div' + id, []);
@@ -233,7 +236,13 @@ function spawnImageInput(doc, parent, id, txt, lbl, func) {
     return image;
 }
 exports.spawnImageInput = spawnImageInput;
-function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
+function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
+    if (preview === void 0) { preview = false; }
+    if (preview) {
+        canvas_1.game.setStartForPlayers(lastStart);
+        canvas_1.game.setEndForPlayers(lastEnd);
+        canvas_1.game.setCantBeEliminatedOnTile(lastImmune);
+    }
     spawnDiv(document, parent, 'div' + id, []);
     var label = doc.createElement('label');
     label.htmlFor = id;
@@ -276,6 +285,9 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
             option.style.backgroundColor = 'yellow';
         }
         option.addEventListener('click', function (e) {
+            if (canvas_1.game.getChoosenTile() != undefined) {
+                (0, TileEditor_1.update)();
+            }
             if (type == 'start') {
                 if (i == 0) {
                     if (canvas_1.game.getStartForPlayers().length < canvas_1.game.getPlayerTokens().length) {
@@ -377,9 +389,7 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
                     }
                 }
             }
-            if (canvas_1.game.getChoosenTile() != undefined) {
-                (0, TileEditor_1.update)();
-            }
+            (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
             e.stopPropagation();
             if (option.style.backgroundColor == 'white' && i != 0) {
                 option.style.backgroundColor = 'yellow';
@@ -387,8 +397,18 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
             else if (i != 0) {
                 option.style.backgroundColor = 'white';
             }
-            (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
             e.stopPropagation();
+            if (canvas_1.game.getChoosenTile() != undefined) {
+                console.log(canvas_1.game.getStartForPlayers());
+                (0, TileEditor_1.update)();
+                console.log(canvas_1.game.getChoosenTile().getIsStartingFor());
+                (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
+            }
+            if (preview) {
+                lastStart = canvas_1.game.getStartForPlayers();
+                lastEnd = canvas_1.game.getEndForPlayers();
+                lastImmune = canvas_1.game.getCantBeEliminatedOnTile();
+            }
         });
         startMenuDropdown.appendChild(option);
     };

@@ -194,20 +194,26 @@ function spawnElements(){
         game.setImage(new Image())
           game.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
           game.getImage().onload = function(){
+            if (game.getChoosenTile()!=undefined){
+              lastImage = game.getImage()
+            }
             showActualState()
           }
           
         }
       else{
         game.setImage(undefined!)
+        if (game.getChoosenTile()!=undefined){
+          lastImage = game.getImage()
+        }
       }
     })
 
 //spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
-spawnMultiSelect(doc,'tileEditingPlace','',texts[135],texts[192],options,'start')
+spawnMultiSelect(doc,'tileEditingPlace','',texts[135],texts[192],options,'start',game.getChoosenTile() == undefined)
 
 //spawnParagraph(doc,"tileEditingPlace",'',texts[136],true)
-spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
+spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',game.getChoosenTile() == undefined)
 
 // spawnParagraph(doc,"tileEditingPlace",'','Which player can visit this tile? (choose players)',true)
 // spawnMultiSelect(doc,'tileEditingPlace','',game.getPlayerTokens(),'enabled')
@@ -244,7 +250,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     //})
     //spawnParagraph(document,'tileEditingPlace','',texts[143],true)
   
-    spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',texts[143],texts[192],options,'immune')
+    spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',texts[143],texts[192],options,'immune',game.getChoosenTile() == undefined)
 
     //spawnParagraph(document,'tileEditingPlace','',texts[144],true)
     //let questionChecker =spawnCheckerWithValueShower(document,'tileEditingPlace','askQuestionChecker',false,[texts[92],texts[93]])
@@ -585,7 +591,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     return addedTile    
   }
   let update = function(){
-   // console.log('zavolal update')
+   console.log('zavolal update')
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -604,6 +610,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       // }
      
     game.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
+    game.getChoosenTile()!.setIsStartingFor(game.getStartForPlayers().slice())
+    game.getChoosenTile()!.setIsEndingFor(game.getEndForPlayers().slice())
     
 
     game.getChoosenTile()?.setPawns([])
@@ -616,9 +624,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
 
    // console.log(game.getChoosenTile()!)
   //  console.log(game.getStartForPlayers().slice())
-    game.getChoosenTile()!.setIsStartingFor(game.getStartForPlayers().slice())
-    game.getChoosenTile()!.setIsEndingFor(game.getEndForPlayers().slice())
-    
+  
     
     //game.getChoosenTile()!.setToogleNumber((<HTMLInputElement>doc.getElementById('toogleNumberingChecker')!).checked)
     //game.getChoosenTile()!.setNumberingColor((<HTMLInputElement>doc.getElementById('numberingColorPicker')!).value)

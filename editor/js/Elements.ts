@@ -1,8 +1,9 @@
 import { ctx, game, reload } from "./canvas";
 import { showActualState, update } from "./TileEditor";
 
-
-
+let lastStart:Array<string> = []
+let lastEnd:Array<string> = []
+let lastImmune:Array<string> = []
 function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,func:Function= function(){}){
 
     spawnDiv(document,parent,'div'+id,[])
@@ -93,6 +94,7 @@ function spawnCheckerWithValueShower(doc:HTMLDocument,parent:string,id:string,is
 }
 
 function spawnSliderWithValueShower(doc:HTMLDocument,parent:string,id:string,lbl:string,min:string,max:string,step:string,value:string){
+
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
@@ -158,7 +160,8 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
   return button
 }
 function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,active:Array<string> = []){
-
+  
+ 
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
@@ -253,7 +256,15 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     doc.getElementById('div'+id)!.appendChild( image);
     return image
 }
-function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string){
+function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string,preview:boolean = false){
+  if (preview){
+    game.setStartForPlayers(lastStart)
+    game.setEndForPlayers(lastEnd)
+    game.setCantBeEliminatedOnTile(lastImmune)
+
+ }
+ 
+  
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
@@ -308,6 +319,9 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
       
       
         option.addEventListener('click',function(e){
+          if (game.getChoosenTile()!=undefined){
+            update()
+          }
           if (type == 'start'){
             if (i == 0){
               if (game.getStartForPlayers().length < game.getPlayerTokens().length){
@@ -335,6 +349,7 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
               }
               else{
                 game.getStartForPlayers().push(types[i])
+                
                 if (i!=0 && game.getStartForPlayers().length == game.getPlayerTokens().length){
                   document.getElementById(types[0]+type)!.style.backgroundColor ='yellow'
                 }
@@ -415,10 +430,8 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
           
           }
      
-          if (game.getChoosenTile()!=undefined){
-            update()
-          }
           
+          reload(game,ctx)
           e.stopPropagation()
           if (option.style.backgroundColor == 'white' && i!=0){
             option.style.backgroundColor = 'yellow'
@@ -426,9 +439,19 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
           else if(i!=0){
             option.style.backgroundColor = 'white'
           }
-          reload(game,ctx)
+          
           e.stopPropagation()
-
+          if (game.getChoosenTile()!=undefined){
+            console.log(game.getStartForPlayers())
+            update()
+            console.log(game.getChoosenTile()!.getIsStartingFor())
+            reload(game,ctx)
+          }
+          if (preview){
+            lastStart = game.getStartForPlayers()
+            lastEnd = game.getEndForPlayers()
+            lastImmune = game.getCantBeEliminatedOnTile()
+          }
         })
         startMenuDropdown.appendChild(option);
     }
