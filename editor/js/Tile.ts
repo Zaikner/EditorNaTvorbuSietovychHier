@@ -159,8 +159,14 @@ class Tile{
                     }
             }
             if (game.getToogleNumber() || isEditor){
-                //ctx.save() 
-                //ctx.scale(game.getScaleX(),game.getScaleY())
+                //ctx.save()
+                if (game.getChoosenTile()==this){
+                    ctx.scale(game.getScaleX(),game.getScaleY())
+                }
+                else{
+                   // CSSTransition.re
+                }
+                
                 ctx.font = "bold 30px Arial";
                 if (this.strokeColor != this.color){
                     ctx.fillStyle =  this.strokeColor
@@ -180,7 +186,7 @@ class Tile{
                     ctx.fillText(this.tileNumber.toString(),this.centerX-15,this.centerY)
                 }
                 ctx.resetTransform();
-                ctx.restore()
+                //ctx.restore()
 
 
             }

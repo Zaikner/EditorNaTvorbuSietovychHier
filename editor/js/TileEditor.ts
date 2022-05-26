@@ -138,7 +138,7 @@ function spawnElements(){
 
     //spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
     let sizeOfTileSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfTileSlider',texts[125],'20','50','1',lastSize)
-    sizeOfTileSlider.onchange = showActualState
+    sizeOfTileSlider.onchange = function(){showActualState()}
    
    
     // spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
@@ -147,19 +147,19 @@ function spawnElements(){
 
     // spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
     let outlineColorPicker = spawnColorPicker(doc,"tileEditingPlace",'outlineColorPicker',texts[127])
-    outlineColorPicker.onchange = showActualState
+    outlineColorPicker.onchange =function(){showActualState()}
     outlineColorPicker.value = lastOutlineColor
     
 
     //spawnParagraph(doc,"tileEditingPlace",'',texts[128],true)
     
     let sizeOfOutlineSlider = spawnSliderWithValueShower(doc,"tileEditingPlace",'sizeOfOutlineSlider',texts[128],'0','10','1',lastOutline)
-    sizeOfOutlineSlider.onchange = showActualState
+    sizeOfOutlineSlider.onchange = function(){showActualState()}
     
     //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
     let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',texts[129],["btn","btn-dark"],['circle','square'])
     //let shapeMenu =spawnRadioButtons(doc,"tileEditingPlace",'shapeMenu',texts[129],["btn","btn-dark"],['circle','square'], showActualState)
-    shapeMenu.onchange= showActualState
+    shapeMenu.onchange= function(){showActualState()}
     
 
     
@@ -194,18 +194,13 @@ function spawnElements(){
         game.setImage(new Image())
           game.getImage()!.src =URL.createObjectURL((<HTMLInputElement>doc.getElementById('tileImage')!).files![0]!)
           game.getImage().onload = function(){
-            if (game.getChoosenTile()!=undefined){
-              lastImage = game.getImage()
-            }
+            
             showActualState()
           }
           
         }
       else{
         game.setImage(undefined!)
-        if (game.getChoosenTile()!=undefined){
-          lastImage = game.getImage()
-        }
       }
     })
 
@@ -298,6 +293,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
     document.getElementById('tileEditingPlace')?.appendChild(div)
     let button = spawnButton(document,'wrapperDiv','removeTileButton',['btn','btn-dark'],texts[255],function(){
       game.deleteTile()
+      removeAllButtons()
+      spawnElements()
       showActualState();
       
     })
@@ -427,7 +424,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
       spawnElements()
 
       setValues(undefined!,true)
-    showActualState()      
+    showActualState(false)      
     }
   
     function saveEditingTiles(){
@@ -601,6 +598,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
       //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
       //let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
       let insertImage = game.getImage()
+     
+      
       //let pattImage = game.getPattern()
       // if (!backgroundChecker.checked){
       //   insertImage = undefined!
@@ -694,6 +693,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
       game.setRepeat(tile.getRepeat())
       game.setForward(tile.getForward())
       game.setBackward(tile.getBackward())
+      
       game.setMustThrown(tile.getMustThrown())
       game.setTurnsToSetFree(tile.getTurnsToSetFree())
       game.setQuestionId(tile.getQuestionId())
@@ -852,8 +852,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
       reload(game,ctx)
   }
 
-  function showActualState(){
-    if (game.getChoosenTile()!){
+  function showActualState(updateTile:boolean = true){
+    if (game.getChoosenTile()! && updateTile){
       update()
     }
     let cs = <HTMLCanvasElement>document.getElementById('changeCanvas')!
@@ -863,7 +863,12 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
     let height = cs.height
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
 
-   
+    let image:HTMLImageElement|undefined = game.getImage()
+    if (game.getChoosenTile()!= undefined){
+      
+        image =  game.getChoosenTile()!.getImage()
+      
+    }
     let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
     //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
     let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -876,7 +881,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
   
 
     let stroke = parseInt(sizeOfOutlineSlider!.value)
-    let tile = game.initTile(false,{x:width/2,y:height/2},colorPicker!.value,parseInt(sizeOfTileSlider!.value),stroke,outlineColorPicker!.value,shapeMenu!.value,undefined)
+    let tile = game.initTile(false,{x:width/2,y:height/2},colorPicker!.value,parseInt(sizeOfTileSlider!.value),stroke,outlineColorPicker!.value,shapeMenu!.value,image)
     //tile.setNumberingColor(numberingColor.value)
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
@@ -884,7 +889,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
     if (game.getChoosenTile()!= undefined){
       tile.setTileNumber(game.getChoosenTile()!.getTileNumber())
     }
-    tile.setImage(game.getImage())
+    tile.setImage(image!)
     //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0,0,cs.width,cs.height)
     cttttx.resetTransform()

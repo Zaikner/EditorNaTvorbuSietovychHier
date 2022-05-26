@@ -114,21 +114,21 @@ function spawnElements() {
     //spawnCheckerWithValueShower(doc,"tileEditingPlace",'eliminationChecker',false,[texts[92],texts[93]])
     //spawnParagraph(doc,"tileEditingPlace",'',texts[125],true)
     var sizeOfTileSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfTileSlider', clientSocket_js_1.texts[125], '20', '50', '1', lastSize);
-    sizeOfTileSlider.onchange = showActualState;
+    sizeOfTileSlider.onchange = function () { showActualState(); };
     // spawnParagraph(doc,"tileEditingPlace",'',texts[126],true)
     // let outlineChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'outlineChecker',false,[texts[92],texts[93]])
     // outlineChecker.onchange = showActualState
     // spawnParagraph(doc,"tileEditingPlace",'',texts[127],true)
     var outlineColorPicker = (0, Elements_js_1.spawnColorPicker)(canvas_js_1.doc, "tileEditingPlace", 'outlineColorPicker', clientSocket_js_1.texts[127]);
-    outlineColorPicker.onchange = showActualState;
+    outlineColorPicker.onchange = function () { showActualState(); };
     outlineColorPicker.value = lastOutlineColor;
     //spawnParagraph(doc,"tileEditingPlace",'',texts[128],true)
     var sizeOfOutlineSlider = (0, Elements_js_1.spawnSliderWithValueShower)(canvas_js_1.doc, "tileEditingPlace", 'sizeOfOutlineSlider', clientSocket_js_1.texts[128], '0', '10', '1', lastOutline);
-    sizeOfOutlineSlider.onchange = showActualState;
+    sizeOfOutlineSlider.onchange = function () { showActualState(); };
     //spawnParagraph(doc,"tileEditingPlace",'',texts[129],true)
     var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', clientSocket_js_1.texts[129], ["btn", "btn-dark"], ['circle', 'square']);
     //let shapeMenu =spawnRadioButtons(doc,"tileEditingPlace",'shapeMenu',texts[129],["btn","btn-dark"],['circle','square'], showActualState)
-    shapeMenu.onchange = showActualState;
+    shapeMenu.onchange = function () { showActualState(); };
     //   spawnParagraph(doc,"tileEditingPlace",'',texts[130],true)
     //   let patternChecker = spawnCheckerWithValueShower(doc,"tileEditingPlace",'patternChecker',false,[texts[92],texts[93]])
     //   patternChecker.onchange = showActualState
@@ -152,17 +152,11 @@ function spawnElements() {
             canvas_js_1.game.setImage(new Image());
             canvas_js_1.game.getImage().src = URL.createObjectURL(canvas_js_1.doc.getElementById('tileImage').files[0]);
             canvas_js_1.game.getImage().onload = function () {
-                if (canvas_js_1.game.getChoosenTile() != undefined) {
-                    lastImage = canvas_js_1.game.getImage();
-                }
                 showActualState();
             };
         }
         else {
             canvas_js_1.game.setImage(undefined);
-            if (canvas_js_1.game.getChoosenTile() != undefined) {
-                lastImage = canvas_js_1.game.getImage();
-            }
         }
     });
     //spawnParagraph(doc,"tileEditingPlace",'',texts[135],true)
@@ -226,6 +220,8 @@ function spawnElements() {
     (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
     var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', 'removeTileButton', ['btn', 'btn-dark'], clientSocket_js_1.texts[255], function () {
         canvas_js_1.game.deleteTile();
+        removeAllButtons();
+        spawnElements();
         showActualState();
     });
     button.style.marginTop = '10%';
@@ -331,7 +327,7 @@ function editTiles() {
     }
     spawnElements();
     setValues(undefined, true);
-    showActualState();
+    showActualState(false);
 }
 exports.editTiles = editTiles;
 function saveEditingTiles() {
@@ -669,8 +665,9 @@ var moveTile = function (event) {
     canvas_js_1.game.moveTile(event);
     (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
 };
-function showActualState() {
-    if (canvas_js_1.game.getChoosenTile()) {
+function showActualState(updateTile) {
+    if (updateTile === void 0) { updateTile = true; }
+    if (canvas_js_1.game.getChoosenTile() && updateTile) {
         update();
     }
     var cs = document.getElementById('changeCanvas');
@@ -679,6 +676,10 @@ function showActualState() {
     var width = cs.width;
     var height = cs.height;
     var sizeOfTileSlider = canvas_js_1.doc.getElementById('sizeOfTileSlider');
+    var image = canvas_js_1.game.getImage();
+    if (canvas_js_1.game.getChoosenTile() != undefined) {
+        image = canvas_js_1.game.getChoosenTile().getImage();
+    }
     var colorPicker = canvas_js_1.doc.getElementById('colorPicker');
     //let numberingColor:HTMLInputElement = <HTMLInputElement>doc.getElementById('numberingColorPicker')!
     var sizeOfOutlineSlider = canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
@@ -689,7 +690,7 @@ function showActualState() {
     //let patternChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('patternChecker')!
     //let toogleNumberingChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('toogleNumberingChecker')!
     var stroke = parseInt(sizeOfOutlineSlider.value);
-    var tile = canvas_js_1.game.initTile(false, { x: width / 2, y: height / 2 }, colorPicker.value, parseInt(sizeOfTileSlider.value), stroke, outlineColorPicker.value, shapeMenu.value, undefined);
+    var tile = canvas_js_1.game.initTile(false, { x: width / 2, y: height / 2 }, colorPicker.value, parseInt(sizeOfTileSlider.value), stroke, outlineColorPicker.value, shapeMenu.value, image);
     //tile.setNumberingColor(numberingColor.value)
     // if (tileNumberSetter.value != ""){
     //   tile.setTileNumber(parseInt(tileNumberSetter.value))
@@ -697,7 +698,7 @@ function showActualState() {
     if (canvas_js_1.game.getChoosenTile() != undefined) {
         tile.setTileNumber(canvas_js_1.game.getChoosenTile().getTileNumber());
     }
-    tile.setImage(canvas_js_1.game.getImage());
+    tile.setImage(image);
     //tile.setRadius(tile.getRadius()*2)
     cttttx.clearRect(0, 0, cs.width, cs.height);
     cttttx.resetTransform();

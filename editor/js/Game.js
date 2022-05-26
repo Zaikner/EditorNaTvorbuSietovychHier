@@ -210,6 +210,9 @@ var Game = /** @class */ (function () {
                 });
             }
         });
+        this.getPlayerTokens().forEach(function (token) {
+            _this.getChoosenTile().getNextTilesIds().set(token, _this.tiles.length + 2);
+        });
         (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
     };
     Game.prototype.nullEditor = function () {

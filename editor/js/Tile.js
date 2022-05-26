@@ -133,8 +133,13 @@ var Tile = /** @class */ (function () {
             }
         }
         if (canvas_js_1.game.getToogleNumber() || clientSocket_js_1.isEditor) {
-            //ctx.save() 
-            //ctx.scale(game.getScaleX(),game.getScaleY())
+            //ctx.save()
+            if (canvas_js_1.game.getChoosenTile() == this) {
+                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+            }
+            else {
+                // CSSTransition.re
+            }
             ctx.font = "bold 30px Arial";
             if (this.strokeColor != this.color) {
                 ctx.fillStyle = this.strokeColor;
@@ -153,7 +158,7 @@ var Tile = /** @class */ (function () {
                 ctx.fillText(this.tileNumber.toString(), this.centerX - 15, this.centerY);
             }
             ctx.resetTransform();
-            ctx.restore();
+            //ctx.restore()
         }
         ctx.closePath();
     };

@@ -239,6 +239,9 @@ class Game{
                 })
             }
         })
+       this.getPlayerTokens().forEach((token:string)=>{
+        this.getChoosenTile()!.getNextTilesIds().set(token,this.tiles.length+2)
+      })
       
         reload(game,ctx)
         
