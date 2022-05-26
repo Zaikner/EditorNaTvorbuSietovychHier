@@ -158,15 +158,17 @@ class Tile{
                         ctx.resetTransform();
                     }
             }
-            if (game.getToogleNumber() || isEditor){
-                //ctx.save()
-                if (game.getChoosenTile()==this){
-                    ctx.scale(game.getScaleX(),game.getScaleY())
-                }
-                else{
-                   // CSSTransition.re
-                }
-                
+            if ((game.getToogleNumber() || isEditor) && game.getChoosenTile()!=this){
+                ctx.resetTransform()
+                ctx.save()
+                ctx.scale(game.getScaleX(),game.getScaleY())
+                // if (game.getChoosenTile()==this){
+                //     ctx.scale(game.getScaleX(),game.getScaleY())
+                // }
+                // else{
+                //    // CSSTransition.re
+                // }
+                //ctx.scale(game.getScaleX(),game.getScaleY())
                 ctx.font = "bold 30px Arial";
                 if (this.strokeColor != this.color){
                     ctx.fillStyle =  this.strokeColor
@@ -180,17 +182,19 @@ class Tile{
                
                 ctx.textBaseline = 'middle';
                 if(this.tileNumber < 10){
-                    ctx.fillText(this.tileNumber.toString(),(this.centerX-8),this.centerY)
+                    ctx.fillText(this.tileNumber.toString(),(this.x1+this.x2)/2-8,(this.y1+this.y2)/2)
                 }
                 else{
-                    ctx.fillText(this.tileNumber.toString(),this.centerX-15,this.centerY)
+                    ctx.fillText(this.tileNumber.toString(),(this.x1+this.x2)/2-15,(this.y1+this.y2)/2)
                 }
                 ctx.resetTransform();
-                //ctx.restore()
+                ctx.restore()
+                ctx.resetTransform();
 
 
             }
         ctx.closePath()
+        ctx.resetTransform();
     }
 
     drawPawns(ctx:CanvasRenderingContext2D){

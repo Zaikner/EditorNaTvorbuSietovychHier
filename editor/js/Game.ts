@@ -385,12 +385,15 @@ class Game{
         if (tile != undefined){
             //console.log('nebol undefined')
             let coords = calibreEventCoords(event)
-            tile.setCenterX(coords.x/this.scaleX)
-            tile.setCenterY(coords.y/this.scaleY)
-            tile.setX1((coords.x-tile.getRadius())/this.scaleX)
-            tile.setX2((coords.x+tile.getRadius())/this.scaleX)
-            tile.setY1((coords.y-tile.getRadius())/this.scaleY)
-            tile.setY2((coords.y+tile.getRadius())/this.scaleY)
+           
+            tile.setX1((coords.x/this.scaleX-tile.getRadius()))
+            tile.setX2((coords.x/this.scaleX+tile.getRadius()))
+            tile.setY1((coords.y/this.scaleY-tile.getRadius()))
+            tile.setY2((coords.y/this.scaleY+tile.getRadius()))
+            tile.setCenterX((tile.getX1()+tile.getX2())/2)
+            tile.setCenterY((tile.getY1()+tile.getY2())/2)
+            console.log(tile.getCenterX()-tile.getX1())
+            console.log(tile.getCenterX()-tile.getX2())
             reload(this,ctx)
         }
     

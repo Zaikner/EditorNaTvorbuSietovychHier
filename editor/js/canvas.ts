@@ -490,7 +490,7 @@ let button = spawnButton(document,'tileEditingPlace','publishGame',['btn','btn-d
 
  var length:number =0;
 
-ctx.scale(2, -2);
+//ctx.scale(2, -2);
 resize(game,ctx);
 
  
@@ -511,7 +511,7 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
      }
      
      game.setScaleX(canvas.width/game.getInitSizeX())
-     game.setScaleY(canvas.height/game.getInitSizeY())
+     game.setScaleY((canvas.height-20)/game.getInitSizeY())
   
    reload(editor,context);
   

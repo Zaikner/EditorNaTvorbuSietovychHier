@@ -132,14 +132,17 @@ var Tile = /** @class */ (function () {
                 ctx.resetTransform();
             }
         }
-        if (canvas_js_1.game.getToogleNumber() || clientSocket_js_1.isEditor) {
-            //ctx.save()
-            if (canvas_js_1.game.getChoosenTile() == this) {
-                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
-            }
-            else {
-                // CSSTransition.re
-            }
+        if ((canvas_js_1.game.getToogleNumber() || clientSocket_js_1.isEditor) && canvas_js_1.game.getChoosenTile() != this) {
+            ctx.resetTransform();
+            ctx.save();
+            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+            // if (game.getChoosenTile()==this){
+            //     ctx.scale(game.getScaleX(),game.getScaleY())
+            // }
+            // else{
+            //    // CSSTransition.re
+            // }
+            //ctx.scale(game.getScaleX(),game.getScaleY())
             ctx.font = "bold 30px Arial";
             if (this.strokeColor != this.color) {
                 ctx.fillStyle = this.strokeColor;
@@ -152,15 +155,17 @@ var Tile = /** @class */ (function () {
             }
             ctx.textBaseline = 'middle';
             if (this.tileNumber < 10) {
-                ctx.fillText(this.tileNumber.toString(), (this.centerX - 8), this.centerY);
+                ctx.fillText(this.tileNumber.toString(), (this.x1 + this.x2) / 2 - 8, (this.y1 + this.y2) / 2);
             }
             else {
-                ctx.fillText(this.tileNumber.toString(), this.centerX - 15, this.centerY);
+                ctx.fillText(this.tileNumber.toString(), (this.x1 + this.x2) / 2 - 15, (this.y1 + this.y2) / 2);
             }
             ctx.resetTransform();
-            //ctx.restore()
+            ctx.restore();
+            ctx.resetTransform();
         }
         ctx.closePath();
+        ctx.resetTransform();
     };
     Tile.prototype.drawPawns = function (ctx) {
         var _this = this;

@@ -533,12 +533,14 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
     //let backgroundChecker:HTMLInputElement = <HTMLInputElement>doc.getElementById('backgroundChecker')!
     
     var insertImage = game.getImage()
+    
+
   
     // if (!backgroundChecker.checked){
     //   insertImage = undefined!
     // }
   
-
+    
     let addedTile = game.initTile(true,coords,colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
     addedTile.setIsStartingFor(game.getStartForPlayers().slice())
     addedTile.setIsEndingFor(game.getEndForPlayers().slice())
@@ -556,6 +558,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end',g
     addedTile.setTurnsToSetFree(game.getTurnsToSetFree())
     addedTile.setQuestionId(game.getQuestionId())
     addedTile.setRandomQuestion(game.getRandomQuestion())
+    
    
     
     // if ((<HTMLInputElement>document.getElementById('tileNumberSetter')).value.length > 0){

@@ -408,7 +408,7 @@ function mainMenu() {
 }
 exports.mainMenu = mainMenu;
 var length = 0;
-ctx.scale(2, -2);
+//ctx.scale(2, -2);
 resize(game, ctx);
 window.addEventListener('resize', function () { resize(game, ctx); });
 // // resize canvas
@@ -423,7 +423,7 @@ function resize(editor, context) {
         game.setInitSizeY(canvas.height);
     }
     game.setScaleX(canvas.width / game.getInitSizeX());
-    game.setScaleY(canvas.height / game.getInitSizeY());
+    game.setScaleY((canvas.height - 20) / game.getInitSizeY());
     reload(editor, context);
 }
 exports.resize = resize;
