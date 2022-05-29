@@ -247,7 +247,6 @@ var ServerSocket = /** @class */ (function () {
                                 t.setForward(tile.forward);
                                 t.setBackward(tile.backward);
                                 t.setMustThrown(tile.mustThrown);
-                                t.setTurnsToSetFree(tile.turnToSetFree);
                                 t.setRandomQuestion(tile.randomQuestion);
                                 t.insert();
                             });
@@ -360,15 +359,10 @@ var ServerSocket = /** @class */ (function () {
                 if (r.getPlayerOnTurn().getMustThrown() != 0) {
                     if (r.getPlayerOnTurn().getMustThrown() != msg.value) {
                         socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
-                        r.getPlayerOnTurn().setTurnsToSetFree(r.getPlayerOnTurn().getTurnsToSetFree() - 1);
                         socket.emit('react to event:must Thrown', { token: r.getPlayerOnTurn().getAccount().getName(), value: r.getPlayerOnTurn().getMustThrown(), turnsLeft: r.getPlayerOnTurn().getTurnsToSetFree() });
-                        if (r.getPlayerOnTurn().getTurnsToSetFree() == 0) {
-                            r.getPlayerOnTurn().setMustThrown(0);
-                        }
                     }
                     else {
                         r.getPlayerOnTurn().setMustThrown(0);
-                        r.getPlayerOnTurn().setTurnsToSetFree(0);
                         socket.emit('canMovePawn', { value: msg.value, token: msg.token });
                     }
                 }
@@ -480,7 +474,7 @@ var ServerSocket = /** @class */ (function () {
                             }
                             else if (msg.mustThrown > 0) {
                                 r.getPlayerOnTurn().setMustThrown(msg.mustThrown);
-                                r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree);
+                                // r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree)
                                 socket.emit('evaluate End', { token: r.getPlayerOnTurn().getToken() });
                             }
                             else {
@@ -804,22 +798,13 @@ var ServerSocket = /** @class */ (function () {
                     }
                 });
             }); });
-            socket.on('get texts', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+            socket.on('get texts', function () { return __awaiter(_this, void 0, void 0, function () {
                 var texts;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            texts = [];
-                            if (!(msg.language == 'SK')) return [3 /*break*/, 2];
-                            return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
+                        case 0: return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
                         case 1:
                             texts = (_a.sent()).map(function (txt) { return txt.getSK(); });
-                            return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, TextFinder_1.TextsFinder.getIntance().findAll()];
-                        case 3:
-                            texts = (_a.sent()).map(function (txt) { return txt.getEN(); });
-                            _a.label = 4;
-                        case 4:
                             socket.emit('got texts', { text: texts });
                             return [2 /*return*/];
                     }

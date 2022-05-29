@@ -15,8 +15,7 @@ import { Room } from './Room.js';
 import { Player } from './Player.js';
 import { ServerSocket } from '../../services/socket/SocketServer.js';
 import { Account } from '../Accounts/Account.js';
-import { BackgroundComponent_db } from '../../services/db/RDG/BackgroundComponent_db.js';
-import { BackgroundComponentFinder } from '../../services/db/RDG/BackgroundComponentFinder.js';
+
 //const Room = require('./Room.js')
 
 

@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.PawnStyle = void 0;
-var utilityFunctions_1 = require("./utilityFunctions");
+var UtilityFunctions_1 = require("./UtilityFunctions");
 var PawnStyle = /** @class */ (function () {
     function PawnStyle(player, color, type) {
         this.player = '';
@@ -16,7 +16,7 @@ var PawnStyle = /** @class */ (function () {
         return { player: this.player,
             color: this.color,
             type: this.type,
-            image: this.image === undefined ? 'none' : (0, utilityFunctions_1.getDataUrlFromImage)(this.image) };
+            image: this.image === undefined ? 'none' : (0, UtilityFunctions_1.getDataUrlFromImage)(this.image) };
     };
     PawnStyle.prototype.setColor = function (newColor) {
         this.color = newColor;

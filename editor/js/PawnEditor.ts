@@ -1,24 +1,13 @@
-import { calibreEventCoords, canvas, ctx, doc, game, reload } from "./canvas"
-import { texts } from "./clientSocket"
+import { calibreEventCoords, canvas, ctx, doc, game, reload } from "./Canvas"
+import { texts } from "./ClientSocket"
 import { spawnButton, spawnCanvas, spawnColorPicker, spawnDiv, spawnHeading, spawnImageInput, spawnParagraph, spawnSelectMenu } from "./Elements"
 import { Pawn } from "./Pawn"
 import { Tile } from "./Tile"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
-
-
-
-
 function pawnInsertMenu(){
     removeAllListenersAdded()
     removeAllButtons()
-    // spawnParagraph(doc,'tileEditingPlace','','Configure your Pawn, and click on tile to insert it!')
-    // spawnParagraph(doc,'tileEditingPlace','','Choose pawn color!')
-    // spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker')
-    // spawnParagraph(doc,'tileEditingPlace','','Choose pawn image!')
-    // spawnImageInput(doc,'tileEditingPlace','imagePicker','Choose!',function(){})
-    // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
-    //spawnParagraph(doc,'tileEditingPlace','',texts[73],true)
     spawnSelectMenu(doc,'tileEditingPlace','playerSelect',texts[73],['btn','btn-secondary'],game.getPlayerTokens())
     canvas.addEventListener('click',insertPawn)
 }
@@ -38,11 +27,9 @@ function insertPawn(event:MouseEvent){
     if(tile!=undefined){
         let player:HTMLSelectElement = <HTMLSelectElement>doc.getElementById('playerSelect')!
         let newPawn = new Pawn(player!.value,tile)
-        //newPawn.color = colorPicker!.value
         game.getPawns().push(newPawn)
         tile.getPawns().push(newPawn)
-        //removeAllListenersAdded()
-        reload(game,ctx)
+        reload(ctx)
         console.log(newPawn)
     }
 }
@@ -71,7 +58,7 @@ function deletePawn(event:MouseEvent){
             }
         })
        
-        reload(game,ctx)
+        reload(ctx)
       
     }
 }
@@ -93,23 +80,15 @@ function pawnEditMenu(){
         (<HTMLInputElement> document.getElementById('pawnColorPicker')).value = game.getPawnStyle().get(playerPicker.value)?.getColor()!
        
     }
-    // let cavn = spawnCanvas(doc,'tileEditingPlace','pawnStyle')
-    // cavn.classList.add('pawnType')
-    // cavn.style.width = '100px'
-    // cavn.style.height = '100px'
-
-    
-   
+  
     let colorPicker = spawnColorPicker(doc,'tileEditingPlace','pawnColorPicker',texts[75])
     colorPicker.onchange = function(){
         game.getPawnStyle().get(playerPicker.value)?.setColor(colorPicker.value)
         game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
         drawActualPawnLook(playerPicker.value)
         drawStyles(colorPicker.value)
+        reload(ctx)
     }
-    // spawnParagraph(doc,'tileEditingPlace','',texts[76],true)
-    // spawnButton(doc,'tileEditingPlace','chooseType',['btn', 'btn-secondary'],texts[77],function(){$('#pawnModal').modal('show')
-    //  drawStyles(colorPicker.value)})
 
     spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[78],texts[78],function(){
 
@@ -119,7 +98,7 @@ function pawnEditMenu(){
             game.getPawnStyle().get(playerPicker.value)!.getImage().src =URL.createObjectURL((<HTMLInputElement>document.getElementById('imagePicker')!).files![0]!)    
             game.getPawnStyle().get(playerPicker.value)!.getImage().onload = function(){
                 drawActualPawnLook(playerPicker.value)
-          
+                reload(ctx)
             }
             for (let i = 1; i <= 7; i++){
                 document.getElementById('canvasPawn'+i)!.style.borderColor = 'white'
@@ -136,7 +115,6 @@ function pawnEditMenu(){
     
     p.style.textAlign = 'center'
     for (let i = 1; i <= 7; i++){
-        //let button = <HTMLButtonElement>document.getElementById('pawnType'+i)
         let c = spawnCanvas(document,'pawnPickerDiv','canvasPawn'+i)
         c.classList.add('pawnType')
         c.style.width = '50px';
@@ -146,13 +124,7 @@ function pawnEditMenu(){
         if (i.toString()  ==type!.charAt(type!.length - 1) && image == undefined){
             c.style.borderColor = 'red'
         }
-        // button.onclick = function(){
-        //     let player = playerPicker.value
-        //     game.getPawnStyle().get(player)?.setType('type'+i)
-        //     game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
-        //     console.log(game.getPawnStyle())
-        //     drawActualPawnLook(player)
-        // }
+    
         c.onclick = function(){
 
             for (let i = 1; i <= 8; i++){
@@ -165,8 +137,6 @@ function pawnEditMenu(){
         
             drawActualPawnLook(player)
         }
-
-        
     }
     let c = spawnCanvas(document,'pawnPickerDiv','canvasPawn'+8)
     c.classList.add('pawnType')
@@ -195,10 +165,7 @@ function pawnEditMenu(){
     }
     drawActualPawnLook('Player 1')
     drawStyles(colorPicker.value)
-    
-    // spawnParagraph(doc,'tileEditingPlace','','Give an ID to pawn(so you can choose it, edit it and delete it)!')
-    
-
+  
 }
 function pawnDeleteMenu(){
     removeAllListenersAdded()
@@ -216,23 +183,6 @@ function drawStyles(color:string){
 
     drawPawnType1( <CanvasRenderingContext2D> cs.getContext("2d"),50,20,20,100,100,color)
   
-    // cs.width = 100
-    // cs.height = 100
-    // let contextik = <CanvasRenderingContext2D> cs.getContext("2d");
-    // contextik.resetTransform()
-    // let width = cs.width
-    // let height = cs.height
-    // contextik.beginPath()
-    // contextik.arc(50,20,20,0, 2 * Math.PI)
-    // contextik.fillStyle = color
-    // contextik.fill()
-    // contextik.beginPath()
-    // contextik.moveTo(50,30)
-    // contextik.lineTo(20,90)
-    // contextik.lineTo(80,90)
-    // contextik.lineTo(50,30)
-    // contextik.fill()
-
     cs = <HTMLCanvasElement>document.getElementById('canvasPawn2')!
     cs.width = 100
     cs.height = 100
@@ -240,16 +190,7 @@ function drawStyles(color:string){
     contextik.resetTransform()
     let width = cs.width
     let height = cs.height
-    // contextik.beginPath()
-    // contextik.arc(50,20,20,0, 2 * Math.PI)
-    // contextik.fillStyle = color
-    // contextik.fill()
-    // contextik.beginPath()
-    // contextik.moveTo(30,40)
-    // contextik.lineTo(70,40)
-    // contextik.lineTo(50,90)
-    // contextik.lineTo(30,40)
-    // contextik.fill()
+   
     drawPawnType2(contextik,50,20,20,100,100,color)
 
     cs = <HTMLCanvasElement>document.getElementById('canvasPawn3')!
@@ -300,9 +241,7 @@ function drawStyles(color:string){
     width = cs.width
     height = cs.height
   
-
     drawPawnType7(contextik,50,20,20,100,100,color)
-
     cs = <HTMLCanvasElement>document.getElementById('canvasPawn8')!
     cs.width = 100
     cs.height = 100
@@ -315,9 +254,7 @@ function drawStyles(color:string){
         drawPawnImage(contextik,50,30,30,100,100,image!)
       
     }
-    else{
-       
-    }
+
     }
     
 
@@ -428,40 +365,7 @@ function drawPawnImage(contextik:CanvasRenderingContext2D,headCenterX:number,hea
 
 }
 function drawActualPawnLook(player:string){
-    
-    // let cs = <HTMLCanvasElement>document.getElementById('pawnStyle')
-    // let context = <CanvasRenderingContext2D> cs.getContext("2d")
-    // context.clearRect(0,0,cs.width,cs.height)
     let style = game.getPawnStyle().get(player)
     drawStyles(style!.getColor())
-    // if (style?.getImage()!= undefined){
-    //     drawPawnImage(context,cs.width/2,40,40,100,100,style?.getImage())
-    // }
-    // else if (style?.getType() === 'type1'){
-    //     drawPawnType1( context,cs.width/2,40,30,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type2'){
-    //     drawPawnType2( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type3'){
-    //     drawPawnType3( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type4'){
-    //     drawPawnType4( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type5'){
-    //     drawPawnType5( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type6'){
-    //     drawPawnType6( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else if(style?.getType()==='type7'){
-    //     drawPawnType7( context,cs.width/2,40,40,100,100,style!.getColor())
-    // }
-    // else{
-    //     console.log('nie je dorobene')
-    // }
-    
-    
 }
 export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,drawPawnImage,insertPawn,drawPawnType1,drawPawnType2,drawPawnType3,drawPawnType4,drawPawnType5,drawPawnType6,drawPawnType7,deletePawn}

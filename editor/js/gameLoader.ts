@@ -1,8 +1,8 @@
-import { ctx, game, initNewGame, mainMenu, reload } from "./canvas";
-import { editorSocket, getCookie, texts } from "./clientSocket";
-import { spawnButton, spawnButtonWithLabel, spawnDiv, spawnHeading, spawnSelectMenu } from "./Elements";
+import { ctx, game, initNewGame, mainMenu, reload } from "./Canvas";
+import { editorSocket, getCookie, texts } from "./ClientSocket";
+import { spawnButton, spawnDiv, spawnHeading, spawnSelectMenu } from "./Elements";
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor";
-import { Warning } from "./Warning";
+
 
 function loadGameMenu(names:Array<string>,authored:Array<string>){
     removeAllButtons()
@@ -23,7 +23,7 @@ function loadGameMenu(names:Array<string>,authored:Array<string>){
 
     button = spawnButton(document,'tileEditingPlace',texts[252],['btn','btn-secondary'],texts[252],function(){
         initNewGame()
-        reload(game,ctx)
+        reload(ctx)
     })
     button.style.float='right'
     button.style.marginTop='20px';

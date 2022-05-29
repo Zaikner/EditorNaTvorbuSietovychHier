@@ -3,7 +3,6 @@ exports.__esModule = true;
 var path = require('path');
 var http = require('http');
 var express = require('express');
-var DbConnect = require('./services/db/DbConnect.js');
 var socket_io_1 = require("socket.io");
 var busboy = require('connect-busboy');
 var CryptoJS = require("crypto-js");
@@ -12,9 +11,6 @@ var fileUpload = require('express-fileupload');
 var SocketServer = require('./services/socket/SocketServer.js');
 var AccountManager = require('./backEnd/Accounts/AccountManager.js');
 var GameManager = require('./backEnd/Game/GameManager.js');
-//const GameManager = require('./backEnd/Game/GameManager.js')
-//const multer  = require('multer')
-//import {Socket} from './services/socket/Socket.js';
 var app = express();
 var server = http.createServer(app);
 var io = new socket_io_1.Server(server);
@@ -24,14 +20,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/editor/views');
-//app.use(multer)
-// app.use(fileUpload({
-//   createParentPath: true
-// }));
-//const socketConnection = Socket.get();
-// socketConnection.setServerSocket(server);
-// const io = socketConnection.getServerSocket()
-var Path = require('./editor/js/Path');
 app.use(fileUpload());
 app.use(express.static(__dirname));
 var editor = require("./routes/editor.js");
@@ -61,4 +49,3 @@ server.listen(PORT, function () { return console.log("Server running on port ".c
 SocketServer.setIo(io);
 SocketServer.serverListen();
 AccountManager.checkLogedAccounts();
-GameManager.closeInactiveRooms();

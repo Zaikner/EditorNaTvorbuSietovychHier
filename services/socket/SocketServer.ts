@@ -19,10 +19,7 @@ import { Rules } from "../db/RDG/Rules";
 
 import { TextsFinder } from "../db/RDG/TextFinder";
 import { Texts } from "../db/RDG/Texts";
-import { BackgroundComponent } from "../../editor/js/BackgroundComponent";
-import { BackgroundComponent_db } from "../db/RDG/BackgroundComponent_db";
-import { BackgroundComponentFinder } from "../db/RDG/BackgroundComponentFinder";
-import { PawnFinder } from "../db/RDG/PawnFinder";
+
 import { PawnStyleFinder } from "../db/RDG/PawnStyleFinder";
 import { QuestionOptionFinder } from "../db/RDG/QuestionOptionFinder";
 
@@ -219,7 +216,6 @@ export class ServerSocket{
           t.setForward(tile.forward)
           t.setBackward(tile.backward)
           t.setMustThrown(tile.mustThrown)
-          t.setTurnsToSetFree(tile.turnToSetFree)
           t.setRandomQuestion(tile.randomQuestion)
           t.insert()
         })
@@ -355,18 +351,13 @@ export class ServerSocket{
         r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getMustThrown()!=0){
           if (r.getPlayerOnTurn().getMustThrown()!=msg.value){
-            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
-            r.getPlayerOnTurn().setTurnsToSetFree( r.getPlayerOnTurn().getTurnsToSetFree()-1)
-            
+            socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})    
             socket.emit('react to event:must Thrown',{token: r.getPlayerOnTurn().getAccount().getName(),value:r.getPlayerOnTurn().getMustThrown(),turnsLeft:r.getPlayerOnTurn().getTurnsToSetFree()})
-            if ( r.getPlayerOnTurn().getTurnsToSetFree() == 0){
-              r.getPlayerOnTurn().setMustThrown(0)
-            }
-            
+      
           }
           else{
             r.getPlayerOnTurn().setMustThrown(0)
-            r.getPlayerOnTurn().setTurnsToSetFree(0)
+           
             socket.emit('canMovePawn',{value:msg.value,token:msg.token})
           }
         }
@@ -394,7 +385,7 @@ export class ServerSocket{
 
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
-      socket.on('react to tile',async (msg:{room:string,questionId:number,randomQuestion:boolean,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,turnsToSetFree:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
+      socket.on('react to tile',async (msg:{room:string,questionId:number,randomQuestion:boolean,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
         //returnValue
         //console.log('recieved react to tile id: '+msg.id)
         //console.log(msg)
@@ -474,7 +465,7 @@ export class ServerSocket{
           }
           else if(msg.mustThrown > 0){
             r.getPlayerOnTurn().setMustThrown(msg.mustThrown)
-            r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree)
+           // r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree)
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
           else{
@@ -812,16 +803,9 @@ export class ServerSocket{
         socket.emit('loadedAnswerQuestions',data)
       })
 
-      socket.on('get texts',async (msg:{language:string})=>{
-        let texts:Array<string> = []
-        if (msg.language == 'SK'){
-          texts = (await TextsFinder.getIntance().findAll())!.map((txt:Texts)=>txt.getSK())
-        }
-        else{
-          texts = (await TextsFinder.getIntance().findAll())!.map((txt:Texts)=>txt.getEN())
-        }
-
-
+      socket.on('get texts',async ()=>{
+        let texts:Array<string> = (await TextsFinder.getIntance().findAll())!.map((txt:Texts)=>txt.getSK())
+      
         socket.emit('got texts',{text:texts})
       })
       socket.on('join Room',(msg:{roomName:string})=>{

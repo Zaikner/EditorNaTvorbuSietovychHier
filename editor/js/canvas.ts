@@ -1,8 +1,9 @@
 
-import { Point } from "./Point";
+   
+
 import {Tile} from './Tile.js'
 import {editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
-import { addComponentMenu, deleteComponentMenu, editBackground, editComponentMenu, moveComponentMenu, removeAllComponentListeners } from "./BackgroundEditor";
+import {  editBackground,  } from "./BackgroundEditor";
 
 import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
 
@@ -12,7 +13,7 @@ import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuest
 
 import { PawnStyle } from "./PawnStyle";
 
-import { editorSocket, isEditor,getCookie,texts } from "./clientSocket";
+import { editorSocket, isEditor,getCookie,texts } from "./ClientSocket";
 import { Warning } from "./Warning";
 import { Game } from "./Game";
 
@@ -78,9 +79,12 @@ document.getElementById('noneButton')!.addEventListener('click',function(){
     update()
 })
 document.getElementById('forwardButton')!.addEventListener('click',function(){
+  document.getElementById('howManytimes')?.removeAttribute('hidden')
+  document.getElementById('diceValue')?.setAttribute('hidden','hidden')
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[97],true)
-  spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
+  elementDeleter('confirmEvent')
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[97],false)
+  spawnButton(document,'confirmEvent','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     game.setEvents('forward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
@@ -93,10 +97,12 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
   })
 })
 document.getElementById('backwardButton')!.addEventListener('click',function(){
-  
+  document.getElementById('howManytimes')?.removeAttribute('hidden')
+  document.getElementById('diceValue')?.setAttribute('hidden','hidden')
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[102],true)
-  spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
+  elementDeleter('confirmEvent')
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[102],false)
+  spawnButton(document,'confirmEvent','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     game.setEvents('backward',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
@@ -111,10 +117,12 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
   })
 })
 document.getElementById('skipButton')!.addEventListener('click',function(){
-
+  document.getElementById('howManytimes')?.removeAttribute('hidden')
+  document.getElementById('diceValue')?.setAttribute('hidden','hidden')
+  elementDeleter('confirmEvent')
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[104],true)
-  spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[104],false)
+  spawnButton(document,'confirmEvent','',['btn','btn-secondary'],texts[101],function(){
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     game.setEvents('skip',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
@@ -128,10 +136,13 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
   
 })
 document.getElementById('repeatButton')!.addEventListener('click',function(){
- 
+  document.getElementById('howManytimes')?.removeAttribute('hidden')
+  document.getElementById('diceValue')?.setAttribute('hidden','hidden')
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[106],true)
-  spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
+  elementDeleter('confirmEvent')
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[106],false)
+  spawnButton(document,'confirmEvent','',['btn','btn-secondary'],texts[101],function(){
+  
     let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
     game.setEvents('repeat',{num:parseInt(nums),value:0})
     $('#editEventModal').modal('hide')
@@ -146,19 +157,16 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
   
 });
 document.getElementById('stopButton')!.addEventListener('click',function(){
- 
+  document.getElementById('howManytimes')?.setAttribute('hidden','hidden')
+  document.getElementById('diceValue')?.removeAttribute('hidden')
   elementDeleter('askTheQuestionEventEdit')
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[108],true)
+  elementDeleter('confirmEvent')
   
-  let freeInput = spawnNumberInput(document,'askTheQuestionEventEdit','freeInput')!
-  freeInput.max = '6'
-  freeInput.min = '1'
-  freeInput.placeholder = texts[55]
-  spawnParagraph(document,'askTheQuestionEventEdit','',texts[109],true)
+  spawnParagraph(document,'askTheQuestionEventEdit','',texts[109],false)
   
-  spawnButton(document,'askTheQuestionEventEdit','',['btn','btn-secondary'],texts[101],function(){
-    let nums = (<HTMLInputElement>document.getElementById('howManytimes'))!.value
-    game.setEvents('stop',{num:parseInt(nums),value:parseInt(freeInput.value)})
+  spawnButton(document,'confirmEvent','',['btn','btn-secondary'],texts[101],function(){
+    let nums = (<HTMLInputElement>document.getElementById('diceValue'))!.value
+    game.setEvents('stop',{num:parseInt(nums),value:parseInt(nums)})
     $('#editEventModal').modal('hide')
     $('#EventModal').modal('hide')
     
@@ -166,7 +174,7 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
    
     
     //document.getElementById('bindEvent')!.textContent = texts[98]
-    document.getElementById('pickedEventParagraph')!.textContent =texts[110] + freeInput.value +texts[111] + nums + texts[100];
+    document.getElementById('pickedEventParagraph')!.textContent =texts[110]+ ' '+ nums+' '  +texts[111];
     update()
   })
   
@@ -324,7 +332,7 @@ numOfPlayersSlider.onclick =function(){
   //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
   
   game.setPlayerTokens(playerTokens)
-  reload(game,ctx)
+  reload(ctx)
 }
 document.getElementById("numOfPlayersPlace")!.appendChild(numOfPlayersSlider);
 
@@ -406,7 +414,7 @@ slid.onchange = function(){
   
 
  
-  reload(game,ctx)
+  reload(ctx)
 }
 let numbering = spawnCheckerWithLabel(doc,'tileEditingPlace','toogleNumberingChecker',texts[137],game.getToogleNumber(),[texts[92],texts[93]])
 
@@ -483,6 +491,12 @@ let button = spawnButton(document,'tileEditingPlace','publishGame',['btn','btn-d
  
  
 })
+if (game.getIsPublished()){
+  button.textContent = texts[258]
+}
+else{
+  button.textContent = texts[181]
+}
 }
 
 
@@ -504,6 +518,7 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
    context.canvas.height = window.innerHeight;
    //if(!isEditor){
     if(game.getInitSizeX() == 0){
+      console.log('bolo 0 tak nastavil toto')
       game.setInitSizeX(canvas.width)
      }
      if(game.getInitSizeY() == 0){
@@ -512,14 +527,15 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
      
      game.setScaleX(canvas.width/game.getInitSizeX())
      game.setScaleY((canvas.height-20)/game.getInitSizeY())
-  
-   reload(editor,context);
+     console.log(game.getScaleX())
+     console.log(game.getScaleY())
+   reload(context);
   
 }
 
 
 
-function reload(editor:Game,ctx:CanvasRenderingContext2D)
+function reload(ctx:CanvasRenderingContext2D)
 { 
   
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -529,30 +545,8 @@ function reload(editor:Game,ctx:CanvasRenderingContext2D)
   }
  
   let num = 0
-  let size = game.getPath().getPath().length;
-  while(num < size-1){
-  
-    let from:Point = game.getPath().getPath()[num];
-    let to:Point  = game.getPath().getPath()[num+1];
-    
-    if (from.getEnd()){
-      num++;
-      continue;
-    }
-   
-
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#c0392b';
-
-    ctx.moveTo(from.getX(), from.getY()); // from
-    ctx.lineTo(to.getX(), to.getY()); // to
-  
-    length+= Math.sqrt( Math.pow((from.getX()-to.getX()), 2) + Math.pow((from.getY()-to.getY()), 2) );
-    ctx.stroke(); // draw it!
-    num++;
-  }
+  //let size = game.getPath().getPath().length;
+ 
   ctx.closePath()
   let tiles = game.getTiles()
   tiles.forEach((tile:Tile) => {
@@ -570,7 +564,7 @@ function reload(editor:Game,ctx:CanvasRenderingContext2D)
 }
 
 function clear(){ //toto este prerobit
-  game.getPath().setPath([]);
+  //game.getPath().setPath([]);
   //sessionStorage.points = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -597,5 +591,5 @@ window.onload = function(){
 
 
 
-setInterval(function(){resize(game,ctx)},500)
+//setInterval(function(){resize(game,ctx)},500)
 export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,game,reload,resize,initNewGame};

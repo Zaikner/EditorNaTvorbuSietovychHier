@@ -1,4 +1,4 @@
-import { getDataUrlFromImage } from "./utilityFunctions";
+import { getDataUrlFromImage } from "./UtilityFunctions";
 
 export class PawnStyle{
     private player:string = '';
@@ -6,8 +6,6 @@ export class PawnStyle{
     private type:string = ''
     private image:HTMLImageElement = undefined!;
  
-
-
     constructor(player:string,color:string,type:string){
         this.player = player
         this.color = color

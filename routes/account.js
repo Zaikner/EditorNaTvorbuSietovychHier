@@ -14,14 +14,7 @@ router
 {   
   
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
-
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
 
     let name = request.query.name
     let visitAcc = undefined
@@ -62,25 +55,12 @@ router
 router.route("/login")
 .get(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
-
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('login',{root:'./editor/views',text:"",action:'/account/login',texts:text})
 })
 .post(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
 
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
@@ -109,25 +89,13 @@ router
 .get(async(request,res) =>
 {   
 
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('changeAvatar.pug',{root:'./editor/views',texts:text});
     
 }).post(async(req,res) =>
 {   
     console.log('padlo to na texte')
-    let text;
-    if (req.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     console.log('presile request na zmenu avatara')
     //console.log('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
     let acc = AccountManager.getAccountByClientId(req.cookies.id)
@@ -152,13 +120,7 @@ router
 .post(async(request,res) =>
 {   
     console.log('tu2')
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
    console.log(request)
    let avatar = request.files.avatar;
    res.render('changeAvatar.pug',{root:'./editor/views',texts:text});
@@ -170,26 +132,13 @@ router
 .route("/change/password")
 .get(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('changePassword',{root:'./editor/views',text:'',texts:text})
     
 })
 .post(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
-
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     if (acc != undefined){
         if (request.body.oldPassword === AccountManager.decode(acc.getPassword())){

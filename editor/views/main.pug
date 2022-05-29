@@ -16,8 +16,7 @@ style.
   background: rgb(2,0,36);
   background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
   }
-.text-left
-  button#languageSetter.btn.btn-dark(type='button') SK/EN
+
 .text-left
   button#help.btn.btn-dark(type='button' onclick="$('#helpModal').modal('show')") Show help
 .text-center
@@ -54,24 +53,7 @@ script.
   else{
   console.log('ziaden uzivatel nie je pripojenz')
   }
-  if(Cookies.get('language') == undefined){
-  Cookies.set('language','SK')
-  localStorage.setItem('language','SK')
-  }
-  document.getElementById('languageSetter').addEventListener('click',function(){
-  if(Cookies.get('language') == 'SK'){
-  Cookies.set('language','EN')
-  localStorage.setItem('language','EN')
-  document.getElementById('languageSetter').textContent = 'SK/EN'
-  }
-  else{
-  Cookies.set('language','SK')
-  localStorage.setItem('language','SK')
-  document.getElementById('languageSetter').textContent = 'EN/SK'
-  }
-  console.log(Cookies.get('language'))
-  })
-  console.log('jazyk je: '+Cookies.get('language'))
+  
   socket.on('set cookie',()=>{
   console.log('nastavil socket')
   Cookies.set('id',window.localStorage.getItem('id'))

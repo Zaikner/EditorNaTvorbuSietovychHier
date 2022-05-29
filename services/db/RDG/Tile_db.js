@@ -28,7 +28,6 @@ var Tile_db = /** @class */ (function () {
         this.forward = 0;
         this.backward = 0;
         this.mustThrown = 0;
-        this.turnToSetFree = 0;
         this.nextTilesIds = [];
         this.randomQuestion = false;
     }
@@ -182,12 +181,6 @@ var Tile_db = /** @class */ (function () {
     Tile_db.prototype.setMustThrown = function (newThrown) {
         this.mustThrown = newThrown;
     };
-    Tile_db.prototype.getTurnsToSetFree = function () {
-        return this.turnToSetFree;
-    };
-    Tile_db.prototype.setTurnsToSetFree = function (newTurns) {
-        this.turnToSetFree = newTurns;
-    };
     Tile_db.prototype.setRandomQuestion = function (is) {
         this.randomQuestion = is;
     };
@@ -198,8 +191,8 @@ var Tile_db = /** @class */ (function () {
         var client = DbConnect_1.DbConnect.get();
         var query = {
             name: 'insert-tile',
-            text: 'INSERT INTO bachelors_thesis.tiles(id,center_x,center_y,x_1,x_2,y_1,y_2,radius,color,stroke,stroke_color,shape,image,tile_number,is_ending_for,is_starting_for,game_id,question_id,cant_be_eliminated_on_tile,skip,repeat,forward,backward,must_thrown,turn_to_set_free,next_tiles_ids,random_question) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
-            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.image, this.tileNumber, this.isEndingFor, this.isStartingFor, this.gameId, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.turnToSetFree, this.nextTilesIds, this.randomQuestion]
+            text: 'INSERT INTO bachelors_thesis.tiles(id,center_x,center_y,x_1,x_2,y_1,y_2,radius,color,stroke,stroke_color,shape,image,tile_number,is_ending_for,is_starting_for,game_id,question_id,cant_be_eliminated_on_tile,skip,repeat,forward,backward,must_thrown,next_tiles_ids,random_question) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26);',
+            values: [this.id, this.centerX, this.centerY, this.x1, this.x2, this.y1, this.y2, this.radius, this.color, this.stroke, this.strokeColor, this.shape, this.image, this.tileNumber, this.isEndingFor, this.isStartingFor, this.gameId, this.questionId, this.cantBeEliminatedOnTile, this.skip, this.repeat, this.forward, this.backward, this.mustThrown, this.nextTilesIds, this.randomQuestion]
         };
         client
             .query(query)
@@ -230,7 +223,6 @@ var Tile_db = /** @class */ (function () {
         ret.setForward(data.forward);
         ret.setBackward(data.backward);
         ret.setMustThrown(data.must_thrown);
-        ret.setTurnsToSetFree(data.turn_to_set_free);
         ret.setNextTilesIds(data.next_tiles_ids);
         ret.setRandomQuestion(data.random_question);
         return ret;

@@ -1,19 +1,15 @@
-import {Path} from './Path.js'
 import {Tile} from './Tile.js'
 import {Background} from './Background.js'
-import { calibreEventCoords, canvas, ctx, game, reload} from './canvas.js';
-import { editorSocket, getCookie, isEditor, texts} from './clientSocket.js'
-import {getDataUrlFromImage} from './utilityFunctions.js'
+import { calibreEventCoords, canvas, ctx, game, reload} from './Canvas.js';
+import { editorSocket, getCookie, isEditor, texts} from './ClientSocket.js'
 import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
 import { PawnStyle } from './PawnStyle.js';
-import { editTiles, insert } from './TileEditor.js';
+import { editTiles, insert, startInsertingByOne } from './TileEditor.js';
 class Game{
     private id:number = 0
     private name:string = "";
     private author:string = "";
-    private path:Path = new Path();
-    //players:Array<Player>
     private numOfPlayers:number = 2;
     private tiles:Array<Tile> = [];
     private playerTokens:Array<string> = ['Player 1','Player 2']
@@ -57,12 +53,11 @@ class Game{
     private forward = 0;
     private backward = 0;
     private mustThrown = 0;
-    private turnToSetFree = 0;
     private randomQuestion = false;
 
     constructor(){
-
-    }
+        console.log('urobil novu hru')
+    }   
 
     saveGame(){
         if (this.name.length == 0){
@@ -153,34 +148,13 @@ class Game{
         let originalTile = game.findTileById(pawn.tileId)
         let tileId = originalTile.getTileNumber()
         let ret = 0
-        // while (value > 0){
-        //     let tileId = originalTile.getTileNumber()
-        //     for (let i = 0;i < value;i++){
-                
-        //         let tile = game.findTileByNextTileNumber(tileId,pawn.player)
-        //         if (tile != undefined)
-        //         {
-        //             tileId = tile.getTileNumber()
-        //             console.log('posunul ale neprehodil hodnotu')
-        //             //if (i+1 == value){
-        //                 ret+=1
-        //             //}
-        //         }
-               
-        
-              
-        //     }
-        //     value--;
-        // }
-        for (let i = 0;i < value;i++){
-                
+
+        for (let i = 0;i < value;i++){                
             let tile = game.findTileByNextTileNumber(tileId,pawn.player)
             if (tile != undefined)
             {
-                tileId = tile.getTileNumber()
-                //if (i+1 == value){
-                    ret+=1
-                //}
+                tileId = tile.getTileNumber()  
+                    ret+=1           
             }
            
     
@@ -226,24 +200,44 @@ class Game{
         this.pawns = this.pawns.filter((p) => {return p != pawn});
     }
     renumber(deleted:number){
-        this.getTiles().forEach((tile:Tile)=>{
-            if (tile.getTileNumber()>deleted){
-                tile.setTileNumber(tile.getTileNumber()-1)
-
-                this.getTiles().forEach((t:Tile)=>{
-                    this.getPlayerTokens().forEach((token:string)=>{
-                        if (t.getNextTilesIds().get(token) == (tile.getTileNumber()+1)){
-                            t.getNextTilesIds().set(token,tile.getTileNumber())
-                        }
+        if (this.tiles.length == 1){
+           this.getPlayerTokens().forEach((token:string) => {
+               this.tiles[0].getNextTilesIds().set(token,2)
+           });
+        }
+        else{
+            let remap:Map<number,number> = new Map()
+            remap.set(deleted+1,deleted)
+            remap.set(deleted,deleted)
+            remap.set(this.tiles.length+1,this.tiles.length)
+            remap.set(this.tiles.length+2,this.tiles.length+1)
+            this.getTiles().forEach((tile:Tile)=>{
+                if (tile.getTileNumber()>deleted){
+                    tile.setTileNumber(tile.getTileNumber()-1)
+                    remap.set(tile.getTileNumber()+1,tile.getTileNumber())
+                    
+                }
+            })
+            console.log(remap)
+            this.getTiles().forEach((t:Tile)=>{
+                        this.getPlayerTokens().forEach((token:string)=>{
+                            if (Array.from(remap.keys()).includes(t.getNextTilesIds().get(token)!)){
+                                t.getNextTilesIds().set(token,remap.get(t.getNextTilesIds().get(token)!)!)
+                                console.log(t.getTileNumber()+ ' => ' + remap.get(t.getNextTilesIds().get(token)!))
+                            }
+                            else{
+                                console.log('neobsahuje hodnotu '+ t.getNextTilesIds().get(token)!)
+                            }
+                           
+                        })
                     })
-                })
-            }
-        })
+        }
+       
        this.getPlayerTokens().forEach((token:string)=>{
-        this.getChoosenTile()!.getNextTilesIds().set(token,this.tiles.length+2)
+        this.getNextTilesIds().set(token,this.tiles.length+2)
       })
       
-        reload(game,ctx)
+       reload(ctx)
         
     }
     nullEditor(){
@@ -253,14 +247,6 @@ class Game{
         this.image = undefined!
         this.pattern = undefined!
     }
-
-    // initNewGame(){
-    //     this
-        
-    //     this.game.getPlayerTokens().forEach((token:string)=>{
-    //         this.game.getNextTilesIds().set(token,2)
-    //     })
-    // }   
 
     initTile(add:boolean,coords:{x:number,y:number},color:string,size:number,stroke:number,strokeColor:string,shape:string,background?:HTMLImageElement):Tile{
         let tileNumber = this.makeNextTileNumber()
@@ -283,13 +269,9 @@ class Game{
         }
         
         newTile.drawTile(canvas,ctx,false);
-        //this.game.increaseTileNumber()
         newTile.setTileNumber(tileNumber)
-        //newTile.setFollowingTileNumber(tileNumber+1)
-        
-     
         newTile.setId(this.nextTileId)
-    
+
         return newTile
   }
     findTile(event:MouseEvent,edit:boolean){
@@ -304,7 +286,6 @@ class Game{
                 if (tiles[i] == this.choosenTile){
                     tiles[i].setIsChoosen(false)               
                     this.choosenTile = undefined
-                    console.log('odvybral')
                     if (isEditor) document.getElementById('removeTileButton')!.removeAttribute('hidden')
                 }
                 else{
@@ -314,15 +295,11 @@ class Game{
                     tiles[i].setIsChoosen(true)
                     this.choosenTile = tiles[i]
                     if(isEditor)document.getElementById('removeTileButton')!.setAttribute('hidden','hidden')
-                    console.log('vybral')
-                    //if (!this.isMoving && edit)editTiles()
-                    
                 }
                 break
             }
         }
-        console.log('nasiel:')
-        console.log(found)
+     
         if (!found && isEditor){
             insert(event)
         }
@@ -332,29 +309,15 @@ class Game{
     }
   
     deleteTile(){
-        
-        // let coords = calibreEventCoords(event)
-        // let tiles = this.game.getTiles()
-        
-        // for (let i = tiles.length-1; i >= 0;i--){
-        //     if (tiles[i].isPointedAt(coords.x,coords.y)){
-        //         this.game.removeTile(tiles[i])
-        //         tiles[i].getPawns().forEach((pawn:Pawn)=>{
-        //             this.game.removePawn(pawn)
-        //         })
-                
-        //         break
-        //     }
-        // }
-    
       if(this.choosenTile!=undefined){
         this.removeTile(this.choosenTile)
         this.renumber(this.choosenTile.getTileNumber())
         this.choosenTile.getPawns().forEach((pawn:Pawn)=>{
                         this.removePawn(pawn)
                      })
-        
-        reload(game,ctx)
+       this.choosenTile = undefined!
+       startInsertingByOne()
+       reload(ctx)
       }
       
 
@@ -362,12 +325,6 @@ class Game{
     }
     updateChoosenTile(color:string,size:number,stroke:number,strokeColor:string,shape:string,image?:HTMLImageElement){
         this.choosenTile?.setColor(color)
-        // this.choosenTile?.setCenterX(centerX)
-        // this.choosenTile?.setCenterY(centerY)
-        // this.choosenTile?.setX1(centerX-size)
-        // this.choosenTile?.setX2(centerX+size)
-        // this.choosenTile?.setY1(centerY-size)
-        // this.choosenTile?.setY2(centerY+size)
         this.choosenTile?.setRadius(size)
         this.choosenTile?.setShape(shape)
         this.choosenTile?.setImage(image!)
@@ -381,9 +338,8 @@ class Game{
         this.choosenTile
     }
     moveTile(event:MouseEvent,tile:Tile = this.choosenTile!){
-        //console.log('pohol')
+      
         if (tile != undefined){
-            //console.log('nebol undefined')
             let coords = calibreEventCoords(event)
            
             tile.setX1((coords.x/this.scaleX-tile.getRadius()))
@@ -394,7 +350,7 @@ class Game{
             tile.setCenterY((tile.getY1()+tile.getY2())/2)
             console.log(tile.getCenterX()-tile.getX1())
             console.log(tile.getCenterX()-tile.getX2())
-            reload(this,ctx)
+            reload(ctx)
         }
     
        
@@ -492,7 +448,6 @@ class Game{
                                             skip:tile.getSkip(),
                                             repeat:tile.getRepeat(),
                                             mustThrown:tile.getMustThrown(),
-                                            turnsToSetFree:tile.getTurnsToSetFree(),
                                             canRemovePawnIds:canRemovePawnIds
                                         })
             this.setIsOnTurn(false)
@@ -541,34 +496,11 @@ class Game{
         tile.getPawns().push(pawn)
         pawn.tileId = tile.getId()
         pawn.tile = tile
-        reload(game,ctx)
+       reload(ctx)
 
         if (react){
             this.reactToTile(tile,value,pawn)
-        }
-        // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
-        // console.log()
-        // let addTo:Tile =  this.findTileById(tileId);
-        // console.log(addTo)
-        // let pawn:Pawn;
-        // this.getGame().getTiles().forEach((tile:Tile)=>{
-        //     tile.getPawns().forEach((p:Pawn)=>{
-        //         if (p.id == pawnId){
-        //            pawn = p
-        //            p.tileId = tileId
-        //            p.tile = addTo
-        //            addTo.getPawns().push(p)
-        //            tile.removePawn(p)
-        //            console.log('tento pawn:')
-        //            console.log(pawn)
-        //            console.log('tento tile')
-        //            console.log(addTo)
-        //            reload(game,ctx)
-        //         }
-        //     })
-            
-        // })
-       
+        } 
     }
 
     setEvents(type:string,values:{num:number,value:number}){
@@ -577,7 +509,6 @@ class Game{
         this.forward = 0
         this.backward = 0
         this.mustThrown = 0;
-        this.turnToSetFree = 0;
         this.questionId = -1;
         this.randomQuestion = false;
 
@@ -595,7 +526,6 @@ class Game{
         }
         else if (type == 'stop'){
             this.mustThrown = values.value;
-            this.turnToSetFree = values.num;
         }
         else if (type == 'random'){
             this.randomQuestion = true
@@ -677,12 +607,7 @@ class Game{
         })
         return m
     }
-    setPath(newPath:Path){
-        this.path = newPath;
-    }
-    getPath(){
-        return this.path
-    }
+
     setNumOfPlayers(num:number){
         this.numOfPlayers = num
     }
@@ -913,12 +838,7 @@ class Game{
     public setMustThrown(newThrown:number){
         this.mustThrown = newThrown
     }
-    public getTurnsToSetFree(){
-        return this.turnToSetFree
-    }
-    public setTurnsToSetFree(newTurns:number){
-        this.turnToSetFree = newTurns
-    }
+
     public setRandomQuestion(is:boolean){
         this.randomQuestion = is
     }

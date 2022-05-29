@@ -1,11 +1,10 @@
 "use strict";
 exports.__esModule = true;
 exports.Game = void 0;
-var Path_js_1 = require("./Path.js");
 var Tile_js_1 = require("./Tile.js");
 var Background_js_1 = require("./Background.js");
-var canvas_js_1 = require("./canvas.js");
-var clientSocket_js_1 = require("./clientSocket.js");
+var Canvas_js_1 = require("./Canvas.js");
+var ClientSocket_js_1 = require("./ClientSocket.js");
 var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
@@ -15,8 +14,6 @@ var Game = /** @class */ (function () {
         this.id = 0;
         this.name = "";
         this.author = "";
-        this.path = new Path_js_1.Path();
-        //players:Array<Player>
         this.numOfPlayers = 2;
         this.tiles = [];
         this.playerTokens = ['Player 1', 'Player 2'];
@@ -55,12 +52,12 @@ var Game = /** @class */ (function () {
         this.forward = 0;
         this.backward = 0;
         this.mustThrown = 0;
-        this.turnToSetFree = 0;
         this.randomQuestion = false;
+        console.log('urobil novu hru');
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
-            Warning_js_1.Warning.show(clientSocket_js_1.texts[182]);
+            Warning_js_1.Warning.show(ClientSocket_js_1.texts[182]);
         }
         else {
             var savedTiles_1 = [];
@@ -75,7 +72,7 @@ var Game = /** @class */ (function () {
             Array.from(this.pawnStyle.values()).forEach(function (pawnStyle) {
                 savedPawnStyles_1.push(pawnStyle.JSONfyStyle());
             });
-            clientSocket_js_1.editorSocket.emit('saveGame', { name: this.name,
+            ClientSocket_js_1.editorSocket.emit('saveGame', { name: this.name,
                 author: this.author,
                 background: this.background.save(),
                 id: this.id,
@@ -84,7 +81,7 @@ var Game = /** @class */ (function () {
                 pawns: savedPawns_1,
                 styles: savedPawnStyles_1,
                 rules: this.rules,
-                clientId: (0, clientSocket_js_1.getCookie)('id'),
+                clientId: (0, ClientSocket_js_1.getCookie)('id'),
                 nextTilesIds: this.mapNextTiles(),
                 initSizeX: this.initSizeX,
                 initSizeY: this.initSizeY,
@@ -125,39 +122,22 @@ var Game = /** @class */ (function () {
         });
     };
     Game.prototype.howManyCanMove = function (id, value) {
-        var pawn = canvas_js_1.game.findPawnById(id);
+        var pawn = Canvas_js_1.game.findPawnById(id);
         while (!pawn.canMove(value)) {
             value--;
         }
         return value;
     };
     Game.prototype.howManyCanMoveBack = function (id, value) {
-        var pawn = canvas_js_1.game.findPawnById(id);
-        var originalTile = canvas_js_1.game.findTileById(pawn.tileId);
+        var pawn = Canvas_js_1.game.findPawnById(id);
+        var originalTile = Canvas_js_1.game.findTileById(pawn.tileId);
         var tileId = originalTile.getTileNumber();
         var ret = 0;
-        // while (value > 0){
-        //     let tileId = originalTile.getTileNumber()
-        //     for (let i = 0;i < value;i++){
-        //         let tile = game.findTileByNextTileNumber(tileId,pawn.player)
-        //         if (tile != undefined)
-        //         {
-        //             tileId = tile.getTileNumber()
-        //             console.log('posunul ale neprehodil hodnotu')
-        //             //if (i+1 == value){
-        //                 ret+=1
-        //             //}
-        //         }
-        //     }
-        //     value--;
-        // }
         for (var i = 0; i < value; i++) {
-            var tile = canvas_js_1.game.findTileByNextTileNumber(tileId, pawn.player);
+            var tile = Canvas_js_1.game.findTileByNextTileNumber(tileId, pawn.player);
             if (tile != undefined) {
                 tileId = tile.getTileNumber();
-                //if (i+1 == value){
                 ret += 1;
-                //}
             }
         }
         return ret;
@@ -198,22 +178,40 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.renumber = function (deleted) {
         var _this = this;
-        this.getTiles().forEach(function (tile) {
-            if (tile.getTileNumber() > deleted) {
-                tile.setTileNumber(tile.getTileNumber() - 1);
-                _this.getTiles().forEach(function (t) {
-                    _this.getPlayerTokens().forEach(function (token) {
-                        if (t.getNextTilesIds().get(token) == (tile.getTileNumber() + 1)) {
-                            t.getNextTilesIds().set(token, tile.getTileNumber());
-                        }
-                    });
+        if (this.tiles.length == 1) {
+            this.getPlayerTokens().forEach(function (token) {
+                _this.tiles[0].getNextTilesIds().set(token, 2);
+            });
+        }
+        else {
+            var remap_1 = new Map();
+            remap_1.set(deleted + 1, deleted);
+            remap_1.set(deleted, deleted);
+            remap_1.set(this.tiles.length + 1, this.tiles.length);
+            remap_1.set(this.tiles.length + 2, this.tiles.length + 1);
+            this.getTiles().forEach(function (tile) {
+                if (tile.getTileNumber() > deleted) {
+                    tile.setTileNumber(tile.getTileNumber() - 1);
+                    remap_1.set(tile.getTileNumber() + 1, tile.getTileNumber());
+                }
+            });
+            console.log(remap_1);
+            this.getTiles().forEach(function (t) {
+                _this.getPlayerTokens().forEach(function (token) {
+                    if (Array.from(remap_1.keys()).includes(t.getNextTilesIds().get(token))) {
+                        t.getNextTilesIds().set(token, remap_1.get(t.getNextTilesIds().get(token)));
+                        console.log(t.getTileNumber() + ' => ' + remap_1.get(t.getNextTilesIds().get(token)));
+                    }
+                    else {
+                        console.log('neobsahuje hodnotu ' + t.getNextTilesIds().get(token));
+                    }
                 });
-            }
-        });
+            });
+        }
         this.getPlayerTokens().forEach(function (token) {
-            _this.getChoosenTile().getNextTilesIds().set(token, _this.tiles.length + 2);
+            _this.getNextTilesIds().set(token, _this.tiles.length + 2);
         });
-        (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+        (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
     };
     Game.prototype.nullEditor = function () {
         this.startForPlayers = [];
@@ -222,12 +220,6 @@ var Game = /** @class */ (function () {
         this.image = undefined;
         this.pattern = undefined;
     };
-    // initNewGame(){
-    //     this
-    //     this.game.getPlayerTokens().forEach((token:string)=>{
-    //         this.game.getNextTilesIds().set(token,2)
-    //     })
-    // }   
     Game.prototype.initTile = function (add, coords, color, size, stroke, strokeColor, shape, background) {
         var tileNumber = this.makeNextTileNumber();
         var newTile = new Tile_js_1.Tile(coords.x, coords.y, coords.x - size, coords.x + size, coords.y - size, coords.y + size, size, color, this.getNextTileNumber());
@@ -243,16 +235,14 @@ var Game = /** @class */ (function () {
             this.addTile(newTile);
             this.nextTileId++;
         }
-        newTile.drawTile(canvas_js_1.canvas, canvas_js_1.ctx, false);
-        //this.game.increaseTileNumber()
+        newTile.drawTile(Canvas_js_1.canvas, Canvas_js_1.ctx, false);
         newTile.setTileNumber(tileNumber);
-        //newTile.setFollowingTileNumber(tileNumber+1)
         newTile.setId(this.nextTileId);
         return newTile;
     };
     Game.prototype.findTile = function (event, edit) {
         var found = false;
-        var coords = (0, canvas_js_1.calibreEventCoords)(event);
+        var coords = (0, Canvas_js_1.calibreEventCoords)(event);
         var tiles = this.getTiles();
         for (var i = tiles.length - 1; i >= 0; i--) {
             if (tiles[i].isPointedAt(coords.x, coords.y)) {
@@ -260,8 +250,7 @@ var Game = /** @class */ (function () {
                 if (tiles[i] == this.choosenTile) {
                     tiles[i].setIsChoosen(false);
                     this.choosenTile = undefined;
-                    console.log('odvybral');
-                    if (clientSocket_js_1.isEditor)
+                    if (ClientSocket_js_1.isEditor)
                         document.getElementById('removeTileButton').removeAttribute('hidden');
                 }
                 else {
@@ -270,54 +259,35 @@ var Game = /** @class */ (function () {
                     }
                     tiles[i].setIsChoosen(true);
                     this.choosenTile = tiles[i];
-                    if (clientSocket_js_1.isEditor)
+                    if (ClientSocket_js_1.isEditor)
                         document.getElementById('removeTileButton').setAttribute('hidden', 'hidden');
-                    console.log('vybral');
-                    //if (!this.isMoving && edit)editTiles()
                 }
                 break;
             }
         }
-        console.log('nasiel:');
-        console.log(found);
-        if (!found && clientSocket_js_1.isEditor) {
+        if (!found && ClientSocket_js_1.isEditor) {
             (0, TileEditor_js_1.insert)(event);
         }
-        else if (found && clientSocket_js_1.isEditor) {
+        else if (found && ClientSocket_js_1.isEditor) {
             (0, TileEditor_js_1.editTiles)();
         }
     };
     Game.prototype.deleteTile = function () {
-        // let coords = calibreEventCoords(event)
-        // let tiles = this.game.getTiles()
         var _this = this;
-        // for (let i = tiles.length-1; i >= 0;i--){
-        //     if (tiles[i].isPointedAt(coords.x,coords.y)){
-        //         this.game.removeTile(tiles[i])
-        //         tiles[i].getPawns().forEach((pawn:Pawn)=>{
-        //             this.game.removePawn(pawn)
-        //         })
-        //         break
-        //     }
-        // }
         if (this.choosenTile != undefined) {
             this.removeTile(this.choosenTile);
             this.renumber(this.choosenTile.getTileNumber());
             this.choosenTile.getPawns().forEach(function (pawn) {
                 _this.removePawn(pawn);
             });
-            (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+            this.choosenTile = undefined;
+            (0, TileEditor_js_1.startInsertingByOne)();
+            (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
         }
     };
     Game.prototype.updateChoosenTile = function (color, size, stroke, strokeColor, shape, image) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
         (_a = this.choosenTile) === null || _a === void 0 ? void 0 : _a.setColor(color);
-        // this.choosenTile?.setCenterX(centerX)
-        // this.choosenTile?.setCenterY(centerY)
-        // this.choosenTile?.setX1(centerX-size)
-        // this.choosenTile?.setX2(centerX+size)
-        // this.choosenTile?.setY1(centerY-size)
-        // this.choosenTile?.setY2(centerY+size)
         (_b = this.choosenTile) === null || _b === void 0 ? void 0 : _b.setRadius(size);
         (_c = this.choosenTile) === null || _c === void 0 ? void 0 : _c.setShape(shape);
         (_d = this.choosenTile) === null || _d === void 0 ? void 0 : _d.setImage(image);
@@ -331,10 +301,8 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.moveTile = function (event, tile) {
         if (tile === void 0) { tile = this.choosenTile; }
-        //console.log('pohol')
         if (tile != undefined) {
-            //console.log('nebol undefined')
-            var coords = (0, canvas_js_1.calibreEventCoords)(event);
+            var coords = (0, Canvas_js_1.calibreEventCoords)(event);
             tile.setX1((coords.x / this.scaleX - tile.getRadius()));
             tile.setX2((coords.x / this.scaleX + tile.getRadius()));
             tile.setY1((coords.y / this.scaleY - tile.getRadius()));
@@ -343,7 +311,7 @@ var Game = /** @class */ (function () {
             tile.setCenterY((tile.getY1() + tile.getY2()) / 2);
             console.log(tile.getCenterX() - tile.getX1());
             console.log(tile.getCenterX() - tile.getX2());
-            (0, canvas_js_1.reload)(this, canvas_js_1.ctx);
+            (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
         }
     };
     Game.prototype.makeAllTilesNotChoosen = function () {
@@ -418,10 +386,10 @@ var Game = /** @class */ (function () {
                     });
                 }
             });
-            clientSocket_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
+            ClientSocket_js_1.editorSocket.emit('react to tile', { room: params.get('id'),
                 questionId: tile.getQuestionId(),
                 randomQuestion: tile.getRandomQuestion(),
-                id: (0, clientSocket_js_1.getCookie)('id'),
+                id: (0, ClientSocket_js_1.getCookie)('id'),
                 returnValue: returnValue,
                 pawnId: pawn.id,
                 forward: tile.getForward(),
@@ -429,7 +397,6 @@ var Game = /** @class */ (function () {
                 skip: tile.getSkip(),
                 repeat: tile.getRepeat(),
                 mustThrown: tile.getMustThrown(),
-                turnsToSetFree: tile.getTurnsToSetFree(),
                 canRemovePawnIds: canRemovePawnIds_1
             });
             this.setIsOnTurn(false);
@@ -470,31 +437,10 @@ var Game = /** @class */ (function () {
         tile.getPawns().push(pawn);
         pawn.tileId = tile.getId();
         pawn.tile = tile;
-        (0, canvas_js_1.reload)(canvas_js_1.game, canvas_js_1.ctx);
+        (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
         if (react) {
             this.reactToTile(tile, value, pawn);
         }
-        // console.log('tile id: '+ tileId + ' pawn id: ' + pawnId)
-        // console.log()
-        // let addTo:Tile =  this.findTileById(tileId);
-        // console.log(addTo)
-        // let pawn:Pawn;
-        // this.getGame().getTiles().forEach((tile:Tile)=>{
-        //     tile.getPawns().forEach((p:Pawn)=>{
-        //         if (p.id == pawnId){
-        //            pawn = p
-        //            p.tileId = tileId
-        //            p.tile = addTo
-        //            addTo.getPawns().push(p)
-        //            tile.removePawn(p)
-        //            console.log('tento pawn:')
-        //            console.log(pawn)
-        //            console.log('tento tile')
-        //            console.log(addTo)
-        //            reload(game,ctx)
-        //         }
-        //     })
-        // })
     };
     Game.prototype.setEvents = function (type, values) {
         this.skip = 0;
@@ -502,7 +448,6 @@ var Game = /** @class */ (function () {
         this.forward = 0;
         this.backward = 0;
         this.mustThrown = 0;
-        this.turnToSetFree = 0;
         this.questionId = -1;
         this.randomQuestion = false;
         if (type == 'skip') {
@@ -519,7 +464,6 @@ var Game = /** @class */ (function () {
         }
         else if (type == 'stop') {
             this.mustThrown = values.value;
-            this.turnToSetFree = values.num;
         }
         else if (type == 'random') {
             this.randomQuestion = true;
@@ -589,12 +533,6 @@ var Game = /** @class */ (function () {
             m.set(pawn.player, m.get(pawn.player) + 1);
         });
         return m;
-    };
-    Game.prototype.setPath = function (newPath) {
-        this.path = newPath;
-    };
-    Game.prototype.getPath = function () {
-        return this.path;
     };
     Game.prototype.setNumOfPlayers = function (num) {
         this.numOfPlayers = num;
@@ -820,12 +758,6 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.setMustThrown = function (newThrown) {
         this.mustThrown = newThrown;
-    };
-    Game.prototype.getTurnsToSetFree = function () {
-        return this.turnToSetFree;
-    };
-    Game.prototype.setTurnsToSetFree = function (newTurns) {
-        this.turnToSetFree = newTurns;
     };
     Game.prototype.setRandomQuestion = function (is) {
         this.randomQuestion = is;

@@ -13,13 +13,7 @@ router
 .get(async(request,res) =>
 {   
 
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     console.log(request.query)
     let r = GameManager.getActiveRooms().get(parseInt(request.query.id))
     // console.log(GameManager.getActiveRooms())

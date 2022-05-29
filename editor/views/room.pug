@@ -135,18 +135,5 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 .container(style='text-align: center;')
                   button#leaveEndRoom.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#endModal').modal('hide')")=texts[219]
         script(src='../socket.io/socket.io.js')
-        script(src='../editor/js/webpackVysledok.js')
-        //
-          <script type = 'module'>
-          //import { io } from "socket.io-client";
-          const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
-          //socket.emit('chat message', 'hi');
-          editorSocket.on('chat message', function(msg) {
-          console.log(msg)
-          });
-          editorSocket.emit('editor',{jo:'co'})
-          </script>
-        //
-          <script>
-          $(window).on('load', function(){$('#exampleModal').modal('toggle')});
-          </script>
+        script(src='../editor/js/bundle.js')
+      

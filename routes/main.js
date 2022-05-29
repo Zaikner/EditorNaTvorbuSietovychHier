@@ -8,13 +8,7 @@ router
 .route("/")
 .get( async (request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('main',{root:'./editor/views',texts:text});
 });
 

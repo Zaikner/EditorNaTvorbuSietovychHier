@@ -20,13 +20,7 @@ router
     console.log('gameLobbyparams:')
     console.log(request.query)
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     
     
     //console.log(text)
@@ -134,24 +128,11 @@ router
 router.route("/login")
 .get(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('login',{root:'./editor/views',text:"",action:'/gameLobby/login',texts:text})
 })
 .post(async(request,res) =>
-{    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
-
+{   let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     

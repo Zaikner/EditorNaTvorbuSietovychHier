@@ -24,7 +24,6 @@ export class Tile_db{
     private forward = 0;
     private backward = 0;
     private mustThrown = 0;
-    private turnToSetFree = 0;
     private nextTilesIds:Array<string> = []
     private randomQuestion:boolean = false;
 
@@ -184,12 +183,7 @@ export class Tile_db{
     public setMustThrown(newThrown:number){
         this.mustThrown = newThrown
     }
-    public getTurnsToSetFree(){
-        return this.turnToSetFree
-    }
-    public setTurnsToSetFree(newTurns:number){
-        this.turnToSetFree = newTurns
-    }
+
     public setRandomQuestion(is:boolean){
         this.randomQuestion = is
     }
@@ -202,8 +196,8 @@ export class Tile_db{
           
             const query = {
                 name: 'insert-tile',
-                text: 'INSERT INTO bachelors_thesis.tiles(id,center_x,center_y,x_1,x_2,y_1,y_2,radius,color,stroke,stroke_color,shape,image,tile_number,is_ending_for,is_starting_for,game_id,question_id,cant_be_eliminated_on_tile,skip,repeat,forward,backward,must_thrown,turn_to_set_free,next_tiles_ids,random_question) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27);',
-                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.image,this.tileNumber,this.isEndingFor,this.isStartingFor,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.turnToSetFree,this.nextTilesIds,this.randomQuestion],
+                text: 'INSERT INTO bachelors_thesis.tiles(id,center_x,center_y,x_1,x_2,y_1,y_2,radius,color,stroke,stroke_color,shape,image,tile_number,is_ending_for,is_starting_for,game_id,question_id,cant_be_eliminated_on_tile,skip,repeat,forward,backward,must_thrown,next_tiles_ids,random_question) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26);',
+                values: [this.id,this.centerX,this.centerY,this.x1,this.x2,this.y1,this.y2,this.radius,this.color,this.stroke,this.strokeColor,this.shape,this.image,this.tileNumber,this.isEndingFor,this.isStartingFor,this.gameId,this.questionId,this.cantBeEliminatedOnTile,this.skip,this.repeat,this.forward,this.backward,this.mustThrown,this.nextTilesIds,this.randomQuestion],
               }
               client
               .query(query)
@@ -237,7 +231,6 @@ export class Tile_db{
         ret.setForward(data.forward)
         ret.setBackward(data.backward)
         ret.setMustThrown(data.must_thrown)
-        ret.setTurnsToSetFree(data.turn_to_set_free)
         ret.setNextTilesIds(data.next_tiles_ids)
         ret.setRandomQuestion(data.random_question)
         return ret

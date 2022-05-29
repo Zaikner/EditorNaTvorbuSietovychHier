@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
 exports.Tile = void 0;
-var canvas_js_1 = require("./canvas.js");
-var clientSocket_js_1 = require("./clientSocket.js");
+var Canvas_js_1 = require("./Canvas.js");
+var ClientSocket_js_1 = require("./ClientSocket.js");
 var PawnEditor_js_1 = require("./PawnEditor.js");
-var utilityFunctions_js_1 = require("./utilityFunctions.js");
+var UtilityFunctions_js_1 = require("./UtilityFunctions.js");
 var Tile = /** @class */ (function () {
     function Tile(centerX, centerY, x1, x2, y1, y2, radius, color, tileNumber) {
         this.id = 0;
@@ -24,15 +24,14 @@ var Tile = /** @class */ (function () {
         this.forward = 0;
         this.backward = 0;
         this.mustThrown = 0;
-        this.turnToSetFree = 0;
         this.nextTilesIds = new Map();
         this.randomQuestion = false;
-        this.centerX = centerX / canvas_js_1.game.getScaleX();
-        this.centerY = centerY / canvas_js_1.game.getScaleY();
-        this.x1 = x1 / canvas_js_1.game.getScaleX();
-        this.x2 = x2 / canvas_js_1.game.getScaleX();
-        this.y1 = y1 / canvas_js_1.game.getScaleY();
-        this.y2 = y2 / canvas_js_1.game.getScaleY();
+        this.centerX = centerX / Canvas_js_1.game.getScaleX();
+        this.centerY = centerY / Canvas_js_1.game.getScaleY();
+        this.x1 = x1 / Canvas_js_1.game.getScaleX();
+        this.x2 = x2 / Canvas_js_1.game.getScaleX();
+        this.y1 = y1 / Canvas_js_1.game.getScaleY();
+        this.y2 = y2 / Canvas_js_1.game.getScaleY();
         this.color = color;
         this.radius = radius;
         this.tileNumber = tileNumber;
@@ -44,7 +43,7 @@ var Tile = /** @class */ (function () {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 0;
             ctx.fillStyle = this.color;
-            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+            ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
             if (this.shape == 'circle') {
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
             }
@@ -58,7 +57,7 @@ var Tile = /** @class */ (function () {
             // //kresli image
             if (this.shape == 'circle') {
                 ctx.save();
-                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+                ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
                 var clipPath = new Path2D();
                 clipPath.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
                 ctx.clip(clipPath);
@@ -72,7 +71,7 @@ var Tile = /** @class */ (function () {
             }
             else {
                 ctx.save();
-                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+                ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
                 var clipPath = new Path2D();
                 clipPath.rect(this.x1, this.y1, this.radius * 2, this.radius * 2);
                 ctx.clip(clipPath);
@@ -91,13 +90,13 @@ var Tile = /** @class */ (function () {
         if (this.stroke > 0) {
             ctx.resetTransform();
             ctx.restore();
-            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+            ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
             ctx.strokeStyle = this.strokeColor;
             ctx.lineWidth = this.stroke;
             ctx.stroke();
         }
         // ak je vybrany
-        if (this.isChoosen && clientSocket_js_1.isEditor) {
+        if (this.isChoosen && ClientSocket_js_1.isEditor) {
             if (this.shape == 'circle') {
                 // ctx.lineWidth = 10
                 // ctx.strokeStyle = '#FF0000'
@@ -106,7 +105,7 @@ var Tile = /** @class */ (function () {
                 // ctx.setLineDash([0]);
                 ctx.resetTransform();
                 ctx.restore();
-                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+                ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
                 var grd = ctx.createRadialGradient(this.centerX, this.centerY, this.radius, this.centerX, this.centerY, this.radius + 8);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -120,7 +119,7 @@ var Tile = /** @class */ (function () {
             else {
                 ctx.resetTransform();
                 ctx.restore();
-                ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+                ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
                 var grd = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
                 grd.addColorStop(0, "red");
                 //grd.addColorStop(0.5, "#990000");
@@ -132,10 +131,10 @@ var Tile = /** @class */ (function () {
                 ctx.resetTransform();
             }
         }
-        if ((canvas_js_1.game.getToogleNumber() || clientSocket_js_1.isEditor) && canvas_js_1.game.getChoosenTile() != this) {
+        if ((Canvas_js_1.game.getToogleNumber() || ClientSocket_js_1.isEditor) && Canvas_js_1.game.getChoosenTile() != this) {
             ctx.resetTransform();
             ctx.save();
-            ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
+            ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
             // if (game.getChoosenTile()==this){
             //     ctx.scale(game.getScaleX(),game.getScaleY())
             // }
@@ -184,13 +183,13 @@ var Tile = /** @class */ (function () {
         ctx.restore();
         ctx.beginPath();
         ctx.closePath();
-        ctx.scale(canvas_js_1.game.getScaleX(), canvas_js_1.game.getScaleY());
-        canvas_js_1.game.getPlayerTokens().forEach(function (player) {
+        ctx.scale(Canvas_js_1.game.getScaleX(), Canvas_js_1.game.getScaleY());
+        Canvas_js_1.game.getPlayerTokens().forEach(function (player) {
             drawn = 0;
             _this.pawns.forEach(function (pawn) {
                 if (pawn.player == player) {
                     num++;
-                    var style = canvas_js_1.game.getPawnStyle().get(pawn.player);
+                    var style = Canvas_js_1.game.getPawnStyle().get(pawn.player);
                     //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (_this.pawns.length == 2 && num == 2) {
                         diff = 30 * _this.radius / 50;
@@ -266,13 +265,13 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.isPointedAt = function (x, y) {
         if (this.shape == 'circle') {
-            if (Math.sqrt(Math.pow((this.centerX * canvas_js_1.game.getScaleX() - x), 2) + Math.pow((this.centerY * canvas_js_1.game.getScaleY() - y), 2)) <= this.radius) {
+            if (Math.sqrt(Math.pow((this.centerX * Canvas_js_1.game.getScaleX() - x), 2) + Math.pow((this.centerY * Canvas_js_1.game.getScaleY() - y), 2)) <= this.radius) {
                 return true;
             }
             //if (((Math.pow(x-this.centerX*game.getScaleX(),2)/Math.pow(this.radius*game.getScaleX(),2))+(Math.pow(y-this.centerY*game.getScaleY(),2)/Math.pow(this.radius*game.getScaleY(),2))<=1)
         }
         if (this.shape == 'square') {
-            if (this.x1 * canvas_js_1.game.getScaleX() <= x && x <= this.x2 * canvas_js_1.game.getScaleX() && this.y1 * canvas_js_1.game.getScaleY() <= y && y <= this.y2 * canvas_js_1.game.getScaleY()) {
+            if (this.x1 * Canvas_js_1.game.getScaleX() <= x && x <= this.x2 * Canvas_js_1.game.getScaleX() && this.y1 * Canvas_js_1.game.getScaleY() <= y && y <= this.y2 * Canvas_js_1.game.getScaleY()) {
                 return true;
             }
         }
@@ -291,7 +290,7 @@ var Tile = /** @class */ (function () {
             stroke: this.stroke,
             strokeColor: this.strokeColor,
             shape: this.shape,
-            image: this.image === undefined ? 'none' : (0, utilityFunctions_js_1.getDataUrlFromImage)(this.image),
+            image: this.image === undefined ? 'none' : (0, UtilityFunctions_js_1.getDataUrlFromImage)(this.image),
             tileNumber: this.tileNumber,
             isEndingFor: this.isEndingFor,
             isStartingFor: this.isStartingFor,
@@ -303,7 +302,6 @@ var Tile = /** @class */ (function () {
             backward: this.backward,
             mustThrown: this.mustThrown,
             randomQuestion: this.randomQuestion,
-            turnToSetFree: this.turnToSetFree,
             nextTilesIds: this.mapNextTiles(),
             id: this.id
         };
@@ -322,15 +320,6 @@ var Tile = /** @class */ (function () {
         });
         return ret;
     };
-    // findPreviousTile(){
-    //     let res:Array<Tile> = []
-    //     game.getTiles().forEach((tile:Tile)=>{
-    //         if (tile.getFollowingTileNumber() == this.id){
-    //             res.push(tile)
-    //         }
-    //     })
-    //     return res
-    // }
     Tile.prototype.isSuccessfullyEnding = function (token) {
         var _this = this;
         var ret = false;
@@ -502,12 +491,6 @@ var Tile = /** @class */ (function () {
     };
     Tile.prototype.setMustThrown = function (newThrown) {
         this.mustThrown = newThrown;
-    };
-    Tile.prototype.getTurnsToSetFree = function () {
-        return this.turnToSetFree;
-    };
-    Tile.prototype.setTurnsToSetFree = function (newTurns) {
-        this.turnToSetFree = newTurns;
     };
     Tile.prototype.setNextTilesIds = function (newIds) {
         this.nextTilesIds = newIds;

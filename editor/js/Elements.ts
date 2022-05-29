@@ -1,9 +1,6 @@
-import { ctx, game, reload } from "./canvas";
+import { ctx, game, reload } from "./Canvas";
 import { showActualState, update } from "./TileEditor";
 
-let lastStart:Array<string> = []
-let lastEnd:Array<string> = []
-let lastImmune:Array<string> = []
 function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,func:Function= function(){}){
 
     spawnDiv(document,parent,'div'+id,[])
@@ -228,9 +225,6 @@ function spawnRadioButtons(doc:HTMLDocument,parent:string,id:string,lbl:string,c
       
     }
     div.appendChild(divkoMax)
-   // doc.getElementById('div'+id)!.appendChild( label);
-    //doc.getElementById('div'+id)!.appendChild( menu);
-    //return menu
 }
 function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl:string,func:Function){
     spawnDiv(document,parent,'div'+id,[])
@@ -247,7 +241,7 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     image.textContent = txt
     image.style.float = 'right'
     image.style.width = '50%'
-    image.oninput = function(){ 
+    image.onclick = function(){ 
      func()
     }
    
@@ -256,13 +250,8 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     doc.getElementById('div'+id)!.appendChild( image);
     return image
 }
-function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string,preview:boolean = false){
-  if (preview){
-    game.setStartForPlayers(lastStart)
-    game.setEndForPlayers(lastEnd)
-    game.setCantBeEliminatedOnTile(lastImmune)
-
- }
+function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string){
+ 
  
   
   spawnDiv(document,parent,'div'+id,[])
@@ -276,18 +265,13 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'
   startMenuWrapper.classList.add("dropdown")
-  //startMenuWrapper.style.marginTop = '10%'
   startMenuWrapper.style.float = 'right'
-  //startMenuWrapper.style.float = 'right'
   let startMenuButton = doc.createElement('button')
   startMenuButton.id = 'startMenuButton'
   startMenuButton.textContent = txt
   startMenuButton.classList.add("btn","btn-dark","dropdown-toggle")
   startMenuButton.setAttribute('data-bs-toggle','dropdown');
-  
-  startMenuButton.style.float = 'right'
-  //startMenuButton.style.marginTop = '3%'
-  
+  startMenuButton.style.float = 'right' 
   startMenuWrapper.appendChild(startMenuButton)
   document.getElementById('tileEditingPlace')!.appendChild(startMenuWrapper)
   
@@ -314,10 +298,6 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
         if (type == 'immune' && (game.getCantBeEliminatedOnTile().includes(types[i]) || (game.getCantBeEliminatedOnTile().length == game.getPlayerTokens().length && i == 0))){
           option.style.backgroundColor = 'yellow'
         }
-
-        
-      
-      
         option.addEventListener('click',function(e){
           if (game.getChoosenTile()!=undefined){
             update()
@@ -431,7 +411,7 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
           }
      
           
-          reload(game,ctx)
+         // reload(game,ctx)
           e.stopPropagation()
           if (option.style.backgroundColor == 'white' && i!=0){
             option.style.backgroundColor = 'yellow'
@@ -445,13 +425,9 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
             console.log(game.getStartForPlayers())
             update()
             console.log(game.getChoosenTile()!.getIsStartingFor())
-            reload(game,ctx)
+           // reload(game,ctx)
           }
-          if (preview){
-            lastStart = game.getStartForPlayers()
-            lastEnd = game.getEndForPlayers()
-            lastImmune = game.getCantBeEliminatedOnTile()
-          }
+      
         })
         startMenuDropdown.appendChild(option);
     }

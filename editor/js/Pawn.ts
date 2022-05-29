@@ -1,8 +1,5 @@
-
-import { BlobOptions } from "buffer";
-import { ctx, game,  reload } from "./canvas";
-import { editorSocket, getCookie} from './clientSocket.js'
-import { drawPawnType1, pawnDeleteMenu } from "./PawnEditor";
+import { ctx, game,  reload } from "./Canvas";
+import { editorSocket, getCookie} from './ClientSocket.js'
 import { Tile } from "./Tile";
 
 export class Pawn{
@@ -43,12 +40,8 @@ export class Pawn{
 
 
     move(numOfTiles:number){
-    
         let startTile = this.tile;
         let actuallTile = this.tile;
-        let endTile = this.tile;
-      
-        
         let p = this;
         for (let i = 0;i < numOfTiles ; i++){
         
@@ -62,7 +55,7 @@ export class Pawn{
                 p.tileId = actuallTile.getId()
                 p.tile = actuallTile
           
-            reload(game,ctx)
+            reload(ctx)
             }, 500*i)
         }
      
@@ -74,7 +67,7 @@ export class Pawn{
                 game.setChoosenTile(undefined!)
                 game.reactToTile(actuallTile,numOfTiles,p)
                
-                reload(game,ctx)
+                reload(ctx)
           
             }, 550*numOfTiles)
         }
@@ -89,7 +82,7 @@ export class Pawn{
         this.tileId = this.startingTileId
         this.tile = game.findTileById(this.tileId)
         this.tile.getPawns().push(this)
-        reload(game,ctx)
+        reload(ctx)
     }
     JSONfyPawn(){
         return{player:this.player,

@@ -1,9 +1,9 @@
 
-import { game } from './canvas.js';
-import { isEditor } from './clientSocket.js';
+import { game } from './Canvas.js';
+import { isEditor } from './ClientSocket.js';
 import { Pawn } from './Pawn.js';
 import { drawPawnImage, drawPawnType1, drawPawnType2, drawPawnType3, drawPawnType4, drawPawnType5, drawPawnType6, drawPawnType7 } from './PawnEditor.js';
-import {getDataUrlFromImage} from './utilityFunctions.js'
+import {getDataUrlFromImage} from './UtilityFunctions.js'
 class Tile{
     private id:number = 0;
     private centerX:number;
@@ -31,7 +31,7 @@ class Tile{
     private forward = 0;
     private backward = 0;
     private mustThrown = 0;
-    private turnToSetFree = 0;
+ 
     private nextTilesIds:Map<string,number> = new Map()
     private randomQuestion  = false;
 
@@ -48,7 +48,6 @@ class Tile{
         this.tileNumber = tileNumber;
        
     }
-
 
     public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
      
@@ -353,7 +352,6 @@ class Tile{
                 backward:this.backward,
                 mustThrown:this.mustThrown,
                 randomQuestion:this.randomQuestion,
-                turnToSetFree:this.turnToSetFree,
                 nextTilesIds:this.mapNextTiles(),
                 id:this.id}
             
@@ -378,15 +376,6 @@ class Tile{
         return ret
     }
     
-    // findPreviousTile(){
-    //     let res:Array<Tile> = []
-    //     game.getTiles().forEach((tile:Tile)=>{
-    //         if (tile.getFollowingTileNumber() == this.id){
-    //             res.push(tile)
-    //         }
-    //     })
-    //     return res
-    // }
     isSuccessfullyEnding(token:string){
         let ret = false
         if (!this.isEndingFor.includes(token)){
@@ -565,12 +554,7 @@ class Tile{
     public setMustThrown(newThrown:number){
         this.mustThrown = newThrown
     }
-    public getTurnsToSetFree(){
-        return this.turnToSetFree
-    }
-    public setTurnsToSetFree(newTurns:number){
-        this.turnToSetFree = newTurns
-    }
+
     public setNextTilesIds(newIds:Map<string,number>){
         this.nextTilesIds = newIds
     }

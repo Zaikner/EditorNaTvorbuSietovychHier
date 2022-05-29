@@ -1,11 +1,8 @@
 "use strict";
 exports.__esModule = true;
 exports.spawnNumberInput = exports.spawnMultiSelect = exports.spawnImageInput = exports.spawnSelectMenu = exports.spawnButton = exports.spawnSliderWithValueShower = exports.spawnCheckerWithValueShower = exports.spawnCanvas = exports.spawnTextArea = exports.spawnHeading = exports.spawnLabel = exports.spawnRadioButtons = exports.spawnCheckerWithLabel = exports.spawnButtonWithLabel = exports.spawnParagraph = exports.spawnDiv = exports.spawnColorPicker = void 0;
-var canvas_1 = require("./canvas");
+var Canvas_1 = require("./Canvas");
 var TileEditor_1 = require("./TileEditor");
-var lastStart = [];
-var lastEnd = [];
-var lastImmune = [];
 function spawnColorPicker(doc, parent, id, lbl, func) {
     if (func === void 0) { func = function () { }; }
     spawnDiv(document, parent, 'div' + id, []);
@@ -208,9 +205,6 @@ function spawnRadioButtons(doc, parent, id, lbl, classList, options, onchangeFun
         divkoMax.appendChild(divko);
     }
     div.appendChild(divkoMax);
-    // doc.getElementById('div'+id)!.appendChild( label);
-    //doc.getElementById('div'+id)!.appendChild( menu);
-    //return menu
 }
 exports.spawnRadioButtons = spawnRadioButtons;
 function spawnImageInput(doc, parent, id, txt, lbl, func) {
@@ -227,7 +221,7 @@ function spawnImageInput(doc, parent, id, txt, lbl, func) {
     image.textContent = txt;
     image.style.float = 'right';
     image.style.width = '50%';
-    image.oninput = function () {
+    image.onclick = function () {
         func();
     };
     image.onchange = function () { func(); };
@@ -236,13 +230,7 @@ function spawnImageInput(doc, parent, id, txt, lbl, func) {
     return image;
 }
 exports.spawnImageInput = spawnImageInput;
-function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
-    if (preview === void 0) { preview = false; }
-    if (preview) {
-        canvas_1.game.setStartForPlayers(lastStart);
-        canvas_1.game.setEndForPlayers(lastEnd);
-        canvas_1.game.setCantBeEliminatedOnTile(lastImmune);
-    }
+function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
     spawnDiv(document, parent, 'div' + id, []);
     var label = doc.createElement('label');
     label.htmlFor = id;
@@ -253,16 +241,13 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
     var startMenuWrapper = doc.createElement('div');
     startMenuWrapper.id = 'startMenuWrapper';
     startMenuWrapper.classList.add("dropdown");
-    //startMenuWrapper.style.marginTop = '10%'
     startMenuWrapper.style.float = 'right';
-    //startMenuWrapper.style.float = 'right'
     var startMenuButton = doc.createElement('button');
     startMenuButton.id = 'startMenuButton';
     startMenuButton.textContent = txt;
     startMenuButton.classList.add("btn", "btn-dark", "dropdown-toggle");
     startMenuButton.setAttribute('data-bs-toggle', 'dropdown');
     startMenuButton.style.float = 'right';
-    //startMenuButton.style.marginTop = '3%'
     startMenuWrapper.appendChild(startMenuButton);
     document.getElementById('tileEditingPlace').appendChild(startMenuWrapper);
     var startMenuDropdown = doc.createElement('div');
@@ -275,31 +260,31 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
         option.id = types[i] + type;
         option.style.backgroundColor = 'white';
         option.classList.add("dropdown-item", 'btn');
-        if (type == 'start' && (canvas_1.game.getStartForPlayers().includes(types[i]) || (canvas_1.game.getStartForPlayers().length == canvas_1.game.getPlayerTokens().length && i == 0))) {
+        if (type == 'start' && (Canvas_1.game.getStartForPlayers().includes(types[i]) || (Canvas_1.game.getStartForPlayers().length == Canvas_1.game.getPlayerTokens().length && i == 0))) {
             option.style.backgroundColor = 'yellow';
         }
-        if (type == 'end' && (canvas_1.game.getEndForPlayers().includes(types[i]) || (canvas_1.game.getEndForPlayers().length == canvas_1.game.getPlayerTokens().length && i == 0))) {
+        if (type == 'end' && (Canvas_1.game.getEndForPlayers().includes(types[i]) || (Canvas_1.game.getEndForPlayers().length == Canvas_1.game.getPlayerTokens().length && i == 0))) {
             option.style.backgroundColor = 'yellow';
         }
-        if (type == 'immune' && (canvas_1.game.getCantBeEliminatedOnTile().includes(types[i]) || (canvas_1.game.getCantBeEliminatedOnTile().length == canvas_1.game.getPlayerTokens().length && i == 0))) {
+        if (type == 'immune' && (Canvas_1.game.getCantBeEliminatedOnTile().includes(types[i]) || (Canvas_1.game.getCantBeEliminatedOnTile().length == Canvas_1.game.getPlayerTokens().length && i == 0))) {
             option.style.backgroundColor = 'yellow';
         }
         option.addEventListener('click', function (e) {
-            if (canvas_1.game.getChoosenTile() != undefined) {
+            if (Canvas_1.game.getChoosenTile() != undefined) {
                 (0, TileEditor_1.update)();
             }
             if (type == 'start') {
                 if (i == 0) {
-                    if (canvas_1.game.getStartForPlayers().length < canvas_1.game.getPlayerTokens().length) {
-                        canvas_1.game.setStartForPlayers(canvas_1.game.getPlayerTokens().slice());
-                        canvas_1.game.setStartForPlayers(canvas_1.game.getStartForPlayers().filter(function (t) { return t != 'all'; }));
+                    if (Canvas_1.game.getStartForPlayers().length < Canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.setStartForPlayers(Canvas_1.game.getPlayerTokens().slice());
+                        Canvas_1.game.setStartForPlayers(Canvas_1.game.getStartForPlayers().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.game.setStartForPlayers([]);
+                        Canvas_1.game.setStartForPlayers([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
@@ -307,15 +292,15 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
                     }
                 }
                 else {
-                    if (canvas_1.game.getStartForPlayers().includes(types[i])) {
-                        canvas_1.game.setStartForPlayers(canvas_1.game.getStartForPlayers().filter(function (t) { return t != types[i]; }));
+                    if (Canvas_1.game.getStartForPlayers().includes(types[i])) {
+                        Canvas_1.game.setStartForPlayers(Canvas_1.game.getStartForPlayers().filter(function (t) { return t != types[i]; }));
                         if (i != 0) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'white';
                         }
                     }
                     else {
-                        canvas_1.game.getStartForPlayers().push(types[i]);
-                        if (i != 0 && canvas_1.game.getStartForPlayers().length == canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.getStartForPlayers().push(types[i]);
+                        if (i != 0 && Canvas_1.game.getStartForPlayers().length == Canvas_1.game.getPlayerTokens().length) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'yellow';
                         }
                     }
@@ -323,16 +308,16 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
             }
             else if (type == 'end') {
                 if (i == 0) {
-                    if (canvas_1.game.getEndForPlayers().length < canvas_1.game.getPlayerTokens().length) {
-                        canvas_1.game.setEndForPlayers(canvas_1.game.getPlayerTokens().slice());
-                        canvas_1.game.setEndForPlayers(canvas_1.game.getEndForPlayers().filter(function (t) { return t != 'all'; }));
+                    if (Canvas_1.game.getEndForPlayers().length < Canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.setEndForPlayers(Canvas_1.game.getPlayerTokens().slice());
+                        Canvas_1.game.setEndForPlayers(Canvas_1.game.getEndForPlayers().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.game.setEndForPlayers([]);
+                        Canvas_1.game.setEndForPlayers([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
@@ -340,34 +325,34 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
                     }
                 }
                 else {
-                    if (canvas_1.game.getEndForPlayers().includes(types[i])) {
-                        canvas_1.game.setEndForPlayers(canvas_1.game.getEndForPlayers().filter(function (t) { return t != types[i]; }));
+                    if (Canvas_1.game.getEndForPlayers().includes(types[i])) {
+                        Canvas_1.game.setEndForPlayers(Canvas_1.game.getEndForPlayers().filter(function (t) { return t != types[i]; }));
                         if (i != 0) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'white';
                         }
-                        console.log(canvas_1.game.getEndForPlayers());
+                        console.log(Canvas_1.game.getEndForPlayers());
                     }
                     else {
-                        canvas_1.game.getEndForPlayers().push(types[i]);
-                        if (i != 0 && canvas_1.game.getEndForPlayers().length == canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.getEndForPlayers().push(types[i]);
+                        if (i != 0 && Canvas_1.game.getEndForPlayers().length == Canvas_1.game.getPlayerTokens().length) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'yellow';
                         }
-                        console.log(canvas_1.game.getEndForPlayers());
+                        console.log(Canvas_1.game.getEndForPlayers());
                     }
                 }
             }
             else if (type == 'immune') {
                 if (i == 0) {
-                    if (canvas_1.game.getCantBeEliminatedOnTile().length < canvas_1.game.getPlayerTokens().length) {
-                        canvas_1.game.setCantBeEliminatedOnTile(canvas_1.game.getPlayerTokens().slice());
-                        canvas_1.game.setCantBeEliminatedOnTile(canvas_1.game.getCantBeEliminatedOnTile().filter(function (t) { return t != 'all'; }));
+                    if (Canvas_1.game.getCantBeEliminatedOnTile().length < Canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.setCantBeEliminatedOnTile(Canvas_1.game.getPlayerTokens().slice());
+                        Canvas_1.game.setCantBeEliminatedOnTile(Canvas_1.game.getCantBeEliminatedOnTile().filter(function (t) { return t != 'all'; }));
                         option.style.backgroundColor = 'yellow';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'yellow';
                         }
                     }
                     else {
-                        canvas_1.game.setCantBeEliminatedOnTile([]);
+                        Canvas_1.game.setCantBeEliminatedOnTile([]);
                         option.style.backgroundColor = 'white';
                         for (var j = 0; j < types.length; j++) {
                             document.getElementById(types[j] + type).style.backgroundColor = 'white';
@@ -375,21 +360,21 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
                     }
                 }
                 else {
-                    if (canvas_1.game.getCantBeEliminatedOnTile().includes(types[i])) {
-                        canvas_1.game.setCantBeEliminatedOnTile(canvas_1.game.getCantBeEliminatedOnTile().filter(function (t) { return t != types[i]; }));
+                    if (Canvas_1.game.getCantBeEliminatedOnTile().includes(types[i])) {
+                        Canvas_1.game.setCantBeEliminatedOnTile(Canvas_1.game.getCantBeEliminatedOnTile().filter(function (t) { return t != types[i]; }));
                         if (i != 0) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'white';
                         }
                     }
                     else {
-                        canvas_1.game.getCantBeEliminatedOnTile().push(types[i]);
-                        if (i != 0 && canvas_1.game.getCantBeEliminatedOnTile().length == canvas_1.game.getPlayerTokens().length) {
+                        Canvas_1.game.getCantBeEliminatedOnTile().push(types[i]);
+                        if (i != 0 && Canvas_1.game.getCantBeEliminatedOnTile().length == Canvas_1.game.getPlayerTokens().length) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'yellow';
                         }
                     }
                 }
             }
-            (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
+            // reload(game,ctx)
             e.stopPropagation();
             if (option.style.backgroundColor == 'white' && i != 0) {
                 option.style.backgroundColor = 'yellow';
@@ -398,16 +383,11 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type, preview) {
                 option.style.backgroundColor = 'white';
             }
             e.stopPropagation();
-            if (canvas_1.game.getChoosenTile() != undefined) {
-                console.log(canvas_1.game.getStartForPlayers());
+            if (Canvas_1.game.getChoosenTile() != undefined) {
+                console.log(Canvas_1.game.getStartForPlayers());
                 (0, TileEditor_1.update)();
-                console.log(canvas_1.game.getChoosenTile().getIsStartingFor());
-                (0, canvas_1.reload)(canvas_1.game, canvas_1.ctx);
-            }
-            if (preview) {
-                lastStart = canvas_1.game.getStartForPlayers();
-                lastEnd = canvas_1.game.getEndForPlayers();
-                lastImmune = canvas_1.game.getCantBeEliminatedOnTile();
+                console.log(Canvas_1.game.getChoosenTile().getIsStartingFor());
+                // reload(game,ctx)
             }
         });
         startMenuDropdown.appendChild(option);

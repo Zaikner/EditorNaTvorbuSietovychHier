@@ -10,14 +10,7 @@ router
 .get( async(request,res) =>
 {   
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
-
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     if (request.cookies.id != undefined && acc != undefined){
         console.log('editor redirectuje')
           
@@ -34,27 +27,14 @@ router
 router.route("/login")
 .get(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
 
     res.render('login',{root:'./editor/views',text:"",action:'/editor/login',texts:text})
 })
 .post(async(request,res) =>
 {   
 
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
-
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
@@ -80,26 +60,14 @@ router.route("/login")
 router.route("/register")
 .get(async(request,res) =>
 {   
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
 
     res.render('register',{root:'./editor/views',action : '/editor/register',texts:text});
 })
 .post(async(request,res) =>
 {   
 
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
 
     let registred = await AccountManager.register(request.body.name,request.body.password,request.body.confirm)
     if (registred){

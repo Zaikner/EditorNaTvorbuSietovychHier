@@ -1,5 +1,5 @@
-import { doc, game,  elementDeleter, mainMenu} from './canvas'
-import { editorSocket,clickFunction,texts} from './clientSocket.js'
+import { doc, game,  elementDeleter, mainMenu} from './Canvas'
+import { editorSocket,clickFunction,texts} from './ClientSocket.js'
 import { spawnButton, spawnDiv, spawnHeading } from './Elements';
 import { removeAllButtons, removeAllListenersAdded, update } from './TileEditor';
 import { Warning } from './Warning';
@@ -28,9 +28,7 @@ function initCreation(){
     text.required = true
     text.style.width = '50%'
     text.placeholder = 'Sem napíš otázku'
-    //text.style.marginLeft = '15px'
-
-
+   
     let label = doc.createElement('label')
     label.style.color='white'
     label.htmlFor = text.id
@@ -49,7 +47,6 @@ function initCreation(){
   
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     let but = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[67],function(){addOption('questionPlace','',false)})
-    //but.style.float = 'left'
     
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[58],function(){createQuestion(-1);})
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
@@ -84,15 +81,11 @@ function renumOptions(){
    
 }
 function addOption(parent:string,txt:string,is:boolean,id:number=-1){
-   
-
-  
      num++;
      let div = doc.createElement('div')
      div.classList.add("form-group",'inline')
      div.style.width='120%'
-     
-     
+    
      let text = doc.createElement('input')
      text.type = 'text'
      text.id = 'ans'+num
@@ -144,7 +137,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      renumOptions()     
      })
      div.appendChild(deleteButton)
-     //text.setAttribute('questionId','none')
+
      div.style.marginBottom = '5px'
      div.style.marginBottom = '5px'
      div.style.width = '100%'
@@ -177,11 +170,7 @@ function createQuestion(id:number){
             }
           
         }
-        else{
-         
-        }
-       
-    
+      
     }
     if (can){
         let data = {question:'',options:options,id:localStorage.getItem('id'),questionId:id}
@@ -193,10 +182,7 @@ function createQuestion(id:number){
     }
     else{
         Warning.show(texts[191])
-    }
-  
-   
-    
+    } 
 }
 
 function showAllQuestions(data:any){
@@ -205,10 +191,7 @@ function showAllQuestions(data:any){
     spawnHeading(document,'tileEditingPlace','',texts[17])
     let bt =spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],texts[241],function(){initCreation()})
     bt.style.marginBottom = '3%;'
-
-  
-                                                                                                      
-    
+                                                                                        
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
      
@@ -223,8 +206,7 @@ function showAllQuestions(data:any){
             quest.classList.add("list-group-item","list-group-item-action","active","btn-info")
             quest.style.textAlign =  'center';
             quest.textContent = elem.questionText
-            quest.onclick =function(){ //$('#editModal').modal('show')
-                                     //$('#questionModal').modal('hide')
+            quest.onclick =function(){ 
                                      let allQuests:any = []
                                     
                                      data.forEach((q:any) => {
@@ -241,7 +223,6 @@ function showAllQuestions(data:any){
         let opt = document.createElement('button')
         opt.type = 'button';
         opt.classList.add("list-group-item","list-group-item-action")
-        //quest.style.textAlign =  'center';
         opt.textContent = elem.optionText
         questions.get(elem.questionId)?.appendChild(opt)
        
@@ -249,10 +230,7 @@ function showAllQuestions(data:any){
 }
 
 function pickQuestion(data:any){
-    //removeAllButtons()
     elementDeleter('listPickerContainer')
-    //spawnHeading(document,'buttonPlace','',texts[198])
-   
 
     let questions:Map<number,HTMLDivElement> = new Map()
     data.forEach((elem:any) =>{
@@ -275,7 +253,6 @@ function pickQuestion(data:any){
                                      document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;
                                      game.setEvents('question',{num:elem.questionId,value:0})
                                      update()
-                                     //(<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[72]
                                      }
             list.appendChild(quest)
 
@@ -284,7 +261,6 @@ function pickQuestion(data:any){
         let opt = document.createElement('button')
         opt.type = 'button';
         opt.classList.add("list-group-item","list-group-item-action")
-        //quest.style.textAlign =  'center';
         opt.textContent = elem.optionText
         questions.get(elem.questionId)?.appendChild(opt)
        
@@ -292,7 +268,7 @@ function pickQuestion(data:any){
 }
 let func = function(){}
 function editQuestionMenu(id:number,txt:string,elem:any){
-    //elementDeleter('editQuestion')
+   
     removeAllButtons()
  
     spawnHeading(document,'buttonPlace','',texts[180])
@@ -318,19 +294,6 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     label.textContent = texts[66]
     label.style.float='left'
 
-    // let editButton = document.createElement('button')
-    // editButton.textContent = texts[64]
-    // editButton.type = 'button'
-    // editButton.style.float = 'left'
-
-    // editButton.classList.add('btn')
-    // editButton.classList.add('btn-secondary')
-    // editButton.addEventListener('click',function(){
-    //     editQuestion(id,text)
-    // })
-    
-    
-    
     document.getElementById('questionPlace')?.appendChild(label)
     div.appendChild(text)
     //div.appendChild(editButton)
@@ -347,9 +310,7 @@ function editQuestionMenu(id:number,txt:string,elem:any){
       
         deleteQuestion(id)
         editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
-    
-    
-    //document.getElementById('questionEditButton')?.addEventListener('click',function(){editQuestion(id)})
+ 
     
 }
 
@@ -365,22 +326,12 @@ function deleteQuestion(id:number){
     }
     
 }
-function editOption(id:number,check:HTMLInputElement,text:HTMLInputElement){  
-  
-    editorSocket.emit('editOption',{id:id,isAnswer:check.checked,text:text.value})
-    //$('#editModal').modal('show')
-}
-function editQuestion(id:number,text:HTMLInputElement){
-    editorSocket.emit('editQuestion',{id:id,text:text.value})
-    //$('#editModal').modal('show')
-}
+
 function askQuestion(data:any){
     let questions:Map<number,HTMLDivElement> = new Map()
     elementDeleter('answerQuestion')
    
-    //removeAllButtons()
-    //$('#answerButtonRoom').show()
-    
+
     let i = 0
     data.forEach((elem:any) =>{
         i++;

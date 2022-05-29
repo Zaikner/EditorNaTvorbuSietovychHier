@@ -67,7 +67,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #warningModalBody.modal-body
               #modalFooter.modal-footer
            
-                button.btn.btn-secondary(type='button' onclick=" $('#WarningModal').modal('hide')")=text[158]
+                button.btn.btn-secondary(type='button' onclick=" $('#WarningModal').modal('hide')") Ok
         #EventModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c;')
@@ -100,8 +100,10 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 h5#modalHeader.modal-title(style='color: white;')=text[48]
                 button.close(type='button' data-dismiss='modal')
               #eventEditorModalBody.modal-body.alignCenter
-                input#howManytimes.alignCenter(type='number' placeholder=text[55])
                 #askTheQuestionEventEdit.alignCenter
+                input#howManytimes.alignCenter(type='number' placeholder=text[55] hidden style="width:50%; margin-bottom:3%;")
+                input#diceValue.alignCenter(type='number' placeholder=text[55] value = '1' min = '1' max = '6' style="width:50%; margin-bottom:3%;")
+                #confirmEvent.alignCenter
               #editEventFooter.modal-footer
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#EventModal').modal('show');$('#editEventModal').modal('hide')")=text[33]
@@ -288,7 +290,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
           #modalFooter.modal-footer
             // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 script(src='../socket.io/socket.io.js')
-script(src='../editor/js/webpackVysledok.js')
+script(src='../editor/js/bundle.js')
 //
   <script type = 'module'>
   //import { io } from "socket.io-client";

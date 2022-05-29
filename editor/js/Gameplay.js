@@ -2,8 +2,8 @@
 exports.__esModule = true;
 exports.Gameplay = void 0;
 var Elements_1 = require("./Elements");
-var canvas_1 = require("./canvas");
-var clientSocket_js_1 = require("./clientSocket.js");
+var Canvas_1 = require("./Canvas");
+var ClientSocket_js_1 = require("./ClientSocket.js");
 var Warning_1 = require("./Warning");
 var Gameplay = /** @class */ (function () {
     function Gameplay() {
@@ -24,7 +24,7 @@ var Gameplay = /** @class */ (function () {
         this.diceImages = diceImages;
     };
     Gameplay.initGameInfo = function (name) {
-        (0, Elements_1.spawnHeading)(canvas_1.doc, "tileEditingPlace", '', clientSocket_js_1.texts[118] + name);
+        (0, Elements_1.spawnHeading)(Canvas_1.doc, "tileEditingPlace", '', ClientSocket_js_1.texts[118] + name);
     };
     Gameplay.initDice = function (name) {
         (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', 'Hráč: ' + name);
@@ -52,25 +52,25 @@ var Gameplay = /** @class */ (function () {
         var div = document.getElementById('waitingContainer');
         var divPlaying = document.getElementById('playingContainer');
         var divending = document.getElementById('endContainer');
-        (0, canvas_1.elementDeleter)('waitingContainer');
-        (0, canvas_1.elementDeleter)('playingContainer');
-        (0, canvas_1.elementDeleter)('endContainer');
+        (0, Canvas_1.elementDeleter)('waitingContainer');
+        (0, Canvas_1.elementDeleter)('playingContainer');
+        (0, Canvas_1.elementDeleter)('endContainer');
         var i = 0;
         var _loop_3 = function () {
             var quest = document.createElement('button');
             quest.type = 'button';
             quest.classList.add("list-group-item", "list-group-item-action", "active");
-            quest.style.backgroundColor = canvas_1.game.getPawnStyle().get(accs[i].token).getColor();
+            quest.style.backgroundColor = Canvas_1.game.getPawnStyle().get(accs[i].token).getColor();
             quest.style.textAlign = 'center';
             quest.textContent = accs[i].name;
             div.appendChild(quest);
             var place = document.createElement('place');
             if (accs[i].place > 0) {
                 if (accs[i].place == 1) {
-                    quest.textContent = clientSocket_js_1.texts[116] + quest.textContent;
+                    quest.textContent = ClientSocket_js_1.texts[116] + quest.textContent;
                 }
                 else {
-                    quest.textContent = accs[i].place.toString() + clientSocket_js_1.texts[117] + quest.textContent;
+                    quest.textContent = accs[i].place.toString() + ClientSocket_js_1.texts[117] + quest.textContent;
                 }
             }
             var questClone = quest.cloneNode();
@@ -107,8 +107,8 @@ var Gameplay = /** @class */ (function () {
         }
     };
     Gameplay.throwDice = function (token) {
-        canvas_1.game.setCanThrow(false);
-        canvas_1.game.setHasThrown(true);
+        Canvas_1.game.setCanThrow(false);
+        Canvas_1.game.setHasThrown(true);
         var params = new URLSearchParams(window.location.search);
         var t = 0;
         var times = 0;
@@ -120,7 +120,7 @@ var Gameplay = /** @class */ (function () {
                 clearInterval(interval);
                 console.log('emitol player thrown');
                 var can_1 = false;
-                canvas_1.game.getPawns().forEach(function (pawn) {
+                Canvas_1.game.getPawns().forEach(function (pawn) {
                     if (pawn.player == token) {
                         if (pawn.canMove(n)) {
                             can_1 = true;
@@ -130,7 +130,7 @@ var Gameplay = /** @class */ (function () {
                 if (!can_1) {
                     Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
                 }
-                clientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), canMove: can_1 });
+                ClientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = Canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), canMove: can_1 });
                 //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
             }
             else {
@@ -138,7 +138,7 @@ var Gameplay = /** @class */ (function () {
                 n = Math.floor(Math.random() * 6) + 1;
                 if (t != n) {
                     t = n;
-                    clientSocket_js_1.editorSocket.emit('show Dice', { id: params.get('id'), value: t });
+                    ClientSocket_js_1.editorSocket.emit('show Dice', { id: params.get('id'), value: t });
                 }
                 var image_1 = new Image();
                 image_1.src = '../../src/Dice' + t + '.png';
@@ -146,7 +146,7 @@ var Gameplay = /** @class */ (function () {
                 image_1.onload = function () {
                     var _a;
                     var rem = document.getElementById('Dice');
-                    (0, canvas_1.elementDeleter)('dicePlace');
+                    (0, Canvas_1.elementDeleter)('dicePlace');
                     (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image_1);
                 };
             }

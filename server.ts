@@ -3,12 +3,7 @@ import { Server } from "http";
 const path = require('path');
 const http = require('http');
 const express = require('express');
-const DbConnect = require('./services/db/DbConnect.js')
 import { Server as ioServer } from "socket.io";
-import {Game_db} from './services/db/RDG/Game_db.js'
-import {GameFinder} from './services/db/RDG/GameFinder_db.js'
-import {Tile_db} from './services/db/RDG/Tile_db.js'
-import { Background_db } from "./services/db/RDG/Background_db.js";
 const busboy = require('connect-busboy');
 var CryptoJS = require("crypto-js");
 var cookieParser = require('cookie-parser')
@@ -16,9 +11,6 @@ const fileUpload = require('express-fileupload');
 const SocketServer = require('./services/socket/SocketServer.js')
 const AccountManager = require('./backEnd/Accounts/AccountManager.js')
 const GameManager = require('./backEnd/Game/GameManager.js')
-//const GameManager = require('./backEnd/Game/GameManager.js')
-//const multer  = require('multer')
-//import {Socket} from './services/socket/Socket.js';
 
 const app = express();
 const server:Server = http.createServer(app);
@@ -29,15 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.set('view engine', 'pug')
 app.set('views', __dirname + '/editor/views');
-//app.use(multer)
-// app.use(fileUpload({
-//   createParentPath: true
-// }));
-
-//const socketConnection = Socket.get();
-// socketConnection.setServerSocket(server);
-// const io = socketConnection.getServerSocket()
-const Path = require('./editor/js/Path');
 
 app.use(fileUpload());
 app.use(express.static(__dirname));
@@ -53,10 +36,6 @@ const showGame = require("./routes/showGame.js")
 const createRoom = require("./routes/createRoom.js")
 const createQuestion = require("./routes/createQuestion.js")
 
-
-
-
-
 app.use('/',main);
 app.use('/editor',editor);
 app.use('/gameLobby',gameLobby);
@@ -71,8 +50,6 @@ app.use('/createQuestion',createQuestion);
 const PORT = process.env.PORT || 8001;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
 
 SocketServer.setIo(io)
 SocketServer.serverListen()

@@ -1,16 +1,11 @@
 
-import { game,elementDeleter } from "./canvas"
-import { isEditor, texts } from "./clientSocket"
+import { game,elementDeleter } from "./Canvas"
+import { isEditor, texts } from "./ClientSocket"
 import { spawnButton, spawnHeading, spawnSelectMenu, spawnTextArea } from "./Elements"
 import { removeAllButtons, removeAllListenersAdded } from "./TileEditor"
 
-function rulesMenu(){
-   
+function rulesMenu(){ 
     removeAllListenersAdded()
-   
-   
- 
-    //elementDeleter(parent)
     let field:HTMLTextAreaElement;
     if (isEditor){
         removeAllButtons()
@@ -23,14 +18,10 @@ function rulesMenu(){
         field=(<HTMLTextAreaElement>document.getElementById('ruleInput'))!
         $('#rulesModal').modal('show');
     }
-    //let field:HTMLTextAreaElement = spawnTextArea(document,'tileEditingPlace','ruleInput','',false)
- 
-
-
+  
     field.onchange = function(){
         game.setRules(field.value)
     }
-
 }
 
 export{rulesMenu}

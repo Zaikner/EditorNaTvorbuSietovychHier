@@ -1,4 +1,4 @@
-import { doc, elementDeleter } from "./canvas";
+import { doc, elementDeleter } from "./Canvas";
 import {spawnParagraph} from './Elements.js'
 
 class Warning{
@@ -15,8 +15,7 @@ class Warning{
         
         let p = spawnParagraph(doc,'InGameModalBody','',txt,false)
         $('#InGameModal').modal('toggle')
-        //console.log('ukazal InGameModal')
-        
+  
     }
 }
 

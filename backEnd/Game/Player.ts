@@ -8,7 +8,6 @@ export class Player{
         private skip:number = 0;
         private repeat:number = 0;
         private mustThrown:number = 0;
-        private turnsToSetFree:number = 0;
 
         constructor(account:Account,token:string){
             //this.id = id;
@@ -66,12 +65,6 @@ export class Player{
         }
         public setMustThrown(newThrown:number){
             this.mustThrown = newThrown
-        }
-        public getTurnsToSetFree(){
-            return this.turnsToSetFree
-        }
-        public setTurnsToSetFree(newTurns:number){
-            this.turnsToSetFree = newTurns
         }
      
     }

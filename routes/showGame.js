@@ -7,13 +7,7 @@ router
 .route("/")
 .get(async(request,res) =>
 {   console.log(request.params)
-    let text;
-    if (request.cookies.language == 'SK'){
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    }
-    else{
-        text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getEN())
-    }
+    let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     res.render('gamePreview',{root:'./editor/views',texts:text});
 });
 
