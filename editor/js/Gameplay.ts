@@ -72,7 +72,7 @@ public static changeWaitingRoom(accs:any){
         quest.classList.add("list-group-item","list-group-item-action","active")
         quest.style.backgroundColor = game.getPawnStyle().get(accs[i].token)!.getColor()
         quest.style.textAlign =  'center';
-        quest.textContent =accs[i].name
+        quest.textContent =accs[i].name+' '
         div.appendChild(quest)
 
         let place = document.createElement('place')
@@ -81,7 +81,7 @@ public static changeWaitingRoom(accs:any){
                 quest.textContent = texts[116] +  quest.textContent
             }
             else{
-                quest.textContent = accs[i].place.toString()+texts[117] +  quest.textContent
+                quest.textContent = accs[i].place.toString()+texts[117] +' '+  quest.textContent
             }
         }
      

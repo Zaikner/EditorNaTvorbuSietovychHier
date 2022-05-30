@@ -21,7 +21,7 @@ router
     let games =  await GameFinder.getIntance().findByName(request.params.name)
     console.log(games)
     let game = games[0]
-    
+    GameManager.reloadTables()
     let room = await GameManager.createRoom(request.params.name,game.getNumOfPlayers(),acc.getId())
     //room.join(new Player(acc,'Player 1'))
   

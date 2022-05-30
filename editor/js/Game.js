@@ -397,7 +397,8 @@ var Game = /** @class */ (function () {
                 skip: tile.getSkip(),
                 repeat: tile.getRepeat(),
                 mustThrown: tile.getMustThrown(),
-                canRemovePawnIds: canRemovePawnIds_1
+                canRemovePawnIds: canRemovePawnIds_1,
+                tileNumber: tile.getTileNumber()
             });
             this.setIsOnTurn(false);
         }

@@ -46,6 +46,7 @@ var PawnStyleFinder_js_1 = require("../../services/db/RDG/PawnStyleFinder.js");
 var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
 var Room_js_1 = require("./Room.js");
 var Player_js_1 = require("./Player.js");
+var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
 //const Room = require('./Room.js')
 var GameManager = /** @class */ (function () {
     function GameManager() {
@@ -94,6 +95,12 @@ var GameManager = /** @class */ (function () {
             });
         });
     };
+    GameManager.reloadTables = function () {
+        console.log('reloadol table');
+        var rooms = GameManager.getActiveRoomsTable();
+        var players = GameManager.getActivePlayersTable();
+        SocketServer_js_1.ServerSocket.getIo().emit('refresh lobby', rooms, players);
+    };
     GameManager.createRoom = function (name, numOfPlayers, accId) {
         return __awaiter(this, void 0, void 0, function () {
             var stop, id, room, gameData, numOfPawns, pawnNumber, pawns;
@@ -134,6 +141,7 @@ var GameManager = /** @class */ (function () {
                         });
                         gameData.pawns = pawns;
                         room.setGameData(gameData);
+                        this.reloadTables();
                         return [2 /*return*/, room];
                 }
             });
@@ -157,7 +165,7 @@ var GameManager = /** @class */ (function () {
                 //console.log(acc)
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () {
                         rooms[i].join(new Player_js_1.Player(acc, ''));
-                    }, rooms[i].getHasStarted()]);
+                    }, rooms[i].getHasStarted() || (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())]);
             });
         };
         for (var i = 0; i < rooms.length; i++) {
@@ -165,7 +173,41 @@ var GameManager = /** @class */ (function () {
         }
         return ret;
     };
-    GameManager.closeInactiveRooms = function () {
+    GameManager.getActivePlayersTable = function () {
+        var ret = [];
+        var rooms = Array.from(this.activeRooms.values());
+        var _loop_2 = function (i) {
+            rooms[i].getPlayers().forEach(function (player) {
+                //console.log(acc)
+                ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), rooms[i].getHasStarted() || (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())]);
+            });
+        };
+        for (var i = 0; i < rooms.length; i++) {
+            _loop_2(i);
+        }
+        return ret;
+    };
+    GameManager.getActiveRoomsTable = function () {
+        var ret = [];
+        var rooms = Array.from(this.activeRooms.values());
+        for (var i = 0; i < rooms.length; i++) {
+            var txt = "Miestnosť: " + rooms[i].getId() + "  Hra: " + rooms[i].getGameName() + "   Hráči:  " + rooms[i].getPlayers().length + '/' + rooms[i].getMaxPlayers();
+            ret.push([rooms[i].getId(), rooms[i].getGameName(), rooms[i].getHasStarted() || (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers()), txt]);
+        }
+        return ret;
+    };
+    GameManager.gameExists = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var existingGames;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, GameFinder_db_js_1.GameFinder.getIntance().findByName(name)];
+                    case 1:
+                        existingGames = _a.sent();
+                        return [2 /*return*/, existingGames.length > 0];
+                }
+            });
+        });
     };
     GameManager.getActiveRooms = function () {
         return this.activeRooms;

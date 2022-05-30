@@ -29,7 +29,7 @@ router
         let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
         let rooms = Array.from(GameManager.getActiveRooms().values())
         .map(room => [room.getId(),
-            "Room: "+room.getId()+ "  Game: "+ room.getGameName()+"   Players:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
+            "Miestnosť: "+room.getId()+ "  Hra: "+ room.getGameName()+"   Hráči:  "+ room.getPlayers().length+'/'+room.getMaxPlayers(),
             room.getGameName(),
             room.getHasStarted()
            ])

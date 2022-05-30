@@ -29,28 +29,28 @@ var Room = /** @class */ (function () {
     }
     // public  async initGameData(){
     //     this.gameData = await GameManager.loadGame(this.gameName)
-    //     //console.log('zavolal initGameData')
-    //     //console.log(this.gameData)
+    //     ////console.log('zavolal initGameData')
+    //     ////console.log(this.gameData)
     // }
     Room.prototype.join = function (player) {
-        //console.log('skusil join')
-        //console.log(this.hasStarted)
+        ////console.log('skusil join')
+        ////console.log(this.hasStarted)
         if (this.numOfPresentPlayers == this.maxPlayers || this.hasStarted) {
-            //console.log('nepustil')
+            ////console.log('nepustil')
             SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'room is full', {});
             return;
         }
-        //console.log('aktivoval room join')
+        ////console.log('aktivoval room join')
         if (player.getToken() != 'spectator') {
             if (this.numOfPresentPlayers == this.maxPlayers) {
                 SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'room is full', {});
                 player.setToken('spectator');
                 this.spectators.push(player);
-                //console.log('premenil na spectator')
+                ////console.log('premenil na spectator')
             }
             else {
                 this.players.push(player);
-                //console.log('aspon zavoalal pridelenie tokenu')
+                ////console.log('aspon zavoalal pridelenie tokenu')
                 player.getAccount().setActiveInRoom(this);
                 player.setToken('');
                 for (var i = 1; i <= this.players.length; i++) {
@@ -58,10 +58,10 @@ var Room = /** @class */ (function () {
                         player.setToken('Player ' + i);
                         this.usedTokens.push('Player ' + i);
                         this.numOfPresentPlayers++;
-                        //console.log('pridelil token:' + player.getToken())
+                        ////console.log('pridelil token:' + player.getToken())
                     }
                     else {
-                        //console.log('nechcel Player '+i)
+                        ////console.log('nechcel Player '+i)
                     }
                 }
             }
@@ -70,7 +70,9 @@ var Room = /** @class */ (function () {
             this.spectators.push(player);
         }
         SocketServer_1.ServerSocket.emitToSpecificSocket(player.getAccount().getSocketId(), 'join Room', { id: this.id.toString(), started: this.hasStarted, name: player.getAccount().getName() });
-        //console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
+        ////console.log(' joinol a emitol playerovi: '+ player.getAccount().getSocketId())
+        GameManager_1.GameManager.reloadTables();
+        //console.log('refreshol lobby')
         if (this.numOfPresentPlayers == 1 && player.getToken() != 'spectator') {
             this.playerOnTurn = this.players[0];
         }
@@ -90,6 +92,7 @@ var Room = /** @class */ (function () {
             GameManager_1.GameManager.getActiveRooms()["delete"](this.id);
         }
         SocketServer_1.ServerSocket.emitToRoom(this.id.toString(), 'player left', { msg: player.getAccount().getName(), token: player.getToken() });
+        GameManager_1.GameManager.reloadTables();
         //'player left',(msg:{msg:string})
     };
     Room.prototype.startGame = function () {
@@ -99,10 +102,10 @@ var Room = /** @class */ (function () {
         setInterval(function () {
             if (r.players.length > 0) {
                 r.timeLeft--;
-                //console.log('time left --->' + r.timeLeft)
+                ////console.log('time left --->' + r.timeLeft)
                 if (r.timeLeft == 0) {
                     r.timeLeft = 120;
-                    //console.log('ended turn')
+                    ////console.log('ended turn')
                     SocketServer_1.ServerSocket.emitToRoom(r.id.toString(), 'end turn', {});
                     r.nextTurn();
                     var stop_1 = true;
@@ -112,8 +115,8 @@ var Room = /** @class */ (function () {
                         stop_1 = false;
                     }
                     while (!stop_1) {
-                        ////console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
-                        ////console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+                        //////console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+                        //////console.log('skipped:' + r.getPlayerOnTurn().getSkip())
                         if (r.getPlayerOnTurn().getSkip() == 0) {
                             stop_1 = true;
                         }
@@ -123,8 +126,8 @@ var Room = /** @class */ (function () {
                             //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
                         }
                     }
-                    ////console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
-                    //////console.log(r)
+                    //////console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+                    ////////console.log(r)
                     SocketServer_1.ServerSocket.emitToRoom(r.id.toString(), 'turn', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                     SocketServer_1.ServerSocket.emitToRoom(r.getPlayerOnTurn().getAccount().getSocketId(), 'turnMove', { player: r.getPlayerOnTurn().getAccount().getName(), token: r.getPlayerOnTurn().getToken() });
                     r.setReturnValue(-1);
@@ -137,15 +140,15 @@ var Room = /** @class */ (function () {
     Room.prototype.broadcast = function (msg) {
     };
     Room.prototype.nextTurn = function () {
-        //console.log('teraz je next ID :')
-        //console.log(this.playerOnTurn)
-        //console.log(this.lastPlayerId)
+        ////console.log('teraz je next ID :')
+        ////console.log(this.playerOnTurn)
+        ////console.log(this.lastPlayerId)
         if (!this.gameEnded()) {
             if (this.playerOnTurn.getRepeat() != 0) {
                 this.playerOnTurn.setRepeat((this.playerOnTurn.getRepeat() - 1));
                 SocketServer_1.ServerSocket.emitToRoom(this.id.toString(), 'player repeat his turn', { name: this.playerOnTurn.getAccount().getName() });
-                //console.log('zopakoval')
-                //console.log(this.playerOnTurn.getRepeat())
+                ////console.log('zopakoval')
+                ////console.log(this.playerOnTurn.getRepeat())
             }
             else {
                 if (this.lastPlayerId + 1 >= this.players.length) {
@@ -155,9 +158,9 @@ var Room = /** @class */ (function () {
                     this.lastPlayerId++;
                 }
                 this.playerOnTurn = this.players[this.lastPlayerId];
-                //console.log('teraz je next ID :')
-                //console.log(this.playerOnTurn)
-                //console.log(this.lastPlayerId)
+                ////console.log('teraz je next ID :')
+                ////console.log(this.playerOnTurn)
+                ////console.log(this.lastPlayerId)
                 if (!this.gameEnded() && this.playerOnTurn.getPlace() != 0) {
                     this.nextTurn();
                 }

@@ -55,11 +55,11 @@ title=text[1]
                 // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[232]
-                ul.list-group(style='overflow-y: scroll; max-height: 20vh')
+                ul#activePlayers.list-group(style='overflow-y: scroll; max-height: 20vh')
                   each player in players
                       form(action='/room?game:'+player[1] method='get' name='name' value =player[2])
                         strong 
-                          li.list-group-item(name='room' id='listOfPlayers' value = player[2])= player[0] + ' is playing' + player[1] +' in room number '+ player[2]
+                          li.list-group-item(name='room' id='listOfPlayers' value = player[2])= player[0] + ' hrá ' + player[1] +' v miestnosti '+ player[2]
                             |
                             input(type='hidden' name='id' value=player[2])
                             
@@ -180,9 +180,12 @@ script.
   }
   for (let i of playerNames){
     console.log(i)
-  document.getElementById(i).addEventListener('click',function(){
+    if(document.getElementById(i)!=undefined){
+      document.getElementById(i).addEventListener('click',function(){
        window.location.replace('/account?name='+i)
-     })}
+      })
+    }
+  }
   
   document.getElementById('joinSelectedRoom').onclick = function(){
     console.log( existingRoomsId)
@@ -199,6 +202,7 @@ script.
        alert("#{text[210]}")
       }
     }
+    
     //- editorSocket.on('refresh active players',()=>{
     //-     console.log('aspon obdrzal refresh active players')
     //-     document.getElementById('activeRooms').innerHtml = ''
@@ -213,6 +217,94 @@ script.
     //-           //-               button(type = 'submit' name='name' id = room[0] value = room[2]).btn.btn-dark=text[8]
     //- })
   }
+  editorSocket.on('refresh lobby',(rooms,players)=>{
+      console.log('refreshol lobby')
+      console.log(rooms)
+      console.log(players)
+      let li = document.getElementById('activeRooms')
+     
+      li.replaceChildren()
+      rooms.forEach(room =>{
+         let form =  document.createElement('form')
+         form.action = action='/room?game:'+room[1]
+      let liItem = document.createElement('li')
+      liItem.classList.add('list-group-item')
+      liItem.name = 'room'
+      liItem.value = room[0]
+      liItem.textContent = room[3]
+      liItem.style.fontWeight = 'bold'
+
+      let input = document.createElement('input')
+      input.setAttribute('hidden','hidden')
+      input.name = 'id'
+      input.value = room[0]
+      if (!room[2]){
+          let button = document.createElement('button')
+          button.type = 'submit'
+          button.name = 'name'
+          button.value = room[1]
+          button.id = room[0]
+          button.classList.add('btn')
+          button.classList.add('btn-dark')
+          button.textContent = "#{text[8]}"
+
+          liItem.appendChild(button)
+      }
+    
+      liItem.appendChild(input)
+      form.appendChild(liItem)
+      li.appendChild(form)
+      })
+
+
+      li = document.getElementById('activePlayers')
+     
+      li.replaceChildren()
+      players.forEach(player =>{
+         let form =  document.createElement('form')
+         form.action = action='/room?game:'+player[1]
+      let liItem = document.createElement('li')
+      liItem.classList.add('list-group-item')
+      liItem.name = 'room'
+      liItem.value = player[2]
+      liItem.textContent = player[0] + ' hrá ' + player[1] +' v miestnosti '+ player[2]
+      liItem.style.fontWeight = 'bold'
+
+      let input = document.createElement('input')
+      input.setAttribute('hidden','hidden')
+      input.name = 'id'
+      input.value = player[2]
+
+         let ac = document.createElement('button')
+          ac.type = 'button'
+          ac.classList.add('btn')
+         ac.classList.add('btn-dark')
+          ac.textContent = "#{text[2]}"
+          ac.onclick = function(){
+              window.location.replace('/account?name='+player[0])
+              //document.getElementById(player[2]).click()
+          }
+
+      liItem.appendChild(ac)
+     
+      if (!player[3]){
+          let button = document.createElement('button')
+          button.type = 'submit'
+          button.name = 'name'
+          button.value = player[1]
+          button.classList.add('btn')
+          button.classList.add('btn-dark')
+          button.textContent = "#{text[8]}"
+
+          liItem.appendChild(button)
+      }
+    
+      liItem.appendChild(input)
+      form.appendChild(liItem)
+      li.appendChild(form)
+      })
+     
+    })
  
  
  

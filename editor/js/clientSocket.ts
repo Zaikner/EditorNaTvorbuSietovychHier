@@ -416,7 +416,7 @@ s.on('got texts',(msg:{text:Array<string>})=>{
     console.log(game.getIsOnturn())
     game.setHasThrown(false)
     elementDeleter('onTurnPlace')
-    let p = spawnParagraph(document,'onTurnPlace','',texts[96]+msg.player,false)
+    let p = spawnParagraph(document,'onTurnPlace','',texts[96]+' '+msg.player,false)
     p.style.textAlign = 'center'
   })
 
@@ -509,7 +509,7 @@ s.on('got texts',(msg:{text:Array<string>})=>{
   })
   s.on('player ended',(msg:{player:string,place:number,token:string})=>{
    s.emit('reload waiting room',{room:params.get('id')})
-    Warning.showInGame(msg.player + ' '+ texts[190] + msg.place + texts[189])
+    Warning.showInGame(msg.player + ' '+ texts[190] +' ' +msg.place + texts[189])
     game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == msg.token){
             pawn.hasEnded = true

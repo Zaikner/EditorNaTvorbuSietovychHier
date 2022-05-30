@@ -41,17 +41,17 @@ export class ServerSocket{
             socket.on('is online',(msg:{id:string})=>{
               let acc = AccountManager.getAccountByClientId(msg.id)
               acc.setAnswered = 0;
-              //console.log('ohlasil sa:' + acc.getName())
+              ////console.log('ohlasil sa:' + acc.getName())
             })
             socket.on('load game',async (msg:{id:string,name:string,room:string,response:boolean}) => {
-                    //console.log('prisiel k load game')
-                    //console.log('prisla sprava:')
-                    //console.log(msg)
+                    ////console.log('prisiel k load game')
+                    ////console.log('prisla sprava:')
+                    ////console.log(msg)
                     if (msg.response){
-                        //console.log('sem prisiel')
+                        ////console.log('sem prisiel')
                         let game = await GameFinder.getIntance().findByName(msg.name)
-                        //console.log(game)
-                        //console.log('sem neprisiel')
+                        ////console.log(game)
+                        ////console.log('sem neprisiel')
                         if (game!.length == 0){
                           socket.emit('wrong game name')
                           return
@@ -62,7 +62,7 @@ export class ServerSocket{
                     // let game = await GameFinder.getIntance().findByName(msg.name)
                     // let tt =await TileFinder.getIntance().findByName(msg.name)
                     // let background = await BackgroundFinder.getIntance().findByName(msg.name)
-                  //console.log('nacital aspon meno')
+                  ////console.log('nacital aspon meno')
                    
                   
                    let emit;
@@ -71,7 +71,7 @@ export class ServerSocket{
                      
                     let r = GameManager.getActiveRooms().get(parseInt(msg.room))
                      emit  = r.getGameData()
-                  //   //console.log('tuna bude chyba')
+                  //   ////console.log('tuna bude chyba')
                   //   let numOfPawns =  emit.game.numOfPawnsPerTile
                   //   emit.pawns = []
                   //   let pawns:Array<Array<string>> = []
@@ -94,10 +94,10 @@ export class ServerSocket{
                     emit.pawns.forEach((pawn:{token:string,id:number,tileId:number})=>{
                         pawn.tileId = r.getPawnPositions().get(pawn.id)
                     })
-                    //console.log('nebola to ona')
+                    ////console.log('nebola to ona')
                    }
                    else{
-                    //console.log('isiel cez tento branch takze game over')
+                    ////console.log('isiel cez tento branch takze game over')
                     emit = await GameManager.loadGame(msg.name)
                     let numOfPawns = emit.game.getNumOfPawnsPerTile()
                     let pawnNumber = 1;
@@ -117,8 +117,8 @@ export class ServerSocket{
                     
                    }
                 
-                    //console.log('emited:')
-                    //console.log(emit)
+                    ////console.log('emited:')
+                    ////console.log(emit)
                     this.emitToSpecificSocket(socket.id,'connected', emit)
                  
             });
@@ -132,15 +132,15 @@ export class ServerSocket{
             });
         socket.on('saveGame',async (data:any) => {
           
-          //console.log('saved game:')
-          //console.log(data)
+          ////console.log('saved game:')
+          ////console.log(data)
           let acc = AccountManager.getAccountByClientId(data.clientId)
           let existingGames = await GameFinder.getIntance().findByName(data.name)
           let lastGame = await GameFinder.getIntance().findLast()
-          //console.log('prebehli vsetkz queries')
-          //console.log(acc)
-          //console.log(existingGames)
-          //console.log(lastGame)
+          ////console.log('prebehli vsetkz queries')
+          ////console.log(acc)
+          ////console.log(existingGames)
+          ////console.log(lastGame)
           if (acc == undefined){
             return
           }
@@ -152,7 +152,7 @@ export class ServerSocket{
               return
             }
             else{
-              //console.log('je author a chce zmenit')
+              ////console.log('je author a chce zmenit')
              id = data.id
             }
            
@@ -164,8 +164,8 @@ export class ServerSocket{
             else{
               id = lastGame![0].getId()+1
             }
-            //console.log('neexistuje taka hra')
-            //console.log(existingGames)
+            ////console.log('neexistuje taka hra')
+            ////console.log(existingGames)
           }
         let last = await TileFinder.getIntance().findLast()
         let lastId = last?.getId()
@@ -175,7 +175,7 @@ export class ServerSocket{
         //await PawnFinder.getIntance().deleteByName(data.name)
         await PawnStyleFinder.getIntance().deleteById(id)
 
-        //console.log('ucet je:'+ acc)
+        ////console.log('ucet je:'+ acc)
         let g = new Game_db()
         g.setId(id)
         g.setAuthorId(acc.getId())
@@ -246,7 +246,7 @@ export class ServerSocket{
         //   c.setImageWidth(comp.imageWidth)
         //   c.setImageHeight(comp.imageHeigth)
         //   c.insert()
-        //   //console.log(c)
+        //   ////console.log(c)
 
         // })
         b.upsert()
@@ -280,8 +280,8 @@ export class ServerSocket{
 
       socket.on('set Socket',(msg:{id:string,room:string})=>
       {
-        //console.log('dostal set Socket')
-        //console.log(msg)
+        ////console.log('dostal set Socket')
+        ////console.log(msg)
         let acc = AccountManager.getAccountByClientId(msg.id)
            if(acc === undefined){
              return
@@ -295,8 +295,8 @@ export class ServerSocket{
           //     cont = false
           //   }
           //   else{
-          //     //console.log(player.getAccount().getName())
-          //     //console.log(pl)
+          //     ////console.log(player.getAccount().getName())
+          //     ////console.log(pl)
           //   }
           // })
          
@@ -324,7 +324,7 @@ export class ServerSocket{
         //this.io.emit('refresh active players')
         this.io.in(msg.room).emit('game started',{msg:'Game has started!',tokens:r.getPlayers().map((p:any)=>p.getToken())})
         this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
-     
+        GameManager.reloadTables()
         this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
       }
         
@@ -335,13 +335,13 @@ export class ServerSocket{
         this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
       })
       socket.on('move pawns back',(msg:{room:string,pawn:number,value:number})=>{
-        //console.log('posunul dozadu o ' + msg.value)
+        ////console.log('posunul dozadu o ' + msg.value)
         this.io.in(msg.room).emit('move Pawn back',{pawn:msg.pawn,value:msg.value})
       })
 
     
       socket.on('player thrown',(msg:{room:string,token:string,value:number,tileId:number,canMove:boolean})=>{
-        console.log('recieved player thrond od:' + msg.token + msg.canMove)
+        //console.log('recieved player thrond od:' + msg.token + msg.canMove)
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           return
@@ -362,15 +362,15 @@ export class ServerSocket{
           }
         }
         else if(!msg.canMove){
-          console.log('nemoze ist dalej')
+          //console.log('nemoze ist dalej')
           socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
         }
         else{
           socket.emit('canMovePawn',{value:msg.value,token:msg.token})
-          console.log('emitol move pawn')
+          //console.log('emitol move pawn')
         }
-        //console.log('recieved player thrown' +msg.token)
-        //console.log('emited movePawn')
+        ////console.log('recieved player thrown' +msg.token)
+        ////console.log('emited movePawn')
         //this.io.in(msg.room).emit('move Pawn',{pawn:msg.pawn,value:msg.value})
         
         
@@ -385,21 +385,34 @@ export class ServerSocket{
 
         socket.to(msg.id).emit('show Dice value',{value:msg.value})
       })
-      socket.on('react to tile',async (msg:{room:string,questionId:number,randomQuestion:boolean,id:string,returnValue:number,pawnId:number,repeat:number,skip:number,forward:number,backward:number,mustThrown:number,canRemovePawnIds:Array<number>})=>{
+      socket.on('react to tile',async (msg:{room:string,id:string,returnValue:number,pawnId:number,canRemovePawnIds:Array<number>,tileNumber:number})=>{
         //returnValue
-        //console.log('recieved react to tile id: '+msg.id)
-        //console.log(msg)
-        console.log('obdrzal react to tile')
+        ////console.log('recieved react to tile id: '+msg.id)
+        ////console.log(msg)
+        //console.log('obdrzal react to tile')
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           return
         }
+        let tile:Tile_db = undefined!
+        //console.log('hlada tile s id '+ msg.tileNumber)
+        r.getGameData().tiles.forEach((t:Tile_db)=>{
+        if (t.getTileNumber() == msg.tileNumber){
+          tile = t
+        }
+        else{
+         // //console.log('idcko sa nerovna: '+ t.getId())
+        }
+        })
+
+        //console.log('nasiel policko')
+        //console.log(tile)
         r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
-          if (msg.randomQuestion){
-            //console.log('nasiel otazku')
+          if (tile.getRandomQuestion()){
+            ////console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
             let author = (await GameFinder.getIntance().findByName(r.getGameName()))!
@@ -408,7 +421,7 @@ export class ServerSocket{
             let randomId  = allQuesstions![Math.floor(Math.random()*allQuesstions!.length)]!.getQuestionId()
             let questions = await QuestionWithOptionsFinder.getInstance().findById(randomId)
             let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
-            //console.log(questions)
+            ////console.log(questions)
     
             questions?.forEach((question) => {
               data.push({
@@ -423,13 +436,13 @@ export class ServerSocket{
             this.io.to(msg.room).emit('loadedAnswerQuestions',data)
             socket.emit('canReactToAnswer')
           }
-          else if (msg.questionId >= 0){
-            //console.log('nasiel otazku')
+          else if (tile.getQuestionId() >= 0){
+            ////console.log('nasiel otazku')
             r.setReturnValue(msg.returnValue)
             r.setChoosedPawnId(msg.pawnId)
-            let questions = await QuestionWithOptionsFinder.getInstance().findById(msg.questionId)
+            let questions = await QuestionWithOptionsFinder.getInstance().findById(tile.getQuestionId())
             let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean;}[] = []
-            //console.log(questions)
+            ////console.log(questions)
     
             questions?.forEach((question) => {
               data.push({
@@ -445,35 +458,35 @@ export class ServerSocket{
             socket.emit('canReactToAnswer')
            
           }
-          else if(msg.skip > 0){
-            r.getPlayerOnTurn().setSkip(msg.skip)
+          else if(tile.getSkip() > 0){
+            r.getPlayerOnTurn().setSkip(tile.getSkip())
             
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
-          else if(msg.repeat > 0){
-            r.getPlayerOnTurn().setRepeat(msg.repeat)
+          else if(tile.getRepeat() > 0){
+            r.getPlayerOnTurn().setRepeat(tile.getRepeat())
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
           
-          else if(msg.forward > 0){
-            socket.emit('react to event: forward',{value:msg.forward,pawnId:msg.pawnId})
+          else if(tile.getForward() > 0){
+            socket.emit('react to event: forward',{value:tile.getForward(),pawnId:msg.pawnId})
           }
-          else if(msg.backward > 0){
-            //console.log('react to event: backward emitol')
-            //console.log({value:msg.backward})
-            socket.emit('react to event: backward',{value:msg.backward,pawnId:msg.pawnId})  
+          else if(tile.getBackward() > 0){
+            ////console.log('react to event: backward emitol')
+            ////console.log({value:msg.backward})
+            socket.emit('react to event: backward',{value:tile.getBackward(),pawnId:msg.pawnId})  
           }
-          else if(msg.mustThrown > 0){
-            r.getPlayerOnTurn().setMustThrown(msg.mustThrown)
+          else if(tile.getMustThrown() > 0){
+            r.getPlayerOnTurn().setMustThrown(tile.getMustThrown())
            // r.getPlayerOnTurn().setTurnsToSetFree(msg.turnsToSetFree)
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
           }
           else{
-            console.log('reac to tile poslal evaluate end')
+            //console.log('reac to tile poslal evaluate end')
             socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
             // r.nextTurn()
       
-            // ////console.log(r)
+            // //////console.log(r)
        
             // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
             // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -483,7 +496,7 @@ export class ServerSocket{
     
         }
         else{
-          //console.log([r.getPlayerOnTurn().getAccount().getSocketId(),socket.id])
+          ////console.log([r.getPlayerOnTurn().getAccount().getSocketId(),socket.id])
         }
          
       })
@@ -498,7 +511,7 @@ export class ServerSocket{
         }
         else{
         
-          ////console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
+          //////console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
         }
         
        
@@ -509,8 +522,8 @@ export class ServerSocket{
 
       })
       socket.on('evaluated end',(msg:{is:boolean,room:string,token:string})=>{
-        console.log('recieved evaluated end: '+msg.token)
-        //console.log('odchyil evaluetedEnd')
+        //console.log('recieved evaluated end: '+msg.token)
+        ////console.log('odchyil evaluetedEnd')
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           return
@@ -523,10 +536,10 @@ export class ServerSocket{
           r.getPlayersWhichEnded().push(player)
           let place = r.getPlayersWhichEnded().length
           r
-          //console.log(r.getPlayersWhichEnded())
-          //console.log(msg.is,msg.token,place)
+          ////console.log(r.getPlayersWhichEnded())
+          ////console.log(msg.is,msg.token,place)
           player.setPlace(place)
-          //console.log('prisiel aspon po emit')
+          ////console.log('prisiel aspon po emit')
           this.io.in(msg.room).emit('player ended',{player:player.getAccount().getName(),place:place,token:player.token})
         }
         
@@ -556,8 +569,8 @@ export class ServerSocket{
             stop = false
           }
           while(!stop){
-            //console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
-            //console.log('skipped:' + r.getPlayerOnTurn().getSkip())
+            ////console.log('skipped:' + r.getPlayerOnTurn().getAccount().getName())
+            ////console.log('skipped:' + r.getPlayerOnTurn().getSkip())
             
             
             if (r.getPlayerOnTurn().getSkip() ==0){
@@ -569,8 +582,8 @@ export class ServerSocket{
               //this.io.in(msg.room).emit('react to event: skip',{token: r.getPlayerOnTurn().getToken(),left:r.getPlayerOnTurn().getSkip()})
             }
           }
-          //console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
-          ////console.log(r)
+          ////console.log('ide:'+ r.getPlayerOnTurn().getAccount().getName())
+          //////console.log(r)
      
           this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
           this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -585,16 +598,16 @@ export class ServerSocket{
         let r = GameManager.getActiveRooms().get(parseInt(msg.room))
 
         if (!msg.is){
-          //console.log('vratil spat figurku ,lebo bol false')
+          ////console.log('vratil spat figurku ,lebo bol false')
           this.io.in(msg.room).emit('return Pawn to place',{pawnId:r.getChoosedPawnId(),value:r.getReturnValue()})
           r.getPawnPositions().set(r.getChoosedPawnId(),r.getReturnValue())
          }
         else{
-          //console.log('bol true')
+          ////console.log('bol true')
         }
       
       
-        ////console.log(r)
+        //////console.log(r)
         socket.emit('evaluate End',{token:r.getPlayerOnTurn().getToken()})
         // this.io.in(msg.room).emit('turn',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
         // this.io.to(r.getPlayerOnTurn().getAccount().getSocketId()).emit('turnMove',{player:r.getPlayerOnTurn().getAccount().getName(),token:r.getPlayerOnTurn().getToken()})
@@ -614,24 +627,25 @@ export class ServerSocket{
         let isSpectator = r.isSpectator(acc)
         
         // if (r.getHasStarted() || isSpectator){
-        //   //console.log('emitol spravne')
+        //   ////console.log('emitol spravne')
         //   this.io.in(msg.roomId).emit('player joined',{msg:'Player '+ acc.getName() + ' has joined the room.(spectating)'})
 
         // }
         // else{
+          GameManager.reloadTables()
           this.io.in(msg.roomId).emit('player joined',{msg:acc.getName()})
         //}
       })
       // socket.on('relog',async(msg:{id:string})=>{
-      //   //console.log('skusil relognut'+msg.id)
-      //   ////console.log(msg.id)
+      //   ////console.log('skusil relognut'+msg.id)
+      //   //////console.log(msg.id)
       //   let acc = AccountManager.getAccountByClientId(msg.id)
       //   if(acc === undefined){
       //     return
       //   }
       //   AccountManager.login(acc)
       //   socket.emit('set cookie')
-      //   //console.log('pripojil'+acc)
+      //   ////console.log('pripojil'+acc)
       // })
 
       socket.on('upsertQuestion', async(data:{question:string,options:Array<{txt:string,isAnswer:boolean,id:string}>,id:string,questionId:number})=>{
@@ -642,8 +656,8 @@ export class ServerSocket{
           return
         }
         QuestionWithOptionsFinder.getInstance().deleteOptionsByQuestionId(data.questionId)
-        //console.log('options na servery su:')
-        //console.log(data.options)
+        ////console.log('options na servery su:')
+        ////console.log(data.options)
         let id = 0
         if (data.questionId < 0){
           
@@ -676,30 +690,30 @@ export class ServerSocket{
           let option = new QuestionOption()
           option.setId(<number>lastId)
           lastId++;
-          //console.log('posunul'+lastId)
+          ////console.log('posunul'+lastId)
           // if (elem.id == undefined){
           //     option.setId(<number>lastId)
           //     lastId++;
-          //     //console.log('posunul'+lastId)
+          //     ////console.log('posunul'+lastId)
           // }
           // else{
           //   option.setId(parseInt(elem.id))
-          //   //console.log(elem.id)
-          //   //console.log('nastavil id:' + elem.id)
+          //   ////console.log(elem.id)
+          //   ////console.log('nastavil id:' + elem.id)
           // }
           option.setText(elem.txt)
           option.setQuestionId(id)
           option.setIsAnswer(elem.isAnswer)
   
-          //console.log(option)
+          ////console.log(option)
           option.insert()
         })
         
-        ////console.log(await QuestionWithOptionsFinder.getIntance().findAll())
+        //////console.log(await QuestionWithOptionsFinder.getIntance().findAll())
       })
   
       socket.on('deleteQuestion', async(data:{questionId:string,id:string})=>{
-        //console.log('edituje')
+        ////console.log('edituje')
         let acc = AccountManager.getAccountByClientId(data.id)
         if (acc == undefined){
           return
@@ -710,9 +724,9 @@ export class ServerSocket{
         
         //DOPLNIT AUTHORA
       
-        //console.log('can je:' + can)
-        //console.log('questionNumber je' + questionNumber)
-        //console.log('number of question for author'+ lastRandomQuestion)
+        ////console.log('can je:' + can)
+        ////console.log('questionNumber je' + questionNumber)
+        ////console.log('number of question for author'+ lastRandomQuestion)
       
         if(questionNumber == 1 && lastRandomQuestion){
           socket.emit('random and 0')
@@ -732,7 +746,7 @@ export class ServerSocket{
         
       })
       // socket.on('upsertRule', async(data:{text:string,gameName:string})=>{
-      //   //console.log('upsertuje Rule')
+      //   ////console.log('upsertuje Rule')
       //   let find = await  RulesFinder.getIntance().findByName(data.gameName)
       //   let rule = new Rules()
       //   rule.setGameName(data.gameName)
@@ -744,7 +758,7 @@ export class ServerSocket{
         
       // })
       socket.on('insertQuestion', async(data:{text:string,isAnswer:boolean})=>{
-        //console.log('edituje')
+        ////console.log('edituje')
         let opt = new QuestionOption()
         opt.setText(data.text)
         opt.setIsAnswer(data.isAnswer)
@@ -784,11 +798,11 @@ export class ServerSocket{
       })
 
       socket.on('answerQuestion',async(msg:{id:number})=>{
-        //console.log('odchytil answerQuestion' )
-        //console.log(msg.id)
+        ////console.log('odchytil answerQuestion' )
+        ////console.log(msg.id)
         let questions = await QuestionWithOptionsFinder.getInstance().findById(msg.id)
         let data: { questionId: number; optionId: number; questionText: string; optionText: string; authorId: number; isAnswer: boolean; }[] = []
-        //console.log(questions)
+        ////console.log(questions)
 
         questions?.forEach((question) => {
           data.push({
@@ -810,15 +824,16 @@ export class ServerSocket{
       })
       socket.on('join Room',(msg:{roomName:string})=>{
         socket.join(msg.roomName)
+        GameManager.reloadTables()
       })
       socket.on('filter',(msg:{maxPlayers:string,maxTiles:string,questions:boolean})=>{
-        console.log(msg)
+        //console.log(msg)
       })
       socket.on('reload waiting room',(msg:{room:string})=>{
         let r =  GameManager.getActiveRooms().get(parseInt(msg.room))
         if (r == undefined){
           socket.emit('exit to main menu')
-          //console.log('exitol bo nebola roomka')
+          ////console.log('exitol bo nebola roomka')
           return
         }
         let names:Array<{name:string,avatar:string,place:number,token:string}>= []
@@ -826,7 +841,9 @@ export class ServerSocket{
           names.push({name:player.getAccount().getName(),avatar:player.getAccount().getAvatar(),place:player.getPlace(),token:player.getToken()})
         }
         )
-        //console.log('emitol reload waiting')
+        ////console.log('emitol reload waiting')
+        GameManager.reloadTables()
+        
         this.io.in(msg.room).emit('reloaded waiting room',{names:names})
       })
       socket.on('loadGameNames',async(msg:{id:string})=>{
@@ -859,7 +876,7 @@ export class ServerSocket{
             return
           }
           else{
-            //console.log('je author a chce zmenit')
+            ////console.log('je author a chce zmenit')
             existingGames![0].setIsPublished(false)
             existingGames![0].upsert()
           }
@@ -881,7 +898,7 @@ export class ServerSocket{
             return
           }
           else{
-            //console.log('je author a chce zmenit')
+            ////console.log('je author a chce zmenit')
             existingGames![0].delete()
           }
          

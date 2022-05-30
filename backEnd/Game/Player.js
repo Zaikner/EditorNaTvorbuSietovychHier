@@ -9,7 +9,6 @@ var Player = /** @class */ (function () {
         this.skip = 0;
         this.repeat = 0;
         this.mustThrown = 0;
-        this.turnsToSetFree = 0;
         //this.id = id;
         this.account = account;
     }
@@ -55,12 +54,6 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.setMustThrown = function (newThrown) {
         this.mustThrown = newThrown;
-    };
-    Player.prototype.getTurnsToSetFree = function () {
-        return this.turnsToSetFree;
-    };
-    Player.prototype.setTurnsToSetFree = function (newTurns) {
-        this.turnsToSetFree = newTurns;
     };
     return Player;
 }());

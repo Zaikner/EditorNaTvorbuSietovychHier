@@ -62,7 +62,7 @@ var Gameplay = /** @class */ (function () {
             quest.classList.add("list-group-item", "list-group-item-action", "active");
             quest.style.backgroundColor = Canvas_1.game.getPawnStyle().get(accs[i].token).getColor();
             quest.style.textAlign = 'center';
-            quest.textContent = accs[i].name;
+            quest.textContent = accs[i].name + ' ';
             div.appendChild(quest);
             var place = document.createElement('place');
             if (accs[i].place > 0) {
@@ -70,7 +70,7 @@ var Gameplay = /** @class */ (function () {
                     quest.textContent = ClientSocket_js_1.texts[116] + quest.textContent;
                 }
                 else {
-                    quest.textContent = accs[i].place.toString() + ClientSocket_js_1.texts[117] + quest.textContent;
+                    quest.textContent = accs[i].place.toString() + ClientSocket_js_1.texts[117] + ' ' + quest.textContent;
                 }
             }
             var questClone = quest.cloneNode();

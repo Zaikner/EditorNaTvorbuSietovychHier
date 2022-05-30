@@ -448,7 +448,8 @@ class Game{
                                             skip:tile.getSkip(),
                                             repeat:tile.getRepeat(),
                                             mustThrown:tile.getMustThrown(),
-                                            canRemovePawnIds:canRemovePawnIds
+                                            canRemovePawnIds:canRemovePawnIds,
+                                            tileNumber:tile.getTileNumber()
                                         })
             this.setIsOnTurn(false)
         }

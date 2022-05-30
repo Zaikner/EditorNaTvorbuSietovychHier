@@ -77,14 +77,14 @@ export class AccountManager{
         return newAcc
     }
     public static logout(acc:Account){
-        console.log('vykonal logout')
+        //console.log('vykonal logout')
         if (acc == undefined){
             return
         }
-        console.log('nie je undefined')
+        //console.log('nie je undefined')
         this.loggedAccounts = this.loggedAccounts.filter((a:Account) => a!=acc)
         this.clientIds = this.clientIds.filter((id) => id != acc.getClientId())
-        console.log(acc.activeInRoom)
+        //console.log(acc.activeInRoom)
         let room = acc.activeInRoom
         if (room!=undefined){
             room.leave(room.findPlayerOnAccount(acc)!)
@@ -112,7 +112,7 @@ export class AccountManager{
             if (acc.getName()===name){
                 ret = true
             }
-            //////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
+            ////////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
             
         })
         return ret
@@ -133,7 +133,7 @@ export class AccountManager{
             if (acc.getClientId()===clientId){
                 ret = acc
             }
-            //////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
+            ////////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
             
         })
         return ret
@@ -141,7 +141,7 @@ export class AccountManager{
     public static async changePassword(name:string, newPassword:string, clientId:string){
         let accounts = await AccountFinder.getIntance().findByName(name)
         if (accounts!= undefined){
-            //////console.log(accounts[0])
+            ////////console.log(accounts[0])
             accounts[0].setPassword(this.encode(newPassword))
             accounts[0].update();
             
@@ -150,13 +150,13 @@ export class AccountManager{
         
     }
     public static async changeAvatar(name:string, newAvatar:string){
-        //////console.log('tu to padlo')
+        ////////console.log('tu to padlo')
         let accounts = await AccountFinder.getIntance().findByName(name)
         if (accounts!= undefined){
             
             accounts[0].setAvatar(newAvatar)
-            ////////console.log(accounts[0])
-            //////console.log('aspon updatol avatar')
+            //////////console.log(accounts[0])
+            ////////console.log('aspon updatol avatar')
             accounts[0].update();
             
         }
@@ -165,10 +165,10 @@ export class AccountManager{
         let man = this
         
         setInterval(function(){   AccountManager.loggedAccounts.forEach((acc:Account)=>{
-            //////console.log('spytal sa')
+            ////////console.log('spytal sa')
             if (acc.getPing() == 12){
                 man.logout(acc)
-                //////console.log('odlogol')
+                ////////console.log('odlogol')
             }
         })},5000)
      

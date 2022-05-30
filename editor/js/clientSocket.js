@@ -363,7 +363,7 @@ var ClientSocket = /** @class */ (function () {
             console.log(Canvas_1.game.getIsOnturn());
             Canvas_1.game.setHasThrown(false);
             (0, Canvas_1.elementDeleter)('onTurnPlace');
-            var p = (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + msg.player, false);
+            var p = (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + ' ' + msg.player, false);
             p.style.textAlign = 'center';
         });
         s.on('turnMove', function (msg) {
@@ -441,7 +441,7 @@ var ClientSocket = /** @class */ (function () {
         });
         s.on('player ended', function (msg) {
             s.emit('reload waiting room', { room: params.get('id') });
-            Warning_1.Warning.showInGame(msg.player + ' ' + texts[190] + msg.place + texts[189]);
+            Warning_1.Warning.showInGame(msg.player + ' ' + texts[190] + ' ' + msg.place + texts[189]);
             Canvas_1.game.getPawns().forEach(function (pawn) {
                 if (pawn.player == msg.token) {
                     pawn.hasEnded = true;

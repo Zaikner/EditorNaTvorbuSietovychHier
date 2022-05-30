@@ -42,6 +42,12 @@ export class GameManager{
     public static async loadTexts(){
         return {texts:await TextsFinder.getIntance().findAll()}
     }
+    public static reloadTables(){
+        console.log('reloadol table')
+        let rooms = GameManager.getActiveRoomsTable()
+        let players = GameManager.getActivePlayersTable()
+        ServerSocket.getIo().emit('refresh lobby',rooms,players)
+    }
     public static async createRoom(name:string,numOfPlayers:number,accId:number){
         //console.log('aspon vyvroil room')
         
@@ -90,6 +96,7 @@ export class GameManager{
         gameData.pawns = pawns
 
         room.setGameData(gameData)
+        this.reloadTables()
         return room
     }
     
@@ -111,14 +118,35 @@ export class GameManager{
             rooms[i].getPlayers().forEach((player:Player)=>{
                 //console.log(acc)
                 ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),function(){ 
-                    rooms[i].join(new Player(acc,''))},rooms[i].getHasStarted()])
+                    rooms[i].join(new Player(acc,''))},rooms[i].getHasStarted()|| (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())])
             })
         }
         return ret
     }
+    static getActivePlayersTable(){
+        let ret:Array<Array<any>> = []
+        let rooms = Array.from(this.activeRooms.values())
+        for (let i = 0; i < rooms.length;i++){
+            rooms[i].getPlayers().forEach((player:Player)=>{
+                //console.log(acc)
+                ret.push([player.getAccount().getName(),rooms[i].getGameName(),rooms[i].getId(),rooms[i].getHasStarted()|| (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())])
+            })
+        }
+        return ret
+    }
+    static getActiveRoomsTable(){
+        let ret:Array<Array<any>> = []
+        let rooms = Array.from(this.activeRooms.values())
+        for (let i = 0; i < rooms.length;i++){
+          let txt =  "Miestnosť: "+rooms[i].getId()+ "  Hra: "+ rooms[i].getGameName()+"   Hráči:  "+ rooms[i].getPlayers().length+'/'+rooms[i].getMaxPlayers()
+          ret.push([rooms[i].getId(),rooms[i].getGameName(),rooms[i].getHasStarted()|| (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers()),txt])
+        }
+        return ret
+    }
   
-    static closeInactiveRooms(){
-    
+    static async gameExists(name:string){
+        let existingGames = await GameFinder.getIntance().findByName(name)
+        return existingGames!.length>0
     }
     
     static getActiveRooms(){
