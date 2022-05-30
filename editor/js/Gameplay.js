@@ -128,7 +128,7 @@ var Gameplay = /** @class */ (function () {
                     }
                 });
                 if (!can_1) {
-                    Warning_1.Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn');
+                    Warning_1.Warning.showInGame('Nemôžeš sa pohnuť so žiadnou tvojou figúrkou, preskakuješ tvoje kolo.');
                 }
                 ClientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = Canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), canMove: can_1 });
                 //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})

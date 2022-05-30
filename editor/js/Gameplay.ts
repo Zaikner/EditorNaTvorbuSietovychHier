@@ -144,7 +144,7 @@ public static changeWaitingRoom(accs:any){
                   }
                 })
                 if (!can){
-                    Warning.showInGame('You cant move with any of your remaining pawns. You skip your turn')
+                    Warning.showInGame('Nemôžeš sa pohnuť so žiadnou tvojou figúrkou, preskakuješ tvoje kolo.')
                 }
                 editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId(),canMove:can})
                 //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
