@@ -272,11 +272,17 @@ let started:Boolean = false;
 function changeNextTileText(){
   let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
     nextTile.textContent= texts[141]+' ('
-    Array.from(game.getNextTilesIds().values()).forEach((num:number)=>{
+    let arr = Array.from(game.getNextTilesIds().values())
+    arr.forEach((num:number)=>{
       nextTile.textContent+= ' ' + num+','
     })
     nextTile.textContent=nextTile.textContent!.slice(0,nextTile.textContent!.length-1)
     nextTile.textContent+= ')'
+
+    let set = new Set(arr)
+    if (set.size == 1){
+      nextTile.textContent= texts[141]+' (' + arr[0] + ')'
+    }
 }
 
 function mainMenu(){ 

@@ -230,11 +230,16 @@ var started = false;
 function changeNextTileText() {
     var nextTile = document.getElementById('setNextTileButtonlabel');
     nextTile.textContent = ClientSocket_1.texts[141] + ' (';
-    Array.from(game.getNextTilesIds().values()).forEach(function (num) {
+    var arr = Array.from(game.getNextTilesIds().values());
+    arr.forEach(function (num) {
         nextTile.textContent += ' ' + num + ',';
     });
     nextTile.textContent = nextTile.textContent.slice(0, nextTile.textContent.length - 1);
     nextTile.textContent += ')';
+    var set = new Set(arr);
+    if (set.size == 1) {
+        nextTile.textContent = ClientSocket_1.texts[141] + ' (' + arr[0] + ')';
+    }
 }
 exports.changeNextTileText = changeNextTileText;
 function mainMenu() {
