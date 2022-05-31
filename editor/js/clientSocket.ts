@@ -414,6 +414,8 @@ s.on('got texts',(msg:{text:Array<string>})=>{
  s.on('turn',(msg:{player:string,token:string})=>{
     console.log('recieved: turn')
     console.log(game.getIsOnturn())
+    $('#pickQuestionModal').modal('hide')
+    $('#WarningModal').modal('hide')
     game.setHasThrown(false)
     elementDeleter('onTurnPlace')
     let p = spawnParagraph(document,'onTurnPlace','',texts[96]+' '+msg.player,false)

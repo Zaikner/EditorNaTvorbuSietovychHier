@@ -1,5 +1,5 @@
 
-import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,game,reload} from './Canvas.js'
+import {mainMenu,doc,elementDeleter,canvas,ctx, calibreEventCoords,game,reload, changeNextTileText} from './Canvas.js'
 import { editorSocket,canMovePawnFunc,texts} from './ClientSocket.js'
 import {spawnColorPicker,spawnParagraph,spawnCanvas,spawnSliderWithValueShower,spawnButton,spawnSelectMenu, spawnImageInput, spawnMultiSelect, spawnHeading, spawnButtonWithLabel}from './Elements.js'
 import { Tile } from './Tile.js'
@@ -106,7 +106,7 @@ function spawnElements(){
     
     let shapeMenu = spawnSelectMenu(doc,"tileEditingPlace",'shapeMenu',texts[129],["btn","btn-dark"],['circle','square'])
     shapeMenu.onchange= function(){showActualState()}
- 
+    shapeMenu.value = lastShape
     spawnImageInput(doc,"tileEditingPlace",'tileImage',texts[134],texts[134],function(){
   
       if ((<HTMLInputElement>doc.getElementById('tileImage')!).files!.length > 0){
@@ -133,6 +133,8 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       generateNextTiles()
       
     })
+    changeNextTileText()
+
   
     spawnMultiSelect(document,'tileEditingPlace','cantBeEleminated',texts[143],texts[192],options,'immune')
 
@@ -306,7 +308,21 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
         game.insertPawns(player,addedTile)
       })
       showActualState()
-    }  
+      game.setEvents('none',{num:0,value:0})
+      $('#editEventModal').modal('hide')
+      $('#EventModal').modal('hide')
+      
+      elementDeleter('askTheQuestionEventEdit')
+      document.getElementById('pickedEventParagraph')!.textContent =texts[197]
+
+      game.setStartForPlayers([])
+      game.setCantBeEliminatedOnTile([])
+      game.setEndForPlayers([])
+      removeAllButtons()
+      spawnElements()
+      showActualState()
+    }
+    console.log(game)  
   }
 
   let spawnTile = function(coords:{x:number,y:number}){
@@ -486,7 +502,6 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
     
     reload(ctx)
-  
    
     if (game.getChoosenTile()== undefined){
       lastSize = sizeOfTileSlider.value

@@ -2,7 +2,7 @@
    
 
 import {Tile} from './Tile.js'
-import {editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update } from "./TileEditor.js";
+import {editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update, spawnElements, showActualState } from "./TileEditor.js";
 import {  editBackground,  } from "./BackgroundEditor";
 
 import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
@@ -230,7 +230,7 @@ document.getElementById('nextTileButtonSet')?.addEventListener('click',function(
   if (game.getChoosenTile()!= undefined){
     game.getChoosenTile()?.setNextTilesIds(copyNextTileMap())
   }
-
+ changeNextTileText()
 })
 document.getElementById('questionSubmitButton')!.addEventListener('click',function(){createQuestion(-1);})
 document.getElementById('eventQuestionButton')!.addEventListener('click',function(){
@@ -269,7 +269,15 @@ document.getElementById("canvasPlace")!.appendChild(canvas);
 let started:Boolean = false;
 
 
-
+function changeNextTileText(){
+  let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
+    nextTile.textContent= texts[141]+' ('
+    Array.from(game.getNextTilesIds().values()).forEach((num:number)=>{
+      nextTile.textContent+= ' ' + num+','
+    })
+    nextTile.textContent=nextTile.textContent!.slice(0,nextTile.textContent!.length-1)
+    nextTile.textContent+= ')'
+}
 
 function mainMenu(){ 
   
@@ -320,7 +328,7 @@ numOfPlayersSlider.onclick =function(){
     for (let i = 1; i <= number;i++){
       if (!playerTokens.includes('Player '+i)){
         playerTokens.push('Player '+ (playerTokens.length+1))
-        game.getNextTilesIds().set('Player '+i,game.getTiles().length+1)
+        game.getNextTilesIds().set('Player '+i,game.getTiles().length+2)
         game.getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
        
       }
@@ -592,4 +600,4 @@ window.onload = function(){
 
 
 //setInterval(function(){resize(game,ctx)},500)
-export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,game,reload,resize,initNewGame};
+export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,game,reload,resize,initNewGame,changeNextTileText};

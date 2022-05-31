@@ -18,4 +18,6 @@ function getDataUrlFromImage(img:HTMLImageElement) {
     })
     return cookie.get(name);
   }
+
+
 export {getDataUrlFromImage,getCookie}

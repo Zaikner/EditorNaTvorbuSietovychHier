@@ -130,6 +130,7 @@ function spawnButtonWithLabel(doc, parent, id, lbl, classList, txt, func) {
     label.textContent = lbl;
     label.style.float = 'left';
     label.style.fontSize = 'normal';
+    label.id = id + 'label';
     var button = doc.createElement('button');
     button.id = 'div' + id;
     button.textContent = txt;

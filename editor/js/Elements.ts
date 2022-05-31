@@ -142,6 +142,7 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
   label.textContent = lbl
   label.style.float = 'left'
   label.style.fontSize = 'normal'
+  label.id = id+'label'
 
 
   let button:HTMLButtonElement = doc.createElement('button')

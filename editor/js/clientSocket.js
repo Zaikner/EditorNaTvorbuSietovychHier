@@ -361,6 +361,8 @@ var ClientSocket = /** @class */ (function () {
         s.on('turn', function (msg) {
             console.log('recieved: turn');
             console.log(Canvas_1.game.getIsOnturn());
+            $('#pickQuestionModal').modal('hide');
+            $('#WarningModal').modal('hide');
             Canvas_1.game.setHasThrown(false);
             (0, Canvas_1.elementDeleter)('onTurnPlace');
             var p = (0, Elements_1.spawnParagraph)(document, 'onTurnPlace', '', texts[96] + ' ' + msg.player, false);

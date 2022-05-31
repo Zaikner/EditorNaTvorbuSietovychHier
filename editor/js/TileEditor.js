@@ -94,6 +94,7 @@ function spawnElements() {
     sizeOfOutlineSlider.onchange = function () { showActualState(); };
     var shapeMenu = (0, Elements_js_1.spawnSelectMenu)(Canvas_js_1.doc, "tileEditingPlace", 'shapeMenu', ClientSocket_js_1.texts[129], ["btn", "btn-dark"], ['circle', 'square']);
     shapeMenu.onchange = function () { showActualState(); };
+    shapeMenu.value = lastShape;
     (0, Elements_js_1.spawnImageInput)(Canvas_js_1.doc, "tileEditingPlace", 'tileImage', ClientSocket_js_1.texts[134], ClientSocket_js_1.texts[134], function () {
         if (Canvas_js_1.doc.getElementById('tileImage').files.length > 0) {
             Canvas_js_1.game.setImage(new Image());
@@ -112,6 +113,7 @@ function spawnElements() {
         $('#nextTileModal').modal('show');
         generateNextTiles();
     });
+    (0, Canvas_js_1.changeNextTileText)();
     (0, Elements_js_1.spawnMultiSelect)(document, 'tileEditingPlace', 'cantBeEleminated', ClientSocket_js_1.texts[143], ClientSocket_js_1.texts[192], options, 'immune');
     (0, Elements_js_1.spawnButtonWithLabel)(document, 'tileEditingPlace', 'bindEvent', ClientSocket_js_1.texts[98], ['btn', 'btn-dark'], ClientSocket_js_1.texts[174], function () {
         $('#EventModal').modal('show');
@@ -263,7 +265,19 @@ var insert = function (event) {
             Canvas_js_1.game.insertPawns(player, addedTile);
         });
         showActualState();
+        Canvas_js_1.game.setEvents('none', { num: 0, value: 0 });
+        $('#editEventModal').modal('hide');
+        $('#EventModal').modal('hide');
+        (0, Canvas_js_1.elementDeleter)('askTheQuestionEventEdit');
+        document.getElementById('pickedEventParagraph').textContent = ClientSocket_js_1.texts[197];
+        Canvas_js_1.game.setStartForPlayers([]);
+        Canvas_js_1.game.setCantBeEliminatedOnTile([]);
+        Canvas_js_1.game.setEndForPlayers([]);
+        removeAllButtons();
+        spawnElements();
+        showActualState();
     }
+    console.log(Canvas_js_1.game);
 };
 exports.insert = insert;
 var spawnTile = function (coords) {

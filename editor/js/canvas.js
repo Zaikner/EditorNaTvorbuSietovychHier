@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.initNewGame = exports.resize = exports.reload = exports.game = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
+exports.changeNextTileText = exports.initNewGame = exports.resize = exports.reload = exports.game = exports.calibreEventCoords = exports.ctx = exports.canvas = exports.clear = exports.edit = exports.elementDeleter = exports.doc = exports.mainMenu = void 0;
 var TileEditor_js_1 = require("./TileEditor.js");
 var BackgroundEditor_1 = require("./BackgroundEditor");
 var Elements_1 = require("./Elements");
@@ -200,6 +200,7 @@ function edit() {
         if (game.getChoosenTile() != undefined) {
             (_a = game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setNextTilesIds((0, TileEditor_js_1.copyNextTileMap)());
         }
+        changeNextTileText();
     });
     document.getElementById('questionSubmitButton').addEventListener('click', function () { (0, Questions_1.createQuestion)(-1); });
     document.getElementById('eventQuestionButton').addEventListener('click', function () {
@@ -226,6 +227,16 @@ var doc = document;
 exports.doc = doc;
 document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
+function changeNextTileText() {
+    var nextTile = document.getElementById('setNextTileButtonlabel');
+    nextTile.textContent = ClientSocket_1.texts[141] + ' (';
+    Array.from(game.getNextTilesIds().values()).forEach(function (num) {
+        nextTile.textContent += ' ' + num + ',';
+    });
+    nextTile.textContent = nextTile.textContent.slice(0, nextTile.textContent.length - 1);
+    nextTile.textContent += ')';
+}
+exports.changeNextTileText = changeNextTileText;
 function mainMenu() {
     started = false;
     (0, Elements_1.spawnHeading)(document, 'buttonPlace', '', ClientSocket_1.texts[21]);
@@ -272,7 +283,7 @@ function mainMenu() {
             for (var i = 1; i <= number; i++) {
                 if (!playerTokens.includes('Player ' + i)) {
                     playerTokens.push('Player ' + (playerTokens.length + 1));
-                    game.getNextTilesIds().set('Player ' + i, game.getTiles().length + 1);
+                    game.getNextTilesIds().set('Player ' + i, game.getTiles().length + 2);
                     game.getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
                 }
                 //game.getPawnStyle().Player
