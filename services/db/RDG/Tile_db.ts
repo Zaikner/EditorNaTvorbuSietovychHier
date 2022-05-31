@@ -220,6 +220,7 @@ export class Tile_db{
         ret.setStroke(data.stroke)
         ret.setStrokeColor(data.stroke_color)
         ret.setShape(data.shape)
+        ret.setImage(data.image)
         ret.setTileNumber(data.tile_number)
         ret.setIsEndingFor(data.is_ending_for)
         ret.setIsStartingFor(data.is_starting_for)

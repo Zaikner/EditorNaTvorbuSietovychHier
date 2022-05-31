@@ -337,8 +337,9 @@ class Game{
         
         this.choosenTile
     }
-    moveTile(event:MouseEvent,tile:Tile = this.choosenTile!){
+    moveTile(event:MouseEvent,tile:Tile = this.choosenTile!,addX=0,addY=0){
       
+       
         if (tile != undefined){
             let coords = calibreEventCoords(event)
            

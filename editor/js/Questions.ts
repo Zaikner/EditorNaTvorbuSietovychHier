@@ -248,6 +248,8 @@ function pickQuestion(data:any){
             quest.textContent = elem.questionText
             quest.onclick =function(){ 
                                      $('#pickQuestionModal').modal('hide')
+                                     $('#editEventModal').modal('hide')
+                                     $('#EventModal').modal('hide')
                                      game.setQuestionId(elem.questionId)
                                   
                                      document.getElementById('pickedEventParagraph')!.textContent = texts[71] + elem.questionText;

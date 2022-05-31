@@ -142,7 +142,9 @@ var startY = 0;
 var tilik = undefined;
 var moveWithTile = function (event) {
     if (tilik != undefined) {
-        Canvas_js_1.game.moveTile(event, tilik);
+        console.log([startX, startY]);
+        var coords = (0, Canvas_js_1.calibreEventCoords)(event);
+        Canvas_js_1.game.moveTile(event, tilik, startX - coords.x, startY - coords.y);
     }
 };
 var initMove = function (event) {
@@ -400,6 +402,9 @@ function showActualState(updateTile) {
     var image = Canvas_js_1.game.getImage();
     if (Canvas_js_1.game.getChoosenTile() != undefined) {
         image = Canvas_js_1.game.getChoosenTile().getImage();
+        Canvas_js_1.game.setImage(image);
+        console.log('nastavil obrazok');
+        console.log(image);
     }
     var colorPicker = Canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = Canvas_js_1.doc.getElementById('sizeOfOutlineSlider');

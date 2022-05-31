@@ -88,6 +88,7 @@ function pawnEditMenu() {
         drawStyles(colorPicker.value);
         (0, Canvas_1.reload)(Canvas_1.ctx);
     };
+    colorPicker.value = Canvas_1.game.getPawnStyle().get(playerPicker.value).getColor();
     (0, Elements_1.spawnImageInput)(Canvas_1.doc, 'tileEditingPlace', 'imagePicker', ClientSocket_1.texts[78], ClientSocket_1.texts[78], function () {
         var _a, _b, _c;
         if (document.getElementById('imagePicker').files.length > 0) {

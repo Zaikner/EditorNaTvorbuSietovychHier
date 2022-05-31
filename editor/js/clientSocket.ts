@@ -42,9 +42,9 @@ class ClientSocket{
        addedTile.setStrokeColor(tile.strokeColor)
        addedTile.setShape(tile.shape)
        addedTile.setIsChoosen(tile.isChoosen)
-       if(tile.backgroundFile != 'none'){
+       if(tile.image != 'none'){
         let image = new Image()
-        image.src = tile.backgroundFile
+        image.src = tile.image
         image.onload = function(){
          addedTile.setImage(image)
          reload(ctx)

@@ -212,6 +212,8 @@ function pickQuestion(data) {
             quest.textContent = elem.questionText;
             quest.onclick = function () {
                 $('#pickQuestionModal').modal('hide');
+                $('#editEventModal').modal('hide');
+                $('#EventModal').modal('hide');
                 Canvas_1.game.setQuestionId(elem.questionId);
                 document.getElementById('pickedEventParagraph').textContent = ClientSocket_js_1.texts[71] + elem.questionText;
                 Canvas_1.game.setEvents('question', { num: elem.questionId, value: 0 });

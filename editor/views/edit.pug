@@ -158,9 +158,10 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #modalBody.modal-body(style='overflow-y: auto; height:70vh')
                 #listPickerContainer.container
               #modalFooter.modal-footer
-                .container.alignCenter
-                  button.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
+                .container.alignCenter  
                   button#randomQuestionID.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[200]
+                  button.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
+                
                   //button#resetQuestionID.btn.btn-secondary.alignCenter(type='button' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #answerModal.modal.fade(tabindex='-1' role='dialog')

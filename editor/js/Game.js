@@ -299,8 +299,10 @@ var Game = /** @class */ (function () {
         (_k = this.choosenTile) === null || _k === void 0 ? void 0 : _k.setY2(this.choosenTile.getCenterY() + size);
         this.choosenTile;
     };
-    Game.prototype.moveTile = function (event, tile) {
+    Game.prototype.moveTile = function (event, tile, addX, addY) {
         if (tile === void 0) { tile = this.choosenTile; }
+        if (addX === void 0) { addX = 0; }
+        if (addY === void 0) { addY = 0; }
         if (tile != undefined) {
             var coords = (0, Canvas_js_1.calibreEventCoords)(event);
             tile.setX1((coords.x / this.scaleX - tile.getRadius()));

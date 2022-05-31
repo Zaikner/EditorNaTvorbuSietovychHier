@@ -47,9 +47,9 @@ var ClientSocket = /** @class */ (function () {
                 addedTile.setStrokeColor(tile.strokeColor);
                 addedTile.setShape(tile.shape);
                 addedTile.setIsChoosen(tile.isChoosen);
-                if (tile.backgroundFile != 'none') {
+                if (tile.image != 'none') {
                     var image_1 = new Image();
-                    image_1.src = tile.backgroundFile;
+                    image_1.src = tile.image;
                     image_1.onload = function () {
                         addedTile.setImage(image_1);
                         (0, Canvas_1.reload)(Canvas_1.ctx);

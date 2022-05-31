@@ -167,7 +167,9 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
   let tilik:Tile = undefined!
   let moveWithTile = function(event:MouseEvent){
     if (tilik!=undefined){
-      game.moveTile(event,tilik)
+      console.log([startX,startY])
+      let coords = calibreEventCoords(event)
+      game.moveTile(event,tilik,startX-coords.x,startY-coords.y)
     }
    
   }
@@ -463,7 +465,9 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     if (game.getChoosenTile()!= undefined){
       
         image =  game.getChoosenTile()!.getImage()
-      
+        game.setImage(image!)
+        console.log('nastavil obrazok')
+        console.log(image)
     }
     let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
     let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!

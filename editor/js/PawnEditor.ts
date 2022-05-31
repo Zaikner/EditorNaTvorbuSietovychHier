@@ -89,6 +89,7 @@ function pawnEditMenu(){
         drawStyles(colorPicker.value)
         reload(ctx)
     }
+    colorPicker.value = game.getPawnStyle().get(playerPicker.value)!.getColor()
 
     spawnImageInput(doc,'tileEditingPlace','imagePicker',texts[78],texts[78],function(){
 
