@@ -15,7 +15,6 @@ function pawnInsertMenu() {
 exports.pawnInsertMenu = pawnInsertMenu;
 function insertPawn(event) {
     var colorPicker = Canvas_1.doc.getElementById('pawnColorPicker');
-    console.log('skusil nakreslit');
     var tiles = Canvas_1.game.getTiles();
     var tile = undefined;
     var coords = (0, Canvas_1.calibreEventCoords)(event);
@@ -31,12 +30,10 @@ function insertPawn(event) {
         Canvas_1.game.getPawns().push(newPawn);
         tile.getPawns().push(newPawn);
         (0, Canvas_1.reload)(Canvas_1.ctx);
-        console.log(newPawn);
     }
 }
 exports.insertPawn = insertPawn;
 function deletePawn(event) {
-    console.log('deleteto');
     var tiles = Canvas_1.game.getTiles();
     var tile = undefined;
     var coords = (0, Canvas_1.calibreEventCoords)(event);
@@ -47,13 +44,11 @@ function deletePawn(event) {
         }
     }
     if (tile != undefined) {
-        console.log('nasiel tile');
         var pawns = tile.getPawns();
         var stop_1 = false;
         var player_1 = Canvas_1.doc.getElementById('playerSelect');
         pawns.forEach(function (pawn) {
             if (pawn.player == player_1.value && !stop_1) {
-                console.log('nasiel pawn');
                 stop_1 = true;
                 Canvas_1.game.removePawn(pawn);
                 tile.removePawn(pawn);
@@ -177,161 +172,147 @@ function drawStyles(color) {
     var cs = document.getElementById('canvasPawn1');
     cs.width = 100;
     cs.height = 100;
-    drawPawnType1(cs.getContext("2d"), 50, 20, 20, 100, 100, color);
+    drawPawnType1(cs.getContext("2d"), 50, 20, 20, color);
     cs = document.getElementById('canvasPawn2');
     cs.width = 100;
     cs.height = 100;
-    var contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    var width = cs.width;
-    var height = cs.height;
-    drawPawnType2(contextik, 50, 20, 20, 100, 100, color);
+    var context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType2(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn3');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
-    drawPawnType3(contextik, 50, 20, 20, 100, 100, color);
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType3(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn4');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
-    drawPawnType4(contextik, 50, 20, 20, 100, 100, color);
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType4(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn5');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
-    drawPawnType5(contextik, 50, 20, 20, 100, 100, color);
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType5(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn6');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
-    drawPawnType6(contextik, 50, 20, 20, 100, 100, color);
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType6(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn7');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
-    drawPawnType7(contextik, 50, 20, 20, 100, 100, color);
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
+    drawPawnType7(context2, 50, 20, 20, color);
     cs = document.getElementById('canvasPawn8');
     cs.width = 100;
     cs.height = 100;
-    contextik = cs.getContext("2d");
-    contextik.resetTransform();
-    width = cs.width;
-    height = cs.height;
+    context2 = cs.getContext("2d");
+    context2.resetTransform();
     var image = (_a = Canvas_1.game.getPawnStyle().get(document.getElementById('playerSelect').value)) === null || _a === void 0 ? void 0 : _a.getImage();
     if (image != undefined) {
-        drawPawnImage(contextik, 50, 30, 30, 100, 100, image);
+        drawPawnImage(context2, 50, 30, 30, image);
     }
 }
-function drawPawnType1(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.moveTo(headCenterX, headCenterY + radius / 2);
-    contextik.lineTo(headCenterX - radius * 1.5, headCenterY + radius * 3);
-    contextik.lineTo(headCenterX + radius * 1.5, headCenterY + radius * 3);
-    contextik.lineTo(headCenterX, headCenterY + radius / 2);
-    contextik.fill();
+function drawPawnType1(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.moveTo(headCenterX, headCenterY + radius / 2);
+    context2.lineTo(headCenterX - radius * 1.5, headCenterY + radius * 3);
+    context2.lineTo(headCenterX + radius * 1.5, headCenterY + radius * 3);
+    context2.lineTo(headCenterX, headCenterY + radius / 2);
+    context2.fill();
 }
 exports.drawPawnType1 = drawPawnType1;
-function drawPawnType2(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.moveTo(headCenterX - radius, headCenterY + radius);
-    contextik.lineTo(headCenterX + radius, headCenterY + radius);
-    contextik.lineTo(headCenterX, headCenterY + radius * 3.5);
-    contextik.lineTo(headCenterX - radius, headCenterY + radius);
-    contextik.fill();
+function drawPawnType2(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.moveTo(headCenterX - radius, headCenterY + radius);
+    context2.lineTo(headCenterX + radius, headCenterY + radius);
+    context2.lineTo(headCenterX, headCenterY + radius * 3.5);
+    context2.lineTo(headCenterX - radius, headCenterY + radius);
+    context2.fill();
 }
 exports.drawPawnType2 = drawPawnType2;
-function drawPawnType3(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.moveTo(headCenterX - radius * 2, headCenterY + radius);
-    contextik.lineTo(headCenterX + radius * 2, headCenterY + radius);
-    contextik.lineTo(headCenterX, headCenterY + radius * 3.5);
-    contextik.lineTo(headCenterX - radius * 2, headCenterY + radius);
-    contextik.fill();
+function drawPawnType3(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.moveTo(headCenterX - radius * 2, headCenterY + radius);
+    context2.lineTo(headCenterX + radius * 2, headCenterY + radius);
+    context2.lineTo(headCenterX, headCenterY + radius * 3.5);
+    context2.lineTo(headCenterX - radius * 2, headCenterY + radius);
+    context2.fill();
 }
 exports.drawPawnType3 = drawPawnType3;
-function drawPawnType4(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 2.5, 0, 0, Math.PI, true);
-    contextik.fill();
+function drawPawnType4(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 2.5, 0, 0, Math.PI, true);
+    context2.fill();
 }
 exports.drawPawnType4 = drawPawnType4;
-function drawPawnType5(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.fillStyle = color;
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius / 2, radius * 4, 0, 0, Math.PI, true);
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 1.5, 0, 0, Math.PI, true);
-    contextik.fill();
+function drawPawnType5(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.fillStyle = color;
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius / 2, radius * 4, 0, 0, Math.PI, true);
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 1.5, 0, 0, Math.PI, true);
+    context2.fill();
 }
 exports.drawPawnType5 = drawPawnType5;
-function drawPawnType6(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius, radius * 2.5, 0, 0, Math.PI, true);
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 1.5, 0, 0, Math.PI, true);
-    contextik.fill();
+function drawPawnType6(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius, radius * 2.5, 0, 0, Math.PI, true);
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius * 1.5, radius * 1.5, 0, 0, Math.PI, true);
+    context2.fill();
 }
 exports.drawPawnType6 = drawPawnType6;
-function drawPawnType7(contextik, headCenterX, headCenterY, radius, width, height, color) {
-    contextik.beginPath();
-    contextik.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
-    contextik.fillStyle = color;
-    contextik.fill();
-    contextik.beginPath();
-    contextik.moveTo(headCenterX, headCenterY + radius / 2);
-    contextik.lineTo(headCenterX - radius, headCenterY + radius * 3);
-    contextik.lineTo(headCenterX + radius, headCenterY + radius * 3);
-    contextik.lineTo(headCenterX, headCenterY + radius / 2);
-    contextik.fill();
-    contextik.beginPath();
-    contextik.ellipse(headCenterX, headCenterY + radius * 3, radius * +1.5, radius, 0, 0, Math.PI, true);
-    contextik.fill();
+function drawPawnType7(context2, headCenterX, headCenterY, radius, color) {
+    context2.beginPath();
+    context2.arc(headCenterX, headCenterY, radius, 0, 2 * Math.PI);
+    context2.fillStyle = color;
+    context2.fill();
+    context2.beginPath();
+    context2.moveTo(headCenterX, headCenterY + radius / 2);
+    context2.lineTo(headCenterX - radius, headCenterY + radius * 3);
+    context2.lineTo(headCenterX + radius, headCenterY + radius * 3);
+    context2.lineTo(headCenterX, headCenterY + radius / 2);
+    context2.fill();
+    context2.beginPath();
+    context2.ellipse(headCenterX, headCenterY + radius * 3, radius * +1.5, radius, 0, 0, Math.PI, true);
+    context2.fill();
 }
 exports.drawPawnType7 = drawPawnType7;
-function drawPawnImage(contextik, headCenterX, headCenterY, radius, width, height, image) {
-    contextik.beginPath();
-    contextik.drawImage(image, headCenterX - radius, headCenterY - radius, radius * 2, radius * 3);
+function drawPawnImage(context2, headCenterX, headCenterY, radius, image) {
+    context2.beginPath();
+    context2.drawImage(image, headCenterX - radius, headCenterY - radius, radius * 2, radius * 3);
 }
 exports.drawPawnImage = drawPawnImage;
 function drawActualPawnLook(player) {

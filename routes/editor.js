@@ -99,10 +99,8 @@ router.route("/register")
 router
 .route("/setId")
 .get((request,res) =>
-{   console.log(request.params)
-    console.log(request.query)
+{   
     res.sendFile('setClientId.html',{root:'./editor/views'});
-    //res.sendFile('main.html',{root:'./editor/views'});
 });
 
 

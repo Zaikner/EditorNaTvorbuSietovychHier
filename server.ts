@@ -30,8 +30,6 @@ const gameLobby = require("./routes/gameLobby.js")
 const account = require("./routes/account.js")
 const logout = require("./routes/logout.js")
 const room = require("./routes/room.js")
-const loginOrGuest = require("./routes/loginOrGuest.js")
-const playAsGuest = require("./routes/playAsGuest.js")
 const showGame = require("./routes/showGame.js")
 const createRoom = require("./routes/createRoom.js")
 const createQuestion = require("./routes/createQuestion.js")
@@ -42,8 +40,6 @@ app.use('/gameLobby',gameLobby);
 app.use('/account',account);
 app.use('/logout',logout);
 app.use('/room',room);
-app.use('/loginOrGuest',loginOrGuest);
-app.use('/playAsGuest',playAsGuest);
 app.use('/showGame',showGame);
 app.use('/createRoom',createRoom);
 app.use('/createQuestion',createQuestion);

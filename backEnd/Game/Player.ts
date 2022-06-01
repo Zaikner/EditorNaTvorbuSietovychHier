@@ -10,14 +10,8 @@ export class Player{
         private mustThrown:number = 0;
 
         constructor(account:Account,token:string){
-            //this.id = id;
-            this.account = account;
-        
-          
+            this.account = account;      
         }
-        //constructor(){}
-
-
         public getId() : number {
             return this.id
         }

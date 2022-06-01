@@ -374,7 +374,6 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.reactToTile = function (tile, returnValue, pawn) {
         var params = new URLSearchParams(window.location.search);
-        console.log('reagoval na tile');
         if (this.getIsOnturn()) {
             var canRemovePawnIds_1 = [];
             var ownersOfEliminatedPawns_1 = [];

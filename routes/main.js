@@ -15,7 +15,7 @@ router
 router
 .route("/id/:id")
 .get((request,res) =>
-{   console.log(request.params)
+{   
     res.render('main',{root:'./editor/views'});
 });
 

@@ -48,13 +48,10 @@ export class Pawn{
                 setTimeout(function(){   
                 actuallTile.removePawn(p)
                 actuallTile = game.findTileByTileId(actuallTile.getNextTilesIds().get(p.player)!)!
-                
-
                 actuallTile.getPawns().push(p)
                
                 p.tileId = actuallTile.getId()
                 p.tile = actuallTile
-          
             reload(ctx)
             }, 500*i)
         }
@@ -70,12 +67,7 @@ export class Pawn{
                 reload(ctx)
           
             }, 550*numOfTiles)
-        }
-        else{
-            console.log('nereagoval lebo nebolo jeho kolo')
-        }
-     
-        
+        }   
     }
     returnToStart(){
         this.tile.removePawn(this)

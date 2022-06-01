@@ -298,7 +298,6 @@ function editQuestionMenu(id:number,txt:string,elem:any){
 
     document.getElementById('questionPlace')?.appendChild(label)
     div.appendChild(text)
-    //div.appendChild(editButton)
     div.style.marginBottom = '5px'
     document.getElementById('questionPlace')?.appendChild(div)
 
@@ -360,7 +359,6 @@ function askQuestion(data:any){
         opt.type = 'button';
         opt.classList.add("list-group-item","list-group-item-action",'btn','btn-light')
         opt.setAttribute('isAnswer',elem.isAnswer)
-        //quest.style.textAlign =  'center';
         opt.textContent = elem.optionText
         opt.addEventListener('click',function(){
             if (opt.classList.contains('active')){

@@ -19,15 +19,12 @@ function editBackground(){
         background.onload = function(){
           game.getBackground().setBackgroundImage(background)
          reload(ctx)
-          console.log('16')
         }}})
  
-
   let coloPicker = spawnColorPicker(document,'tileEditingPlace','colorPicker',texts[95],function(){
     game.getBackground().setColor((<HTMLInputElement>document.getElementById('colorPicker')).value)
     game.getBackground().setBackgroundImage(undefined!)
    reload(ctx)
-   console.log('17')
 })
   coloPicker.value = game.getBackground().getColor()
  }

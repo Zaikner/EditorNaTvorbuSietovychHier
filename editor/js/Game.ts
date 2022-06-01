@@ -338,8 +338,7 @@ class Game{
         this.choosenTile
     }
     moveTile(event:MouseEvent,tile:Tile = this.choosenTile!,addX=0,addY=0){
-      
-       
+         
         if (tile != undefined){
             let coords = calibreEventCoords(event)
            
@@ -419,13 +418,9 @@ class Game{
         return t
     }
 
-
-  
     reactToTile(tile:Tile,returnValue:number,pawn:Pawn){
         const params = new URLSearchParams(window.location.search);
-        console.log('reagoval na tile')
         if (this.getIsOnturn()){
-    
             let canRemovePawnIds:Array<number> = []
             let ownersOfEliminatedPawns:Array<string> = []
             this.getPlayerTokens().forEach((token:string)=>{
@@ -853,12 +848,6 @@ class Game{
     public getHasThrown(){
         return this.hasThrown
     }
-    // getHasStarted(){
-    //     return  this.hasStarted
-    // }
-    // setHasStarted(newStarted:boolean){
-    //     this.hasStarted = newStarted
-    // }
 }
 
 export{Game}

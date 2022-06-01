@@ -132,30 +132,19 @@ var AccountManager = /** @class */ (function () {
         newAcc.setId(acc.getId());
         this.loggedAccounts.push(newAcc);
         newAcc.addPing();
-        //newAcc.checkIfOnline()
         return newAcc;
     };
     AccountManager.logout = function (acc) {
-        //console.log('vykonal logout')
+        console.log('odhlasil');
         if (acc == undefined) {
             return;
         }
-        //console.log('nie je undefined')
         this.loggedAccounts = this.loggedAccounts.filter(function (a) { return a != acc; });
         this.clientIds = this.clientIds.filter(function (id) { return id != acc.getClientId(); });
-        //console.log(acc.activeInRoom)
         var room = acc.activeInRoom;
         if (room != undefined) {
             room.leave(room.findPlayerOnAccount(acc));
         }
-    };
-    AccountManager.logGuest = function () {
-        var newAcc = new Account_js_1.Account((this.numberOfGuests + 1).toString(), 'guestHaveNoPassword');
-        this.numberOfGuests++;
-        newAcc.setIsGuest(true);
-        newAcc.setClientId(this.createNewClientId());
-        this.loggedAccounts.push(newAcc);
-        return newAcc;
     };
     AccountManager.isLogged = function (name) {
         // OPRAVIT!!!!!!!!!!!!, ide to, ale odlogovanie nie je poriesene
@@ -185,7 +174,6 @@ var AccountManager = /** @class */ (function () {
             if (acc.getClientId() === clientId) {
                 ret = acc;
             }
-            ////////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
         });
         return ret;
     };
@@ -198,7 +186,6 @@ var AccountManager = /** @class */ (function () {
                     case 1:
                         accounts = _a.sent();
                         if (accounts != undefined) {
-                            ////////console.log(accounts[0])
                             accounts[0].setPassword(this.encode(newPassword));
                             accounts[0].update();
                         }
@@ -217,8 +204,6 @@ var AccountManager = /** @class */ (function () {
                         accounts = _a.sent();
                         if (accounts != undefined) {
                             accounts[0].setAvatar(newAvatar);
-                            //////////console.log(accounts[0])
-                            ////////console.log('aspon updatol avatar')
                             accounts[0].update();
                         }
                         return [2 /*return*/];
@@ -230,10 +215,8 @@ var AccountManager = /** @class */ (function () {
         var man = this;
         setInterval(function () {
             AccountManager.loggedAccounts.forEach(function (acc) {
-                ////////console.log('spytal sa')
                 if (acc.getPing() == 12) {
                     man.logout(acc);
-                    ////////console.log('odlogol')
                 }
             });
         }, 5000);
@@ -251,7 +234,6 @@ var AccountManager = /** @class */ (function () {
                         if (acc.length > 0) {
                             newAcc = new Account_js_1.Account(acc[0].getName(), acc[0].getPassword());
                             newAcc.setAvatar(acc[0].getAvatar());
-                            //newAcc.setClientId(this.createNewClientId())
                             newAcc.setScore(acc[0].getScore());
                             newAcc.setGameWon(acc[0].getGameWon());
                             newAcc.setGameLost(acc[0].getGameLost());

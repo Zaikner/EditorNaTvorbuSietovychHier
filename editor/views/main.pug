@@ -31,17 +31,21 @@ style.
   .modal-dialog.modal-xl
     .modal-content(style='background-color: #292b2c')
       .modal-header
-        h3#modalHeader.modal-title(style='color: white;') Help:
+        h3#modalHeader.modal-title(style='color: white;') Nápoveda:
       #helpModalBody.modal-body(style='text-align: center;')
         h4(style='text-align: center; color: white;')=texts[0]
         hr(style='background-color: white;')
+
         h4(style='text-align: center; color: white;')=texts[1]
         hr(style='background-color: white;')
         h4(style='text-align: center; color: white;')=texts[2]
         hr(style='background-color: white;')
+        p(style = 'color:white')
+          |V sekcii účet si môžete zmeniť svoje údaje, ako obrázok pod ktorým budete v hrách vystupovať, alebo zmeniť heslo.
+          |Obrázok musí byť vo formáte PNG, JPG alebo JPEG. Heslo musí byť dlhé minimálne 5 znakov. V tejto sekcii vídíte aj svoje dosiahnuté herné štatistiky.
       #editEventFooter.modal-footer
         // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        button.btn.btn-secondary(type='button' onclick="$('#helpModal').modal('hide');") Leave!
+        button.btn.btn-secondary(type='button' onclick="$('#helpModal').modal('hide');") Ok!
         // <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button>
 // </div>
 script(src='/socket.io/socket.io.js')

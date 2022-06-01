@@ -199,8 +199,6 @@ function spawnRadioButtons(doc, parent, id, lbl, classList, options, onchangeFun
         checkerShower.textContent = options[i];
         checkerShower.htmlFor = option.id;
         checkerShower.style.float = 'left';
-        //option.onchange = function(){onchangeFunc()}
-        //option.text = options[i];
         divko.append(option);
         divko.append(checkerShower);
         divkoMax.appendChild(divko);
@@ -331,14 +329,12 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
                         if (i != 0) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'white';
                         }
-                        console.log(Canvas_1.game.getEndForPlayers());
                     }
                     else {
                         Canvas_1.game.getEndForPlayers().push(types[i]);
                         if (i != 0 && Canvas_1.game.getEndForPlayers().length == Canvas_1.game.getPlayerTokens().length) {
                             document.getElementById(types[0] + type).style.backgroundColor = 'yellow';
                         }
-                        console.log(Canvas_1.game.getEndForPlayers());
                     }
                 }
             }
@@ -375,7 +371,6 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
                     }
                 }
             }
-            // reload(game,ctx)
             e.stopPropagation();
             if (option.style.backgroundColor == 'white' && i != 0) {
                 option.style.backgroundColor = 'yellow';
@@ -385,10 +380,7 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
             }
             e.stopPropagation();
             if (Canvas_1.game.getChoosenTile() != undefined) {
-                console.log(Canvas_1.game.getStartForPlayers());
                 (0, TileEditor_1.update)();
-                console.log(Canvas_1.game.getChoosenTile().getIsStartingFor());
-                // reload(game,ctx)
             }
         });
         startMenuDropdown.appendChild(option);

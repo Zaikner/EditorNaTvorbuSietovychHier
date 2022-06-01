@@ -9,10 +9,8 @@ var Player = /** @class */ (function () {
         this.skip = 0;
         this.repeat = 0;
         this.mustThrown = 0;
-        //this.id = id;
         this.account = account;
     }
-    //constructor(){}
     Player.prototype.getId = function () {
         return this.id;
     };

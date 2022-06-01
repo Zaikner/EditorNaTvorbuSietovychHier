@@ -25,8 +25,6 @@ var Account = /** @class */ (function () {
         newAcc.setName(this.name);
         newAcc.setGameWon(this.gameWon);
         newAcc.setGameLost(this.gameLost);
-        //console.log('updatoval:')
-        //console.log(newAcc)
         newAcc.update();
     };
     Account.prototype.addPing = function () {

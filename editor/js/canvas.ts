@@ -2,35 +2,27 @@
    
 
 import {Tile} from './Tile.js'
-import {editTiles,deleteTiles,moveTiles, removeAllButtons, removeAllListenersAdded, moveEventHandler, pickTile, unchooseEverything, startInsertingByOne, copyNextTileMap, update, spawnElements, showActualState } from "./TileEditor.js";
+import {removeAllButtons, removeAllListenersAdded, unchooseEverything, startInsertingByOne, copyNextTileMap, update} from "./TileEditor.js";
 import {  editBackground,  } from "./BackgroundEditor";
 
-import { spawnButton, spawnHeading, spawnNumberInput, spawnParagraph, spawnSliderWithValueShower,spawnCheckerWithValueShower, spawnCheckerWithLabel } from "./Elements";
+import { spawnButton, spawnHeading, spawnParagraph, spawnSliderWithValueShower, spawnCheckerWithLabel } from "./Elements";
 
-import { pawnInsertMenu,pawnEditMenu,pawnDeleteMenu } from "./PawnEditor";
+import { pawnEditMenu } from "./PawnEditor";
 import { Pawn } from "./Pawn";
-import { addOption, askQuestion, createQuestion, showAllQuestions ,evaluateQuestion, removeLastOption, initCreation, pickQuestion, showResults} from "./Questions";
+import { addOption, createQuestion, initCreation} from "./Questions";
 
 import { PawnStyle } from "./PawnStyle";
 
-import { editorSocket, isEditor,getCookie,texts } from "./ClientSocket";
+import { editorSocket,getCookie,texts } from "./ClientSocket";
 import { Warning } from "./Warning";
 import { Game } from "./Game";
-
-
 
 let game = new Game()
 initNewGame()
 const params = new URLSearchParams(window.location.search);
 
-
-//socket.emit('chat message', 'hi');
 const canvas = document.createElement('canvas');
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
-
-
-
-
 
 function initNewGame(){
         game = new Game()
@@ -40,14 +32,8 @@ function initNewGame(){
         })
     }   
 
-
-
 function edit(){
   mainMenu();
-
-// document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
-//   updateNextTileIds()
-// })
 
 document.getElementById('randomQuestionID')?.addEventListener('click',function(){
   if (Array.from(game.getQuestions().entries()).length >0){
@@ -61,12 +47,9 @@ document.getElementById('randomQuestionID')?.addEventListener('click',function()
   }
   else{
     $('#editEventModal').modal('hide')
-    $('#EventModal').modal('hide')
-    
+    $('#EventModal').modal('hide') 
     Warning.show(texts[202])
   }
- 
- 
 })
 document.getElementById('noneButton')!.addEventListener('click',function(){
 
@@ -91,7 +74,6 @@ document.getElementById('forwardButton')!.addEventListener('click',function(){
     $('#EventModal').modal('hide')
     
     elementDeleter('askTheQuestionEventEdit')
-    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[99] +' ' + nums +' ' + texts[100]
     update()
   })
@@ -109,9 +91,6 @@ document.getElementById('backwardButton')!.addEventListener('click',function(){
     $('#EventModal').modal('hide')
     
     elementDeleter('askTheQuestionEventEdit')
-  
-    
-    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[103] +' ' + nums +' ' + texts[100]
     update()
   })
@@ -129,7 +108,6 @@ document.getElementById('skipButton')!.addEventListener('click',function(){
     $('#EventModal').modal('hide')
     
     elementDeleter('askTheQuestionEventEdit')
-    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[105] +' ' + nums +' ' + texts[100]
     update()
   })
@@ -149,7 +127,6 @@ document.getElementById('repeatButton')!.addEventListener('click',function(){
     $('#EventModal').modal('hide')
     
     elementDeleter('askTheQuestionEventEdit')
-    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[107] +' ' + nums +' ' + texts[100]
     update()
     
@@ -171,46 +148,28 @@ document.getElementById('stopButton')!.addEventListener('click',function(){
     $('#EventModal').modal('hide')
     
     elementDeleter('askTheQuestionEventEdit')
-   
-    
-    //document.getElementById('bindEvent')!.textContent = texts[98]
     document.getElementById('pickedEventParagraph')!.textContent =texts[110]+ ' '+ nums+' '  +texts[111];
     update()
   })
   
 });
 
-  //$('#rulesModal').modal('show');
 document.getElementById('editBackground')!.addEventListener('click',function(){
   unchooseEverything()
   editBackground();} );
 document.getElementById('insertTiles')!.addEventListener('click',function(){
   unchooseEverything()
   startInsertingByOne();} );
-// document.getElementById('moveTiles')!.addEventListener('click',function(){
-//   unchooseEverything()
-//   moveTiles();} );
-// document.getElementById('editTiles')!.addEventListener('click',function(){
-//   unchooseEverything()
-//   editTiles();} );
-// document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
+
 
 document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
                                                                                 editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false});} )
-// document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
-// document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
 
-//spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
 document.getElementById('generalInfoButton')!.addEventListener('click',function(){
   removeAllButtons()
   removeAllListenersAdded()
   mainMenu();})
-// document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
-// document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
-// document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
-// document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
-  
-//document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
+
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
 document.getElementById('addButtonEdit')!.addEventListener('click',function(){addOption('editQuestion','',false);})
 document.getElementById('createQuestionButtonModal')!.addEventListener('click',function(){initCreation();
@@ -219,12 +178,10 @@ document.getElementById('deleteGameButton')!.addEventListener('click',function()
  editorSocket.emit('deleteGame',{id:localStorage.getItem('id'),name:game.getName()})
   window.location.replace('/editor')
 })
-//document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
-//document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
+
 document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
   game.getPlayerTokens().forEach((token:string)=>{
     let input =(<HTMLInputElement>document.getElementById('nextTile'+token))!.value
-    // if (game.getChoosenTile()!=undefined){
     game.getNextTilesIds().set(token,parseInt(input))
   })
   if (game.getChoosenTile()!= undefined){
@@ -252,22 +209,13 @@ document.getElementById('loadGameButton')?.addEventListener('click',function(){
 
 
 document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
-
-// document.getElementById("resetQuestionID")!.addEventListener('click',function(){
-//   game.setQuestionId(-1);
-//   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
- 
-// })
- }
+}
 
 var doc = document;
-
-
 
 document.getElementById("canvasPlace")!.appendChild(canvas);
 
 let started:Boolean = false;
-
 
 function changeNextTileText(){
   let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
@@ -286,7 +234,6 @@ function changeNextTileText(){
 }
 
 function mainMenu(){ 
-  
  started = false
 
 spawnHeading(document,'buttonPlace','',texts[21])
@@ -297,7 +244,6 @@ numOfPlayersSlider.value = game.getnumOfPlayers().toString()
 numOfPlayersSlider.min = '1';
 numOfPlayersSlider.max = '6';
 numOfPlayersSlider.step = '1';
-
 
 let numShower = document.createElement('paragraph');
 numShower.id = 'numShower'
@@ -338,13 +284,8 @@ numOfPlayersSlider.onclick =function(){
         game.getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
        
       }
-     
-      //game.getPawnStyle().Player
     }
   }
-  //spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
-  //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
-  
   game.setPlayerTokens(playerTokens)
   reload(ctx)
 }
@@ -365,12 +306,6 @@ document.getElementById("gameNamePlace")!.appendChild(gameName);
 let gameType:HTMLSelectElement = document.createElement('select');
 gameType.id = 'gameType'
 
-// text = document.createElement('p')
-// text.textContent = 'Typ hry:'
-// document.getElementById("gameTypePlace")!.appendChild(text);
-// document.getElementById("gameTypePlace")!.appendChild(gameType);
-
-//spawnParagraph(document,'tileEditingPlace','',texts[112],true)
 let slid = spawnSliderWithValueShower(document,'tileEditingPlace','pawnNumberSlider',texts[112],'1','4','1',game.getNumberOfStartingPawns().toString())
 slid.style.width = '100%'
 slid.onchange = function(){
@@ -393,7 +328,7 @@ slid.onchange = function(){
     game.getPlayerTokens().forEach((player:string) => {
       let num = 0
       let rem:Array<Pawn> = []
-      //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
+     
       game.getTiles().forEach((tile:Tile)=>{
         num = 0
         tile.getPawns().forEach((pawn:Pawn)=>{
@@ -410,18 +345,6 @@ slid.onchange = function(){
         })
       })
       
-  //     game.getPawns().forEach((pawn:Pawn)=>{
-  //       if (pawn.player == player){
-  //         num++;
-  //         if (num > max){
-  //           rem.push(pawn)
-  //         }
-  //       }
-  //     })
-  //     rem.forEach((pawn:Pawn)=>{
-  //       game.removePawn(pawn)
-  //       pawn.tile.removePawn(pawn)
-  //     })
      });
    }
   game.setNumberOfStartingPawns(max)
@@ -464,8 +387,6 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],text
     game.saveGame()
     Warning.show(texts[249])
   }
-  
-  //window.location.replace('/')
 })
 
 let button = spawnButton(document,'tileEditingPlace','publishGame',['btn','btn-dark'],texts[181],function(){
@@ -513,26 +434,15 @@ else{
 }
 }
 
-
- 
-
- var length:number =0;
-
-//ctx.scale(2, -2);
 resize(game,ctx);
 
- 
 window.addEventListener('resize', function(){resize(game,ctx)});
 
-
-
-// // resize canvas
 function resize(editor:Game,context:CanvasRenderingContext2D) {
    context.canvas.width = window.innerWidth/ 3 * 2-30
    context.canvas.height = window.innerHeight;
-   //if(!isEditor){
+ 
     if(game.getInitSizeX() == 0){
-      console.log('bolo 0 tak nastavil toto')
       game.setInitSizeX(canvas.width)
      }
      if(game.getInitSizeY() == 0){
@@ -541,13 +451,9 @@ function resize(editor:Game,context:CanvasRenderingContext2D) {
      
      game.setScaleX(canvas.width/game.getInitSizeX())
      game.setScaleY((canvas.height-20)/game.getInitSizeY())
-     console.log(game.getScaleX())
-     console.log(game.getScaleY())
    reload(context);
   
 }
-
-
 
 function reload(ctx:CanvasRenderingContext2D)
 { 
@@ -556,11 +462,7 @@ function reload(ctx:CanvasRenderingContext2D)
 
   if (game.getBackground() != undefined){
     game.getBackground().draw()
-  }
- 
-  let num = 0
-  //let size = game.getPath().getPath().length;
- 
+  } 
   ctx.closePath()
   let tiles = game.getTiles()
   tiles.forEach((tile:Tile) => {
@@ -569,17 +471,9 @@ function reload(ctx:CanvasRenderingContext2D)
   })
   ctx.closePath()
   ctx.restore()
-  // let pawns = game.getPawns()
-  // pawns.forEach((pawn:Pawn) =>{
-  //     pawn.draw(ctx)
-  // })
- 
-  
 }
 
-function clear(){ //toto este prerobit
-  //game.getPath().setPath([]);
-  //sessionStorage.points = null;
+function clear(){ 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -590,8 +484,6 @@ function elementDeleter(parent:string){
   }
 }
 function calibreEventCoords(event:MouseEvent):{x:number,y:number}{
-  //console.log({x:event.offsetX*game.getScaleX(),y:event.offsetY*game.getScaleY()})
-  //console.log({x:event.offsetX,y:event.offsetY})
   return {x:event.offsetX,y:event.offsetY}
 }
 
@@ -603,7 +495,4 @@ window.onload = function(){
  
 }
 
-
-
-//setInterval(function(){resize(game,ctx)},500)
 export{mainMenu,doc,elementDeleter,edit,clear,canvas,ctx,calibreEventCoords,game,reload,resize,initNewGame,changeNextTileText};

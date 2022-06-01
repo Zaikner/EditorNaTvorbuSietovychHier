@@ -17,15 +17,10 @@ router
 .route("/")
 .get( async(request,res) =>
 {   
-    console.log('gameLobbyparams:')
-    console.log(request.query)
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    
-    
-    //console.log(text)
+
     if (request.cookies.id != undefined && acc != undefined){
-        //console.log(await GameFinder.getIntance().findAll())
         let a = (await GameFinder.getIntance().findAllPublished()).map((game) => game.getName())
         let rooms = Array.from(GameManager.getActiveRooms().values())
         .map(room => [room.getId(),
@@ -33,8 +28,7 @@ router
             room.getGameName(),
             room.getHasStarted()
            ])
-        console.log('poslal rooms:')
-        console.log(rooms)
+
         let scores =await AccountFinder.getIntance().findAllByOrderedScore()
         let sendScores = []
         for (let i = 1 ; i<= scores.length;i++){
@@ -42,12 +36,7 @@ router
         }
         let players = GameManager.getActivePlayers(acc)
         let playerNames = players.map(p=>p[0])
-        console.log(players)
-        //console.log(rooms)
-        //console.log(sendScores)
         let existingRoomsIds = Array.from(GameManager.getActiveRooms().keys())
-        console.log('existing rooms:')
-        //console.log(existingRoomsId)
 
         let filteredNames = []
         let numOfPlayers = 6;
@@ -63,43 +52,28 @@ router
             }
            
             let p = await GameFinder.getIntance().findByMaxPlayers(parseInt(request.query.players))
-            size = parseInt(request.query.tiles)
-            //numOfTiles = 1
-            // if(request.query.tiles.substring(0,2) == 'St' || request.query.tiles.substring(0,2) == 'Mi'){
-            //    size = 50
-
-            // }
-            // else if (request.query.tiles.substring(0,2) == 'Lo' || request.query.tiles.substring(0,2) == 'Dl'){
-            //    size = 100000
-            // }
-         
+            size = parseInt(request.query.tiles)         
             let len = p.length
            
             for (let i = 0; i < len; i ++){
                let game = p[i]
                let gameInfo = await TileFinder.getIntance().findByGameId(game.getId())
-               console.log('dlzka je :'+ gameInfo.length)
+
                if (gameInfo.length <= size){
            
                    let add = true;
                    if (request.query.questions == 'true'){
-                       console.log('je true')
                        add = false
                        gameInfo.forEach((tile)=>{
                            if (tile.getQuestionId() >= 0 || tile.getRandomQuestion()){
                                add = true
-                               console.log('nachadza sa otayzka')
                            }
                        })
                    }
               
                    if (add){
                     filteredNames.push(game.getName())
-                   }
-                  
-                   console.log('pridal')
-                   console.log(filteredNames)
-                
+                   }                
                }
               
             }
@@ -111,12 +85,8 @@ router
             res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString(),playerNames:playerNames});
         }
         else{
-            console.log('aspon zachytil ze hra je plna')
             res.render('gameLobby.pug',{root:'./editor/views',gameNames:a,rooms:rooms,filteredNames:filteredNames,scores:sendScores,text:text,players:players,full:true,existingRoomsIds:existingRoomsIds,numOfPlayers:numOfPlayers,questions:questions,numOfTiles:size.toString(),playerNames:playerNames});
-        }
-        
-        
-        
+        }    
     }
     else{
         res.redirect('/gameLobby/login')

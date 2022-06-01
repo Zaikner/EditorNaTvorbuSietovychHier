@@ -12,7 +12,6 @@ export class AccountManager{
     private static clientIds:Array<String> = []
     private static numberOfGuests:number = 0
    
-
     public static isValidRegistration(name:string,password:string,confirm:string){
         return password == confirm && this.isValidName(name)
     }
@@ -71,36 +70,25 @@ export class AccountManager{
         newAcc.setGameWon(acc.getGameWon())
         newAcc.setGameLost(acc.getGameLost())
         newAcc.setId(acc.getId())
+
         this.loggedAccounts.push(newAcc)
         newAcc.addPing()
-        //newAcc.checkIfOnline()
+
         return newAcc
     }
     public static logout(acc:Account){
-        //console.log('vykonal logout')
+        console.log('odhlasil')
         if (acc == undefined){
             return
         }
-        //console.log('nie je undefined')
+     
         this.loggedAccounts = this.loggedAccounts.filter((a:Account) => a!=acc)
         this.clientIds = this.clientIds.filter((id) => id != acc.getClientId())
-        //console.log(acc.activeInRoom)
+       
         let room = acc.activeInRoom
         if (room!=undefined){
             room.leave(room.findPlayerOnAccount(acc)!)
-        }
-
-     
-    }
-    public static logGuest(){
-        let newAcc = new Account((this.numberOfGuests+1).toString(),'guestHaveNoPassword')
-        this.numberOfGuests++;
-        newAcc.setIsGuest(true)
-        newAcc.setClientId(this.createNewClientId())
-        this.loggedAccounts.push(newAcc)
-        return newAcc
-        
-
+        } 
     }
     
     public static isLogged(name:string){
@@ -132,43 +120,31 @@ export class AccountManager{
         this.loggedAccounts.forEach((acc:Account) =>{
             if (acc.getClientId()===clientId){
                 ret = acc
-            }
-            ////////console.log('PRe ucey s id : ' + clientId + ' nasiel ucet s nazvom ' + acc.getName())
-            
+            }    
         })
         return ret
     }
     public static async changePassword(name:string, newPassword:string, clientId:string){
         let accounts = await AccountFinder.getIntance().findByName(name)
         if (accounts!= undefined){
-            ////////console.log(accounts[0])
             accounts[0].setPassword(this.encode(newPassword))
             accounts[0].update();
-            
         }
-    
-        
     }
-    public static async changeAvatar(name:string, newAvatar:string){
-        ////////console.log('tu to padlo')
+    public static async changeAvatar(name:string, newAvatar:string){   
         let accounts = await AccountFinder.getIntance().findByName(name)
         if (accounts!= undefined){
-            
             accounts[0].setAvatar(newAvatar)
-            //////////console.log(accounts[0])
-            ////////console.log('aspon updatol avatar')
-            accounts[0].update();
-            
+            accounts[0].update();       
         }
     }
     public static checkLogedAccounts(){
         let man = this
         
-        setInterval(function(){   AccountManager.loggedAccounts.forEach((acc:Account)=>{
-            ////////console.log('spytal sa')
+        setInterval(function(){ 
+            AccountManager.loggedAccounts.forEach((acc:Account)=>{ 
             if (acc.getPing() == 12){
                 man.logout(acc)
-                ////////console.log('odlogol')
             }
         })},5000)
      
@@ -179,23 +155,16 @@ export class AccountManager{
         if (acc!.length >0){
             let newAcc = new Account(acc![0].getName(),acc![0].getPassword())
             newAcc.setAvatar(acc![0].getAvatar())
-            //newAcc.setClientId(this.createNewClientId())
             newAcc.setScore(acc![0].getScore())
             newAcc.setGameWon(acc![0].getGameWon())
             newAcc.setGameLost(acc![0].getGameLost())
             newAcc.setId(acc![0].getId())
             ret = newAcc
         }
-
-
         return ret
     }
     public static getLogedAccounts(){
         return this.loggedAccounts
     }
-  
-    
-    
-
 }
 module.exports = AccountManager

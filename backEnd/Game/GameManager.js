@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.GameManager = void 0;
-var AccountManager = require('../Accounts/AccountManager.js');
 var GameFinder_db_js_1 = require("../../services/db/RDG/GameFinder_db.js");
 var TileFinder_1 = require("../../services/db/RDG/TileFinder");
 var TextFinder_1 = require("../../services/db/RDG/TextFinder");
@@ -47,7 +46,6 @@ var RulesFinder_js_1 = require("../../services/db/RDG/RulesFinder.js");
 var Room_js_1 = require("./Room.js");
 var Player_js_1 = require("./Player.js");
 var SocketServer_js_1 = require("../../services/socket/SocketServer.js");
-//const Room = require('./Room.js')
 var GameManager = /** @class */ (function () {
     function GameManager() {
     }
@@ -96,7 +94,6 @@ var GameManager = /** @class */ (function () {
         });
     };
     GameManager.reloadTables = function () {
-        console.log('reloadol table');
         var rooms = GameManager.getActiveRoomsTable();
         var players = GameManager.getActivePlayersTable();
         SocketServer_js_1.ServerSocket.getIo().emit('refresh lobby', rooms, players);
@@ -119,12 +116,9 @@ var GameManager = /** @class */ (function () {
                             });
                         }
                         room = new Room_js_1.Room(id, numOfPlayers, name);
-                        return [4 /*yield*/, GameManager.loadGame(name)
-                            //console.log(room)
-                        ];
+                        return [4 /*yield*/, GameManager.loadGame(name)];
                     case 1:
                         gameData = _a.sent();
-                        //console.log(room)
                         this.activeRooms.set(id, room);
                         numOfPawns = gameData.game.getNumOfPawnsPerTile();
                         pawnNumber = 1;
@@ -134,7 +128,6 @@ var GameManager = /** @class */ (function () {
                                 for (var i = 0; i < numOfPawns; i++) {
                                     room.getPawnPositions().set(pawnNumber, tile.id);
                                     pawns.push({ token: token, id: pawnNumber, tileId: tile.id });
-                                    //[token, pawnNumber,tile.id])
                                     pawnNumber++;
                                 }
                             });
@@ -152,7 +145,6 @@ var GameManager = /** @class */ (function () {
             room.getPlayers().forEach(function (player) {
                 if (player.getAccount().getSocketId() == socketId) {
                     room.leave(player);
-                    //ServerSocket.getIo().to(room.getId().toString()).emit('player left',{msg:'Player '+player.getAccount().getName()+' has left the room.'})
                 }
             });
         });
@@ -162,7 +154,6 @@ var GameManager = /** @class */ (function () {
         var rooms = Array.from(this.activeRooms.values());
         var _loop_1 = function (i) {
             rooms[i].getPlayers().forEach(function (player) {
-                //console.log(acc)
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), function () {
                         rooms[i].join(new Player_js_1.Player(acc, ''));
                     }, rooms[i].getHasStarted() || (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())]);
@@ -178,7 +169,6 @@ var GameManager = /** @class */ (function () {
         var rooms = Array.from(this.activeRooms.values());
         var _loop_2 = function (i) {
             rooms[i].getPlayers().forEach(function (player) {
-                //console.log(acc)
                 ret.push([player.getAccount().getName(), rooms[i].getGameName(), rooms[i].getId(), rooms[i].getHasStarted() || (rooms[i].getNumOfPlayers() == rooms[i].getMaxPlayers())]);
             });
         };

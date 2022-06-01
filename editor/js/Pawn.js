@@ -54,9 +54,6 @@ var Pawn = /** @class */ (function () {
                 (0, Canvas_1.reload)(Canvas_1.ctx);
             }, 550 * numOfTiles);
         }
-        else {
-            console.log('nereagoval lebo nebolo jeho kolo');
-        }
     };
     Pawn.prototype.returnToStart = function () {
         this.tile.removePawn(this);

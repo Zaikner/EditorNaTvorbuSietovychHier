@@ -15,7 +15,6 @@ var game = new Game_1.Game();
 exports.game = game;
 initNewGame();
 var params = new URLSearchParams(window.location.search);
-//socket.emit('chat message', 'hi');
 var canvas = document.createElement('canvas');
 exports.canvas = canvas;
 var ctx = canvas.getContext("2d");
@@ -30,9 +29,6 @@ exports.initNewGame = initNewGame;
 function edit() {
     var _a, _b, _c, _d;
     mainMenu();
-    // document.getElementById('nextTileButtonSet')?.addEventListener('click',function(){
-    //   updateNextTileIds()
-    // })
     (_a = document.getElementById('randomQuestionID')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
         if (Array.from(game.getQuestions().entries()).length > 0) {
             game.setEvents('random', { num: 0, value: 0 });
@@ -69,7 +65,6 @@ function edit() {
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = ClientSocket_1.texts[99] + ' ' + nums + ' ' + ClientSocket_1.texts[100];
             (0, TileEditor_js_1.update)();
         });
@@ -87,7 +82,6 @@ function edit() {
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = ClientSocket_1.texts[103] + ' ' + nums + ' ' + ClientSocket_1.texts[100];
             (0, TileEditor_js_1.update)();
         });
@@ -105,7 +99,6 @@ function edit() {
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = ClientSocket_1.texts[105] + ' ' + nums + ' ' + ClientSocket_1.texts[100];
             (0, TileEditor_js_1.update)();
         });
@@ -123,7 +116,6 @@ function edit() {
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = ClientSocket_1.texts[107] + ' ' + nums + ' ' + ClientSocket_1.texts[100];
             (0, TileEditor_js_1.update)();
         });
@@ -141,12 +133,10 @@ function edit() {
             $('#editEventModal').modal('hide');
             $('#EventModal').modal('hide');
             elementDeleter('askTheQuestionEventEdit');
-            //document.getElementById('bindEvent')!.textContent = texts[98]
             document.getElementById('pickedEventParagraph').textContent = ClientSocket_1.texts[110] + ' ' + nums + ' ' + ClientSocket_1.texts[111];
             (0, TileEditor_js_1.update)();
         });
     });
-    //$('#rulesModal').modal('show');
     document.getElementById('editBackground').addEventListener('click', function () {
         (0, TileEditor_js_1.unchooseEverything)();
         (0, BackgroundEditor_1.editBackground)();
@@ -155,30 +145,15 @@ function edit() {
         (0, TileEditor_js_1.unchooseEverything)();
         (0, TileEditor_js_1.startInsertingByOne)();
     });
-    // document.getElementById('moveTiles')!.addEventListener('click',function(){
-    //   unchooseEverything()
-    //   moveTiles();} );
-    // document.getElementById('editTiles')!.addEventListener('click',function(){
-    //   unchooseEverything()
-    //   editTiles();} );
-    // document.getElementById('deleteTiles')!.addEventListener('click',function(){deleteTiles();} );
     document.getElementById('questionManager').addEventListener('click', function () {
         elementDeleter('listContainer');
         ClientSocket_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
-    // document.getElementById('questionSubmitButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
-    // document.getElementById('questionEditButton')!.addEventListener('mousedown',function(){editorSocket.emit('loadQuestions');} )
-    //spawnButton(document,'containerAdd','dd',[],'Add Option',addOption)
     document.getElementById('generalInfoButton').addEventListener('click', function () {
         (0, TileEditor_js_1.removeAllButtons)();
         (0, TileEditor_js_1.removeAllListenersAdded)();
         mainMenu();
     });
-    // document.getElementById('addComponent')?.addEventListener('click',function(){addComponentMenu()})
-    // document.getElementById('editComponent')?.addEventListener('click',function(){editComponentMenu()})
-    // document.getElementById('moveComponent')?.addEventListener('click',function(){moveComponentMenu()})
-    // document.getElementById('deleteComponent')?.addEventListener('click',function(){deleteComponentMenu()})
-    //document.getElementById('setAnswerButton')!.addEventListener('click',function(){editorSocket.emit('answerQuestion',{id:0})})
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
     document.getElementById('addButtonEdit').addEventListener('click', function () { (0, Questions_1.addOption)('editQuestion', '', false); });
     document.getElementById('createQuestionButtonModal').addEventListener('click', function () {
@@ -188,13 +163,10 @@ function edit() {
         ClientSocket_1.editorSocket.emit('deleteGame', { id: localStorage.getItem('id'), name: game.getName() });
         window.location.replace('/editor');
     });
-    //document.getElementById('removeButtonInsert')!.addEventListener('click',function(){removeLastOption('questionOptions');})
-    //document.getElementById('removeButtonEdit')!.addEventListener('click',function(){removeLastOption('editQuestion');})
     (_b = document.getElementById('nextTileButtonSet')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', function () {
         var _a;
         game.getPlayerTokens().forEach(function (token) {
             var input = document.getElementById('nextTile' + token).value;
-            // if (game.getChoosenTile()!=undefined){
             game.getNextTilesIds().set(token, parseInt(input));
         });
         if (game.getChoosenTile() != undefined) {
@@ -217,10 +189,6 @@ function edit() {
         ClientSocket_1.editorSocket.emit('loadGameNames', { id: localStorage.getItem('id') });
     });
     document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
-    // document.getElementById("resetQuestionID")!.addEventListener('click',function(){
-    //   game.setQuestionId(-1);
-    //   (<HTMLButtonElement>document.getElementById('bindQuestion'))!.textContent = texts[114]
-    // })
 }
 exports.edit = edit;
 var doc = document;
@@ -291,11 +259,8 @@ function mainMenu() {
                     game.getNextTilesIds().set('Player ' + i, game.getTiles().length + 2);
                     game.getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
                 }
-                //game.getPawnStyle().Player
             }
         }
-        //spawnParagraph(doc,"tileEditingPlace",'',texts[137],true)
-        //spawnCheckerWithValueShower(doc,"tileEditingPlace",'toogleNumberingChecker',false,[texts[92],texts[93]])
         game.setPlayerTokens(playerTokens);
         reload(ctx);
     };
@@ -312,11 +277,6 @@ function mainMenu() {
     document.getElementById("gameNamePlace").appendChild(gameName);
     var gameType = document.createElement('select');
     gameType.id = 'gameType';
-    // text = document.createElement('p')
-    // text.textContent = 'Typ hry:'
-    // document.getElementById("gameTypePlace")!.appendChild(text);
-    // document.getElementById("gameTypePlace")!.appendChild(gameType);
-    //spawnParagraph(document,'tileEditingPlace','',texts[112],true)
     var slid = (0, Elements_1.spawnSliderWithValueShower)(document, 'tileEditingPlace', 'pawnNumberSlider', ClientSocket_1.texts[112], '1', '4', '1', game.getNumberOfStartingPawns().toString());
     slid.style.width = '100%';
     slid.onchange = function () {
@@ -337,7 +297,6 @@ function mainMenu() {
             game.getPlayerTokens().forEach(function (player) {
                 var num = 0;
                 var rem = [];
-                //EDITOR PRECHADZAT CEZ TILES A NIE CEZ PAWN BOA
                 game.getTiles().forEach(function (tile) {
                     num = 0;
                     tile.getPawns().forEach(function (pawn) {
@@ -353,18 +312,6 @@ function mainMenu() {
                         });
                     });
                 });
-                //     game.getPawns().forEach((pawn:Pawn)=>{
-                //       if (pawn.player == player){
-                //         num++;
-                //         if (num > max){
-                //           rem.push(pawn)
-                //         }
-                //       }
-                //     })
-                //     rem.forEach((pawn:Pawn)=>{
-                //       game.removePawn(pawn)
-                //       pawn.tile.removePawn(pawn)
-                //     })
             });
         }
         game.setNumberOfStartingPawns(max);
@@ -401,7 +348,6 @@ function mainMenu() {
             game.saveGame();
             Warning_1.Warning.show(ClientSocket_1.texts[249]);
         }
-        //window.location.replace('/')
     });
     var button = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', 'publishGame', ['btn', 'btn-dark'], ClientSocket_1.texts[181], function () {
         if (!game.getIsPublished()) {
@@ -444,17 +390,12 @@ function mainMenu() {
     }
 }
 exports.mainMenu = mainMenu;
-var length = 0;
-//ctx.scale(2, -2);
 resize(game, ctx);
 window.addEventListener('resize', function () { resize(game, ctx); });
-// // resize canvas
 function resize(editor, context) {
     context.canvas.width = window.innerWidth / 3 * 2 - 30;
     context.canvas.height = window.innerHeight;
-    //if(!isEditor){
     if (game.getInitSizeX() == 0) {
-        console.log('bolo 0 tak nastavil toto');
         game.setInitSizeX(canvas.width);
     }
     if (game.getInitSizeY() == 0) {
@@ -462,8 +403,6 @@ function resize(editor, context) {
     }
     game.setScaleX(canvas.width / game.getInitSizeX());
     game.setScaleY((canvas.height - 20) / game.getInitSizeY());
-    console.log(game.getScaleX());
-    console.log(game.getScaleY());
     reload(context);
 }
 exports.resize = resize;
@@ -472,8 +411,6 @@ function reload(ctx) {
     if (game.getBackground() != undefined) {
         game.getBackground().draw();
     }
-    var num = 0;
-    //let size = game.getPath().getPath().length;
     ctx.closePath();
     var tiles = game.getTiles();
     tiles.forEach(function (tile) {
@@ -482,15 +419,9 @@ function reload(ctx) {
     });
     ctx.closePath();
     ctx.restore();
-    // let pawns = game.getPawns()
-    // pawns.forEach((pawn:Pawn) =>{
-    //     pawn.draw(ctx)
-    // })
 }
 exports.reload = reload;
 function clear() {
-    //game.getPath().setPath([]);
-    //sessionStorage.points = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 exports.clear = clear;
@@ -502,8 +433,6 @@ function elementDeleter(parent) {
 }
 exports.elementDeleter = elementDeleter;
 function calibreEventCoords(event) {
-    //console.log({x:event.offsetX*game.getScaleX(),y:event.offsetY*game.getScaleY()})
-    //console.log({x:event.offsetX,y:event.offsetY})
     return { x: event.offsetX, y: event.offsetY };
 }
 exports.calibreEventCoords = calibreEventCoords;

@@ -18,7 +18,6 @@ function editBackground() {
             background.onload = function () {
                 Canvas_js_1.game.getBackground().setBackgroundImage(background);
                 (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
-                console.log('16');
             };
         }
     });
@@ -26,7 +25,6 @@ function editBackground() {
         Canvas_js_1.game.getBackground().setColor(document.getElementById('colorPicker').value);
         Canvas_js_1.game.getBackground().setBackgroundImage(undefined);
         (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
-        console.log('17');
     });
     coloPicker.value = Canvas_js_1.game.getBackground().getColor();
 }

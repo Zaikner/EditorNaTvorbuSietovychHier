@@ -10,7 +10,6 @@ function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,fu
     label.style.float = 'left'
     label.style.fontSize = 'normal'
 
-
     let colorPicker:HTMLInputElement = doc.createElement('input')
     colorPicker.type = 'color'
     colorPicker.id = id;
@@ -59,8 +58,6 @@ function spawnCheckerWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:stri
   label.style.float = 'left'
   label.style.fontSize = 'normal'
   label.style.verticalAlign = 'baseline'
-
-  
 
   doc.getElementById('div'+id)!.appendChild(checker);
   doc.getElementById('div'+id)!.appendChild(label);
@@ -217,9 +214,7 @@ function spawnRadioButtons(doc:HTMLDocument,parent:string,id:string,lbl:string,c
       checkerShower.textContent = options[i]
       checkerShower.htmlFor = option.id
       checkerShower.style.float='left'
-     
-      //option.onchange = function(){onchangeFunc()}
-      //option.text = options[i];
+ 
       divko.append(option)
       divko.append(checkerShower)
       divkoMax.appendChild(divko);
@@ -252,9 +247,7 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
     return image
 }
 function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string){
- 
- 
-  
+   
   spawnDiv(document,parent,'div'+id,[])
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
@@ -364,14 +357,12 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
                 if (i!=0){
                   document.getElementById(types[0]+type)!.style.backgroundColor ='white'
                 }
-                console.log(game.getEndForPlayers())
               }
               else{
                 game.getEndForPlayers().push(types[i])
                 if (i!=0 && game.getEndForPlayers().length == game.getPlayerTokens().length){
                   document.getElementById(types[0]+type)!.style.backgroundColor ='yellow'
                 }
-                console.log(game.getEndForPlayers())
               }
             }
           
@@ -410,9 +401,7 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
               }
           
           }
-     
-          
-         // reload(game,ctx)
+
           e.stopPropagation()
           if (option.style.backgroundColor == 'white' && i!=0){
             option.style.backgroundColor = 'yellow'
@@ -422,11 +411,8 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
           }
           
           e.stopPropagation()
-          if (game.getChoosenTile()!=undefined){
-            console.log(game.getStartForPlayers())
+          if (game.getChoosenTile()!=undefined){ 
             update()
-            console.log(game.getChoosenTile()!.getIsStartingFor())
-           // reload(game,ctx)
           }
       
         })

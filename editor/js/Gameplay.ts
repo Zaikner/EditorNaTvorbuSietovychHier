@@ -1,9 +1,7 @@
-import { spawnHeading, spawnParagraph } from "./Elements";
-import {canvas, doc,game,elementDeleter} from './Canvas'
+import { spawnHeading} from "./Elements";
+import {doc,game,elementDeleter} from './Canvas'
 import { editorSocket, texts} from './ClientSocket.js'
-import {pickTile} from './TileEditor'
 import { Pawn } from "./Pawn";
-import { Socket } from "socket.io";
 import { Warning } from "./Warning";
 
 
@@ -22,14 +20,10 @@ export class Gameplay{
         }
         this.diceImages = diceImages
     }
-   
-
 
     public static initGameInfo(name:string){
         spawnHeading(doc,"tileEditingPlace",'',texts[118]+name)
     }
-
-
     
     public static initDice(name:string){
 
@@ -48,10 +42,8 @@ export class Gameplay{
         let image = new Image()
         image.src = '../../src/Dice'+i+'.png'
        
-        image.onload = function(){
-            
-            diceImages.push(image)
-           
+        image.onload = function(){        
+            diceImages.push(image)       
         }
     }
 }
@@ -85,8 +77,6 @@ public static changeWaitingRoom(accs:any){
             }
         }
      
-   
-
         let questClone = quest.cloneNode()
         questClone.textContent =quest.textContent
 
@@ -96,7 +86,6 @@ public static changeWaitingRoom(accs:any){
         divPlaying.appendChild(questClone)
         divending.appendChild(questClone1)
       
-
         let image:HTMLImageElement =<HTMLImageElement> document.createElement("IMG");
         image.src =accs[i].avatar
         image.style.width = '50px'
@@ -108,18 +97,7 @@ public static changeWaitingRoom(accs:any){
             questClone1.appendChild(image.cloneNode())
 
         }
-        //if(accs[i].place != 0){
-            // let place = document.createElement('place')
-            // if (accs[i].place == 1){
-            //     place.textContent = 'Winner !!'
-            // }
-            // else{
-            //     place.textContent = accs[i].place.toString()+'. Place'
-            // }
-            // quest.appendChild(place)
-            // questClone.appendChild(place.cloneNode())
-        //}
-       
+   
         i++;
     }}
     public static throwDice(token:string){
@@ -134,7 +112,6 @@ public static changeWaitingRoom(accs:any){
             if (times == 10){
                 const params = new URLSearchParams(window.location.search);
                 clearInterval(interval)
-                console.log('emitol player thrown')
                 let can = false
                 game.getPawns().forEach((pawn:Pawn)=>{
                   if (pawn.player == token){
@@ -147,7 +124,6 @@ public static changeWaitingRoom(accs:any){
                     Warning.showInGame('Nemôžeš sa pohnuť so žiadnou tvojou figúrkou, preskakuješ tvoje kolo.')
                 }
                 editorSocket.emit('player thrown',{room:params.get('id'),token:token,value:n,tileId:game.getChoosenTile()?.getId(),canMove:can})
-                //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
             }
             else{
                 times++;
@@ -162,13 +138,10 @@ public static changeWaitingRoom(accs:any){
                 image.id = 'Dice'
                
                 image.onload = function(){
-                    let rem  = document.getElementById('Dice')
                     elementDeleter('dicePlace')
                     document.getElementById('dicePlace')?.append(image)
                 }
             }
-        
-            //.getElementById('dicePlace')?.append(dice)
         }, 200);
     
     }

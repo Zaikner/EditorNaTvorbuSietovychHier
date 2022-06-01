@@ -255,7 +255,6 @@ function editQuestionMenu(id, txt, elem) {
     label.style.float = 'left';
     (_a = document.getElementById('questionPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(label);
     div.appendChild(text);
-    //div.appendChild(editButton)
     div.style.marginBottom = '5px';
     (_b = document.getElementById('questionPlace')) === null || _b === void 0 ? void 0 : _b.appendChild(div);
     elem.forEach(function (e) {
@@ -305,7 +304,6 @@ function askQuestion(data) {
         opt.type = 'button';
         opt.classList.add("list-group-item", "list-group-item-action", 'btn', 'btn-light');
         opt.setAttribute('isAnswer', elem.isAnswer);
-        //quest.style.textAlign =  'center';
         opt.textContent = elem.optionText;
         opt.addEventListener('click', function () {
             if (opt.classList.contains('active')) {

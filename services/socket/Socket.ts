@@ -1,7 +1,5 @@
 import { Server } from "http";
 import { io } from "socket.io-client";
-//import { Server as ioServer } from "socket.io";
-//const SocketServer = require('socket.io');
 
 export class Socket{
     private static socket:Socket;
@@ -31,7 +29,6 @@ export class Socket{
     }
 
     setServerSocket(server:Server){
-        //this.serverSocket = new ioServer(server);
         console.log("Socket connected to Server!")
     }
 }

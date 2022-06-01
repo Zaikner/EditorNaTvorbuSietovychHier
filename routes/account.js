@@ -37,7 +37,7 @@ router
             }
             else{
                 f = acc.getAvatar()
-                //console.log(f)
+            
             }
             
             
@@ -94,19 +94,13 @@ router
     
 }).post(async(req,res) =>
 {   
-    console.log('padlo to na texte')
     let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    console.log('presile request na zmenu avatara')
-    //console.log('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
     let acc = AccountManager.getAccountByClientId(req.cookies.id)
     if (acc != undefined){
         let avatar = 'data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64")
         acc.setAvatar(avatar)
-        console.log('tu to este silo')
+       
         AccountManager.changeAvatar(acc.getName(),avatar)
-        //let accDb = AccountFinder.getIntance().findByName(acc.getName())
-        //accDb.setAvatar('data:image/jpeg;base64,'+Buffer.from(req.files.avatar.data, "base64").toString("base64"))
-        //accDb.update()
         res.redirect('/account')
     }
     else{
@@ -119,9 +113,9 @@ router
 .route("/change/avatar/id/:id")
 .post(async(request,res) =>
 {   
-    console.log('tu2')
+   
     let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-   console.log(request)
+  
    let avatar = request.files.avatar;
    res.render('changeAvatar.pug',{root:'./editor/views',texts:text});
 });

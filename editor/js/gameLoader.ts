@@ -19,17 +19,12 @@ function loadGameMenu(names:Array<string>,authored:Array<string>){
         mainMenu()
     })
     button.style.float='right'
-    //button.style.marginRight = '30%'
-
     button = spawnButton(document,'tileEditingPlace',texts[252],['btn','btn-secondary'],texts[252],function(){
         initNewGame()
         reload(ctx)
     })
     button.style.float='right'
     button.style.marginTop='20px';
-
-    
-    
 
     spawnButton(document,'tileEditingPlace',texts[260],['btn','btn-secondary'],texts[260],function(){
         $('#deleteGameModal').modal('show')

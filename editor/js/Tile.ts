@@ -82,13 +82,9 @@ class Tile{
                 ctx.clip(clipPath);
                 ctx.fillStyle = 'black'
                 ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
-                //ctx.fill()
-             
-                
                 ctx.drawImage(this.image!,this.x1,this.y1,2*this.radius,2*this.radius)
                 ctx.resetTransform();
                 ctx.restore()
-                //ctx.restore()
             }
             else{
                 ctx.save()
@@ -98,7 +94,6 @@ class Tile{
                 ctx.clip(clipPath);
                 ctx.fillStyle = 'black'
                 ctx.rect(this.x1,this.y1,this.radius*2,this.radius*2)
-                //ctx.fill()
                 ctx.stroke()
                 
                 ctx.drawImage(this.image!,this.x1,this.y1,2*this.radius,2*this.radius)
@@ -106,7 +101,6 @@ class Tile{
                 ctx.restore()
             }
         }
-     
             //outline
             ctx.resetTransform();
             ctx.restore()
@@ -123,17 +117,11 @@ class Tile{
     
                  if (this.isChoosen && isEditor){
                     if (this.shape == 'circle'){
-                         // ctx.lineWidth = 10
-                // ctx.strokeStyle = '#FF0000'
-                // ctx.setLineDash([1]);
-                // ctx.stroke()
-                // ctx.setLineDash([0]);
                 ctx.resetTransform();
                 ctx.restore()
                 ctx.scale(game.getScaleX(),game.getScaleY())
                 var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+8);
                 grd.addColorStop(0, "red");
-                //grd.addColorStop(0.5, "#990000");
                  grd.addColorStop(0.33, '#990000');
                  grd.addColorStop(0.66, 'pink');
                 ctx.lineWidth = 15
@@ -148,7 +136,6 @@ class Tile{
                         var grd = ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
     
                         grd.addColorStop(0, "red");
-                        //grd.addColorStop(0.5, "#990000");
                          grd.addColorStop(0.33, '#990000');
                          grd.addColorStop(0.66, 'pink');
                         ctx.lineWidth = 15
@@ -161,13 +148,7 @@ class Tile{
                 ctx.resetTransform()
                 ctx.save()
                 ctx.scale(game.getScaleX(),game.getScaleY())
-                // if (game.getChoosenTile()==this){
-                //     ctx.scale(game.getScaleX(),game.getScaleY())
-                // }
-                // else{
-                //    // CSSTransition.re
-                // }
-                //ctx.scale(game.getScaleX(),game.getScaleY())
+        
                 ctx.font = "bold 30px Arial";
                 if (this.strokeColor != this.color){
                     ctx.fillStyle =  this.strokeColor
@@ -200,8 +181,7 @@ class Tile{
         
         let num = 0
         let drawn = 0
-        let pawndiff =0
-        let diff = 0;//10*this.radius/50
+        let diff = 0;
         if (this.pawns.length == 1){
             diff = 30*this.radius/50
         }
@@ -225,8 +205,6 @@ class Tile{
                 
                     num++;
                     let style = game.getPawnStyle().get(pawn.player)
-            
-                    //drawPawnType1( ctx,this.getCenterX()-20+drawn*10,this.getCenterY()-10-10,8*this.radius/30,100,100,'#000000')
                     if (this.pawns.length == 2 && num == 2){
                         diff = 30*this.radius/50
                     }
@@ -240,28 +218,28 @@ class Tile{
                     }
                     if (this.pawns.length == 1){
                         if (style?.getImage()!= undefined){
-                            drawPawnImage( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style?.getImage())
+                            drawPawnImage( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style?.getImage())
                         }
                         else if (style?.getType() === 'type1'){
-                            drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type2'){
-                            drawPawnType2( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType2( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type3'){
-                            drawPawnType3( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType3( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type4'){
-                            drawPawnType4( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType4( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type5'){
-                            drawPawnType5( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType5( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type6'){
-                            drawPawnType6( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType6( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type7'){
-                            drawPawnType7( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,100,100,style!.getColor())
+                            drawPawnType7( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
                         }
                         
                         
@@ -269,28 +247,28 @@ class Tile{
                     }
                     else{  
                         if (style?.getImage()!= undefined){
-                            drawPawnImage( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getImage())
+                            drawPawnImage( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getImage())
                         }
                         else if (style?.getType() === 'type1'){
-                            drawPawnType1( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType1( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type2'){
-                            drawPawnType2( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType2( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type3'){
-                            drawPawnType3( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType3( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type4'){
-                            drawPawnType4( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType4( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type5'){
-                            drawPawnType5( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType5( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type6'){
-                            drawPawnType6( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType6( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                         else if (style?.getType() === 'type7'){
-                            drawPawnType7( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,100,100,style!.getColor())
+                            drawPawnType7( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
                         }
                        
                     }
@@ -315,16 +293,13 @@ class Tile{
            {   
                return true
            }
-           //if (((Math.pow(x-this.centerX*game.getScaleX(),2)/Math.pow(this.radius*game.getScaleX(),2))+(Math.pow(y-this.centerY*game.getScaleY(),2)/Math.pow(this.radius*game.getScaleY(),2))<=1)
         }
         if (this.shape == 'square'){
             if (this.x1*game.getScaleX() <= x && x <= this.x2*game.getScaleX() && this.y1*game.getScaleY() <= y && y <= this.y2*game.getScaleY()){
-              
                 return true
             }
             
         }
-
         return false;
     }
     JSONfyTile(){
@@ -360,19 +335,13 @@ class Tile{
         this.pawns = this.pawns.filter((p) => {return p != pawn});
     }
     havePawnOnTile(player:string){
-        let ret:any = undefined
-      
+        let ret:any = undefined 
         this.pawns.forEach((pawn:Pawn)=>{
        
             if (pawn.player == player){
                 ret = pawn
-            }
-            else{
-           
-            }
-         
-        })
-    
+            }         
+        })  
         return ret
     }
     

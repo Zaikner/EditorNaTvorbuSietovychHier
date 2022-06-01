@@ -89,17 +89,6 @@ var Gameplay = /** @class */ (function () {
                 questClone.appendChild(image.cloneNode());
                 questClone1.appendChild(image.cloneNode());
             };
-            //if(accs[i].place != 0){
-            // let place = document.createElement('place')
-            // if (accs[i].place == 1){
-            //     place.textContent = 'Winner !!'
-            // }
-            // else{
-            //     place.textContent = accs[i].place.toString()+'. Place'
-            // }
-            // quest.appendChild(place)
-            // questClone.appendChild(place.cloneNode())
-            //}
             i++;
         };
         while (i < accs.length) {
@@ -118,7 +107,6 @@ var Gameplay = /** @class */ (function () {
             if (times == 10) {
                 var params_1 = new URLSearchParams(window.location.search);
                 clearInterval(interval);
-                console.log('emitol player thrown');
                 var can_1 = false;
                 Canvas_1.game.getPawns().forEach(function (pawn) {
                     if (pawn.player == token) {
@@ -131,7 +119,6 @@ var Gameplay = /** @class */ (function () {
                     Warning_1.Warning.showInGame('Nemôžeš sa pohnuť so žiadnou tvojou figúrkou, preskakuješ tvoje kolo.');
                 }
                 ClientSocket_js_1.editorSocket.emit('player thrown', { room: params_1.get('id'), token: token, value: n, tileId: (_a = Canvas_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.getId(), canMove: can_1 });
-                //document.getElementById('Dice')?.addEventListener('click',function(){throwDice()})
             }
             else {
                 times++;
@@ -145,12 +132,10 @@ var Gameplay = /** @class */ (function () {
                 image_1.id = 'Dice';
                 image_1.onload = function () {
                     var _a;
-                    var rem = document.getElementById('Dice');
                     (0, Canvas_1.elementDeleter)('dicePlace');
                     (_a = document.getElementById('dicePlace')) === null || _a === void 0 ? void 0 : _a.append(image_1);
                 };
             }
-            //.getElementById('dicePlace')?.append(dice)
         }, 200);
     };
     Gameplay.diceImages = [];

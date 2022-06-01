@@ -22,7 +22,7 @@ var isEditor = false;
 exports.isEditor = isEditor;
 var zoz = window.location.href.split('/');
 var params = new URLSearchParams(window.location.search);
-var editorSocket = (0, socket_io_client_1.io)(); //'https://sietove-hry.herokuapp.com/'
+var editorSocket = (0, socket_io_client_1.io)();
 exports.editorSocket = editorSocket;
 setInterval(function () { editorSocket.emit('ping', { id: localStorage.getItem('id') }); }, 5000);
 var canMovePawnFunc;
@@ -359,8 +359,6 @@ var ClientSocket = /** @class */ (function () {
             Warning_1.Warning.show(texts[187]);
         });
         s.on('turn', function (msg) {
-            console.log('recieved: turn');
-            console.log(Canvas_1.game.getIsOnturn());
             $('#pickQuestionModal').modal('hide');
             $('#WarningModal').modal('hide');
             Canvas_1.game.setHasThrown(false);
@@ -370,7 +368,6 @@ var ClientSocket = /** @class */ (function () {
         });
         s.on('turnMove', function (msg) {
             var _a;
-            console.log('recieved: turn move');
             Canvas_1.game.setIsOnTurn(true);
             Canvas_1.game.setCanThrow(true);
             Canvas_1.game.setHasThrown(false);
@@ -388,7 +385,6 @@ var ClientSocket = /** @class */ (function () {
             Canvas_1.game.setIsOnTurn(false);
             Canvas_1.game.setCanThrow(false);
             Canvas_1.canvas.removeEventListener('click', canMovePawnFunc);
-            console.log('recived end turn');
         });
         s.on('add chat message', function (data) {
             var chat = document.getElementById('chat');

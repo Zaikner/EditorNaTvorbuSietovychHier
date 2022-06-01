@@ -18,7 +18,6 @@ function loadGameMenu(names, authored) {
         (0, Canvas_1.mainMenu)();
     });
     button.style.float = 'right';
-    //button.style.marginRight = '30%'
     button = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', ClientSocket_1.texts[252], ['btn', 'btn-secondary'], ClientSocket_1.texts[252], function () {
         (0, Canvas_1.initNewGame)();
         (0, Canvas_1.reload)(Canvas_1.ctx);

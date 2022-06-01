@@ -12,7 +12,6 @@ class Background{
         else{
             ctx.beginPath()
             ctx.fillStyle = this.color
-           
             ctx.fillRect(0,0,canvas.width,canvas.height)
         }
 
@@ -27,7 +26,6 @@ class Background{
     
     public setColor(newColor:string){
         this.color = newColor
-        console.log('prestavil backgroud')
     }
     public getColor(){
         return this.color
@@ -38,7 +36,6 @@ class Background{
     public setBackgroundImage(newImage:HTMLImageElement){
          this.backgroundImage = newImage
     }
-   
 }
 
 export {Background}

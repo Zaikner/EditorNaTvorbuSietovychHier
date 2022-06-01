@@ -26,7 +26,6 @@ var Background = /** @class */ (function () {
     };
     Background.prototype.setColor = function (newColor) {
         this.color = newColor;
-        console.log('prestavil backgroud');
     };
     Background.prototype.getColor = function () {
         return this.color;

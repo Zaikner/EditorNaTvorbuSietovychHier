@@ -17,7 +17,7 @@ let texts:Array<string> = []
 let isEditor = false;
 let zoz = window.location.href.split('/')
 const params = new URLSearchParams(window.location.search);
-const editorSocket = io();//'https://sietove-hry.herokuapp.com/'
+const editorSocket = io();
 setInterval(function(){ editorSocket.emit('ping',{id:localStorage.getItem('id')})},5000)
 let canMovePawnFunc:(event: MouseEvent) => void;
 let clickFunction = function(){evaluateQuestion();}
@@ -412,8 +412,6 @@ s.on('got texts',(msg:{text:Array<string>})=>{
     Warning.show(texts[187])
   })
  s.on('turn',(msg:{player:string,token:string})=>{
-    console.log('recieved: turn')
-    console.log(game.getIsOnturn())
     $('#pickQuestionModal').modal('hide')
     $('#WarningModal').modal('hide')
     game.setHasThrown(false)
@@ -423,7 +421,6 @@ s.on('got texts',(msg:{text:Array<string>})=>{
   })
 
   s.on('turnMove',(msg:{player:string,token:string})=>{
-    console.log('recieved: turn move')
     game.setIsOnTurn(true)
     game.setCanThrow(true)
     game.setHasThrown(false)
@@ -447,7 +444,6 @@ s.on('got texts',(msg:{text:Array<string>})=>{
     game.setIsOnTurn(false)
     game.setCanThrow(false)
     canvas.removeEventListener('click',canMovePawnFunc)
-    console.log('recived end turn')
   })
 
   s.on('add chat message',(data:{name:string,msg:string})=>{

@@ -144,7 +144,6 @@ var startY = 0;
 var tilik = undefined;
 var moveWithTile = function (event) {
     if (tilik != undefined) {
-        console.log([startX, startY]);
         var coords = (0, Canvas_js_1.calibreEventCoords)(event);
         Canvas_js_1.game.moveTile(event, tilik, startX - coords.x, startY - coords.y);
     }
@@ -277,7 +276,6 @@ var insert = function (event) {
         spawnElements();
         showActualState();
     }
-    console.log(Canvas_js_1.game);
 };
 exports.insert = insert;
 var spawnTile = function (coords) {
@@ -417,8 +415,6 @@ function showActualState(updateTile) {
     if (Canvas_js_1.game.getChoosenTile() != undefined) {
         image = Canvas_js_1.game.getChoosenTile().getImage();
         Canvas_js_1.game.setImage(image);
-        console.log('nastavil obrazok');
-        console.log(image);
     }
     var colorPicker = Canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = Canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
