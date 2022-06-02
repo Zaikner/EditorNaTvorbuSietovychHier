@@ -237,15 +237,15 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
     div.style.justifyContent = 'space-between';
     div = doc.createElement('div');
     div.style.display = 'flex';
-    div.style.justifyContent = 'space-between';
+    //div.style.justifyContent= 'space-between'
     var label = doc.createElement('label');
     label.htmlFor = id;
     label.textContent = lbl;
     label.style.fontSize = 'normal';
-    label.style.marginRight = '0%';
     var startMenuWrapper = doc.createElement('div');
     startMenuWrapper.id = 'startMenuWrapper';
     startMenuWrapper.classList.add("dropdown");
+    startMenuWrapper.style.marginLeft = 'auto';
     var startMenuButton = doc.createElement('button');
     startMenuButton.id = 'startMenuButton';
     startMenuButton.textContent = txt;

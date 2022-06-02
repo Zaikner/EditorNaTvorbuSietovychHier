@@ -261,17 +261,19 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
   div.style.justifyContent= 'space-between'
   div =  doc.createElement('div')
   div.style.display='flex'
-  div.style.justifyContent= 'space-between'
+  //div.style.justifyContent= 'space-between'
 
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
   label.textContent = lbl
   label.style.fontSize = 'normal'
-  label.style.marginRight = '0%'
+  
+
 
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'
   startMenuWrapper.classList.add("dropdown")
+  startMenuWrapper.style.marginLeft = 'auto'
   let startMenuButton = doc.createElement('button')
   startMenuButton.id = 'startMenuButton'
   startMenuButton.textContent = txt
