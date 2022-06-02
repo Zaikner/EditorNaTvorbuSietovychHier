@@ -144,16 +144,13 @@ function spawnButtonWithLabel(doc, parent, id, lbl, classList, txt, func) {
     return button;
 }
 exports.spawnButtonWithLabel = spawnButtonWithLabel;
-function spawnSelectMenu(doc, parent, id, lbl, classList, options, active) {
+function spawnSelectMenu(doc, parent, id, lbl, classList, options, active, otherElem) {
     if (active === void 0) { active = []; }
+    if (otherElem === void 0) { otherElem = undefined; }
     var div = spawnDiv(document, parent, 'div' + id, []);
     div = doc.createElement('div');
     div.style.display = 'flex';
     div.style.justifyContent = 'space-between';
-    var label = doc.createElement('label');
-    label.htmlFor = id;
-    label.textContent = lbl;
-    label.style.fontSize = 'normal';
     var menu = doc.createElement('select');
     menu.id = id;
     classList.forEach(function (add) {
@@ -168,7 +165,16 @@ function spawnSelectMenu(doc, parent, id, lbl, classList, options, active) {
         }
         menu.appendChild(option);
     }
-    div.appendChild(label);
+    if (otherElem != undefined) {
+        div.appendChild(otherElem);
+    }
+    else {
+        var label = doc.createElement('label');
+        label.htmlFor = id;
+        label.textContent = lbl;
+        label.style.fontSize = 'normal';
+        div.appendChild(label);
+    }
     div.appendChild(menu);
     doc.getElementById('div' + id).appendChild(div);
     return menu;

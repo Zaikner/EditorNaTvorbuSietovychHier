@@ -155,20 +155,13 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
   doc.getElementById('div'+id)!.appendChild(button)
   return button
 }
-function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,active:Array<string> = []){
+function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,active:Array<string> = [],otherElem:any=undefined){
   
  
   let div = spawnDiv(document,parent,'div'+id,[])
   div =  doc.createElement('div')
   div.style.display='flex'
   div.style.justifyContent= 'space-between'
-
-  
-
-  let label:HTMLLabelElement = doc.createElement('label')
-  label.htmlFor = id
-  label.textContent = lbl
-  label.style.fontSize = 'normal'
   
 
     let menu:HTMLSelectElement = doc.createElement('select')
@@ -185,7 +178,18 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
       }
       menu.appendChild(option);
     }
-    div.appendChild(label)
+
+    if (otherElem !=undefined){
+      div.appendChild(otherElem)
+      }
+      else{
+        let label:HTMLLabelElement = doc.createElement('label')
+        label.htmlFor = id
+        label.textContent = lbl
+        label.style.fontSize = 'normal'
+        div.appendChild(label)
+      }
+    
     div.appendChild(menu)
     doc.getElementById('div'+id)!.appendChild(div);
   
