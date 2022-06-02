@@ -25,12 +25,6 @@ function loadGameMenu(names:Array<string>,authored:Array<string>){
     button.style.marginRight = '1%'
     let menu = spawnSelectMenu(document,'divWrapper1','','',['btn','btn-secondary'],names,authored,button)
     menu.style.float = 'left'
-    // button = spawnButton(document,'divWrapper1','',['btn','btn-secondary','buttonLeftMargin'],texts[251],function(){
-    //     removeAllButtons()
-    //     editorSocket.emit('load game',{id:getCookie('id'),name:menu.value,response:true})
-      
-    //     mainMenu()
-    // })
    
     button = spawnButton(document,'tileEditingPlace',texts[252],['btn','btn-secondary'],texts[252],function(){
         initNewGame()

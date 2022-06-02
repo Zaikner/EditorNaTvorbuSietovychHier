@@ -125,15 +125,14 @@ function spawnElements() {
     div.style.textAlign = 'center';
     div.style.marginTop = '100px';
     div.style.width = '100%';
+    div.style.display = 'flex';
     (_a = document.getElementById('tileEditingPlace')) === null || _a === void 0 ? void 0 : _a.appendChild(div);
-    var button = (0, Elements_js_1.spawnButton)(document, 'wrapperDiv', 'removeTileButton', ['btn', 'btn-dark'], ClientSocket_js_1.texts[255], function () {
+    var button = (0, Elements_js_1.spawnButton)(document, 'tileEditingPlace', 'removeTileButton', ['btn', 'btn-dark'], ClientSocket_js_1.texts[255], function () {
         Canvas_js_1.game.deleteTile();
         removeAllButtons();
         spawnElements();
         showActualState();
     });
-    button.style.marginTop = '10%';
-    button.style.textAlign = 'center';
     if (Canvas_js_1.game.getChoosenTile() == undefined) {
         document.getElementById('removeTileButton').hidden = true;
     }

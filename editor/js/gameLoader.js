@@ -24,11 +24,6 @@ function loadGameMenu(names, authored) {
     button.style.marginRight = '1%';
     var menu = (0, Elements_1.spawnSelectMenu)(document, 'divWrapper1', '', '', ['btn', 'btn-secondary'], names, authored, button);
     menu.style.float = 'left';
-    // button = spawnButton(document,'divWrapper1','',['btn','btn-secondary','buttonLeftMargin'],texts[251],function(){
-    //     removeAllButtons()
-    //     editorSocket.emit('load game',{id:getCookie('id'),name:menu.value,response:true})
-    //     mainMenu()
-    // })
     button = (0, Elements_1.spawnButton)(document, 'tileEditingPlace', ClientSocket_1.texts[252], ['btn', 'btn-secondary'], ClientSocket_1.texts[252], function () {
         (0, Canvas_1.initNewGame)();
         (0, Canvas_1.reload)(Canvas_1.ctx);

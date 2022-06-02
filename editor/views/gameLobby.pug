@@ -27,15 +27,14 @@ title=text[1]
                 p(style='font-size: 15px; font-family: sans-serif; font-weight:bold;')=text[3]
                 hr
                 form
-                  div(style = 'float:left;')
-                    p(style='font-size: 15px; float:left;')=text[156]
-                  
-                    input#roomIdSelecter(type='number', style = 'height:15%; width:35%; float:left;')
-                    button#joinSelectedRoom.btn.btn-dark(type='button' style = 'float:left;')=text[8]
+                  div(style='dislay:inline')
+                    p(style='font-size: 15px;')=text[156]
+                     input#roomIdSelecter(type='number', style = 'height:15%; width:35%')
+                     button#joinSelectedRoom.btn.btn-dark(type='button')=text[8]
                 form
-                  div(style = 'float:left;')
-                    p(style='font-size: 15px; float:left;')=text[4]
-                    button.btn.btn-dark(type='button' id='create' style = 'text-align:right;')=text[31]
+                  div
+                    p(style='font-size: 15px;')=text[4]+' '
+                     button.btn.btn-dark(type='button' id='create' style = 'text-align:right;')=text[31]
               div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[5]

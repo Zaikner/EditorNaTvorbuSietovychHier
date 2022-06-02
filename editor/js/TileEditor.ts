@@ -149,16 +149,17 @@ spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],option
     div.style.textAlign = 'center'
     div.style.marginTop = '100px';
     div.style.width='100%'
+    div.style.display = 'flex'
+    
     document.getElementById('tileEditingPlace')?.appendChild(div)
-    let button = spawnButton(document,'wrapperDiv','removeTileButton',['btn','btn-dark'],texts[255],function(){
+    let button = spawnButton(document,'tileEditingPlace','removeTileButton',['btn','btn-dark'],texts[255],function(){
       game.deleteTile()
       removeAllButtons()
       spawnElements()
       showActualState();
       
     })
-    button.style.marginTop = '10%'
-    button.style.textAlign = 'center'
+    
     if(game.getChoosenTile()== undefined){
       document.getElementById('removeTileButton')!.hidden = true
     }
