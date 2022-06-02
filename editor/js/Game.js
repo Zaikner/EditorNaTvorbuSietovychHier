@@ -29,8 +29,6 @@ var Game = /** @class */ (function () {
         this.rules = '';
         this.isPublished = false;
         this.numberOfStartingPawns = 1;
-        //----------playing---------
-        //private hasStarted = false;
         this.isOnTurn = false;
         this.hasThrown = false;
         this.nextTilesIds = new Map();

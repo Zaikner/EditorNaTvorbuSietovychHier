@@ -2,7 +2,7 @@
 import { game } from './Canvas.js';
 import { isEditor } from './ClientSocket.js';
 import { Pawn } from './Pawn.js';
-import { drawPawnImage, drawPawnType1, drawPawnType2, drawPawnType3, drawPawnType4, drawPawnType5, drawPawnType6, drawPawnType7 } from './PawnEditor.js';
+import { drawnPawnTypes, drawPawnImage } from './PawnEditor.js';
 import {getDataUrlFromImage} from './UtilityFunctions.js'
 class Tile{
     private id:number = 0;
@@ -221,61 +221,19 @@ class Tile{
                         if (style?.getImage()!= undefined){
                             drawPawnImage( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style?.getImage())
                         }
-                        else if (style?.getType() === 'type1'){
-                            drawPawnType1( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type2'){
-                            drawPawnType2( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type3'){
-                            drawPawnType3( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type4'){
-                            drawPawnType4( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type5'){
-                            drawPawnType5( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type6'){
-                            drawPawnType6( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type7'){
-                            drawPawnType7( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor())
-                        }
-                        
-                        
-                        
+                        else {
+                            drawnPawnTypes( ctx,this.getCenterX(),this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/2*this.radius/50,style!.getColor(),style!.getType())
+                        }           
                     }
                     else{  
                         if (style?.getImage()!= undefined){
                             drawPawnImage( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getImage())
                         }
-                        else if (style?.getType() === 'type1'){
-                            drawPawnType1( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type2'){
-                            drawPawnType2( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type3'){
-                            drawPawnType3( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type4'){
-                            drawPawnType4( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type5'){
-                            drawPawnType5( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type6'){
-                            drawPawnType6( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                        else if (style?.getType() === 'type7'){
-                            drawPawnType7( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor())
-                        }
-                       
+                        else {
+                            drawnPawnTypes( ctx,this.getCenterX()-this.radius+20*this.radius/50+drawn*10*this.radius/50+diff,this.getCenterY()-20*this.radius/50+diffY*this.radius/50,6*this.radius/50+2*9/this.pawns.length*this.radius/50,style!.getColor(),style!.getType())
+                        }                 
                     }
-                   
-                    //drawPawnType1( ctx,this.getCenterX()-20+drawn*15,this.getCenterY()-10-10,4*this.radius/30,100,100,style!.getColor())
-                    drawn++;
+                     drawn++;
                 }
             
             })

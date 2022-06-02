@@ -243,7 +243,6 @@ function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
     div.style.justifyContent = 'space-between';
     div = doc.createElement('div');
     div.style.display = 'flex';
-    //div.style.justifyContent= 'space-between'
     var label = doc.createElement('label');
     label.htmlFor = id;
     label.textContent = lbl;

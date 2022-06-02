@@ -27,9 +27,7 @@ class Game{
     private rules:string = ''
     private isPublished:boolean = false;
     private numberOfStartingPawns:number = 1;
-    
-    //----------playing---------
-    //private hasStarted = false;
+
     private isOnTurn = false
     private hasThrown = false
     private nextTilesIds:Map<string,number> = new Map()

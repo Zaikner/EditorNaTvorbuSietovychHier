@@ -174,54 +174,16 @@ function pawnDeleteMenu(){
 }
 
 function drawStyles(color:string){
-    let cs = <HTMLCanvasElement>document.getElementById('canvasPawn1')!
-    cs.width = 100
-    cs.height = 100
-
-    drawPawnType1( <CanvasRenderingContext2D> cs.getContext("2d"),50,20,20,color)
-  
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn2')!
-    cs.width = 100
-    cs.height = 100
-    let context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-   
-    drawPawnType2(context2,50,20,20,color)
-
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn3')!
-    cs.width = 100
-    cs.height = 100
-    context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-    drawPawnType3(context2,50,20,20,color)
-
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn4')!
-    cs.width = 100
-    cs.height = 100
-    context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-    drawPawnType4(context2,50,20,20,color)
-
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn5')!
-    cs.width = 100
-    cs.height = 100
-    context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-    drawPawnType5(context2,50,20,20,color)
-
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn6')!
-    cs.width = 100
-    cs.height = 100
-    context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-    drawPawnType6(context2,50,20,20,color)
-
-    cs = <HTMLCanvasElement>document.getElementById('canvasPawn7')!
-    cs.width = 100
-    cs.height = 100
-    context2 = <CanvasRenderingContext2D> cs.getContext("2d");
-    context2.resetTransform()
-    drawPawnType7(context2,50,20,20,color)
+    let context2;
+    let cs
+    for(let i = 1;i <= 7;i++){
+        cs = <HTMLCanvasElement>document.getElementById('canvasPawn'+i)!
+        cs.width = 100
+        cs.height = 100
+        context2 = <CanvasRenderingContext2D> cs.getContext("2d");
+        context2.resetTransform()
+        drawnPawnTypes( <CanvasRenderingContext2D> cs.getContext("2d"),50,20,20,color,'type'+i)
+    }
 
     cs = <HTMLCanvasElement>document.getElementById('canvasPawn8')!
     cs.width = 100
@@ -233,106 +195,98 @@ function drawStyles(color:string){
         drawPawnImage(context2,50,30,30,image!)
     }
     }
+
+function drawnPawnTypes(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string,type:string){
+    if (type  == 'type1'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fillStyle = color
+        context2.fill()
+        context2.beginPath()
+        context2.moveTo(headCenterX,headCenterY+radius/2)
+        context2.lineTo(headCenterX-radius*1.5,headCenterY+radius*3)
+        context2.lineTo(headCenterX+radius*1.5,headCenterY+radius*3)
+        context2.lineTo(headCenterX,headCenterY+radius/2)
+        context2.fill()
+    }
+    else if (type == 'type2'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fillStyle = color
+        context2.fill()
+        context2.beginPath()
+        context2.moveTo(headCenterX-radius,headCenterY+radius)
+        context2.lineTo(headCenterX+radius,headCenterY+radius)
+        context2.lineTo(headCenterX,headCenterY+radius*3.5)
+        context2.lineTo(headCenterX-radius,headCenterY+radius)
+        context2.fill()
+    }
+    else if (type == 'type3'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fillStyle = color
+        context2.fill()
+        context2.beginPath()
+        context2.moveTo(headCenterX-radius*2,headCenterY+radius)
+        context2.lineTo(headCenterX+radius*2,headCenterY+radius)
+        context2.lineTo(headCenterX,headCenterY+radius*3.5)
+        context2.lineTo(headCenterX-radius*2,headCenterY+radius)
+        context2.fill()
+    }
+    else if (type == 'type4'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fillStyle = color
+        context2.fill()
+        context2.beginPath();
+        context2.ellipse(headCenterX, headCenterY+radius*3, radius*1.5, radius*2.5, 0, 0, Math.PI, true);
+        
+        context2.fill()
+    }
+    else if (type == 'type5'){
+        context2.beginPath()
+        context2.fillStyle = color
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fill()
+        context2.beginPath();
+        context2.ellipse(headCenterX,headCenterY+radius*3, radius/2,radius*4 , 0, 0, Math.PI, true);
+        context2.fill()
     
-function drawPawnType1(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
+        context2.beginPath();
+        context2.ellipse(headCenterX,headCenterY+radius*3, radius*1.5,radius*1.5 , 0, 0, Math.PI, true);
+        context2.fill()
+    }
+    else if (type == 'type6'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+          context2.fillStyle = color
+          context2.fill()
+          context2.beginPath();
+          context2.ellipse(headCenterX, headCenterY+radius*3, radius, radius*2.5, 0, 0, Math.PI, true);
+          context2.fill()
+      
+          context2.beginPath();
+          context2.ellipse(headCenterX,headCenterY+radius*3, radius*1.5,radius*1.5 , 0, 0, Math.PI, true);
+          context2.fill()
+    }
+    else if (type == 'type7'){
+        context2.beginPath()
+        context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
+        context2.fillStyle = color
+        context2.fill()
+        context2.beginPath();
+        context2.moveTo(headCenterX,headCenterY+radius/2)
+        context2.lineTo(headCenterX-radius,headCenterY+radius*3)
+        context2.lineTo(headCenterX+radius,headCenterY+radius*3)
+        context2.lineTo(headCenterX,headCenterY+radius/2)
+        context2.fill()
     
-    context2.beginPath()
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath()
-    context2.moveTo(headCenterX,headCenterY+radius/2)
-    context2.lineTo(headCenterX-radius*1.5,headCenterY+radius*3)
-    context2.lineTo(headCenterX+radius*1.5,headCenterY+radius*3)
-    context2.lineTo(headCenterX,headCenterY+radius/2)
-    context2.fill()
-
-}
-function drawPawnType2(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-    context2.beginPath()
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath()
-    context2.moveTo(headCenterX-radius,headCenterY+radius)
-    context2.lineTo(headCenterX+radius,headCenterY+radius)
-    context2.lineTo(headCenterX,headCenterY+radius*3.5)
-    context2.lineTo(headCenterX-radius,headCenterY+radius)
-    context2.fill()
-
-}
-function drawPawnType3(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-    context2.beginPath()
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath()
-    context2.moveTo(headCenterX-radius*2,headCenterY+radius)
-    context2.lineTo(headCenterX+radius*2,headCenterY+radius)
-    context2.lineTo(headCenterX,headCenterY+radius*3.5)
-    context2.lineTo(headCenterX-radius*2,headCenterY+radius)
-    context2.fill()
-}
-function drawPawnType4(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-    context2.beginPath()
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath();
-    context2.ellipse(headCenterX, headCenterY+radius*3, radius*1.5, radius*2.5, 0, 0, Math.PI, true);
-    
-    context2.fill()
-}
-function drawPawnType5(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-    context2.beginPath()
-    context2.fillStyle = color
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fill()
-    context2.beginPath();
-    context2.ellipse(headCenterX,headCenterY+radius*3, radius/2,radius*4 , 0, 0, Math.PI, true);
-    context2.fill()
-
-    context2.beginPath();
-    context2.ellipse(headCenterX,headCenterY+radius*3, radius*1.5,radius*1.5 , 0, 0, Math.PI, true);
-    context2.fill()
-}
-function drawPawnType6(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-  context2.beginPath()
-  context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath();
-    context2.ellipse(headCenterX, headCenterY+radius*3, radius, radius*2.5, 0, 0, Math.PI, true);
-    context2.fill()
-
-    context2.beginPath();
-    context2.ellipse(headCenterX,headCenterY+radius*3, radius*1.5,radius*1.5 , 0, 0, Math.PI, true);
-    context2.fill()
+        context2.beginPath();
+        context2.ellipse(headCenterX,headCenterY+radius*3, radius*+1.5,radius, 0, 0, Math.PI, true);
+        context2.fill()
+    }
 }
 
-function drawPawnType7(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,color:string)
-{
-    context2.beginPath()
-    context2.arc(headCenterX,headCenterY,radius,0, 2 * Math.PI)
-    context2.fillStyle = color
-    context2.fill()
-    context2.beginPath();
-    context2.moveTo(headCenterX,headCenterY+radius/2)
-    context2.lineTo(headCenterX-radius,headCenterY+radius*3)
-    context2.lineTo(headCenterX+radius,headCenterY+radius*3)
-    context2.lineTo(headCenterX,headCenterY+radius/2)
-    context2.fill()
-
-    context2.beginPath();
-    context2.ellipse(headCenterX,headCenterY+radius*3, radius*+1.5,radius, 0, 0, Math.PI, true);
-    context2.fill()
-}
 function drawPawnImage(context2:CanvasRenderingContext2D,headCenterX:number,headCenterY:number,radius:number,image:HTMLImageElement)
 {
     context2.beginPath()
@@ -344,4 +298,4 @@ function drawActualPawnLook(player:string){
     let style = game.getPawnStyle().get(player)
     drawStyles(style!.getColor())
 }
-export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,drawPawnImage,insertPawn,drawPawnType1,drawPawnType2,drawPawnType3,drawPawnType4,drawPawnType5,drawPawnType6,drawPawnType7,deletePawn}
+export{pawnInsertMenu,pawnEditMenu,pawnDeleteMenu,drawPawnImage,insertPawn,deletePawn,drawnPawnTypes}

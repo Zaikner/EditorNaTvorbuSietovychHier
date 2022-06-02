@@ -53,7 +53,7 @@ export class AccountManager{
         let accounts = await AccountFinder.getIntance().findByName(name)
      
         if(accounts!.length != 0){
-            if (this.decode(accounts![0].getPassword())  == password && !this.isLogged(name)){
+            if (this.decode(accounts![0].getPassword())  == password){
                 
                 return [true,this.login(accounts![0])]
             }
@@ -90,21 +90,7 @@ export class AccountManager{
             room.leave(room.findPlayerOnAccount(acc)!)
         } 
     }
-    
-    public static isLogged(name:string){
 
-        // OPRAVIT!!!!!!!!!!!!, ide to, ale odlogovanie nie je poriesene
-        return false
-        let ret = false
-        this.loggedAccounts.forEach((acc:Account) =>{
-            if (acc.getName()===name){
-                ret = true
-            }
-            ////////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
-            
-        })
-        return ret
-    }
     public static createNewClientId(){
         let ret = ''
         for (let i = 0; i < 12; i++){

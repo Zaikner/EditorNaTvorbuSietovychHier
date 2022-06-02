@@ -265,7 +265,6 @@ function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,tx
   div.style.justifyContent= 'space-between'
   div =  doc.createElement('div')
   div.style.display='flex'
-  //div.style.justifyContent= 'space-between'
 
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
