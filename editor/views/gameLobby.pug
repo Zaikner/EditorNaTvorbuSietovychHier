@@ -119,15 +119,12 @@ title=text[1]
               div(style='margin: 5% ;   margin-bottom: 250px ; background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
               
                 strong=text[6]
-                ul.list-group(style='overflow-y: scroll; max-height: 34vh; margin-top:2%; ')
+                ul.list-group(style='overflow-y: scroll; max-height: 25vh; margin-top:2%; ')
                   each score in scores
                       form()
                         strong 
                           li.list-group-item()= score[0]+text[117]+' '+ score[1] + ' '+ text[179]+' ' + score[2]+ text[244]
-                  each score in [1,2,3]
-                      form()
-                        strong 
-                          li.list-group-item()
+                 
   #loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
     .modal-dialog
       .modal-content
