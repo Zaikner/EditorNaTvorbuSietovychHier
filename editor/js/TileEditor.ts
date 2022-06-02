@@ -230,6 +230,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     if ( game.getChoosenTile()!= undefined){
       game.setStartForPlayers(game.getChoosenTile()!.getIsStartingFor().slice())
       game.setEndForPlayers(game.getChoosenTile()!.getIsEndingFor().slice())
+      game.setCantBeEliminatedOnTile(game.getChoosenTile()!.getCantBeEliminatedOnTile()!.slice())
     }
 
       spawnElements()
@@ -301,6 +302,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
 
     if (canSpawn){
       var addedTile = spawnTile(coords)
+      console.log(addedTile)
       game.addToUndoLog([addedTile])
       addedTile.getIsStartingFor().forEach((player:string)=>{
         game.insertPawns(player,addedTile)
@@ -359,7 +361,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     game.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
     game.getChoosenTile()!.setIsStartingFor(game.getStartForPlayers().slice())
     game.getChoosenTile()!.setIsEndingFor(game.getEndForPlayers().slice())
-    
+    game.getChoosenTile()!.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().slice())
     game.getChoosenTile()?.setPawns([])
 
     game.getChoosenTile()?.getIsStartingFor().forEach((player:string)=>{
@@ -368,7 +370,6 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
       }
     })
 
-    game.getChoosenTile()!.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().slice())
     game.getChoosenTile()!.setSkip(game.getSkip())
     game.getChoosenTile()!.setRepeat(game.getRepeat())
     game.getChoosenTile()!.setForward(game.getForward())

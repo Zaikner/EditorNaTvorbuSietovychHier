@@ -413,6 +413,7 @@ s.on('got texts',(msg:{text:Array<string>})=>{
   })
  s.on('turn',(msg:{player:string,token:string})=>{
     $('#pickQuestionModal').modal('hide')
+    $('#answerModal').modal('hide')
     $('#WarningModal').modal('hide')
     game.setHasThrown(false)
     elementDeleter('onTurnPlace')

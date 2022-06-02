@@ -196,6 +196,7 @@ function editTiles() {
     if (Canvas_js_1.game.getChoosenTile() != undefined) {
         Canvas_js_1.game.setStartForPlayers(Canvas_js_1.game.getChoosenTile().getIsStartingFor().slice());
         Canvas_js_1.game.setEndForPlayers(Canvas_js_1.game.getChoosenTile().getIsEndingFor().slice());
+        Canvas_js_1.game.setCantBeEliminatedOnTile(Canvas_js_1.game.getChoosenTile().getCantBeEliminatedOnTile().slice());
     }
     spawnElements();
     setValues(undefined, true);
@@ -259,6 +260,7 @@ var insert = function (event) {
     var canSpawn = true;
     if (canSpawn) {
         var addedTile = spawnTile(coords);
+        console.log(addedTile);
         Canvas_js_1.game.addToUndoLog([addedTile]);
         addedTile.getIsStartingFor().forEach(function (player) {
             Canvas_js_1.game.insertPawns(player, addedTile);
@@ -312,13 +314,13 @@ var update = function () {
     Canvas_js_1.game.updateChoosenTile(colorPicker.value, parseInt(sizeOfTileSlider.value), parseInt(sizeOfOutlineSlider.value), outlineColorPicker.value, shapeMenu.value, insertImage);
     Canvas_js_1.game.getChoosenTile().setIsStartingFor(Canvas_js_1.game.getStartForPlayers().slice());
     Canvas_js_1.game.getChoosenTile().setIsEndingFor(Canvas_js_1.game.getEndForPlayers().slice());
+    Canvas_js_1.game.getChoosenTile().setCantBeEliminatedOnTile(Canvas_js_1.game.getCantBeEliminatedOnTile().slice());
     (_a = Canvas_js_1.game.getChoosenTile()) === null || _a === void 0 ? void 0 : _a.setPawns([]);
     (_b = Canvas_js_1.game.getChoosenTile()) === null || _b === void 0 ? void 0 : _b.getIsStartingFor().forEach(function (player) {
         for (var i = 0; i < Canvas_js_1.game.getNumberOfStartingPawns(); i++) {
             Canvas_js_1.game.getPawns().push(new Pawn_js_1.Pawn(player, Canvas_js_1.game.getChoosenTile()));
         }
     });
-    Canvas_js_1.game.getChoosenTile().setCantBeEliminatedOnTile(Canvas_js_1.game.getCantBeEliminatedOnTile().slice());
     Canvas_js_1.game.getChoosenTile().setSkip(Canvas_js_1.game.getSkip());
     Canvas_js_1.game.getChoosenTile().setRepeat(Canvas_js_1.game.getRepeat());
     Canvas_js_1.game.getChoosenTile().setForward(Canvas_js_1.game.getForward());

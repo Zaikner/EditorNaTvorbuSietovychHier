@@ -9,6 +9,7 @@ var Warning_js_1 = require("./Warning.js");
 var Pawn_js_1 = require("./Pawn.js");
 var PawnStyle_js_1 = require("./PawnStyle.js");
 var TileEditor_js_1 = require("./TileEditor.js");
+var params = new URLSearchParams(window.location.search);
 var Game = /** @class */ (function () {
     function Game() {
         this.id = 0;
@@ -378,9 +379,9 @@ var Game = /** @class */ (function () {
             var canRemovePawnIds_1 = [];
             var ownersOfEliminatedPawns_1 = [];
             this.getPlayerTokens().forEach(function (token) {
-                if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player && !ownersOfEliminatedPawns_1.includes(token)) {
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token != pawn.player) {
                     tile.getPawns().forEach(function (p) {
-                        if (p.player == token && !p.hasEnded) {
+                        if (p.player == token && !p.hasEnded && !ownersOfEliminatedPawns_1.includes(token)) {
                             canRemovePawnIds_1.push(p.id);
                             ownersOfEliminatedPawns_1.push(token);
                         }
@@ -418,6 +419,7 @@ var Game = /** @class */ (function () {
         this.getTiles().forEach(function (tile) {
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)) {
                 allTilesAreFull = false;
+                console.log(tile);
             }
         });
         var playerPawns = this.pawns.filter(function (p) { return token == p.player; });
@@ -427,6 +429,9 @@ var Game = /** @class */ (function () {
                 allPawnFinished = false;
             }
         });
+        console.log('player ended');
+        console.log(allTilesAreFull);
+        console.log(allPawnFinished);
         return (allTilesAreFull && allPawnFinished);
     };
     Game.prototype.movePawnBack = function (pawnId, value, react) {
@@ -439,6 +444,7 @@ var Game = /** @class */ (function () {
         tile.getPawns().push(pawn);
         pawn.tileId = tile.getId();
         pawn.tile = tile;
+        ClientSocket_js_1.editorSocket.emit('change Pawn position', { pawnId: pawn.id, tileId: pawn.tileId, room: params.get('id'), id: (0, ClientSocket_js_1.getCookie)('id') });
         (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
         if (react) {
             this.reactToTile(tile, value, pawn);
@@ -491,6 +497,7 @@ var Game = /** @class */ (function () {
                 notStarted.push(token);
             }
         });
+        console.log(notStarted);
         return notStarted;
     };
     Game.prototype.checkIfAllPlayersHaveFinishTile = function () {
@@ -510,6 +517,7 @@ var Game = /** @class */ (function () {
                 notFinished.push(token);
             }
         });
+        console.log(notFinished);
         return notFinished;
     };
     Game.prototype.checkIfPathFromStartToEndExists = function () {
@@ -521,6 +529,7 @@ var Game = /** @class */ (function () {
         });
         this.tiles.forEach(function (tile) {
             tile.getIsEndingFor().forEach(function (token) {
+                console.log('nahral token z policka:' + token);
                 m.set(token, m.get(token) + 1);
             });
         });

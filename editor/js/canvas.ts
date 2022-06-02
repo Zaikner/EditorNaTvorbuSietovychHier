@@ -260,20 +260,34 @@ numOfPlayersSlider.onclick =function(){
   let playerTokens = game.getPlayerTokens()
   if (number < playerTokens.length){
   
-    for (let i = number; i <= 6;i++){
+    for (let i = number+1; i <= 6;i++){
       playerTokens.pop()
+   
+      console.log('odstranil ' + 'Player '+i)
+      console.log('Player '+i)
+      console.log('odstranil styl')
+      console.log(game.getPawnStyle().get('Player '+i))
       game.getPawnStyle().delete('Player '+i)
       game.getNextTilesIds().delete('Player '+i)
+      console.log(game.getPawnStyle())
       let rem:Array<Pawn> = []
       game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == ('Player '+i)){
           rem.push(pawn)
         }
       })
+      game.getTiles().forEach((tile:Tile)=>{
+        tile.setIsEndingFor(tile.getIsEndingFor().filter((t) => {return t != ('Player '+i)}))
+        tile.setIsStartingFor(tile.getIsStartingFor().filter((t) => {return t != ('Player '+i)}))
+        tile.setCantBeEliminatedOnTile(tile.getCantBeEliminatedOnTile().filter((t) => {return t != ('Player '+i)}))
+        console.log(tile.getIsStartingFor())
+        console.log(tile.getPawns())
+      })
       rem.forEach((pawn:Pawn)=>{
         game.removePawn(pawn)
         pawn.tile.removePawn(pawn)
       })
+      
     }
   }
   if (number > playerTokens.length){
@@ -281,7 +295,10 @@ numOfPlayersSlider.onclick =function(){
       if (!playerTokens.includes('Player '+i)){
         playerTokens.push('Player '+ (playerTokens.length+1))
         game.getNextTilesIds().set('Player '+i,game.getTiles().length+2)
-        game.getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
+        if (game.getPawnStyle().get('Player '+i) == undefined){
+          game.getPawnStyle().set('Player '+i,new PawnStyle('Player '+i,'#000000','type1'))
+        }
+       
        
       }
     }
@@ -367,6 +384,9 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],text
   let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
   let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
   let ret = false;
+
+  console.log(numOfFinishTiles)
+  console.log(numOfPawnsPerPlayers)
   
   game.getPlayerTokens().forEach((token:string)=>{
     if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
@@ -395,10 +415,12 @@ let button = spawnButton(document,'tileEditingPlace','publishGame',['btn','btn-d
     let numOfFinishTiles = game.numberOfFinishingTilesPerToken();
     let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
     let ret = false;
+   
     
     game.getPlayerTokens().forEach((token:string)=>{
       if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
         ret = true
+      
       }
     })
     if (game.checkIfAllPlayersHaveFinishTile().length > 0){

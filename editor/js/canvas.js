@@ -235,20 +235,32 @@ function mainMenu() {
         if (number < playerTokens.length) {
             var _loop_1 = function (i) {
                 playerTokens.pop();
+                console.log('odstranil ' + 'Player ' + i);
+                console.log('Player ' + i);
+                console.log('odstranil styl');
+                console.log(game.getPawnStyle().get('Player ' + i));
                 game.getPawnStyle()["delete"]('Player ' + i);
                 game.getNextTilesIds()["delete"]('Player ' + i);
+                console.log(game.getPawnStyle());
                 var rem = [];
                 game.getPawns().forEach(function (pawn) {
                     if (pawn.player == ('Player ' + i)) {
                         rem.push(pawn);
                     }
                 });
+                game.getTiles().forEach(function (tile) {
+                    tile.setIsEndingFor(tile.getIsEndingFor().filter(function (t) { return t != ('Player ' + i); }));
+                    tile.setIsStartingFor(tile.getIsStartingFor().filter(function (t) { return t != ('Player ' + i); }));
+                    tile.setCantBeEliminatedOnTile(tile.getCantBeEliminatedOnTile().filter(function (t) { return t != ('Player ' + i); }));
+                    console.log(tile.getIsStartingFor());
+                    console.log(tile.getPawns());
+                });
                 rem.forEach(function (pawn) {
                     game.removePawn(pawn);
                     pawn.tile.removePawn(pawn);
                 });
             };
-            for (var i = number; i <= 6; i++) {
+            for (var i = number + 1; i <= 6; i++) {
                 _loop_1(i);
             }
         }
@@ -257,7 +269,9 @@ function mainMenu() {
                 if (!playerTokens.includes('Player ' + i)) {
                     playerTokens.push('Player ' + (playerTokens.length + 1));
                     game.getNextTilesIds().set('Player ' + i, game.getTiles().length + 2);
-                    game.getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
+                    if (game.getPawnStyle().get('Player ' + i) == undefined) {
+                        game.getPawnStyle().set('Player ' + i, new PawnStyle_1.PawnStyle('Player ' + i, '#000000', 'type1'));
+                    }
                 }
             }
         }
@@ -330,6 +344,8 @@ function mainMenu() {
         var numOfFinishTiles = game.numberOfFinishingTilesPerToken();
         var numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer();
         var ret = false;
+        console.log(numOfFinishTiles);
+        console.log(numOfPawnsPerPlayers);
         game.getPlayerTokens().forEach(function (token) {
             if (numOfFinishTiles.get(token) > numOfPawnsPerPlayers.get(token)) {
                 ret = true;

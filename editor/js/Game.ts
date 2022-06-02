@@ -6,6 +6,8 @@ import { Warning } from './Warning.js';
 import { Pawn } from './Pawn.js';
 import { PawnStyle } from './PawnStyle.js';
 import { editTiles, insert, startInsertingByOne } from './TileEditor.js';
+
+const params = new URLSearchParams(window.location.search);
 class Game{
     private id:number = 0
     private name:string = "";
@@ -424,9 +426,9 @@ class Game{
             let canRemovePawnIds:Array<number> = []
             let ownersOfEliminatedPawns:Array<string> = []
             this.getPlayerTokens().forEach((token:string)=>{
-                if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player && !ownersOfEliminatedPawns.includes(token)){
+                if (!tile.getCantBeEliminatedOnTile().includes(token) && token!=pawn.player){
                     tile.getPawns().forEach((p:Pawn)=>{
-                        if (p.player == token && !p.hasEnded){
+                        if (p.player == token && !p.hasEnded && !ownersOfEliminatedPawns.includes(token)){
                             canRemovePawnIds.push(p.id)
                             ownersOfEliminatedPawns.push(token)
                         }
@@ -467,6 +469,7 @@ class Game{
         this.getTiles().forEach((tile:Tile)=>{
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)){
                 allTilesAreFull  =  false
+                console.log(tile)
             }
           
         })
@@ -479,7 +482,9 @@ class Game{
             }
         
         })
-        
+        console.log('player ended')
+        console.log(allTilesAreFull)
+        console.log(allPawnFinished)
         return (allTilesAreFull && allPawnFinished)
     }
    
@@ -493,6 +498,7 @@ class Game{
         tile.getPawns().push(pawn)
         pawn.tileId = tile.getId()
         pawn.tile = tile
+        editorSocket.emit('change Pawn position',{pawnId:pawn.id,tileId:pawn.tileId,room:params.get('id'),id:getCookie('id')})
        reload(ctx)
 
         if (react){
@@ -552,7 +558,7 @@ class Game{
                 notStarted.push(token)
             }
         })
-    
+        console.log(notStarted)
         return notStarted
         
     }
@@ -576,7 +582,7 @@ class Game{
                 notFinished.push(token)
             }
         })
-    
+        console.log(notFinished)
         return notFinished
     }
     checkIfPathFromStartToEndExists(){
@@ -589,6 +595,7 @@ class Game{
         })
         this.tiles.forEach((tile:Tile)=>{
             tile.getIsEndingFor().forEach((token:string)=>{
+                console.log('nahral token z policka:' + token)
                 m.set(token,m.get(token)!+1)
             })
         })

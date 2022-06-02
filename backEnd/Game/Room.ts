@@ -77,6 +77,10 @@ export class Room{
         public startGame(){
             this.setHasStarted(true)
             let r = this
+
+
+           
+    
             this.timeLeft = 120
             setInterval(function(){
                 if (r.players.length > 0){

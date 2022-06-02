@@ -81,6 +81,9 @@ var ServerSocket = /** @class */ (function () {
                             _a.label = 2;
                         case 2:
                             acc = AccountManager.getAccountByClientId(msg.id);
+                            if (acc == undefined) {
+                                window.location.replace('/');
+                            }
                             acc.setSocketId(socket.id);
                             if (!(msg.room != undefined)) return [3 /*break*/, 3];
                             r_1 = GameManager.getActiveRooms().get(parseInt(msg.room));
@@ -230,6 +233,7 @@ var ServerSocket = /** @class */ (function () {
             socket.on('set Socket', function (msg) {
                 var acc = AccountManager.getAccountByClientId(msg.id);
                 if (acc === undefined) {
+                    window.location.replace('/');
                     return;
                 }
                 acc.setSocketId(socket.id);
@@ -389,12 +393,10 @@ var ServerSocket = /** @class */ (function () {
                 if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
                     r.getPawnPositions().set(msg.pawnId, msg.tileId);
                 }
-                else {
-                    //////console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
-                }
+                console.log(r.getPawnPositions());
             });
             socket.on('showAnswersToOthers', function (msg) {
-                socket.to(msg.room).emit('loadAnswersToOthers', { wrong: msg.wrong, right: msg.right });
+                //socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
             });
             socket.on('evaluated end', function (msg) {
                 var r = GameManager.getActiveRooms().get(parseInt(msg.room));

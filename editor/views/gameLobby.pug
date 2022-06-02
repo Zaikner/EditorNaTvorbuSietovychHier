@@ -101,9 +101,11 @@ title=text[1]
                 div
                   label(for='numOfPlayers')=text[236]
                   select#numOfTiles(style = 'margin-left:3%; ')
+                  
                    option(id = '25' value = '25')=text[237]
                    option(id = '50' value = '50')=text[238]
-                   option(id = '100000' value = '100000')=text[239]
+                   option(id = '100' value = '100')=text[239]
+                   option(id = '100000' value = '100000')=text[267]
                 div
                   button#filterButton.btn.btn-dark(type = 'button' style = 'margin:3%;')=text[240]  
              
@@ -122,6 +124,10 @@ title=text[1]
                       form()
                         strong 
                           li.list-group-item()= score[0]+text[117]+' '+ score[1] + ' '+ text[179]+' ' + score[2]+ text[244]
+                  each score in [1,2,3]
+                      form()
+                        strong 
+                          li.list-group-item()
   #loginModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
     .modal-dialog
       .modal-content

@@ -360,6 +360,7 @@ var ClientSocket = /** @class */ (function () {
         });
         s.on('turn', function (msg) {
             $('#pickQuestionModal').modal('hide');
+            $('#answerModal').modal('hide');
             $('#WarningModal').modal('hide');
             Canvas_1.game.setHasThrown(false);
             (0, Canvas_1.elementDeleter)('onTurnPlace');

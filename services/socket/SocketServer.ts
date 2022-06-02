@@ -51,6 +51,10 @@ export class ServerSocket{
                         }
                     }
                     let acc = AccountManager.getAccountByClientId(msg.id)
+
+                    if (acc == undefined){
+                      window.location.replace('/')
+                    }
                     acc.setSocketId(socket.id)
            
                    let emit;
@@ -198,6 +202,7 @@ export class ServerSocket{
       {
         let acc = AccountManager.getAccountByClientId(msg.id)
            if(acc === undefined){
+             window.location.replace('/')
              return
            }
           acc.setSocketId(socket.id)
@@ -288,6 +293,7 @@ export class ServerSocket{
 
         r.setTimeLeft(120)
         if (r.getPlayerOnTurn().getAccount().getSocketId() ==  socket.id){
+
           this.io.in(msg.room).emit('return pawns to starting tile',{ids:msg.canRemovePawnIds})
           this.io.in(msg.room).emit('ended turn')
           if (tile.getRandomQuestion()){
@@ -369,16 +375,11 @@ export class ServerSocket{
           r.getPawnPositions().set(msg.pawnId,msg.tileId)
   
         }
-        else{
-        
-          //////console.log([socket.id, r.getPlayerOnTurn().getAccount().getSocketId()])
-        }
-        
-       
+        console.log(r.getPawnPositions())
       })
        
       socket.on('showAnswersToOthers',(msg:{room:string,wrong:Array<string>,right:Array<string>})=>{
-        socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
+        //socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
 
       })
       socket.on('evaluated end',(msg:{is:boolean,room:string,token:string})=>{

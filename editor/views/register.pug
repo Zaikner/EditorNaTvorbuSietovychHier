@@ -22,7 +22,7 @@ head
           input#passwordConfirmInput.form-control(name='confirm' type='password' placeholder=texts[170] minlength='5' required='')
           button.btn.btn-primary(type='submit' name='editor' value='editor')=texts[169]
         form.text-center(action='/editor/login' method='get' style='width: 100%;')
-          button.btn.btn-primary(type='submit')=texts[158]
+          button.btn.btn-primary(type='submit' style='margin-top:1%')=texts[158]
 script.
   $(window).on('load', function() {
   $('#registerModal').modal('show');
