@@ -146,15 +146,16 @@ function spawnButtonWithLabel(doc, parent, id, lbl, classList, txt, func) {
 exports.spawnButtonWithLabel = spawnButtonWithLabel;
 function spawnSelectMenu(doc, parent, id, lbl, classList, options, active) {
     if (active === void 0) { active = []; }
-    spawnDiv(document, parent, 'div' + id, []);
+    var div = spawnDiv(document, parent, 'div' + id, []);
+    div = doc.createElement('div');
+    div.style.display = 'flex';
+    div.style.justifyContent = 'space-between';
     var label = doc.createElement('label');
     label.htmlFor = id;
     label.textContent = lbl;
-    label.style.float = 'left';
     label.style.fontSize = 'normal';
     var menu = doc.createElement('select');
     menu.id = id;
-    menu.style.float = 'right';
     classList.forEach(function (add) {
         menu.classList.add(add);
     });
@@ -167,8 +168,9 @@ function spawnSelectMenu(doc, parent, id, lbl, classList, options, active) {
         }
         menu.appendChild(option);
     }
-    doc.getElementById('div' + id).appendChild(label);
-    doc.getElementById('div' + id).appendChild(menu);
+    div.appendChild(label);
+    div.appendChild(menu);
+    doc.getElementById('div' + id).appendChild(div);
     return menu;
 }
 exports.spawnSelectMenu = spawnSelectMenu;
@@ -230,25 +232,29 @@ function spawnImageInput(doc, parent, id, txt, lbl, func) {
 }
 exports.spawnImageInput = spawnImageInput;
 function spawnMultiSelect(doc, parent, id, lbl, txt, options, type) {
-    spawnDiv(document, parent, 'div' + id, []);
+    var div = spawnDiv(document, parent, 'div' + id, []);
+    div.style.display = 'flex';
+    div.style.justifyContent = 'space-between';
+    div = doc.createElement('div');
+    div.style.display = 'flex';
+    div.style.justifyContent = 'space-between';
     var label = doc.createElement('label');
     label.htmlFor = id;
     label.textContent = lbl;
-    label.style.float = 'left';
     label.style.fontSize = 'normal';
     label.style.marginRight = '0%';
     var startMenuWrapper = doc.createElement('div');
     startMenuWrapper.id = 'startMenuWrapper';
     startMenuWrapper.classList.add("dropdown");
-    startMenuWrapper.style.float = 'right';
     var startMenuButton = doc.createElement('button');
     startMenuButton.id = 'startMenuButton';
     startMenuButton.textContent = txt;
     startMenuButton.classList.add("btn", "btn-dark", "dropdown-toggle");
     startMenuButton.setAttribute('data-bs-toggle', 'dropdown');
-    startMenuButton.style.float = 'right';
     startMenuWrapper.appendChild(startMenuButton);
-    document.getElementById('tileEditingPlace').appendChild(startMenuWrapper);
+    div.appendChild(label);
+    div.appendChild(startMenuWrapper);
+    doc.getElementById('div' + id).appendChild(div);
     var startMenuDropdown = doc.createElement('div');
     startMenuDropdown.classList.add("dropdown-menu");
     startMenuDropdown.style.backgroundColor = '#292b2c';

@@ -107,8 +107,8 @@ function spawnElements() {
             Canvas_js_1.game.setImage(undefined);
         }
     });
-    (0, Elements_js_1.spawnMultiSelect)(Canvas_js_1.doc, 'tileEditingPlace', '', ClientSocket_js_1.texts[135], ClientSocket_js_1.texts[192], options, 'start');
-    (0, Elements_js_1.spawnMultiSelect)(Canvas_js_1.doc, 'tileEditingPlace', '', ClientSocket_js_1.texts[136], ClientSocket_js_1.texts[192], options, 'end');
+    (0, Elements_js_1.spawnMultiSelect)(Canvas_js_1.doc, 'tileEditingPlace', 'startSelect', ClientSocket_js_1.texts[135], ClientSocket_js_1.texts[192], options, 'start');
+    (0, Elements_js_1.spawnMultiSelect)(Canvas_js_1.doc, 'tileEditingPlace', 'EndSelect', ClientSocket_js_1.texts[136], ClientSocket_js_1.texts[192], options, 'end');
     (0, Elements_js_1.spawnButtonWithLabel)(Canvas_js_1.doc, "tileEditingPlace", 'setNextTileButton', ClientSocket_js_1.texts[141], ['btn', 'btn-dark'], ClientSocket_js_1.texts[208], function () {
         $('#nextTileModal').modal('show');
         generateNextTiles();

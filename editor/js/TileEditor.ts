@@ -124,9 +124,9 @@ function spawnElements(){
       }
     })
 
-spawnMultiSelect(doc,'tileEditingPlace','',texts[135],texts[192],options,'start')
+spawnMultiSelect(doc,'tileEditingPlace','startSelect',texts[135],texts[192],options,'start')
 
-spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
+spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],options,'end')
 
     spawnButtonWithLabel(doc,"tileEditingPlace",'setNextTileButton',texts[141],['btn','btn-dark'],texts[208],function(){
       

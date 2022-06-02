@@ -158,16 +158,21 @@ function spawnButtonWithLabel(doc:HTMLDocument,parent:string,id:string,lbl:strin
 function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,active:Array<string> = []){
   
  
-  spawnDiv(document,parent,'div'+id,[])
+  let div = spawnDiv(document,parent,'div'+id,[])
+  div =  doc.createElement('div')
+  div.style.display='flex'
+  div.style.justifyContent= 'space-between'
+
+  
+
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
   label.textContent = lbl
-  label.style.float = 'left'
   label.style.fontSize = 'normal'
+  
 
     let menu:HTMLSelectElement = doc.createElement('select')
     menu.id = id;
-    menu.style.float ='right'
     classList.forEach((add:string)=>{
        menu.classList.add(add)
     })
@@ -180,8 +185,10 @@ function spawnSelectMenu(doc:HTMLDocument,parent:string,id:string,lbl:string,cla
       }
       menu.appendChild(option);
     }
-    doc.getElementById('div'+id)!.appendChild( label);
-    doc.getElementById('div'+id)!.appendChild( menu);
+    div.appendChild(label)
+    div.appendChild(menu)
+    doc.getElementById('div'+id)!.appendChild(div);
+  
     return menu
 }
 function spawnRadioButtons(doc:HTMLDocument,parent:string,id:string,lbl:string,classList:Array<string>,options:Array<string>,onchangeFunc:Function){
@@ -249,26 +256,31 @@ function spawnImageInput(doc:HTMLDocument,parent:string,id:string,txt:string,lbl
 }
 function spawnMultiSelect(doc:HTMLDocument,parent:string,id:string,lbl:string,txt:string,options:Array<string>,type:string){
    
-  spawnDiv(document,parent,'div'+id,[])
+  let div = spawnDiv(document,parent,'div'+id,[])
+  div.style.display='flex'
+  div.style.justifyContent= 'space-between'
+  div =  doc.createElement('div')
+  div.style.display='flex'
+  div.style.justifyContent= 'space-between'
+
   let label:HTMLLabelElement = doc.createElement('label')
   label.htmlFor = id
   label.textContent = lbl
-  label.style.float = 'left'
   label.style.fontSize = 'normal'
   label.style.marginRight = '0%'
 
   let startMenuWrapper = doc.createElement('div')
   startMenuWrapper.id = 'startMenuWrapper'
   startMenuWrapper.classList.add("dropdown")
-  startMenuWrapper.style.float = 'right'
   let startMenuButton = doc.createElement('button')
   startMenuButton.id = 'startMenuButton'
   startMenuButton.textContent = txt
   startMenuButton.classList.add("btn","btn-dark","dropdown-toggle")
   startMenuButton.setAttribute('data-bs-toggle','dropdown');
-  startMenuButton.style.float = 'right' 
   startMenuWrapper.appendChild(startMenuButton)
-  document.getElementById('tileEditingPlace')!.appendChild(startMenuWrapper)
+  div.appendChild(label)
+  div.appendChild(startMenuWrapper)
+  doc.getElementById('div'+id)!.appendChild(div);
   
   let startMenuDropdown = doc.createElement('div')
   startMenuDropdown.classList.add("dropdown-menu")
@@ -452,6 +464,8 @@ function spawnTextArea(doc:HTMLDocument,parent:string,id:string,txt:string,reado
 }
 
 function spawnDiv(doc:HTMLDocument,parent:string,id:string,classList:Array<string>){
+
+
   let div:HTMLDivElement = doc.createElement('div')
     div.id = id;
     div.style.float ='left'
