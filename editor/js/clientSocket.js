@@ -154,8 +154,6 @@ var ClientSocket = /** @class */ (function () {
                     Canvas_1.game.getPawnStyle().set(style.player, p);
                 }
             });
-            console.log('loaded game:');
-            console.log(Canvas_1.game);
             var gm = document.getElementById('gameName');
             if (gm != undefined) {
                 gm.value = Canvas_1.game.getName();

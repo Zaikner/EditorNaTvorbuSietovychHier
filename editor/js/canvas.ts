@@ -224,7 +224,7 @@ document.getElementById("canvasPlace")!.appendChild(canvas);
 let started:Boolean = false;
 
 function changeNextTileText(){
-    console.log('zmenil cisla')
+   
     let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
     let arr =  Array.from(game.getNextTilesIds().values())
     if (game.getChoosenTile()!=undefined){
@@ -273,14 +273,9 @@ numOfPlayersSlider.onclick =function(){
   
     for (let i = number+1; i <= 6;i++){
       playerTokens.pop()
-   
-      console.log('odstranil ' + 'Player '+i)
-      console.log('Player '+i)
-      console.log('odstranil styl')
-      console.log(game.getPawnStyle().get('Player '+i))
+  
       game.getPawnStyle().delete('Player '+i)
       game.getNextTilesIds().delete('Player '+i)
-      console.log(game.getPawnStyle())
       let rem:Array<Pawn> = []
       game.getPawns().forEach((pawn:Pawn)=>{
         if (pawn.player == ('Player '+i)){
@@ -291,8 +286,7 @@ numOfPlayersSlider.onclick =function(){
         tile.setIsEndingFor(tile.getIsEndingFor().filter((t) => {return t != ('Player '+i)}))
         tile.setIsStartingFor(tile.getIsStartingFor().filter((t) => {return t != ('Player '+i)}))
         tile.setCantBeEliminatedOnTile(tile.getCantBeEliminatedOnTile().filter((t) => {return t != ('Player '+i)}))
-        console.log(tile.getIsStartingFor())
-        console.log(tile.getPawns())
+      
       })
       rem.forEach((pawn:Pawn)=>{
         game.removePawn(pawn)
@@ -396,9 +390,6 @@ spawnButton(document,'tileEditingPlace','savaGameButton',["btn","btn-dark"],text
   let numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer()
   let ret = false;
 
-  console.log(numOfFinishTiles)
-  console.log(numOfPawnsPerPlayers)
-  
   game.getPlayerTokens().forEach((token:string)=>{
     if (numOfFinishTiles.get(token)! > numOfPawnsPerPlayers.get(token)!){
       ret = true

@@ -202,7 +202,6 @@ exports.doc = doc;
 document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
 function changeNextTileText() {
-    console.log('zmenil cisla');
     var nextTile = document.getElementById('setNextTileButtonlabel');
     var arr = Array.from(game.getNextTilesIds().values());
     if (game.getChoosenTile() != undefined) {
@@ -245,13 +244,8 @@ function mainMenu() {
         if (number < playerTokens.length) {
             var _loop_1 = function (i) {
                 playerTokens.pop();
-                console.log('odstranil ' + 'Player ' + i);
-                console.log('Player ' + i);
-                console.log('odstranil styl');
-                console.log(game.getPawnStyle().get('Player ' + i));
                 game.getPawnStyle()["delete"]('Player ' + i);
                 game.getNextTilesIds()["delete"]('Player ' + i);
-                console.log(game.getPawnStyle());
                 var rem = [];
                 game.getPawns().forEach(function (pawn) {
                     if (pawn.player == ('Player ' + i)) {
@@ -262,8 +256,6 @@ function mainMenu() {
                     tile.setIsEndingFor(tile.getIsEndingFor().filter(function (t) { return t != ('Player ' + i); }));
                     tile.setIsStartingFor(tile.getIsStartingFor().filter(function (t) { return t != ('Player ' + i); }));
                     tile.setCantBeEliminatedOnTile(tile.getCantBeEliminatedOnTile().filter(function (t) { return t != ('Player ' + i); }));
-                    console.log(tile.getIsStartingFor());
-                    console.log(tile.getPawns());
                 });
                 rem.forEach(function (pawn) {
                     game.removePawn(pawn);
@@ -354,8 +346,6 @@ function mainMenu() {
         var numOfFinishTiles = game.numberOfFinishingTilesPerToken();
         var numOfPawnsPerPlayers = game.numberOfPawnsPerPlayer();
         var ret = false;
-        console.log(numOfFinishTiles);
-        console.log(numOfPawnsPerPlayers);
         game.getPlayerTokens().forEach(function (token) {
             if (numOfFinishTiles.get(token) > numOfPawnsPerPlayers.get(token)) {
                 ret = true;

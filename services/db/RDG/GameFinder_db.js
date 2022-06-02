@@ -67,12 +67,9 @@ var GameFinder = /** @class */ (function () {
                             })];
                     case 3:
                         _a.sent();
-                        console.log('find by name vracia:');
-                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_1 = _a.sent();
-                        console.log('zlyhalo findByName');
                         console.log(err_1);
                         console.log("Connection failed");
                         return [3 /*break*/, 5];
@@ -105,8 +102,6 @@ var GameFinder = /** @class */ (function () {
                             })];
                     case 3:
                         _a.sent();
-                        console.log('find by name vracia:');
-                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_2 = _a.sent();
@@ -141,8 +136,6 @@ var GameFinder = /** @class */ (function () {
                             })];
                     case 3:
                         _a.sent();
-                        console.log('find by name vracia:');
-                        console.log(ret);
                         return [2 /*return*/, ret];
                     case 4:
                         err_3 = _a.sent();

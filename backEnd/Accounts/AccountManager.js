@@ -110,7 +110,7 @@ var AccountManager = /** @class */ (function () {
                     case 1:
                         accounts = _a.sent();
                         if (accounts.length != 0) {
-                            if (this.decode(accounts[0].getPassword()) == password && !this.isLogged(name)) {
+                            if (this.decode(accounts[0].getPassword()) == password) {
                                 return [2 /*return*/, [true, this.login(accounts[0])]];
                             }
                         }
@@ -135,7 +135,6 @@ var AccountManager = /** @class */ (function () {
         return newAcc;
     };
     AccountManager.logout = function (acc) {
-        console.log('odhlasil');
         if (acc == undefined) {
             return;
         }
@@ -145,18 +144,6 @@ var AccountManager = /** @class */ (function () {
         if (room != undefined) {
             room.leave(room.findPlayerOnAccount(acc));
         }
-    };
-    AccountManager.isLogged = function (name) {
-        // OPRAVIT!!!!!!!!!!!!, ide to, ale odlogovanie nie je poriesene
-        return false;
-        var ret = false;
-        this.loggedAccounts.forEach(function (acc) {
-            if (acc.getName() === name) {
-                ret = true;
-            }
-            ////////console.log('Ucet sa rovna:'+acc.getName()===name+' ')
-        });
-        return ret;
     };
     AccountManager.createNewClientId = function () {
         var ret = '';

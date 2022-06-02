@@ -103,13 +103,13 @@ router.route("/login")
 })
 .post(async(request,res) =>
 {   let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    let isLoged = AccountManager.isLogged(request.body.name)
+   
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
     if (registred == undefined){
         registred = [false]
     }
-    if (registred[0] && !isLoged){
+    if (registred[0]){
         res.cookie('id',registred[1].getClientId())
         /res.cookie('mode','game')
         res.redirect('/editor/setId?id='+registred[1].getClientId())

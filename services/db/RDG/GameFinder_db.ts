@@ -24,13 +24,12 @@ export class GameFinder{
                    
                     ret.push(Game_db.load(row))
                 });
-                console.log('find by name vracia:')
-                console.log(ret)
+             
                 return ret
         
             }
             catch(err){
-              console.log('zlyhalo findByName')
+             
               console.log(err)
               console.log("Connection failed")
             } 
@@ -51,8 +50,7 @@ export class GameFinder{
                    
                     ret.push(Game_db.load(row))
                 });
-                console.log('find by name vracia:')
-                console.log(ret)
+               
                 return ret
         
             }
@@ -76,8 +74,7 @@ export class GameFinder{
                    
                     ret.push(Game_db.load(row))
                 });
-                console.log('find by name vracia:')
-                console.log(ret)
+              
                 return ret
         
             }

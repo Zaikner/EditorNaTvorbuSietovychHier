@@ -37,17 +37,6 @@ var Rules = /** @class */ (function () {
             .query(query)
             .then(function (res) { return console.log(res.rows[0]); })["catch"](function (e) { return console.error(e.stack); });
     };
-    // public update(){
-    //             let client = DbConnect.get()
-    //                 const query = {
-    //                     name: 'update-rules',
-    //                     text: 'UPDATE "bachelorsThesis"."Rules" SET text = $1 WHERE id = $2;',
-    //                     values: [this.text,this.id],
-    //                   }
-    //                   client
-    //                   .query(query)
-    //                   .then((res:any) => console.log(res.rows[0]))
-    //                   .catch((e:Error) => console.error(e.stack))}
     Rules.load = function (data) {
         var ret = new Rules();
         ret.setId(data.id);

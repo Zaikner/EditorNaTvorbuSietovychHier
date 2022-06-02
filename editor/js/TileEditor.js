@@ -259,7 +259,6 @@ var insert = function (event) {
     var canSpawn = true;
     if (canSpawn) {
         var addedTile = spawnTile(coords);
-        console.log(addedTile);
         Canvas_js_1.game.addToUndoLog([addedTile]);
         addedTile.getIsStartingFor().forEach(function (player) {
             Canvas_js_1.game.insertPawns(player, addedTile);

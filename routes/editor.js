@@ -12,7 +12,7 @@ router
     let acc = AccountManager.getAccountByClientId(request.cookies.id)
     let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
     if (request.cookies.id != undefined && acc != undefined){
-        console.log('editor redirectuje')
+    
           
             res.render('edit',{root:'./editor/views',text:text});
           
@@ -35,13 +35,12 @@ router.route("/login")
 {   
 
     let text =  (await TextsFinder.getIntance().findAll()).map((txt)=>txt.getSK())
-    let isLoged = AccountManager.isLogged(request.body.name)
     let registred = await AccountManager.authenticate(request.body.name,request.body.password)
     
     if (registred == undefined){
         registred = [false]
     }
-    if (registred[0] && !isLoged){
+    if (registred[0]){
         res.cookie('id',registred[1].getClientId())
         res.cookie('mode','editor')
         res.redirect('/editor/setId?id='+registred[1].getClientId())
@@ -86,15 +85,6 @@ router.route("/register")
     }
 
 });
-
-// router
-// .route("/id/:id")
-// .get((request,res) =>
-// {   console.log(request.params)
-    
-//     res.sendFile('edit.html',{root:'./editor/views'});
-//     //res.sendFile('main.html',{root:'./editor/views'});
-// });
 
 router
 .route("/setId")

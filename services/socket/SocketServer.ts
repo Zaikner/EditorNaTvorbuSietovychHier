@@ -375,7 +375,7 @@ export class ServerSocket{
           r.getPawnPositions().set(msg.pawnId,msg.tileId)
   
         }
-        console.log(r.getPawnPositions())
+       
       })
        
       socket.on('showAnswersToOthers',(msg:{room:string,wrong:Array<string>,right:Array<string>})=>{
@@ -514,7 +514,7 @@ export class ServerSocket{
       })
   
       socket.on('deleteQuestion', async(data:{questionId:string,id:string})=>{
-        ////console.log('edituje')
+        
         let acc = AccountManager.getAccountByClientId(data.id)
         if (acc == undefined){
           return
@@ -672,11 +672,11 @@ export class ServerSocket{
         }
       })
       socket.on('ping',(msg:{id:string})=>{
-        console.log('odpingol')
+       
         let acc = AccountManager.getAccountByClientId(msg.id)
         if (acc != undefined){
             acc.setPing(0)
-            console.log('nastavil na 0')
+            
       }})
           });
     }

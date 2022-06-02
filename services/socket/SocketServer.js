@@ -393,7 +393,6 @@ var ServerSocket = /** @class */ (function () {
                 if (r.getPlayerOnTurn().getAccount() == AccountManager.getAccountByClientId(msg.id)) {
                     r.getPawnPositions().set(msg.pawnId, msg.tileId);
                 }
-                console.log(r.getPawnPositions());
             });
             socket.on('showAnswersToOthers', function (msg) {
                 //socket.to(msg.room).emit('loadAnswersToOthers',{wrong:msg.wrong,right:msg.right})
@@ -735,11 +734,9 @@ var ServerSocket = /** @class */ (function () {
                 });
             }); });
             socket.on('ping', function (msg) {
-                console.log('odpingol');
                 var acc = AccountManager.getAccountByClientId(msg.id);
                 if (acc != undefined) {
                     acc.setPing(0);
-                    console.log('nastavil na 0');
                 }
             });
         });

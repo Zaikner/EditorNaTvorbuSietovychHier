@@ -173,8 +173,6 @@ class ClientSocket{
       }
 
     });
-    console.log('loaded game:')
-    console.log(game)
 
     let gm:HTMLInputElement = <HTMLInputElement>document.getElementById('gameName')
     if (gm!= undefined){

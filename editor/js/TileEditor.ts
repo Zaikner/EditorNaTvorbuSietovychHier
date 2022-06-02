@@ -305,7 +305,7 @@ spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],option
 
     if (canSpawn){
       var addedTile = spawnTile(coords)
-      console.log(addedTile)
+      
       game.addToUndoLog([addedTile])
       addedTile.getIsStartingFor().forEach((player:string)=>{
         game.insertPawns(player,addedTile)

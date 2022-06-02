@@ -53,7 +53,7 @@ export class AccountManager{
         let accounts = await AccountFinder.getIntance().findByName(name)
      
         if(accounts!.length != 0){
-            if (this.decode(accounts![0].getPassword())  == password){
+            if (this.decode(accounts![0].getPassword())  == password ){
                 
                 return [true,this.login(accounts![0])]
             }

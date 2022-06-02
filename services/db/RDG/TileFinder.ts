@@ -115,7 +115,7 @@ export class TileFinder{
   public async deleteByGameId(id:number){
             let client = DbConnect.get()
             try {
-              console.log('maze tily s gameID:' + id)
+            
                 const query = {
                     name: 'delete-gameTiles',
                     text: 'DELETE FROM bachelors_thesis.tiles WHERE game_id=$1;',
@@ -128,8 +128,7 @@ export class TileFinder{
                     ret.push(Tile_db.load(row))
                   
                 });
-               console.log('zmazal:')
-               console.log(ret)
+             
                 return ret
         
             }
