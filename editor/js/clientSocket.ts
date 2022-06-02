@@ -183,10 +183,11 @@ class ClientSocket{
     resize(game,ctx)
   })
 
-  s.on('react to event: forward',(msg:{value:number,pawnId:number})=>{
+  s.on('react to event: forward',(msg:{value:number,pawnId:number,token:string})=>{
     game.setIsOnTurn(true)
     let ret = game.howManyCanMove(msg.pawnId,msg.value)
-    s.emit('move pawns',{pawn:msg.pawnId,value:ret,room:params.get('id')})
+
+    s.emit('move pawns',{pawn:msg.pawnId,value:ret,room:params.get('id'),eval})
 })
 
 s.on('react to event: backward',(msg:{value:number,pawnId:number})=>{
@@ -259,17 +260,17 @@ s.on('player left',(msg:{msg:string,token:string})=>{
   let chat =  (<HTMLTextAreaElement>document.getElementById('chat'))!
   let chatPlaying =  (<HTMLTextAreaElement>document.getElementById("chatPlaying"))!
   if (chat.value == ''){
-    chat.value = texts[227] + ' ' + msg.msg + texts[228]
+    chat.value = texts[227] + ' ' + msg.msg +  ' ' + texts[228]
   }
   else{
-    chat.value = chat.value +  '\n' +  texts[227] + ' ' + msg.msg + texts[228]}
+    chat.value = chat.value +  '\n' +  texts[227] + ' ' + msg.msg + ' ' + texts[228]}
 
   
   if (chatPlaying.value == ''){
-    chatPlaying.value =   texts[227] + ' ' + msg.msg + texts[228]
+    chatPlaying.value =   texts[227] + ' ' + msg.msg + ' ' + texts[228]
   }
   else{
-    chatPlaying.value = chatPlaying.value +  '\n' +  texts[227] + ' ' + msg.msg + texts[228];
+    chatPlaying.value = chatPlaying.value +  '\n' +  texts[227] + ' ' + msg.msg +' ' +  texts[228];
   }
   s.emit('reload waiting room',{room:params.get('id')})
   reload(ctx)

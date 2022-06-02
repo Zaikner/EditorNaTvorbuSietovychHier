@@ -165,7 +165,7 @@ var ClientSocket = /** @class */ (function () {
         s.on('react to event: forward', function (msg) {
             Canvas_1.game.setIsOnTurn(true);
             var ret = Canvas_1.game.howManyCanMove(msg.pawnId, msg.value);
-            s.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id') });
+            s.emit('move pawns', { pawn: msg.pawnId, value: ret, room: params.get('id'), eval: eval });
         });
         s.on('react to event: backward', function (msg) {
             Canvas_1.game.setIsOnTurn(true);
@@ -231,16 +231,16 @@ var ClientSocket = /** @class */ (function () {
             var chat = document.getElementById('chat');
             var chatPlaying = document.getElementById("chatPlaying");
             if (chat.value == '') {
-                chat.value = texts[227] + ' ' + msg.msg + texts[228];
+                chat.value = texts[227] + ' ' + msg.msg + ' ' + texts[228];
             }
             else {
-                chat.value = chat.value + '\n' + texts[227] + ' ' + msg.msg + texts[228];
+                chat.value = chat.value + '\n' + texts[227] + ' ' + msg.msg + ' ' + texts[228];
             }
             if (chatPlaying.value == '') {
-                chatPlaying.value = texts[227] + ' ' + msg.msg + texts[228];
+                chatPlaying.value = texts[227] + ' ' + msg.msg + ' ' + texts[228];
             }
             else {
-                chatPlaying.value = chatPlaying.value + '\n' + texts[227] + ' ' + msg.msg + texts[228];
+                chatPlaying.value = chatPlaying.value + '\n' + texts[227] + ' ' + msg.msg + ' ' + texts[228];
             }
             s.emit('reload waiting room', { room: params.get('id') });
             (0, Canvas_1.reload)(Canvas_1.ctx);

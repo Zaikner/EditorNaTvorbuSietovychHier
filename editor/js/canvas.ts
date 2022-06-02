@@ -162,12 +162,15 @@ document.getElementById('insertTiles')!.addEventListener('click',function(){
   startInsertingByOne();} );
 
 
-document.getElementById('questionManager')!.addEventListener('click',function(){elementDeleter('listContainer')
-                                                                                editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false});} )
+document.getElementById('questionManager')!.addEventListener('click',function(){
+  unchooseEverything()
+  elementDeleter('listContainer')
+  editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false});} )
 
 document.getElementById('generalInfoButton')!.addEventListener('click',function(){
   removeAllButtons()
   removeAllListenersAdded()
+  unchooseEverything()
   mainMenu();})
 
 document.getElementById('addButtonInsert')!.addEventListener('click',function(){addOption('questionOptions','',false);})
@@ -204,11 +207,14 @@ document.getElementById('loadCreatedGameModal')?.addEventListener('click',functi
   
 })
 document.getElementById('loadGameButton')?.addEventListener('click',function(){
+  unchooseEverything()
   editorSocket.emit('loadGameNames',{id:localStorage.getItem('id')})
 })
 
 
-document.getElementById('editPawn')!.addEventListener('click',function(){pawnEditMenu()} );
+document.getElementById('editPawn')!.addEventListener('click',function(){
+  unchooseEverything()
+  pawnEditMenu()} );
 }
 
 var doc = document;
@@ -218,9 +224,14 @@ document.getElementById("canvasPlace")!.appendChild(canvas);
 let started:Boolean = false;
 
 function changeNextTileText(){
-  let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
+    console.log('zmenil cisla')
+    let nextTile = <HTMLLabelElement>document.getElementById('setNextTileButtonlabel')
+    let arr =  Array.from(game.getNextTilesIds().values())
+    if (game.getChoosenTile()!=undefined){
+      arr = Array.from(game.getChoosenTile()!.getNextTilesIds().values())
+    }
     nextTile.textContent= texts[141]+' ('
-    let arr = Array.from(game.getNextTilesIds().values())
+    
     arr.forEach((num:number)=>{
       nextTile.textContent+= ' ' + num+','
     })
@@ -488,7 +499,7 @@ function reload(ctx:CanvasRenderingContext2D)
   ctx.closePath()
   let tiles = game.getTiles()
   tiles.forEach((tile:Tile) => {
-    tile.drawTile(canvas,ctx,false)
+    tile.drawTile(canvas,ctx)
     tile.drawPawns(ctx)
   })
   ctx.closePath()

@@ -126,6 +126,7 @@ function pawnEditMenu() {
             (_a = Canvas_1.game.getPawnStyle().get(player)) === null || _a === void 0 ? void 0 : _a.setType('type' + i);
             (_b = Canvas_1.game.getPawnStyle().get(playerPicker.value)) === null || _b === void 0 ? void 0 : _b.setImage(undefined);
             drawActualPawnLook(player);
+            (0, Canvas_1.reload)(Canvas_1.ctx);
         };
     };
     for (var i = 1; i <= 7; i++) {

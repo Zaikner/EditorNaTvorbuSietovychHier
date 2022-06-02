@@ -54,7 +54,6 @@ var Game = /** @class */ (function () {
         this.backward = 0;
         this.mustThrown = 0;
         this.randomQuestion = false;
-        console.log('urobil novu hru');
     }
     Game.prototype.saveGame = function () {
         if (this.name.length == 0) {
@@ -115,16 +114,13 @@ var Game = /** @class */ (function () {
                 if (p.canMove(value)) {
                     p.move(value);
                 }
-                else {
-                    console.log('found pawn but cant move');
-                }
                 return p;
             }
         });
     };
     Game.prototype.howManyCanMove = function (id, value) {
         var pawn = Canvas_js_1.game.findPawnById(id);
-        while (!pawn.canMove(value)) {
+        while (!pawn.canMove(value) && value > 0) {
             value--;
         }
         return value;
@@ -196,15 +192,10 @@ var Game = /** @class */ (function () {
                     remap_1.set(tile.getTileNumber() + 1, tile.getTileNumber());
                 }
             });
-            console.log(remap_1);
             this.getTiles().forEach(function (t) {
                 _this.getPlayerTokens().forEach(function (token) {
                     if (Array.from(remap_1.keys()).includes(t.getNextTilesIds().get(token))) {
                         t.getNextTilesIds().set(token, remap_1.get(t.getNextTilesIds().get(token)));
-                        console.log(t.getTileNumber() + ' => ' + remap_1.get(t.getNextTilesIds().get(token)));
-                    }
-                    else {
-                        console.log('neobsahuje hodnotu ' + t.getNextTilesIds().get(token));
                     }
                 });
             });
@@ -236,7 +227,7 @@ var Game = /** @class */ (function () {
             this.addTile(newTile);
             this.nextTileId++;
         }
-        newTile.drawTile(Canvas_js_1.canvas, Canvas_js_1.ctx, false);
+        newTile.drawTile(Canvas_js_1.canvas, Canvas_js_1.ctx);
         newTile.setTileNumber(tileNumber);
         newTile.setId(this.nextTileId);
         return newTile;
@@ -312,8 +303,6 @@ var Game = /** @class */ (function () {
             tile.setY2((coords.y / this.scaleY + tile.getRadius()));
             tile.setCenterX((tile.getX1() + tile.getX2()) / 2);
             tile.setCenterY((tile.getY1() + tile.getY2()) / 2);
-            console.log(tile.getCenterX() - tile.getX1());
-            console.log(tile.getCenterX() - tile.getX2());
             (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
         }
     };
@@ -321,6 +310,7 @@ var Game = /** @class */ (function () {
         var tiles = this.getTiles();
         tiles.forEach(function (tile) { tile.setIsChoosen(false); });
         this.choosenTile = undefined;
+        (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
     };
     Game.prototype.addToUndoLog = function (addition) {
         this.undoLog.push(addition);
@@ -419,7 +409,6 @@ var Game = /** @class */ (function () {
         this.getTiles().forEach(function (tile) {
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)) {
                 allTilesAreFull = false;
-                console.log(tile);
             }
         });
         var playerPawns = this.pawns.filter(function (p) { return token == p.player; });
@@ -429,9 +418,6 @@ var Game = /** @class */ (function () {
                 allPawnFinished = false;
             }
         });
-        console.log('player ended');
-        console.log(allTilesAreFull);
-        console.log(allPawnFinished);
         return (allTilesAreFull && allPawnFinished);
     };
     Game.prototype.movePawnBack = function (pawnId, value, react) {
@@ -497,7 +483,6 @@ var Game = /** @class */ (function () {
                 notStarted.push(token);
             }
         });
-        console.log(notStarted);
         return notStarted;
     };
     Game.prototype.checkIfAllPlayersHaveFinishTile = function () {
@@ -517,7 +502,6 @@ var Game = /** @class */ (function () {
                 notFinished.push(token);
             }
         });
-        console.log(notFinished);
         return notFinished;
     };
     Game.prototype.checkIfPathFromStartToEndExists = function () {
@@ -529,7 +513,6 @@ var Game = /** @class */ (function () {
         });
         this.tiles.forEach(function (tile) {
             tile.getIsEndingFor().forEach(function (token) {
-                console.log('nahral token z policka:' + token);
                 m.set(token, m.get(token) + 1);
             });
         });

@@ -20,7 +20,6 @@ title=text[1]
   .d-flex.align-items-center.justify-content-center
     .container-fluid
       .row.d-flex.align-items-center.justify-content-center
-        // <div class="col-1"></div>
         .col-12(style=' overflow: auto; width: 100vh; height: 100vh;  bottom-padding:1px')
           .row(style='height:100vh; width: 100%;  bottom-padding:1px')
             .col-5(style=' overflow: hidden;  width: 50vh; height: 100vh; margin-left: 10%; bottom-padding:1px;')
@@ -38,7 +37,6 @@ title=text[1]
                     p(style='font-size: 15px; float:left;')=text[4]
                     button.btn.btn-dark(type='button' id='create' style = 'text-align:right;')=text[31]
               div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 30vh;  border-radius: 25px;')
-                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[5]
                 ul#activeRooms.list-group(style='overflow-y: scroll; max-height: 20vh')
@@ -48,11 +46,9 @@ title=text[1]
                           li.list-group-item(name='room' value = room[2])= room[1]
                             |
                             input(type='hidden' name='id' value=room[0])
-                            //input(type='hidden' name='hasStarted' value=room[3])
                             if (!room[3])
                               button(type = 'submit' name='name' id = room[0] value = room[2] style = 'margin-left:3%;').btn.btn-dark=text[8]
-              div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 30vh;  border-radius: 25px;')
-                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
+              div(style='margin: 5% ;  background-color: white;overflow: visible; width: 100%px; height: 25vh;  border-radius: 25px;')
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong=text[232]
                 ul#activePlayers.list-group(style='overflow-y: scroll; max-height: 20vh')
@@ -74,7 +70,6 @@ title=text[1]
               br
               br
               div(style='margin: 5% ;  background-color: white;overflow: hidden; width: 100%px;height: 35vh;  border-radius: 25px;')
-                // <p style="font-size: 15px; font-family: sans-serif;">Active rooms</p>
                 label(for='chat' style='font-size: 15px; font-family: sans-serif; ')
                   strong='Active players'
                 ul.list-group(style='overflow-y: scroll; max-height: 20vh')
@@ -144,7 +139,6 @@ title=text[1]
             button.btn.btn-primary(type='button' id='leave')=text[158]
             script(src='../socket.io/socket.io.js')
             div
-            // <div class="col-1"></div>
           div
 footer 
   p Gamelobby
@@ -197,28 +191,13 @@ script.
     let roomId = document.getElementById('roomIdSelecter')
     if (roomId.value!=undefined){
       if (existingRoomsId.includes(parseInt(roomId.value))){
-        //window.location.replace('/room?id:'+roomId.value+'&button=true')
-        // window.location.replace('/room?id=1&name=pawns%20>%20finish%20tiles')
         document.getElementById(roomId.value).click()
       }
       else{
        alert("#{text[210]}")
       }
     }
-    
-    //- editorSocket.on('refresh active players',()=>{
-    //-     console.log('aspon obdrzal refresh active players')
-    //-     document.getElementById('activeRooms').innerHtml = ''
-    //-           //- ul.list-group(style='overflow-y: scroll; max-height: 20vh')
-    //-           //-     each room in rooms
-    //-           //-         form(action='/room?game:'+room[2]+'?hasStarted:'+room[3] method='get' name='name' value = room[0])
-    //-           //-           strong 
-    //-           //-             li.list-group-item(name='room' value = room[2])= room[1]
-    //-           //-               |
-    //-           //-               input(type='hidden' name='id' value=room[0])
-    //-           //-               //input(type='hidden' name='hasStarted' value=room[3])
-    //-           //-               button(type = 'submit' name='name' id = room[0] value = room[2]).btn.btn-dark=text[8]
-    //- })
+  
   }
   editorSocket.on('refresh lobby',(rooms,players)=>{
       console.log('refreshol lobby')
@@ -285,7 +264,7 @@ script.
           ac.textContent = "#{text[2]}"
           ac.onclick = function(){
               window.location.replace('/account?name='+player[0])
-              //document.getElementById(player[2]).click()
+             
           }
 
       liItem.appendChild(ac)

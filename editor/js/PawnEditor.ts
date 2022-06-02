@@ -132,6 +132,7 @@ function pawnEditMenu(){
             game.getPawnStyle().get(playerPicker.value)?.setImage(undefined!)
         
             drawActualPawnLook(player)
+            reload(ctx)
         }
     }
     let c = spawnCanvas(document,'pawnPickerDiv','canvasPawn'+8)

@@ -58,7 +58,6 @@ class Game{
     private randomQuestion = false;
 
     constructor(){
-        console.log('urobil novu hru')
     }   
 
     saveGame(){
@@ -129,9 +128,7 @@ class Game{
                 if (p.canMove(value)){
                     p.move(value)
                 }
-                else{
-                    console.log('found pawn but cant move')
-                }
+               
                
                 return p
             }
@@ -139,7 +136,7 @@ class Game{
     howManyCanMove(id:number,value:number){
         let pawn = game.findPawnById(id)
       
-        while (!pawn.canMove(value)){
+        while (!pawn.canMove(value) && value>0){
           value--;
         }
         return value
@@ -220,17 +217,13 @@ class Game{
                     
                 }
             })
-            console.log(remap)
+         
             this.getTiles().forEach((t:Tile)=>{
                         this.getPlayerTokens().forEach((token:string)=>{
                             if (Array.from(remap.keys()).includes(t.getNextTilesIds().get(token)!)){
                                 t.getNextTilesIds().set(token,remap.get(t.getNextTilesIds().get(token)!)!)
-                                console.log(t.getTileNumber()+ ' => ' + remap.get(t.getNextTilesIds().get(token)!))
+                        
                             }
-                            else{
-                                console.log('neobsahuje hodnotu '+ t.getNextTilesIds().get(token)!)
-                            }
-                           
                         })
                     })
         }
@@ -270,7 +263,7 @@ class Game{
             this.nextTileId++;
         }
         
-        newTile.drawTile(canvas,ctx,false);
+        newTile.drawTile(canvas,ctx);
         newTile.setTileNumber(tileNumber)
         newTile.setId(this.nextTileId)
 
@@ -350,8 +343,6 @@ class Game{
             tile.setY2((coords.y/this.scaleY+tile.getRadius()))
             tile.setCenterX((tile.getX1()+tile.getX2())/2)
             tile.setCenterY((tile.getY1()+tile.getY2())/2)
-            console.log(tile.getCenterX()-tile.getX1())
-            console.log(tile.getCenterX()-tile.getX2())
             reload(ctx)
         }
     
@@ -361,6 +352,7 @@ class Game{
         let tiles = this.getTiles()
         tiles.forEach((tile) => {tile.setIsChoosen(false)})
         this.choosenTile = undefined
+        reload(ctx)
     }
     addToUndoLog(addition:Array<Tile>){
   
@@ -469,7 +461,6 @@ class Game{
         this.getTiles().forEach((tile:Tile)=>{
             if (tile.getIsEndingFor().includes(token) && !tile.isSuccessfullyEnding(token)){
                 allTilesAreFull  =  false
-                console.log(tile)
             }
           
         })
@@ -482,9 +473,6 @@ class Game{
             }
         
         })
-        console.log('player ended')
-        console.log(allTilesAreFull)
-        console.log(allPawnFinished)
         return (allTilesAreFull && allPawnFinished)
     }
    
@@ -558,7 +546,6 @@ class Game{
                 notStarted.push(token)
             }
         })
-        console.log(notStarted)
         return notStarted
         
     }
@@ -582,7 +569,6 @@ class Game{
                 notFinished.push(token)
             }
         })
-        console.log(notFinished)
         return notFinished
     }
     checkIfPathFromStartToEndExists(){
@@ -595,7 +581,6 @@ class Game{
         })
         this.tiles.forEach((tile:Tile)=>{
             tile.getIsEndingFor().forEach((token:string)=>{
-                console.log('nahral token z policka:' + token)
                 m.set(token,m.get(token)!+1)
             })
         })

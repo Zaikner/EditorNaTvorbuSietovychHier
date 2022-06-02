@@ -49,10 +49,11 @@ class Tile{
        
     }
 
-    public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D,showOnlyChange:boolean){
-     
+    public drawTile(canvas:HTMLCanvasElement,ctx:CanvasRenderingContext2D){
+        
         ctx.beginPath();
         //obrazec bez outline -- nuluje
+      
         if (this.image == undefined){
             
             ctx.strokeStyle =this.color
@@ -119,7 +120,7 @@ class Tile{
                     if (this.shape == 'circle'){
                 ctx.resetTransform();
                 ctx.restore()
-                ctx.scale(game.getScaleX(),game.getScaleY())
+               ctx.scale(game.getScaleX(),game.getScaleY())
                 var grd = ctx.createRadialGradient(this.centerX,this.centerY,this.radius,this.centerX,this.centerY,this.radius+8);
                 grd.addColorStop(0, "red");
                  grd.addColorStop(0.33, '#990000');

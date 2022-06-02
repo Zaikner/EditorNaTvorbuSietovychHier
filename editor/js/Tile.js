@@ -36,7 +36,7 @@ var Tile = /** @class */ (function () {
         this.radius = radius;
         this.tileNumber = tileNumber;
     }
-    Tile.prototype.drawTile = function (canvas, ctx, showOnlyChange) {
+    Tile.prototype.drawTile = function (canvas, ctx) {
         ctx.beginPath();
         //obrazec bez outline -- nuluje
         if (this.image == undefined) {

@@ -15,31 +15,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   button#questionManager.btn.btn-secondary.py-2.navbarButton(type='button')=text[17]
   button#editPawn.btn.btn-secondary.py-2.navbarButton(type='button')=text[18]
   button#editBackground.btn.btn-secondary.py-2.navbarButton(type='button')=text[36]
-  //- li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
-  //-   a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[36]
-  //-   ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
-  //-     li
-  //-       button#editBackground.btn.btn-secondary.dropdown-item(type='button')=text[37]
-  //-     li
-  //-       button#addComponent.btn.btn-secondary.dropdown-item(type='button')=text[38]
-  //-     li
-  //-       button#moveComponent.btn.btn-secondary.dropdown-item(type='button')=text[39]
-  //-     li
-  //-       button#editComponent.btn.btn-secondary.dropdown-item(type='button')=text[40]
-  //-     li
-  //-       button#deleteComponent.btn.btn-secondary.dropdown-item(type='button')=text[41]
   button#insertTiles.btn.btn-secondary.py-2.navbarButton(type='button')=text[19]
-  //- li.nav-item.dropdown.btn.btn-secondary.py-0(style='margin-right: 10px;')
-  //-   a#optionScroll.nav-link.dropdown-toggle.btn.btn-secondary(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')=text[19]
-  //-   ul.dropdown-menu(aria-labelledby='navbarScrollingDropdown')
-  //-     li
-     
-  //-     li
-  //-       button#editTiles.btn.btn-secondary.dropdown-item(type='button')=text[43]
-  //-     li
-  //-       button#moveTiles.btn.btn-secondary.dropdown-item(type='button')=text[44]
-  //-     li
-  //-       button#deleteTiles.btn.btn-secondary.dropdown-item(type='button')=text[45]
   button#generalInfoButton.btn.btn-secondary.py-2.navbarButton(type='button')=text[21]
   form(action='/' method='get')
     button#mainMenuButton.btn.btn-secondary.py-2.navbarButton(type='submit')=text[11]
@@ -76,7 +52,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #eventModalBody.modal-body.alignCenter
                 h6#modalHeader.modal-title.whiteColor=text[49]
-                  div(style='width:100%; margin: 20px;')
+                div(style='width:100%; margin: 20px;')
                   button#noneButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;' onclick="$('#EventModal').modal('hide');")=text[196]
                 div(style='width:100%; margin: 20px;')
                   button#forwardButton.btn.btn-secondary(type='button' style='width: 90%; height: 120%;' onclick="$('#EventModal').modal('hide');$('#editEventModal').modal('show')")=text[50]
@@ -105,9 +81,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 input#diceValue.alignCenter(type='number' placeholder=text[55] value = '1' min = '1' max = '6' style="width:50%; margin-bottom:3%;")
                 #confirmEvent.alignCenter
               #editEventFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#EventModal').modal('show');$('#editEventModal').modal('hide')")=text[33]
-                // <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button>
         #loadGameModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c')
@@ -115,12 +89,8 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 h5#modalHeader.modal-title(style='color: white;')=text[31]
                 button.close(type='button' data-dismiss='modal')
               #loadGameModalBody.modal-body.alignCenter
-                //- input#gameNameInput.alignCenter(type='text' placeholder=text[31])
-                //- button#loadCreatedGameModal.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[32]
               #editEventFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[33]
-                // <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button>
         #nextTileModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c')
@@ -131,9 +101,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 input#gameNameInput.alignCenter(type='text' placeholder='Enter the game name!')
                 button#loadCreatedGameModal.btn.btn-secondary(type='button' onclick="$('#loadGameModal').modal('hide')")=text[32]
               #nextTileModalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button#nextTileButtonSet.btn.btn-secondary(type='button' onclick="$('#nextTileModal').modal('hide')")=text[57]
-                // <button type="button" class="btn btn-secondary" choice="" id ='eventSet' onclick="$('#editEventModal').modal('hide')">Confirm!</button>
         #questionModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog.modal-xl
             .modal-content(style='background-color: #292b2c')
@@ -144,7 +112,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
               #modalBody.modal-body(style='overflow-y: auto; height:70vh')
                 #listContainer.container
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container.alignCenter
                   button#setAnswerButton.btn.btn-secondary.alignCenter(type='button' style='margin-right: 1%;' onclick="$('#questionModal').modal('hide'); $('#answerModal').modal('hide');")=text[158]
                   button#createQuestionButtonModal.btn.btn-secondary.alignCenter(type='button' onclick="$('#createModal').modal('show'); $('#questionModal').modal('hide')")=text[58]
@@ -161,10 +128,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 .container.alignCenter  
                   button#randomQuestionID.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[200]
                   button.btn.btn-secondary.alignCenter(type='button' onclick="$('#pickQuestionModal').modal('hide');")=text[33]
-                
-                  //button#resetQuestionID.btn.btn-secondary.alignCenter(type='button' onclick=" $('#pickQuestionModal').modal('hide')")=text[59]
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        #answerModal.modal.fade(tabindex='-1' role='dialog')
+          #answerModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content(style='background-color: #292b2c')
               .modal-header
@@ -178,47 +142,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container.alignCenter
                   button#answerButton.btn.btn-secondary.whiteColor(type='button' onclick="$('#questionModal').modal('hide')")=text[60]
-        //- #pawnModal.modal.fade(tabindex='-1' role='dialog')
-        //-   .modal-dialog
-        //-     .modal-content.darkColor(style = 'background-color: #292b2c;')
-        //-       .modal-header
-        //-         .container
-        //-           h2#modalHeader.modal-title.alignCenter.whiteColor(style=' position: sticky;')=text[61]
-        //-         button.close(type='button' data-dismiss='modal')
-        //-       #modalBody.modal-body.alignCenter(style='overflow-y: auto; height:70vh;')
-        //-         .container.alignCenter
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn1.pawnType
-        //-             p.whiteColor=text[62]+'1'
-        //-             button#pawnType1.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn2.pawnType
-        //-             p.whiteColor=text[62]+'2'
-        //-             button#pawnType2.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn3.pawnType
-        //-             p.whiteColor=text[62]+'3'
-        //-             button#pawnType3.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn4.pawnType
-        //-             p.whiteColor=text[62]+'4'
-        //-             button#pawnType4.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn5.pawnType
-        //-             p.whiteColor=text[62]+'5'
-        //-             button#pawnType5.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-group.alignCenter
-        //-             canvas#canvasPawn6.pawnType
-        //-             p.whiteColor=text[62]+'6'
-        //-             button#pawnType6.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-           .list-groupa.alignCenter
-        //-             canvas#canvasPawn7.pawnType
-        //-             p.whiteColor=text[62]+'7'
-        //-             button#pawnType7.btn.btn-secondary(style='margin: 1%;')=text[63]
-        //-       #modalFooter.modal-footer
-        //-         // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        //-         .container.alignCenter
-        //-           button#answerButton.btn.btn-secondary.alignCenter(type='button' onclick="$('#pawnModal').modal('hide')")=text[64]
+     
         #createModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content.darkColor(style='background-color: #292b2c;')
@@ -236,7 +160,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
              
                   #containerAdd.container.alignCenter
                     button#addButtonInsert.btn.btn-secondary(type='button')=text[67]
-                    //- button#removeButtonInsert.btn.btn-secondary(type='button')=text[68]
+                   
                   |  --&gt;
                   .container.alignCenter
                     button#questionSubmitButton.btn.btn-secondary(type='button' onclick="$('#createModal').modal('hide');")=text[151]
@@ -271,7 +195,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
     
                   #containerAdd.container.alignCenter
                     button#addButtonEdit.btn.btn-secondary(type='button')=text[67]
-                    //- button#removeButtonEdit.btn.btn-secondary(type='button')=text[68]
+                    
                   |  --&gt;
                   .container.alignCenter
                     button#questionEditButton.btn.btn-secondary(type='button' onclick="$('#editModal').modal('hide');$('#questionModal').modal('show')")=text[64]
@@ -292,19 +216,3 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
             // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 script(src='../socket.io/socket.io.js')
 script(src='../editor/js/bundle.js')
-//
-  <script type = 'module'>
-  //import { io } from "socket.io-client";
-  const editorSocket = io('http://localhost:8001/');//http://sietove-hry.herokuapp.com/
-  //socket.emit('chat message', 'hi');
-  editorSocket.on('chat message', function(msg) {
-  console.log(msg)
-  });
-  editorSocket.emit('editor',{jo:'co'})
-  </script>
-//
-  <script>
-  $(window).on('load', function(){$('#exampleModal').modal('toggle')});
-  </script>
-script.
-  //localStorage.clear()

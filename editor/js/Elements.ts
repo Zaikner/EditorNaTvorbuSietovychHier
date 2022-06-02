@@ -1,4 +1,5 @@
 import { ctx, game, reload } from "./Canvas";
+import { texts } from "./ClientSocket";
 import { showActualState, update } from "./TileEditor";
 
 function spawnColorPicker(doc:HTMLDocument,parent:string,id:string,lbl:string,func:Function= function(){}){

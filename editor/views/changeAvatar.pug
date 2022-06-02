@@ -33,23 +33,21 @@ script.
   $('#loginModal').modal('show');
   });
   function getDataUrlFromImage(img) {
-  // Create canvas
+
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-  // Set width and height
+
   console.log(img)
   canvas.width = img.width;
   canvas.height = img.height;
-  // Draw the image
+
   ctx.drawImage(img, 0, 0);
-  console.log(canvas.width)
-  console.log(canvas.height)
+
   Cookies.set('avatar',canvas.toDataURL('image/jpeg'))
   Cookies.set('avatar','hehe')
-  //document.getElementById('route').action = '/account/change/avatar/id/'+canvas.toDataURL('image/jpeg',0.1)
+
   socket.emit('msg','/change/avatar/id/'+canvas.toDataURL('image/jpeg'))
-  //return canvas.toDataURL('image/jpeg')
-  //console.log(canvas.toDataURL('image/jpeg'))
+  
   }
   let func = function(){
   if ((document.getElementById("fileInput")).files.length > 0){
@@ -58,12 +56,12 @@ script.
   img.onload = function(){
   getDataUrlFromImage(img)
   }
-  //console.log(URL.createObjectURL((document.getElementById("fileInput")).files[0]) )
+ 
   }
   else{
   Cookies.set('avatar','')
   }
   }
    const params = new URLSearchParams(window.location.search);
-  //const editorSocket = io();
+
   setInterval(function(){ socket.emit('ping',{id:localStorage.getItem('id')})},5000)

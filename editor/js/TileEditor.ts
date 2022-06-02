@@ -74,6 +74,7 @@ let deleteHandler = function(event:MouseEvent){
   
 
 function spawnElements(){
+   
     let options = [texts[195]]
     game.getPlayerTokens().slice().forEach((player:string)=>{
       options.push(player)
@@ -161,6 +162,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     if(game.getChoosenTile()== undefined){
       document.getElementById('removeTileButton')!.hidden = true
     }
+    
 }
 
   let startX = 0
@@ -496,7 +498,7 @@ spawnMultiSelect(doc,'tileEditingPlace','',texts[136],texts[192],options,'end')
     cttttx.clearRect(0,0,cs.width,cs.height)
     cttttx.resetTransform()
     
-    tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"),true)
+    tile.drawTile(cs,<CanvasRenderingContext2D>(<HTMLCanvasElement>document.getElementById('changeCanvas')!).getContext("2d"))
     
     reload(ctx)
    

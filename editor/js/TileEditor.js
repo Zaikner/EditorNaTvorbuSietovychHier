@@ -430,7 +430,7 @@ function showActualState(updateTile) {
     tile.setImage(image);
     cttttx.clearRect(0, 0, cs.width, cs.height);
     cttttx.resetTransform();
-    tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"), true);
+    tile.drawTile(cs, document.getElementById('changeCanvas').getContext("2d"));
     (0, Canvas_js_1.reload)(Canvas_js_1.ctx);
     if (Canvas_js_1.game.getChoosenTile() == undefined) {
         lastSize = sizeOfTileSlider.value;

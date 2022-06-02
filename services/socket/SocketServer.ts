@@ -352,7 +352,7 @@ export class ServerSocket{
           }
           
           else if(tile.getForward() > 0){
-            socket.emit('react to event: forward',{value:tile.getForward(),pawnId:msg.pawnId})
+            socket.emit('react to event: forward',{value:tile.getForward(),pawnId:msg.pawnId,token:r.getPlayerOnTurn().getToken()})
           }
           else if(tile.getBackward() > 0){
             socket.emit('react to event: backward',{value:tile.getBackward(),pawnId:msg.pawnId})  

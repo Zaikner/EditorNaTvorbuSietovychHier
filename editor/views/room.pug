@@ -12,7 +12,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   button#showRulesButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;')=texts[16]
   form(action='/gameLobby' method='get')
     button#mainMenuButton.btn.btn-secondary.py-2(type='submit' style=' width:200px; margin-right: 10px;')=texts[1]
-    // <button  type="submit" name="editor" value="editor">Editor</button>
 .container-fluid
   .row(style='background-color: #292b2c')
     #canvasPlace.col-8
@@ -52,7 +51,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-primary(type='button' onclick="$('#exampleModal').modal('hide')") Ok!
         #answerModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
           .modal-dialog
@@ -65,7 +63,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 .container
                   #answerQuestion.list-group(style=' margin-bottom: 5%;')
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container(style='text-align: center;')
                   button#answerButtonRoom.btn.btn-secondary(type='button' hidden style='text-align: center;' onclick="$('#questionModal').modal('hide')")=texts[248]
         #WarningModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
@@ -76,7 +73,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #warningModalBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button#confirmStart.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide')")=texts[218]
                 button#backToWaitingRoom.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#waitingModal').modal('show')")=texts[224]
                
@@ -88,7 +84,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #InGameModalBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#InGameModal').modal('hide')") OK!
         #EventReactModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
           .modal-dialog
@@ -98,7 +93,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #EventReactBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-secondary(type='button' onclick="$('#WarningModal').modal('hide');$('#EventReactModal').modal('hide')") OK!
         #waitingModal.modal.fade(tabindex='-1' role='dialog' data-bs-backdrop='static' data-bs-keyboard='false')
           .modal-dialog
@@ -116,7 +110,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                   input#messagePlace(type='text' placeholder=texts[230] style='width:100%; max-height: 5vh; resize: none;')
                   button#messageSubmitButton(type='button' style='width:100%; max-height: 7vh; resize: none;')=texts[217]
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container(style='text-align: center;')
                   button#startGameRoom.btn.btn-secondary(type='button' style='text-align: center;' onclick="$('#waitingModal').modal('hide');")=texts[218]
                   button#leaveWaitinRoom.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#waitingModal').modal('hide')")=texts[219]
@@ -131,7 +124,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                   h5=texts[221]
                   #endContainer.container
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 .container(style='text-align: center;')
                   button#leaveEndRoom.btn.btn-secondary(type='button' style='text-align: center; ' onclick=" $('#endModal').modal('hide')")=texts[219]
         script(src='../socket.io/socket.io.js')

@@ -146,12 +146,14 @@ function edit() {
         (0, TileEditor_js_1.startInsertingByOne)();
     });
     document.getElementById('questionManager').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
         elementDeleter('listContainer');
         ClientSocket_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
     document.getElementById('generalInfoButton').addEventListener('click', function () {
         (0, TileEditor_js_1.removeAllButtons)();
         (0, TileEditor_js_1.removeAllListenersAdded)();
+        (0, TileEditor_js_1.unchooseEverything)();
         mainMenu();
     });
     document.getElementById('addButtonInsert').addEventListener('click', function () { (0, Questions_1.addOption)('questionOptions', '', false); });
@@ -186,9 +188,13 @@ function edit() {
         mainMenu();
     });
     (_d = document.getElementById('loadGameButton')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
         ClientSocket_1.editorSocket.emit('loadGameNames', { id: localStorage.getItem('id') });
     });
-    document.getElementById('editPawn').addEventListener('click', function () { (0, PawnEditor_1.pawnEditMenu)(); });
+    document.getElementById('editPawn').addEventListener('click', function () {
+        (0, TileEditor_js_1.unchooseEverything)();
+        (0, PawnEditor_1.pawnEditMenu)();
+    });
 }
 exports.edit = edit;
 var doc = document;
@@ -196,9 +202,13 @@ exports.doc = doc;
 document.getElementById("canvasPlace").appendChild(canvas);
 var started = false;
 function changeNextTileText() {
+    console.log('zmenil cisla');
     var nextTile = document.getElementById('setNextTileButtonlabel');
-    nextTile.textContent = ClientSocket_1.texts[141] + ' (';
     var arr = Array.from(game.getNextTilesIds().values());
+    if (game.getChoosenTile() != undefined) {
+        arr = Array.from(game.getChoosenTile().getNextTilesIds().values());
+    }
+    nextTile.textContent = ClientSocket_1.texts[141] + ' (';
     arr.forEach(function (num) {
         nextTile.textContent += ' ' + num + ',';
     });
@@ -430,7 +440,7 @@ function reload(ctx) {
     ctx.closePath();
     var tiles = game.getTiles();
     tiles.forEach(function (tile) {
-        tile.drawTile(canvas, ctx, false);
+        tile.drawTile(canvas, ctx);
         tile.drawPawns(ctx);
     });
     ctx.closePath();

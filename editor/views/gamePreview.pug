@@ -12,7 +12,6 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
   button#showRulesButton.btn.btn-secondary.py-2(type='button' name='mainMenu' value='mainMenu' style=' width:500px; margin-right: 10px;')=texts[16]
   form(action='/gameLobby' method='get')
     button#mainMenuButton.btn.btn-secondary.py-2(type='submit' name='mainMenu' value='mainMenu' style=' width:200px; margin-right: 10px;')=texts[1]
-    // <button  type="submit" name="editor" value="editor">Editor</button>
 .container-fluid
   .row(style='background-color: #292b2c')
     #canvasPlace.col-8
@@ -36,10 +35,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 textarea#ruleInput(style='width: 100%; height: 50vh;' readonly='')
                 .container(style='text-align: center;')
                   button.btn.btn-secondary(type='button' onclick="$('#rulesModal').modal('hide');") Ok!
-                  // <button type="button" class="btn btn-secondary" id="questionRuleButton" onclick="$('#rulesModal').modal('hide');">Edit Changes!</button>
-            // <div class="container" id = 'containerAdd' style="text-align: center;"></div>
           #modalFooter.modal-footer
-            // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         #exampleModal.modal.fade(tabindex='-1' role='dialog')
           .modal-dialog
             .modal-content
@@ -48,9 +44,7 @@ nav.navbar.navbar-left.navbar-expand-sm.bg-dark.navbar-dark.Sticky-top.py-0
                 button.close(type='button' data-dismiss='modal')
               #modalBody.modal-body
               #modalFooter.modal-footer
-                // <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 button.btn.btn-primary(type='button' onclick="$('#exampleModal').modal('hide')") Ok!
-    // <script src="../socket.io/socket.io.js"></script>
     script(src='/editor/js/bundle.js')
     script.
       const params = new URLSearchParams(window.location.search);
