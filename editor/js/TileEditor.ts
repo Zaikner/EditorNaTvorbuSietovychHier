@@ -354,6 +354,9 @@ spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],option
     return addedTile    
   }
   let update = function(){
+    if (game.getChoosenTile()==undefined){
+      return
+    }
     let sizeOfTileSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfTileSlider')!
       let colorPicker:HTMLInputElement = <HTMLInputElement>doc.getElementById('colorPicker')!
       let sizeOfOutlineSlider:HTMLInputElement = <HTMLInputElement>doc.getElementById('sizeOfOutlineSlider')!
@@ -362,6 +365,7 @@ spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],option
       let insertImage = game.getImage()
       
     game.updateChoosenTile(colorPicker!.value,parseInt(sizeOfTileSlider!.value),parseInt(sizeOfOutlineSlider!.value), outlineColorPicker!.value,shapeMenu!.value,insertImage)
+    
     game.getChoosenTile()!.setIsStartingFor(game.getStartForPlayers().slice())
     game.getChoosenTile()!.setIsEndingFor(game.getEndForPlayers().slice())
     game.getChoosenTile()!.setCantBeEliminatedOnTile(game.getCantBeEliminatedOnTile().slice())

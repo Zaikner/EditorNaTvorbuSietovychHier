@@ -303,6 +303,9 @@ var spawnTile = function (coords) {
 exports.spawnTile = spawnTile;
 var update = function () {
     var _a, _b;
+    if (Canvas_js_1.game.getChoosenTile() == undefined) {
+        return;
+    }
     var sizeOfTileSlider = Canvas_js_1.doc.getElementById('sizeOfTileSlider');
     var colorPicker = Canvas_js_1.doc.getElementById('colorPicker');
     var sizeOfOutlineSlider = Canvas_js_1.doc.getElementById('sizeOfOutlineSlider');
