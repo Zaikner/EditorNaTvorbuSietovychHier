@@ -83,8 +83,9 @@ function renumOptions(){
 function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      num++;
      let div = doc.createElement('div')
-     div.classList.add("form-group",'inline')
-     div.style.width='120%'
+     div.classList.add("form-group")
+     div.style.width='100%'
+     div.style.display = 'flex'
     
      let text = doc.createElement('input')
      text.type = 'text'
@@ -94,7 +95,6 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      text.required = true
      text.value = txt
      text.style.width = '50%'
-     text.style.float = 'left'
      text.placeholder = 'Zadaj odpoveď číslo: '+num
      if (id > 0){
        
@@ -110,13 +110,13 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
      check.classList.add('form-control')
      check.name = 'check'+num
      check.checked = is
-     check.style.float = 'left'
+     
 
      let labelCheck:HTMLLabelElement = doc.createElement('label')
      labelCheck.htmlFor = check.id
      labelCheck.textContent = 'správne '
      labelCheck.style.color = 'white'
-     labelCheck.style.float = 'left'
+    
      labelCheck.style.fontSize = '20px'
    
      div.appendChild(text)
@@ -129,7 +129,7 @@ function addOption(parent:string,txt:string,is:boolean,id:number=-1){
  deleteButton.type = 'button'
  deleteButton.classList.add('btn')
  deleteButton.classList.add('btn-secondary')
- deleteButton.style.float = 'left'
+ deleteButton.style.whiteSpace = 'nowrap'
  deleteButton.addEventListener('click',function(){
      newQuestions = newQuestions.filter((p) => {return p != (num+1)});
      document.getElementById(parent)?.removeChild(div)
