@@ -36,11 +36,23 @@ function initCreation() {
     document.getElementById('questionPlace').appendChild(div);
     addOption('questionPlace', '', false);
     addOption('questionPlace', '', false);
-    div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
-    var but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[67], function () { addOption('questionPlace', '', false); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[58], function () { createQuestion(-1); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[70], function () { ClientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false }); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[242], function () { });
+    //div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
+    div = document.createElement('div');
+    div.style.display = 'flex';
+    div.id = 'addDiv';
+    document.getElementById('tileEditingPlace').appendChild(div);
+    var but = (0, Elements_1.spawnButton)(document, 'addDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[67], function () { addOption('questionPlace', '', false); });
+    div = document.createElement('div');
+    div.style.display = 'flex';
+    div.id = 'buttonDiv';
+    div.style.marginTop = '3%';
+    document.getElementById('tileEditingPlace').appendChild(div);
+    but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[58], function () { createQuestion(-1); });
+    but.style.whiteSpace = 'nowrap';
+    but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[70], function () { ClientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false }); });
+    but.style.whiteSpace = 'nowrap';
+    but = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[242], function () { initCreation(); });
+    but.style.whiteSpace = 'nowrap';
 }
 exports.initCreation = initCreation;
 function renumOptions() {
@@ -258,13 +270,14 @@ function editQuestionMenu(id, txt, elem) {
     elem.forEach(function (e) {
         addOption('questionPlace', e[1].optionText, e[1].isAnswer, e[0]);
     });
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Add option', function () { addOption('questionPlace', '', false); });
+    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Pridaj možnosť!', function () { addOption('questionPlace', '', false); });
     div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[58], function () { createQuestion(id); });
     (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[70], function () {
         deleteQuestion(id);
         ClientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
+    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[242], function () { initCreation(); });
 }
 function deleteQuestion(id) {
     if (Canvas_1.game.containsQuestionId(id)) {

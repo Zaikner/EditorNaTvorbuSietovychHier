@@ -45,12 +45,25 @@ function initCreation(){
     addOption('questionPlace','',false)
     addOption('questionPlace','',false)
   
-    div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
-    let but = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[67],function(){addOption('questionPlace','',false)})
-    
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[58],function(){createQuestion(-1);})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){})
+    //div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
+    div = document.createElement('div')
+    div.style.display = 'flex'
+    div.id = 'addDiv'
+    document.getElementById('tileEditingPlace')!.appendChild(div)
+
+    let but = spawnButton(document,'addDiv','',['btn','btn-secondary'],texts[67],function(){addOption('questionPlace','',false)})
+    div = document.createElement('div')
+    div.style.display = 'flex'
+    div.id = 'buttonDiv'
+    div.style.marginTop = '3%'
+    document.getElementById('tileEditingPlace')!.appendChild(div)
+   
+    but = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(-1);})
+    but.style.whiteSpace = 'nowrap'
+    but=spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
+    but.style.whiteSpace = 'nowrap'
+    but=spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){initCreation()})
+    but.style.whiteSpace = 'nowrap'
 }
 
 
@@ -304,14 +317,14 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     elem.forEach((e:any)=>{
         addOption('questionPlace',e[1].optionText,e[1].isAnswer,e[0])
     })
-    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Add option',function(){addOption('questionPlace','',false)})
+    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Pridaj možnosť!',function(){addOption('questionPlace','',false)})
     div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
     spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(id);})
     spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
       
         deleteQuestion(id)
         editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
- 
+    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){initCreation()})
     
 }
 
