@@ -25,6 +25,7 @@ function initCreation() {
     text.required = true;
     text.style.width = '50%';
     text.placeholder = 'Sem napíš otázku';
+    text.style.marginBottom = '3%';
     var label = Canvas_1.doc.createElement('label');
     label.style.color = 'white';
     label.htmlFor = text.id;
@@ -270,14 +271,24 @@ function editQuestionMenu(id, txt, elem) {
     elem.forEach(function (e) {
         addOption('questionPlace', e[1].optionText, e[1].isAnswer, e[0]);
     });
-    (0, Elements_1.spawnButton)(document, 'tileEditingPlace', '', ['btn', 'btn-secondary'], 'Pridaj možnosť!', function () { addOption('questionPlace', '', false); });
-    div = (0, Elements_1.spawnDiv)(document, 'tileEditingPlace', 'buttonDiv', []);
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[58], function () { createQuestion(id); });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[70], function () {
+    div = document.createElement('div');
+    div.style.display = 'flex';
+    div.id = 'addDiv';
+    document.getElementById('tileEditingPlace').appendChild(div);
+    (0, Elements_1.spawnButton)(document, 'addDiv', '', ['btn', 'btn-secondary'], 'Pridaj možnosť!', function () { addOption('questionPlace', '', false); });
+    div = document.createElement('div');
+    div.style.display = 'flex';
+    div.id = 'buttonDiv';
+    document.getElementById('tileEditingPlace').appendChild(div);
+    var button = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary'], ClientSocket_js_1.texts[58], function () { createQuestion(id); });
+    button.style.whiteSpace = 'nowrap';
+    button = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[70], function () {
         deleteQuestion(id);
         ClientSocket_js_1.editorSocket.emit('loadQuestions', { id: localStorage.getItem('id'), pick: false });
     });
-    (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[242], function () { initCreation(); });
+    button.style.whiteSpace = 'nowrap';
+    button = (0, Elements_1.spawnButton)(document, 'buttonDiv', '', ['btn', 'btn-secondary', 'buttonLeftMargin'], ClientSocket_js_1.texts[242], function () { initCreation(); });
+    button.style.whiteSpace = 'nowrap';
 }
 function deleteQuestion(id) {
     if (Canvas_1.game.containsQuestionId(id)) {

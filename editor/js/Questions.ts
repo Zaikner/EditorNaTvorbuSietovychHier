@@ -18,8 +18,7 @@ function initCreation(){
     let div = doc.createElement('div')
     div.classList.add("form-group")
     div.id = 'questionDiv'
-
-
+    
     let text = doc.createElement('input')
     text.type = 'text'
     text.id = 'question'
@@ -28,6 +27,7 @@ function initCreation(){
     text.required = true
     text.style.width = '50%'
     text.placeholder = 'Sem napíš otázku'
+    text.style.marginBottom = '3%'
    
     let label = doc.createElement('label')
     label.style.color='white'
@@ -317,15 +317,26 @@ function editQuestionMenu(id:number,txt:string,elem:any){
     elem.forEach((e:any)=>{
         addOption('questionPlace',e[1].optionText,e[1].isAnswer,e[0])
     })
-    spawnButton(document,'tileEditingPlace','',['btn','btn-secondary'],'Pridaj možnosť!',function(){addOption('questionPlace','',false)})
-    div = spawnDiv(document,'tileEditingPlace','buttonDiv',[])
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(id);})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
+    div = document.createElement('div')
+    div.style.display = 'flex'
+    div.id = 'addDiv'
+    document.getElementById('tileEditingPlace')!.appendChild(div)
+
+    spawnButton(document,'addDiv','',['btn','btn-secondary'],'Pridaj možnosť!',function(){addOption('questionPlace','',false)})
+
+    div = document.createElement('div')
+    div.style.display = 'flex'
+    div.id = 'buttonDiv'
+    document.getElementById('tileEditingPlace')!.appendChild(div)
+    let button = spawnButton(document,'buttonDiv','',['btn','btn-secondary'],texts[58],function(){createQuestion(id);})
+    button.style.whiteSpace = 'nowrap'
+    button = spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[70],function(){ 
       
         deleteQuestion(id)
         editorSocket.emit('loadQuestions',{id:localStorage.getItem('id'),pick:false})})
-    spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){initCreation()})
-    
+    button.style.whiteSpace = 'nowrap'
+    button = spawnButton(document,'buttonDiv','',['btn','btn-secondary','buttonLeftMargin'],texts[242],function(){initCreation()})
+    button.style.whiteSpace = 'nowrap'
 }
 
 function deleteQuestion(id:number){
