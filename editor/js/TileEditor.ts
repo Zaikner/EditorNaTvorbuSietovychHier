@@ -164,7 +164,7 @@ spawnMultiSelect(doc,'tileEditingPlace','EndSelect',texts[136],texts[192],option
       document.getElementById('removeTileButton')!.hidden = true
     }
     
-}
+} 
 
   let startX = 0
   let startY = 0
